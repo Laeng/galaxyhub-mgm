@@ -1,3 +1,48 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.navigation {
+}
+
+.navigation li {
+    @apply font-bold text-white md:text-gray-500 md:hover:text-white md:float-left py-2 md:mx-2 md:px-4;
+}
+
+.navigation li .active {
+    @apply md:text-white md:bg-gray-700 md:py-2 md:px-4 md:-mx-4 md:-my-2 md:rounded-md;
+}
+
+.navigation li ul {
+    @apply md:hidden list-inside;
+}
+
+@media (min-width: 768px) {
+    .navigation li ul {
+        background: linear-gradient(to bottom, transparent 3.1rem, white 3.1rem);
+    }
+}
+
+@media (prefers-color-scheme: dark) {
+    @media (min-width: 768px) {
+        .navigation li ul {
+            background: linear-gradient(to bottom, transparent 3.1rem, red 3.1rem);
+        }
+    }
+}
+
+.navigation li li {
+    @apply mx-3 md:mx-0 md:my-1.5 md:font-normal md:text-black md:hover:text-black md:hover:bg-transparent md:rounded-none md:text-sm;
+}
+
+.navigation li:hover ul {
+    @apply md:block md:absolute md:-ml-4 md:pt-5 md:shadow-2xl md:rounded-b-md;
+}
+
+.navigation li:hover li {
+    @apply md:float-none md:w-60 md:bg-white md:hover:bg-gray-300;
+}
+
+.navigation li:hover li > a, .navigation li:hover li > span, .navigation li:hover li > p {
+    @apply block md:mx-3;
+}

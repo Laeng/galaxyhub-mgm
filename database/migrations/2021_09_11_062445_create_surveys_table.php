@@ -13,10 +13,13 @@ class CreateSurveysTable extends Migration
      */
     public function up()
     {
+        /*
         Schema::create('surveys', function (Blueprint $table) {
             $table->id();
+            $table->mediumText('question');
             $table->timestamps();
         });
+        */
     }
 
     /**
@@ -26,6 +29,6 @@ class CreateSurveysTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('surveys');
+        //Schema::dropIfExists('surveys');
     }
 }

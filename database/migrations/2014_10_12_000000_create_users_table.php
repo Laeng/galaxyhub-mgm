@@ -18,6 +18,7 @@ class CreateUsersTable extends Migration
             $table->string('username')->unique();
             $table->string('password');
             $table->string('nickname');
+            $table->string('profile_image');
             $table->string('provider')->default('default');
             $table->timestamps();
         });
