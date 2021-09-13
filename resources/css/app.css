@@ -1,3 +1,5 @@
+@import url("vendor/pretendard/pretendard-dynamic-subset.css");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -22,7 +24,7 @@
         background: linear-gradient(to bottom, transparent 3.1rem, white 3.1rem);
     }
 }
-
+/*
 @media (prefers-color-scheme: dark) {
     @media (min-width: 768px) {
         .navigation li ul {
@@ -30,6 +32,7 @@
         }
     }
 }
+ */
 
 .navigation li li {
     @apply mx-3 md:mx-0 md:my-1.5 md:font-normal md:text-black md:hover:text-black md:hover:bg-transparent md:rounded-none md:text-sm;
@@ -45,4 +48,17 @@
 
 .navigation li:hover li > a, .navigation li:hover li > span, .navigation li:hover li > p {
     @apply block md:mx-3;
+}
+
+@keyframes scroll {
+    0% {
+        transform: translateY(0);
+    }
+    30% {
+        transform: translateY(2.5rem);
+    }
+}
+
+svg #wheel {
+    animation: scroll ease 2s infinite;
 }
