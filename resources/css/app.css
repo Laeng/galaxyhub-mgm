@@ -4,51 +4,42 @@
 @tailwind components;
 @tailwind utilities;
 
+[x-cloak] {
+    display: none !important;
+}
+
 .navigation {
+    @apply absolute lg:relative top-14 lg:top-0 lg:left-0 lg:space-x-4 w-full lg:w-auto;
 }
 
 .navigation li {
-    @apply font-bold text-white md:text-gray-500 md:hover:text-white md:float-left py-2 md:mx-2 md:px-4;
-}
-
-.navigation li .active {
-    @apply md:text-white md:bg-gray-700 md:py-2 md:px-4 md:-mx-4 md:-my-2 md:rounded-md;
+    @apply py-2 lg:py-0 text-xl lg:text-sm text-center lg:text-left hover:text-gray-400 lg:float-left;
 }
 
 .navigation li ul {
-    @apply md:hidden list-inside;
+    @apply lg:hidden;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 1024px) {
     .navigation li ul {
-        background: linear-gradient(to bottom, transparent 3.1rem, white 3.1rem);
+        --tw-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        min-width: 9rem;
+        position: absolute;
+        left: 0.5rem;
+        padding-top: 1.35rem;
+        box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+        background: linear-gradient(to bottom, transparent 1.22rem, rgba(255, 255, 255, 1) 1.22rem);
     }
 }
-/*
-@media (prefers-color-scheme: dark) {
-    @media (min-width: 768px) {
-        .navigation li ul {
-            background: linear-gradient(to bottom, transparent 3.1rem, red 3.1rem);
-        }
-    }
-}
- */
 
 .navigation li li {
-    @apply mx-3 md:mx-0 md:my-1.5 md:font-normal md:text-black md:hover:text-black md:hover:bg-transparent md:rounded-none md:text-sm;
+    @apply p-1.5 my-3 lg:my-2 lg:px-8 text-base lg:text-sm text-center lg:text-left text-white lg:text-black hover:text-gray-400 lg:hover:text-black lg:float-none lg:hover:bg-gray-100;
 }
 
 .navigation li:hover ul {
-    @apply md:block md:absolute md:-ml-4 md:pt-5 md:shadow-2xl md:rounded-b-md;
+    @apply lg:block;
 }
 
-.navigation li:hover li {
-    @apply md:float-none md:w-60 md:bg-white md:hover:bg-gray-300;
-}
-
-.navigation li:hover li > a, .navigation li:hover li > span, .navigation li:hover li > p {
-    @apply block md:mx-3;
-}
 
 @keyframes scroll {
     0% {

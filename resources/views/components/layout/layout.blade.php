@@ -21,16 +21,10 @@
     <!-- Scripts -->
     <script defer src="{{ mix('js/app.js') }}"></script>
 </head>
-<body class="bg-gray-900">
+<body class="bg-gray-900 overflow-x-hidden">
 <div class="font-sans text-gray-900 antialiased {{ $class }}" {{$attributes}}>
     {{ $slot }}
 </div>
-<script type="text/javascript">
-    var agent = navigator.userAgent.toLowerCase();
-    if ((navigator.appName === 'Netscape' && agent.indexOf('trident') !== -1) || (agent.indexOf("msie") !== -1)) {
-        document.getElementById("body").innerHTML += '<div class="block-overlay"><div style="font-size: 18pt; text-align: center"><h1 style="display:block;">본 웹사이트는 Internet Explorer 를 지원하지 않습니다.</h1><h1 style="display:block;">다른 웹브라우저를 사용하여 주십시오.</h1></div></div>';
-    }
-</script>
 <noscript>
     <div class="block-overlay">
         <div style="font-size: 18pt; text-align: center">
