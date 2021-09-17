@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "01c2197275e56201753a36b7511974d6",
+    "content-hash": "beae4405644e39636982da0ac112a664",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -5177,6 +5177,65 @@
             "time": "2021-08-04T23:19:25+00:00"
         },
         {
+            "name": "syntax/steam-api",
+            "version": "2.3.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/syntaxerrors/Steam.git",
+                "reference": "8912b9e9d57260fda073bb977aff9958eeed8915"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/syntaxerrors/Steam/zipball/8912b9e9d57260fda073bb977aff9958eeed8915",
+                "reference": "8912b9e9d57260fda073bb977aff9958eeed8915",
+                "shasum": ""
+            },
+            "require": {
+                "ext-bcmath": "*",
+                "ext-curl": "*",
+                "ext-json": "*",
+                "ext-libxml": "*",
+                "ext-simplexml": "*",
+                "guzzlehttp/guzzle": "^7.0",
+                "laravel/framework": "^6.20.12|^7.30.3|^8.22.1",
+                "php": "^7.3|^8.0"
+            },
+            "require-dev": {
+                "orchestra/testbench": "^6.0",
+                "phpunit/phpunit": "^9.5",
+                "vlucas/phpdotenv": "^5.2"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Syntax\\SteamApi\\SteamApiServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Syntax\\SteamApi\\": "src/Syntax/SteamApi"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Stygian",
+                    "email": "stygian.warlock.v2@gmail.com"
+                }
+            ],
+            "description": "A steam-api client for Laravel 6+",
+            "support": {
+                "issues": "https://github.com/syntaxerrors/Steam/issues",
+                "source": "https://github.com/syntaxerrors/Steam/tree/2.3.0"
+            },
+            "time": "2021-01-23T10:08:45+00:00"
+        },
+        {
             "name": "tijsverkoyen/css-to-inline-styles",
             "version": "2.2.3",
             "source": {
@@ -8019,7 +8078,7 @@
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
-        "php": "^7.3|^8.0"
+        "php": "^8.0"
     },
     "platform-dev": [],
     "plugin-api-version": "2.1.0"
