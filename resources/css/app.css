@@ -53,3 +53,7 @@
 svg #wheel {
     animation: scroll ease 2s infinite;
 }
+
+aspect-16\/10 {
+    aspect-ratio: 16/10
+}

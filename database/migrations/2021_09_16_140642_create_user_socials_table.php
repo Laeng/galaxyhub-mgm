@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateUserSteamsTable extends Migration
+class CreateUserSocialsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,15 @@ class CreateUserSteamsTable extends Migration
      */
     public function up()
     {
-        Schema::create('user_steams', function (Blueprint $table) {
+        Schema::create('user_socials', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('account_id');
-            $table->string('account_nickname');
-            $table->string('account_name');
-            $table->string('account_image');
+            $table->string('social_provider');
+            $table->unsignedBigInteger('social_id');
+            $table->text('social_email')->nullable();
+            $table->text('social_name')->nullable();
+            $table->text('social_nickname')->nullable();
+            $table->text('social_avatar')->nullable();
             $table->timestamps();
         });
     }
@@ -31,6 +33,6 @@ class CreateUserSteamsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('user_steams');
+        Schema::dropIfExists('user_socials');
     }
 }
