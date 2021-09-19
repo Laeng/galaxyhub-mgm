@@ -1,4 +1,4 @@
-<x-layout.layout>
+<x-layout.layout title="멀티플레이 게임 매니지먼트">
     <style>
         :root {
             --header-opacity: 0;
@@ -22,7 +22,7 @@
 
     </style>
 
-    <x-layout.header parent-class="bg-gray-900 w-full ho" logo-hex-code="text-[#ffffff]" logo-text-class="text-white" menu-text-class="text-gray-200 lg:text-sm"/>
+    <x-layout.header parent-class="bg-gray-900 w-full ho" logo-hex-code="text-[#ffffff]" logo-text-class="text-white" menu-text-class="text-gray-200 lg:text-sm" website-name="멀티플레이 게임 매니지먼트"/>
 
     <section class="relative h-screen bg-gray-900">
         <div class="bg-cover bg-center h-full" style="background-image: url('https://cdn.discordapp.com/attachments/229099609140494336/883515414125088778/20210904093553_1.jpg')">

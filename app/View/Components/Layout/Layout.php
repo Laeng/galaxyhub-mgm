@@ -16,7 +16,7 @@ class Layout extends Component
      *
      * @return void
      */
-    public function __construct($title = "", $class = "")
+    public function __construct($title = '', $class = '')
     {
         $this->title = $title;
         $this->class = $class;

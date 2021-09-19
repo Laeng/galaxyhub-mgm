@@ -74,7 +74,7 @@ class ViewAuthController extends Controller
                 'social_id' => $social->getId(),
                 'social_email' => $social->getEmail(),
                 'social_name' => $social->getName(),
-                'social_nickname' => $social->getAvatar(),
+                'social_nickname' => $social->getNickname(),
                 'social_avatar' => $social->getAvatar()
             ]);
         }

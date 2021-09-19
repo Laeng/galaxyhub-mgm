@@ -27,6 +27,26 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 //     forceTLS: true
 // });
 
+window.toastify = require('./toastify.js');
+
+window.toast = {
+    show: (type, message, duration = 3000, position = 'center', gravity = 'bottom') => {
+        new window.toastify.lib.init({
+            text: message,
+            className: type,
+            position: position,
+            gravity: gravity,
+            duration: duration,
+        }).showToast();
+    },
+    error: (message, duration = -1, position = 'center', gravity = 'bottom') => {
+        window.toast.show('error', message, duration, position, gravity);
+    },
+    success: (message, duration = 3000, position = 'center', gravity = 'bottom') => {
+        window.toast.show('success', message, duration, position, gravity);
+    },
+}
+
 import Alpine from "alpinejs"
 
 window.Alpine = Alpine;

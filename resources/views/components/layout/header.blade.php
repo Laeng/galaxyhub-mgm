@@ -21,7 +21,7 @@
             <div class="z-10">
                 <a href="#" class="{{ $logoTextClass }}">
                     <svg class="text-white hover:text-pink-500 font-medium w-full h-5">
-                        <text class="fill-current w-full h-5" x="0" y="16" font-size="100%">멀티플레이 게임 매니지먼트</text>
+                        <text class="fill-current w-full h-5" x="0" y="16" font-size="100%">{{$websiteName}}</text>
                     </svg>
                 </a>
             </div>

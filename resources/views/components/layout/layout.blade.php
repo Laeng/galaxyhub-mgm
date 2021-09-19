@@ -3,17 +3,17 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1">
-    <meta name="description" content="최고의 아르마3 클랜, 멀티플레이 게임 매니지먼트의 웹사이트 입니다. #아르마3 #스타시티즌 #MGM">
+    <meta name="description" content="멀티플레이 게임 매니지먼트의 웹사이트 입니다. #아르마3 #스타시티즌 #MGM">
     <meta name="developer" content="Laeng">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta property="og:type" content="website">
     <meta property="og:url" content="{{ url()->current() }}">
-    <meta property="og:site_name" content="Multiplay Game Management">
+    <meta property="og:site_name" content="{{ $title }}">
     <meta property="og:image" content="{{ asset('images/og_image.png') }}">
     <meta property="og:locale" content="ko_KR">
     @stack('og')
 
-    <title>{{ $title ?? "Multiplay Game Management" }}</title>
+    <title>{{ $title }}</title>
 
     <!-- Styles -->
     <link rel="stylesheet" href="{{ mix('css/app.css') }}">
@@ -25,6 +25,15 @@
 <div class="font-sans text-gray-900 antialiased {{ $class }}" {{$attributes}}>
     {{ $slot }}
 </div>
+@if($errors->has('error') || $errors->has('success'))
+    <script type="text/javascript">
+        @foreach($errors->getMessages() as $name => $messages)
+        @foreach($messages as $message)
+        window.toast.show('{{ $name }}', '{{ $message }}', {{ $name == 'error' ? -1 : 3000 }});
+        @endforeach
+        @endforeach
+    </script>
+@endif
 <noscript>
     <div class="block-overlay">
         <div style="font-size: 18pt; text-align: center">

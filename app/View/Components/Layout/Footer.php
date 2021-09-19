@@ -17,7 +17,7 @@ class Footer extends Component
      *
      * @return void
      */
-    public function __construct($parentClass = "", $class = "", $footerTextClass = "")
+    public function __construct($parentClass = '', $class = '', $footerTextClass = '')
     {
         $this->parentClass = $parentClass;
         $this->class = $class;
