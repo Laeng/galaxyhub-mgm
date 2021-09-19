@@ -18,10 +18,9 @@ class CheckInactiveUser
     public function handle(Request $request, Closure $next): mixed
     {
         $groups = $request->user()->groups()->get(['group_id']);
-        $isActive = $groups->every(function ($value, $key) {
-            $groupId = $value->group_id;
 
-            return UserGroup::BANNED != $groupId && UserGroup::INACTIVE != $groupId;
+        $isActive = $groups->every(function ($value, $key) {
+            return UserGroup::BANNED != $value->group_id && UserGroup::INACTIVE != $value->group_id;
         });
 
         if (!$isActive) {
