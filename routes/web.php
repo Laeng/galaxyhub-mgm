@@ -32,3 +32,8 @@ Route::middleware(['auth:web', \App\Http\Middleware\CheckInactiveUser::class])->
 
     Route::get('/', [\App\Http\Controllers\Lounge\ViewLoungeController::class, 'index'])->name('lounge.index');
 });
+
+Route::middleware(['auth:web', \App\Http\Middleware\AllowOnlyStaff::class])->prefix('/staff/lounge')->group(function() {
+
+});
+
