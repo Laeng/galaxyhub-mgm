@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class UserGroup implements UserGroupContract
 {
     const BANNED = 10;
+    const INACTIVE = 11;
 
     const ARMA_APPLY = 20;
     const ARMA_MEMBER = 30;

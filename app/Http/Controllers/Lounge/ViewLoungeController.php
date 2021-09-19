@@ -14,11 +14,18 @@ class ViewLoungeController extends Controller
 {
     public function index(Request $request, UserGroup $group): Factory|View|Application|RedirectResponse
     {
-        /*
-        if (!$group->has($group::ARMA_MEMBER)) {
-            return redirect()->route('join.apply');
+        if ($group->has($group::BANNED)) {
+            return view('lounge.banned');
         }
-        */
+
+        if ($group->has($group::INACTIVE)) {
+            return view('lounge.banned');
+        }
+
+        if (!$group->has($group::ARMA_MEMBER)) {
+            //return redirect()->route('join.apply');
+        }
+
 
 
         return view('lounge.index');
