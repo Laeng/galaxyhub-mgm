@@ -13,7 +13,7 @@ use Syntax\SteamApi\Facades\SteamApi;
 
 class ViewJoinController extends Controller
 {
-    public function apply(Request $request, UserGroup $group): Factory|View|Application|RedirectResponse
+    public function agree(Request $request, UserGroup $group): Factory|View|Application|RedirectResponse
     {
         if ($group->has([$group::ARMA_MEMBER, $group::BANNED])) {
             return redirect()->route('lounge.index');
@@ -41,6 +41,11 @@ class ViewJoinController extends Controller
         }
 
         return view('join.apply', ['isJoinUnable' => $isJoinUnable, 'unableReason' => $unableReason]);
+    }
+
+    public function apply(Request $request, UserGroup $group)
+    {
+        return '';
     }
 
     public function applySubmit(Request $request, UserGroup $group): RedirectResponse

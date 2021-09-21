@@ -24,7 +24,7 @@ class AllowOnlyStaff
         });
 
         if ($isUser) {
-            abort(404);
+            //abort(404);
         }
 
         return $next($request);

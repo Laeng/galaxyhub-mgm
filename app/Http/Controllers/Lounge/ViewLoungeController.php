@@ -19,11 +19,11 @@ class ViewLoungeController extends Controller
         }
 
         if ($group->has($group::INACTIVE)) {
-            return view('lounge.banned');
+            return view('lounge.inactive');
         }
 
         if (!$group->has($group::ARMA_MEMBER)) {
-            //return redirect()->route('join.apply');
+            //return redirect()->route('join.agree');
         }
 
 
