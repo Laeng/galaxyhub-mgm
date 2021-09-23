@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Action\UserGroup;
+namespace App\Action\Group;
 
 use App\Models\User;
 use Auth;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class UserGroup implements UserGroupContract
+class Group implements GroupContract
 {
     const BANNED = 10;
     const INACTIVE = 11;
@@ -18,7 +18,7 @@ class UserGroup implements UserGroupContract
 
     const STAFF = 90;
 
-    public function put(int $groupId): bool
+    public function create(int $groupId): bool
     {
         if (!$this->has($groupId)) {
             $user = $this->getUser();

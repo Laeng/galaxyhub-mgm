@@ -21,6 +21,8 @@ class UserSocial extends Model
         'social_email',
         'social_name',
         'social_avatar',
-        'social_nickname'
+        'social_nickname',
+        'refresh_token',
+        'access_token'
     ];
 }

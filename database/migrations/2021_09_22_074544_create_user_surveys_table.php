@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateSurveyFormsTable extends Migration
+class CreateUserSurveysTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,11 @@ class CreateSurveyFormsTable extends Migration
      */
     public function up()
     {
-        Schema::create('survey_forms', function (Blueprint $table) {
+        Schema::create('user_surveys', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('survey_id'); //설문 양식 아이디
-            $table->unsignedBigInteger('user_id'); // 만든 사람
-            $table->unsignedInteger('count'); //참가자 수
+            $table->unsignedInteger('user_id');
+            $table->unsignedInteger('survey_id');
+            $table->string('type');
             $table->timestamps();
         });
     }
@@ -29,6 +29,6 @@ class CreateSurveyFormsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('survey_forms');
+        Schema::dropIfExists('user_surveys');
     }
 }

@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Action\UserGroup;
+namespace App\Action\Group;
 
-interface UserGroupContract
+interface GroupContract
 {
-    public function put(int $groupId): bool;
+    public function create(int $groupId): bool;
     public function delete(int $groupId): bool;
     public function has(int $groupId): bool;
 }

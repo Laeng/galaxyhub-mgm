@@ -14,12 +14,10 @@ class CreateSurveysTable extends Migration
     public function up()
     {
         Schema::create('surveys', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('user_id'); // 만든사람
-            $table->unsignedBigInteger('original_id')->nullable()->index(); //수정되었다면, 원본 아이디를 저장한다.
-            $table->string('type'); //applicant or mission
-            $table->string('title')->nullable();
-            $table->mediumtext('questions')->default('{}'); //json 형태, 질문과 질문 타입
+            $table->increments('id');
+            $table->unsignedInteger('user_id')->nullable();
+            $table->string('name')->index();
+            $table->json('settings')->nullable();
             $table->timestamps();
         });
     }

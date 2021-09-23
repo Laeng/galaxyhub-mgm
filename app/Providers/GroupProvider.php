@@ -2,11 +2,11 @@
 
 namespace App\Providers;
 
-use App\Action\UserGroup\UserGroup;
-use App\Action\UserGroup\UserGroupContract;
+use App\Action\Group\Group;
+use App\Action\Group\GroupContract;
 use Illuminate\Support\ServiceProvider;
 
-class UserGroupProvider extends ServiceProvider
+class GroupProvider extends ServiceProvider
 {
     /**
      * Register services.
@@ -15,8 +15,8 @@ class UserGroupProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->app->bind(UserGroupContract::class, function (){
-            return new UserGroup();
+        $this->app->bind(GroupContract::class, function (){
+            return new Group();
         });
     }
 
@@ -32,6 +32,6 @@ class UserGroupProvider extends ServiceProvider
 
     public function provides(): array
     {
-        return [UserGroup::class];
+        return [Group::class];
     }
 }
