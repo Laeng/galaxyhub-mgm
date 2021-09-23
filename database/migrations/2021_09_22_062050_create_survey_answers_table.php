@@ -15,8 +15,8 @@ class CreateSurveyAnswersTable extends Migration
     {
         Schema::create('survey_answers', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('question_id');
-            $table->unsignedInteger('entry_id')->nullable();
+            $table->unsignedInteger('survey_question_id');
+            $table->unsignedInteger('survey_entry_id')->nullable();
             $table->string('value');
             $table->timestamps();
         });
