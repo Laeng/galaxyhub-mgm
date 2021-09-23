@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Builder;
 
 class SurveyForm implements SurveyFormContract
 {
-    const JOIN_APPLICATION = 'join-application-2021-09-30';
+    const JOIN_APPLICATION = 'join-application-2021-09-23';
     const MISSION_SURVEY = 'mission-survey';
 
     public function getJoinApplicationForm(): SurveyModel
@@ -27,7 +27,8 @@ class SurveyForm implements SurveyFormContract
                     '회원님들께 제공되는 MGM 아르마 애드온에는 MGM 아르마 클랜 또는 개인이 제작한 비공개 애드온도 포함되어 있으며 운영진 및 애드온 개발자의 동의 없이 재배포 또는 유출 시 법적으로 대응할 수 있음을 알려드립니다!</p>'.
                     '<p>본 클랜은 \'이중 클랜 가입 금지 조항\'이 있으며 이를 반드시 준수하셔야 합니다. 이와 관련된 자세한 규정은 <a href="https://bit.ly/3hjb6wa">이곳을</a> 참고해주시기 바랍니다.</p>'.
                     '<p>이중 클랜 가입 금지 조항은 수차례의 애드온 유출 및 무단 전용 사례가 발생하여 이중 클랜 가입 금지는 앞으로도 변함 없을 것입니다. '.
-                    '만약 이중 클랜 가입이 확인될 시 클랜에서 영구 추방 및 애드온 영구 차단 조치가 이루어지니, 위 사항을 반드시 숙지하시고 가입이후 불이익을 받지 않도록 해주시기 바랍니다.</p>'
+                    '만약 이중 클랜 가입이 확인될 시 클랜에서 영구 추방 및 애드온 영구 차단 조치가 이루어지니, 위 사항을 반드시 숙지하시고 가입이후 불이익을 받지 않도록 해주시기 바랍니다.</p>'.
+                    '<p class="text-red-600 text-base">* 필수 입력</p>'
             ]);
 
             $one->questions()->create([
