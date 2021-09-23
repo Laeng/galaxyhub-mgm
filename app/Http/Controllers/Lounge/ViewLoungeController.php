@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Lounge;
 
-use App\Action\UserGroup\UserGroup;
+use App\Action\Group\Group;
 use App\Http\Controllers\Controller;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -12,18 +12,22 @@ use Illuminate\Http\Request;
 
 class ViewLoungeController extends Controller
 {
-    public function index(Request $request, UserGroup $group): Factory|View|Application|RedirectResponse
+    public function index(Request $request, Group $group): Factory|View|Application|RedirectResponse
     {
         if ($group->has($group::BANNED)) {
             return view('lounge.banned');
         }
 
         if ($group->has($group::INACTIVE)) {
-            return view('lounge.inactive');
+            return view('lounge.inactivated');
+        }
+
+        if ($group->has($group::ARMA_APPLY)) {
+            return view('lounge.applied');
         }
 
         if (!$group->has($group::ARMA_MEMBER)) {
-            //return redirect()->route('join.agree');
+            return redirect()->route('join.agree');
         }
 
 

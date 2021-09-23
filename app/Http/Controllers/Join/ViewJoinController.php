@@ -21,18 +21,7 @@ class ViewJoinController extends Controller
             return redirect()->route('lounge.index');
         }
 
-        $isJoinUnable = false;
-        $unableReason = null;
-
-        try {
-            $this->getSteamProfile($request);
-        } catch (\Exception $e) {
-
-            $isJoinUnable = true;
-            $unableReason = $e->getMessage();
-        }
-
-        return view('join.agree', ['isJoinUnable' => $isJoinUnable, 'unableReason' => $unableReason]);
+        return view('join.agree');
     }
 
     public function apply(Request $request, Group $group, SurveyForm $form): Factory|View|Application|RedirectResponse
@@ -41,21 +30,19 @@ class ViewJoinController extends Controller
             return redirect()->route('lounge.index');
         }
 
+        if ($request->isMethod('get') && (is_null($request->session()->get('_old_input')) || count($request->session()->get('_old_input')) <= 0 )) {
+            return redirect()->route('join.agree');
+        }
+
         $survey = $form->getJoinApplicationForm();
 
-        return view('join.apply', ['survey' => $survey, 'action' => route('join.apply.submit')]);
+        return view('join.apply', ['survey' => $survey, 'action' => route('join.submit')]);
     }
 
-    public function applySubmit(Request $request, Group $group, SurveyForm $form): RedirectResponse
+    public function submit(Request $request, Group $group, SurveyForm $form): RedirectResponse
     {
         if ($group->has([$group::ARMA_MEMBER, $group::BANNED, $group::ARMA_APPLY])) {
             return redirect()->route('lounge.index');
-        }
-
-        try {
-            $steamProfile = $this->getSteamProfile($request);
-        } catch (\Exception $e) {
-            return redirect()->route('join.apply');
         }
 
         $survey = $form->getJoinApplicationForm();
@@ -63,42 +50,9 @@ class ViewJoinController extends Controller
 
         (new SurveyEntry())->for($survey)->by(auth()->user())->fromArray($answers)->push();
 
-
         auth()->user()->update(['agreed_at', now()]);
         $group->create($group::ARMA_APPLY);
 
         return redirect()->route('lounge.index');
-    }
-
-    /**
-     * @throws \Exception
-     */
-    private function getSteamProfile(Request $request)
-    {
-        $steam = $request->user()->socials()->where('social_provider', 'steam')->first();
-
-        $steamPlayer = SteamApi::Player($steam->social_id);
-        $steamUser = SteamApi::User($steam->social_id);
-        $ownedGames = $steamPlayer->GetOwnedGames();
-        $profile = $steamUser->GetPlayerSummaries()[0];
-
-        if ($profile->communityVisibilityState != 3) {
-            throw new \Exception('스팀 프로필이 친구 공개 또는 비공개 상태입니다. 프로필을 공개로 변경해 주십시오.');
-        } else {
-            $isJoinUnable = true;
-
-            foreach ($ownedGames as $game) {
-                if ($game->appId == 107410) {
-                    $isJoinUnable = false;
-                    break;
-                }
-            }
-
-            if ($isJoinUnable) {
-                throw new \Exception('MGM 라운지 및 MGM 아르마 클랜은 ARMA 3 구매자만 가입할 수 있습니다. ARMA 3를 구매 하신 후 다시 신청하여 주십시오.');
-            }
-        }
-
-        return $profile;
     }
 }

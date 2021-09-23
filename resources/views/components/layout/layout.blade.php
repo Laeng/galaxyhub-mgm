@@ -17,9 +17,11 @@
 
     <!-- Styles -->
     <link rel="stylesheet" href="{{ mix('css/app.css') }}">
+    @stack('css')
 
     <!-- Scripts -->
     <script defer src="{{ mix('js/app.js') }}"></script>
+    @stack('js')
 </head>
 <body class="bg-gray-900 overflow-x-hidden">
 <div class="font-sans text-gray-900 antialiased {{ $class }}" {{$attributes}}>
