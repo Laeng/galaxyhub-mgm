@@ -8470,6 +8470,9 @@ select{
 .-mt-px{
 	margin-top: -1px;
 }
+.mt-1{
+	margin-top: 0.25rem;
+}
 .block{
 	display: block;
 }
@@ -8712,6 +8715,10 @@ select{
 .border-gray-400{
 	--tw-border-opacity: 1;
 	border-color: rgba(156, 163, 175, var(--tw-border-opacity));
+}
+.border-red-600{
+	--tw-border-opacity: 1;
+	border-color: rgba(220, 38, 38, var(--tw-border-opacity));
 }
 .bg-blue-600{
 	--tw-bg-opacity: 1;
