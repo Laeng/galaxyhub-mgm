@@ -2,7 +2,7 @@
 
 namespace App\Http\Middleware;
 
-use App\Action\UserGroup\UserGroup;
+use App\Action\Group\Group;
 use Closure;
 use Illuminate\Http\Request;
 
@@ -20,7 +20,7 @@ class CheckInactiveUser
         $groups = $request->user()->groups()->get(['group_id']);
 
         $isActive = $groups->every(function ($value, $key) {
-            return UserGroup::BANNED != $value->group_id && UserGroup::INACTIVE != $value->group_id;
+            return Group::BANNED != $value->group_id && Group::INACTIVE != $value->group_id;
         });
 
         if (!$isActive) {
