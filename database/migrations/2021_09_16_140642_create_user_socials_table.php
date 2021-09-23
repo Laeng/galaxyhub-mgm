@@ -17,11 +17,14 @@ class CreateUserSocialsTable extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->string('social_provider');
-            $table->unsignedBigInteger('social_id');
-            $table->text('social_email')->nullable();
-            $table->text('social_name')->nullable();
-            $table->text('social_nickname')->nullable();
+            $table->text('social_id');
+            $table->string('social_email')->nullable();
+            $table->string('social_name')->nullable();
+            $table->string('social_nickname')->nullable();
             $table->text('social_avatar')->nullable();
+            $table->text('refresh_token')->nullable();
+            $table->text('access_token')->nullable();
+
             $table->timestamps();
         });
     }
