@@ -2,7 +2,7 @@
 
 namespace App\Http\Middleware;
 
-use App\Action\UserGroup\UserGroup;
+use App\Action\Group\Group;
 use Closure;
 use Illuminate\Http\Request;
 
@@ -20,7 +20,7 @@ class AllowOnlyStaff
         $groups = $request->user()->groups()->get(['group_id']);
 
         $isUser = $groups->every(function ($value, $key) {
-            return UserGroup::STAFF != $value->group_id;
+            return Group::STAFF != $value->group_id;
         });
 
         if ($isUser) {
