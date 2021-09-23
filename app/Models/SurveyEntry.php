@@ -88,8 +88,8 @@ class SurveyEntry extends Model
             }
 
             $this->answers->add(SurveyAnswer::make([
-                'question_id' => substr($key, 1),
-                'entry_id' => $this->id,
+                'survey_question_id' => substr($key, 1),
+                'survey_entry_id' => $this->id,
                 'value' => $value,
             ]));
         }
@@ -121,7 +121,7 @@ class SurveyEntry extends Model
         $this->save();
 
         foreach ($this->answers as $answer) {
-            $answer->entry_id = $this->id;
+            $answer->survey_entry_id = $this->id;
         }
 
         return parent::push();

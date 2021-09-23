@@ -87,7 +87,7 @@ class SurveyForm implements SurveyFormContract
                 'content' => '타 커뮤니티, 클랜을 탈퇴하셨다면 탈퇴 이유를 기재하여 주십시오. 탈퇴 이유를 피드백 받아 본 카페 운영에 참조하도록 하겠습니다',
             ]);
 
-            $survey = $builder->latest()->first();
+            $survey = SurveyModel::where('name', self::JOIN_APPLICATION)->latest()->first();
         }
 
         return $survey;
