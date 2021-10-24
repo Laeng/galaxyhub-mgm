@@ -64,24 +64,6 @@
         </div>
     </x-section.base>
 
-    <x-section.base parent-class="bg-indigo-700 text-white" class="py-16 lg:py-24">
-        <div class="flex justify-center">
-            <div class="w-full text-right">
-                <h3 class="text-2xl lg:text-3xl font-medium uppercase mb-2">No one left behind</h3>
-                <p>멀티플레이 게임 매니지먼트의 모토입니다. 피해가 예상되는 전장 한가운데일지라도 아무도 버리고 떠나지 않습니다. 다함께 즐기고 서로 돕습니다.</p>
-            </div>
-        </div>
-    </x-section.base>
-
-    <x-section.base parent-class="bg-gray-200" class="py-16 lg:py-24">
-        <div class="flex justify-center">
-            <div class="w-full">
-                <h3 class="text-xl lg:text-3xl font-medium mb-2">멀티플레이 게임 매니지먼트</h3>
-                <p>애드온, 업데이터, 갤럭시허브과 같은 서비스를 통해 더 재밌는 게임 경험이 될 수 있도록 회원분들을 지원하고 있습니다.</p>
-            </div>
-        </div>
-    </x-section.base>
-
     <x-section.base parent-class="bg-white" class="py-16 lg:py-32">
         <div class="grid grid-cols-1 text-center pb-16">
             <h1 class="font-bold text-4xl font-medium">Group</h1>
@@ -141,6 +123,14 @@
 
     </x-section.base>
 
+    <x-section.base parent-class="bg-indigo-700 text-white" class="py-16 lg:py-24">
+        <div class="flex justify-center">
+            <div class="w-full text-right">
+                <h3 class="text-xl lg:text-3xl font-medium mb-2">멀티플레이 게임 매니지먼트</h3>
+                <p>갤럭시허브, 라운지와 같은 서비스와 업데이터를 통해 더 재밌는 게임 경험이 될 수 있도록 회원분들을 지원하고 있습니다.</p>
+            </div>
+        </div>
+    </x-section.base>
 
     <x-section.base parent-class="bg-gray-100" class="py-16 lg:py-32">
         <div class="grid grid-cols-1 text-center pb-16">
@@ -180,6 +170,15 @@
             </div>
         </div>
 
+    </x-section.base>
+
+    <x-section.base parent-class="bg-gray-200" class="py-16 lg:py-24">
+        <div class="flex justify-center">
+            <div class="w-full">
+                <h3 class="text-2xl lg:text-3xl font-medium uppercase mb-2">No one left behind</h3>
+                <p>멀티플레이 게임 매니지먼트의 모토입니다. 피해가 예상되는 전장 한가운데일지라도 아무도 버리고 떠나지 않습니다. 다함께 즐기고 서로 돕습니다.</p>
+            </div>
+        </div>
     </x-section.base>
 
     <x-section.base parent-class="bg-white" class="py-16 lg:py-32">
