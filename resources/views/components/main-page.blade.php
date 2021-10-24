@@ -1,12 +1,8 @@
 <x-layout.layout title="멀티플레이 게임 매니지먼트">
     <style>
         :root {
-            --header-opacity: 0;
             --banner-text-opacity: 1;
             --banner-text-translate-x: 0;
-        }
-        .ho {
-            --tw-bg-opacity: var(--header-opacity, 0);
         }
         .bto {
             --tw-text-opacity: var(--banner-text-opacity, 1);
@@ -22,11 +18,11 @@
 
     </style>
 
-    <x-layout.header parent-class="bg-gray-900 w-full ho" logo-hex-code="text-[#ffffff]" logo-text-class="text-white" menu-text-class="text-gray-200 lg:text-sm" website-name="멀티플레이 게임 매니지먼트"/>
+    <x-layout.header parent-class="bg-gray-900 w-full ho" logo-hex-code="" logo-text-class="text-pink-600 hover:text-pink-500" menu-text-class="text-gray-200 lg:text-sm" website-name="멀티플레이 게임 매니지먼트"/>
 
     <section class="relative h-screen bg-gray-900">
-        <div class="bg-cover bg-center h-full" style="background-image: url('https://cdn.discordapp.com/attachments/229099609140494336/883515414125088778/20210904093553_1.jpg')">
-            <div class="bg-black bg-opacity-30 h-full">
+        <div class="bg-cover bg-center bg-fixed h-full" style="background-image: url('https://cdn.discordapp.com/attachments/229099609140494336/883515414125088778/20210904093553_1.jpg')">
+            <div class="h-full">
                 <div class="max-w-7xl mx-auto py-4 px-4 h-full" style="">
 
                     <div class="grid grid-cols-1 place-items-center h-full relative -mt-10 md:-mt-8 xl:mt-0">
@@ -219,8 +215,9 @@
         window.addEventListener('scroll', (e) => {
             let y = ((window.pageYOffset || d.scrollTop) - (d.clientTop || 0));
             d.style.setProperty('--header-opacity', calc(y, 100));
+            d.style.setProperty('--header-text-filter',  calc(y, 0.1, 20));
             d.style.setProperty('--banner-text-opacity', 1 - calc(y, 500));
-            d.style.setProperty('--banner-text-translate-x', 1 - calc(y, 10, 200) + 'px');
+            d.style.setProperty('--banner-text-translate-x', 1 - calc(y, 10, 100) + 'px');
         });
 
         function calc(y, d, l = 1) {
