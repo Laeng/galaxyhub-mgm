@@ -26,7 +26,7 @@ class ApiJoinController extends Controller
             }
         }
 
-        return $this->jsonResponse(200, '아르마 3 를 구매하셔야만  MGM 라운지 및 MGM 아르마 클랜 가입 신청이 가능합니다.', true);
+        return $this->jsonResponse(200, '\'아르마 3\'를 구매하셔야만  MGM 라운지 및 MGM 아르마 클랜 가입 신청이 가능합니다.', true);
 
     }
 }
