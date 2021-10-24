@@ -15,7 +15,7 @@ class SurveyAnswer extends Model
      *
      * @var array
      */
-    protected $fillable = ['value', 'question_id', 'entry_id'];
+    protected $fillable = ['value', 'survey_question_id', 'survey_entry_id'];
 
     /**
      * The entry the answer belongs to.
