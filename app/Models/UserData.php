@@ -19,13 +19,4 @@ class UserData extends Model
         'name',
         'data'
     ];
-
-    /**
-     * The attributes that should be casted.
-     *
-     * @var array
-     */
-    protected $casts = [
-        'data' => 'array',
-    ];
 }
