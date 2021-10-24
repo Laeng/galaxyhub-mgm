@@ -40,9 +40,14 @@ class Steam
         return $this->getUser($userId)->GetPlayerSummaries();
     }
 
-    public function getPlayerBans(int $userId): object
+    public function getPlayerBans(int $userId): array
     {
         return $this->getUser($userId)->GetPlayerBans();
+    }
+
+    public function getPlayerFriends(int $userId): array
+    {
+        return $this->getUser($userId)->GetFriendList();
     }
 
 
