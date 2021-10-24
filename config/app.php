@@ -174,6 +174,10 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+        \App\Providers\SteamProvider::class,
+        \App\Providers\SurveyFormProvider::class,
+        \App\Providers\UserDataProvider::class,
+        \App\Providers\GroupProvider::class
 
     ],
 
