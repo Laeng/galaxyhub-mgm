@@ -18,7 +18,7 @@ class Group implements GroupContract
 
     const STAFF = 90;
 
-    public function create(int $groupId): bool
+    public function add(int $groupId): bool
     {
         if (!$this->has($groupId)) {
             $user = $this->getUser();
@@ -31,7 +31,7 @@ class Group implements GroupContract
         return false;
     }
 
-    public function delete(int $groupId): bool
+    public function remove(int $groupId): bool
     {
         if (!$this->has($groupId)) {
             $group = $this->getUserGroups();

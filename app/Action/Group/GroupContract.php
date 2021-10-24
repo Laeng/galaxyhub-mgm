@@ -4,7 +4,7 @@ namespace App\Action\Group;
 
 interface GroupContract
 {
-    public function create(int $groupId): bool;
-    public function delete(int $groupId): bool;
+    public function add(int $groupId): bool;
+    public function remove(int $groupId): bool;
     public function has(int $groupId): bool;
 }
