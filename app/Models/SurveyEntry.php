@@ -90,7 +90,7 @@ class SurveyEntry extends Model
             $this->answers->add(SurveyAnswer::make([
                 'survey_question_id' => substr($key, 1),
                 'survey_entry_id' => $this->id,
-                'value' => $value,
+                'value' => clean($value), //using mews/purifier
             ]));
         }
 
