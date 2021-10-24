@@ -13,7 +13,7 @@
 }
 
 .navigation li {
-    @apply py-2 lg:py-0 text-xl lg:text-sm text-center lg:text-left hover:text-gray-400 lg:float-left;
+    @apply py-2 lg:py-0 text-xl lg:text-sm text-center lg:text-left lg:float-left;
 }
 
 .navigation li ul {
