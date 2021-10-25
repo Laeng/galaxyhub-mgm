@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Builder;
 
 class SurveyForm implements SurveyFormContract
 {
-    const JOIN_APPLICATION = 'join-application-2021-10-24';
+    const JOIN_APPLICATION = 'join-application-2021-10-25';
     const MISSION_SURVEY = 'mission-survey';
 
     public function getJoinApplicationForm(): SurveyModel
@@ -41,7 +41,7 @@ class SurveyForm implements SurveyFormContract
 
             $one->questions()->create([
                 'title' => '이중 클랜 활동에 대한 제재 동의',
-                'content' => '이중 클랜 적발시 영구 탈퇴 및 영구적인 애드온 차단 조치가 됨을 동의합니다.',
+                'content' => '이중 클랜 적발 시 영구 탈퇴 및 영구적인 애드온 차단 조치가 됨을 동의합니다.',
                 'type' => 'radio',
                 'options' => ['동의함'],
                 'rules' => ['required']
@@ -60,32 +60,32 @@ class SurveyForm implements SurveyFormContract
             ]);
 
             $two = $builder->sections()->create([
-                'name' => '타 커뮤니티, 클랜 활동 내역',
-                'description' => '명확히 작성 부탁 드리며, 거짓이 있을 때 경고 없이 카페 탈퇴가 됨을 알려 드립니다.',
+                'name' => '아르마 커뮤니티(클랜) 활동',
+                'description' => '명확히 작성 부탁드리며, 거짓이 있을 때 경고 없이 탈퇴 처리함을 알려드립니다.',
                 'rules' => ['required']
             ]);
 
             $two->questions()->create([
-                'title' => '타 커뮤니티(클랜) 활동 여부',
-                'content' => '이중클랜 적발시 영구 탈퇴및 영구적인 애드온 차단 조치가 됨을 동의합니다.',
+                'title' => '아르마 커뮤니티(클랜) 활동 여부',
+                'content' => '이중 클랜 활동이 확인되면 규정에 따라 강제 탈퇴 및 애드온 사용 금지 조치를 하고 있습니다.',
                 'type' => 'radio',
-                'options' => ['활동 중이다', '타 클랜, 커뮤니티 활동이 있다', '없다'],
+                'options' => ['활동 중이다.', '지금은 아니다.', '없다.'],
                 'rules' => ['required']
             ]);
 
             $two->questions()->create([
-                'title' => '타 커뮤니티명(클랜명)',
-                'content' => '활동하셨던 커뮤니티의 이름(클랜명)을 모두 기재하여 주십시오.',
+                'title' => '타 커뮤니티(클랜) 이름',
+                'content' => '활동하셨거나 활동 중인 아르마 관련 커뮤니티(클랜) 이름을 모두 기재하여 주십시오.',
             ]);
 
             $two->questions()->create([
                 'title' => '타 커뮤니티(클랜)내 닉네임',
-                'content' => '활동 중이거나 활동 경험이 있는 카페 내의 닉네임을 기재하여 주십시오.',
+                'content' => '아르마 관련 커뮤니티에서 활동 중이거나 활동 시 사용하셨던 닉네임을 기재하여 주십시오.',
             ]);
 
             $two->questions()->create([
                 'title' => '(탈퇴 하였다면) 탈퇴 이유',
-                'content' => '타 커뮤니티, 클랜을 탈퇴하셨다면 탈퇴 이유를 기재하여 주십시오. 탈퇴 이유를 피드백 받아 본 카페 운영에 참조하도록 하겠습니다',
+                'content' => '아르마 관련 커뮤니티, 클랜을 탈퇴하셨다면 탈퇴 이유를 기재하여 주십시오. 탈퇴 이유를 피드백 받아 본 카페 운영에 참조하도록 하겠습니다.',
             ]);
 
             $survey = SurveyModel::where('name', self::JOIN_APPLICATION)->latest()->first();
