@@ -34,6 +34,6 @@ class SurveyAnswer extends Model
      */
     public function question(): BelongsTo
     {
-        return $this->belongsTo(SurveyQuestion::class);
+        return $this->belongsTo(SurveyQuestion::class, 'survey_question_id');
     }
 }
