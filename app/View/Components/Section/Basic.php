@@ -20,7 +20,7 @@ class Basic extends Component
      *
      * @return void
      */
-    public function __construct($grandParentClass = "", $grandParentStyle = "", $parentClass = "", $parentStyle = "", $class = "", $style = "")
+    public function __construct(string $grandParentClass = "", string $grandParentStyle = "", string $parentClass = "", string $parentStyle = "", string $class = "", string $style = "")
     {
         $this->grandParentClass = $grandParentClass;
         $this->grandParentStyle = $grandParentStyle;

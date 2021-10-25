@@ -18,7 +18,7 @@ class Base extends Component
      *
      * @return void
      */
-    public function __construct($parentClass = "", $parentStyle = "", $class = "", $style = "")
+    public function __construct(string $parentClass = "", string $parentStyle = "", string $class = "", string $style = "")
     {
         $this->parentClass = $parentClass;
         $this->parentStyle = $parentStyle;
