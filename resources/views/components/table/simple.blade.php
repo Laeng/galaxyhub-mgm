@@ -20,13 +20,13 @@
                     <template x-for="(item, index) in data.first.data.items">
                         <tr>
                             @if($useCheckBox)
-                                <td class="w-4 px-3 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                <td class="w-4 px-3 py-4 whitespace-nowrap text-sm text-gray-900">
                                     <label :for="'check_' + data.component_id + '_' + index" class="sr-only"></label>
                                     <input aria-describedby="comments-description" name="comments" type="checkbox" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded" :id="'check_' + data.component_id + '_' + index">
                                 </td>
                             @endif
                             <template x-for="value in item">
-                                <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-900" x-html="value"></td>
+                                <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-500" x-html="value"></td>
                             </template>
                         </tr>
                     </template>
@@ -36,11 +36,11 @@
             <nav class="bg-white px-3 py-3 flex items-center justify-between border-t border-gray-200 sm:px-3">
                 <div class="hidden sm:block">
                     <p class="text-sm text-gray-700">
-                        <span class="font-medium">1</span>
+                        <span class="font-medium" x-text="(data.first.data.count.offset * data.first.data.count.limit) + 1">1</span>
                         -
-                        <span class="font-medium">10</span>
+                        <span class="font-medium" x-text="((data.first.data.count.offset + 1) * data.first.data.count.limit <= data.first.data.count.total) ? (data.first.data.count.offset + 1) * data.first.data.count.limit : data.first.data.count.total"></span>
                         Total:
-                        <span class="font-medium">20</span>
+                        <span class="font-medium" x-text="data.first.data.count.total"></span>
                     </p>
                 </div>
                 <div class="flex-1 flex justify-start sm:justify-end">
@@ -74,7 +74,12 @@
                         },
                         data: {
                             fields: {},
-                            items: {}
+                            items: {},
+                            count: {
+                                offset: 0,
+                                limit: 0,
+                                total: 0
+                            }
                         }
                     }
                 },
