@@ -12,6 +12,9 @@ class Group implements GroupContract
     const INACTIVE = 11;
 
     const ARMA_APPLY = 20;
+    const ARMA_DEFER = 21;
+    const ARMA_REJECT = 22;
+
     const ARMA_MEMBER = 30;
     const ARMA_MAKER1 = 31;
     const ARMA_MAKER2 = 32;
