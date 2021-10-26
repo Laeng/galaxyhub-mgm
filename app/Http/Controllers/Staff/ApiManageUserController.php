@@ -36,13 +36,14 @@ class ApiManageUserController extends Controller
             $step = 0;
         }
 
-        $applicants = $applicantQuery->offset($step * $limit)->limit($limit)->get();
+        $applicants = $applicantQuery->latest()->offset($step * $limit)->limit($limit)->get();
 
         $items = [];
-
+        $index = [];
 
         foreach ($applicants as $i){
             $user = $i->user()->first();
+            $index[] = $user->id;
 
             $survey = $user->surveys()->whereIn('survey_id', $surveyForms)->latest()->first();
             $answers = $survey->answers()->latest()->get();
@@ -72,11 +73,13 @@ class ApiManageUserController extends Controller
             }
 
             $values[4] = $survey->created_at->toDateString();
+
             $items[] = $values;
         }
 
         return $this->jsonResponse(200, 'OK', [
-            'fields' => ['스팀 닉네임', '네이버 아이디', '생년월일', '타 클랜 활동', '신청일' , '상세 정보'],
+            'fields' => ['스팀 닉네임', '네이버 아이디', '생년월일', '타 클랜 활동', '신청일', '상세 정보'],
+            'index' => $index,
             'items' => $items,
             'count' => [
                 'step' => $step,

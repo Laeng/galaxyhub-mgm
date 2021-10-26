@@ -11,17 +11,19 @@ class Simple extends Component
     private string $componentId;
     private string $apiUrl;
     private bool $useCheckBox;
+    private string $checkBoxName;
 
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct(string $apiUrl, string $useCheckBox = 'false')
+    public function __construct(string $apiUrl, bool $useCheckBox = false, string $checkBoxName = '')
     {
         $this->componentId = \Str::random(8);
         $this->apiUrl = $apiUrl;
-        $this->useCheckBox = filter_var($useCheckBox, FILTER_VALIDATE_BOOLEAN);
+        $this->useCheckBox = $useCheckBox;
+        $this->checkBoxName = $checkBoxName;
     }
 
     /**
@@ -34,7 +36,8 @@ class Simple extends Component
         return view('components.table.simple', [
             'componentId' => $this->componentId,
             'apiUrl' => $this->apiUrl,
-            'useCheckBox' => $this->useCheckBox
+            'useCheckBox' => $this->useCheckBox,
+            'checkBoxName' => $this->checkBoxName
         ]);
     }
 }

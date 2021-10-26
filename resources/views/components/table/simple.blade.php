@@ -1,4 +1,4 @@
-<div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8" x-data="alpinejs_table_simple_{{$componentId}}()">
+<div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8" x-data="table_simple_{{$componentId}}()">
     <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
         <div class="overflow-hidden border border-gray-200 rounded-lg">
             <table class="min-w-full divide-y divide-gray-200">
@@ -22,7 +22,7 @@
                             @if($useCheckBox)
                                 <td class="w-4 px-3 py-4 whitespace-nowrap text-sm text-gray-900">
                                     <label :for="'check_' + data.component_id + '_' + index" class="sr-only"></label>
-                                    <input aria-describedby="comments-description" name="comments" type="checkbox" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded" :id="'check_' + data.component_id + '_' + index">
+                                    <input type="checkbox" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded" :name="data.check_box_name + '[]'" :value="data.list.data.index[index]" :id="'check_' + data.component_id + '_' + index">
                                 </td>
                             @endif
                             <template x-for="value in item">
@@ -56,7 +56,7 @@
     </div>
 
     <script type="text/javascript">
-        function alpinejs_table_simple_{{$componentId}}() {
+        function table_simple_{{$componentId}}() {
             return {
                 interval: {
                     list: -1
@@ -65,6 +65,7 @@
                     list: false,
                 },
                 data: {
+                    check_box_name: '{{$checkBoxName}}',
                     component_id: '{{$componentId}}',
                     list: {
                         lock: false,
@@ -124,6 +125,4 @@
             };
         }
     </script>
-
-
 </div>
