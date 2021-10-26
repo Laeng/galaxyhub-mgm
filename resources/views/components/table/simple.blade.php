@@ -43,13 +43,13 @@
                         <span class="font-medium" x-text="data.list.data.count.total"></span>
                     </p>
                 </div>
-                <div class="flex-1 flex justify-start sm:justify-end">
-                    <a href="#" class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50" @click="list(data.list.body.step -= 1)">
+                <div class="flex-1 flex justify-start sm:justify-end space-x-3">
+                    <x-button.filled.md-white @click="list(data.list.body.step -= 1)">
                         이전
-                    </a>
-                    <a href="#" class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50" @click="list(data.list.body.step += 1)">
+                    </x-button.filled.md-white>
+                    <x-button.filled.md-white @click="list(data.list.body.step += 1)">
                         다음
-                    </a>
+                    </x-button.filled.md-white>
                 </div>
             </nav>
         </div>
