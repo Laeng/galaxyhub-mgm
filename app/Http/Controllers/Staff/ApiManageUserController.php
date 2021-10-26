@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Staff;
 
 use App\Action\Group\Group;
-use App\Action\Survey\SurveyForm;
 use App\Http\Controllers\Controller;
 use App\Models\Survey;
 use App\Models\UserGroup;
@@ -12,16 +11,32 @@ use Illuminate\Http\Request;
 
 class ApiManageUserController extends Controller
 {
-    public function getApplicantList(Request $request, SurveyForm $surveyForm): JsonResponse
+    public function getApplicantList(Request $request): JsonResponse
     {
-        $offset = $request->get('offset',  0);
+        $step = $request->get('step',  0);
         $limit = $request->get('limit', 20);
+
+        if ($limit < 1 || $limit > 100) $limit = 20;
 
         $surveyForms = Survey::where('name', 'like', 'join-application-%')->get(['id'])->pluck('id')->toArray();
 
         $applicantQuery = UserGroup::where('group_id', Group::ARMA_APPLY);
         $applicantCount = $applicantQuery->count();
-        $applicants = $applicantQuery->offset($offset * $limit)->limit($limit)->get();
+
+        if ($step >= 0) {
+            $quotient = intdiv($applicantCount, $limit);
+            if ($quotient <= $step) {
+                $step = $quotient - 1; //step 값은 0부터 시작하기 떄문에 1를 빼준다.
+
+                if ($applicantCount % $limit > 0) {
+                    $step += 1;
+                }
+            }
+        } else {
+            $step = 0;
+        }
+
+        $applicants = $applicantQuery->offset($step * $limit)->limit($limit)->get();
 
         $items = [];
 
@@ -35,7 +50,7 @@ class ApiManageUserController extends Controller
             $values = [
                 "<a class='text-indigo-600 hover:text-indigo-900' href='https://steamcommunity.com/profiles/{$user->socials()->where('social_provider', 'steam')->latest()->first()->social_id}' target='_blank'>{$user->nickname}</a>",
                 '', '', '', '',
-                '<a class="text-indigo-600 hover:text-indigo-900" href="'. route('staff.user.applicant.detail', $user->id) .'" target="_blank">확인하기</a>'
+                '<a class="text-indigo-600 hover:text-indigo-900" href="'. route('staff.user.applicant.detail', $user->id) .'">확인하기</a>'
             ];
 
             foreach ($answers as $it) {
@@ -64,7 +79,7 @@ class ApiManageUserController extends Controller
             'fields' => ['스팀 닉네임', '네이버 아이디', '생년월일', '타 클랜 활동', '신청일' , '상세 정보'],
             'items' => $items,
             'count' => [
-                'offset' => $offset,
+                'step' => $step,
                 'limit' => $limit,
                 'total' => $applicantCount
             ]

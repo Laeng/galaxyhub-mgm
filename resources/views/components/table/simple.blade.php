@@ -1,6 +1,6 @@
 <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8" x-data="alpinejs_table_simple_{{$componentId}}()">
     <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
-        <form class="overflow-hidden border border-gray-200 rounded-lg">
+        <div class="overflow-hidden border border-gray-200 rounded-lg">
             <table class="min-w-full divide-y divide-gray-200">
                 <thead class="bg-gray-50">
                 <tr>
@@ -11,13 +11,13 @@
                         </th>
                     @endif
 
-                    <template x-for="field in data.first.data.fields">
+                    <template x-for="field in data.list.data.fields">
                         <th scope="col" class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" x-html="field"></th>
                     </template>
                 </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
-                    <template x-for="(item, index) in data.first.data.items">
+                    <template x-for="(item, index) in data.list.data.items">
                         <tr>
                             @if($useCheckBox)
                                 <td class="w-4 px-3 py-4 whitespace-nowrap text-sm text-gray-900">
@@ -36,64 +36,67 @@
             <nav class="bg-white px-3 py-3 flex items-center justify-between border-t border-gray-200 sm:px-3">
                 <div class="hidden sm:block">
                     <p class="text-sm text-gray-700">
-                        <span class="font-medium" x-text="(data.first.data.count.offset * data.first.data.count.limit) + 1">1</span>
+                        <span class="font-medium" x-text="(data.list.data.count.step * data.list.data.count.limit) + 1">1</span>
                         -
-                        <span class="font-medium" x-text="((data.first.data.count.offset + 1) * data.first.data.count.limit <= data.first.data.count.total) ? (data.first.data.count.offset + 1) * data.first.data.count.limit : data.first.data.count.total"></span>
+                        <span class="font-medium" x-text="((data.list.data.count.step + 1) * data.list.data.count.limit <= data.list.data.count.total) ? (data.list.data.count.step + 1) * data.list.data.count.limit : data.list.data.count.total"></span>
                         Total:
-                        <span class="font-medium" x-text="data.first.data.count.total"></span>
+                        <span class="font-medium" x-text="data.list.data.count.total"></span>
                     </p>
                 </div>
                 <div class="flex-1 flex justify-start sm:justify-end">
-                    <a href="#" class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+                    <a href="#" class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50" @click="list(data.list.body.step -= 1)">
                         이전
                     </a>
-                    <a href="#" class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+                    <a href="#" class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50" @click="list(data.list.body.step += 1)">
                         다음
                     </a>
                 </div>
             </nav>
-        </form>
+        </div>
     </div>
 
     <script type="text/javascript">
         function alpinejs_table_simple_{{$componentId}}() {
             return {
                 interval: {
-                    first: -1
+                    list: -1
                 },
                 load: {
-                    first: false,
+                    list: false,
                 },
                 data: {
                     component_id: '{{$componentId}}',
-                    first: {
+                    list: {
+                        lock: false,
                         url: '{{ $apiUrl }}',
                         body: {
-                            offset: 0,
+                            step: 0,
                             limit: 20
                         },
                         data: {
                             fields: {},
                             items: {},
                             count: {
-                                offset: 0,
+                                step: 0,
                                 limit: 0,
                                 total: 0
                             }
                         }
                     }
                 },
-                first() {
+                list(step = 0) {
+                    this.data.list.body.step = step;
+
                     let success = (r) => {
                         if (r.data.data !== null) {
                             if (!(typeof r.data.data === 'undefined' || r.data.data.length <= 0)) {
-                                this.data.first = r.data;
+                                this.data.list.data = r.data.data;
 
-                                console.log(r.data);
-                                console.log(this.data.first);
+                                this.data.list.body.step = this.data.list.data.count.step;
+                                this.data.list.body.limit = this.data.list.data.count.limit;
 
-                                if (this.interval.first >= 0) {
-                                    clearInterval(this.interval.first);
+                                if (this.interval.list >= 0) {
+                                    clearInterval(this.interval.list);
                                 }
                             }
                         }
@@ -101,13 +104,19 @@
                     let error = (e) => {
                         console.log(e);
                     }
-                    let complete = () => {}
+                    let complete = () => {
+                        this.data.list.lock = false;
+                    }
 
-                    this.post(this.data.first.url, this.data.first.body, success, error, complete);
-                    //this.interval.first = setInterval(() => {this.post(this.data.first.url, this.data.first.body, success, error, complete)}, 5000);
+                    if (!this.data.list.lock) {
+                        this.data.list.lock = true;
+
+                        this.post(this.data.list.url, this.data.list.body, success, error, complete);
+                        this.interval.list = setInterval(() => {this.post(this.data.list.url, this.data.list.body, success, error, complete)}, 5000);
+                    }
                 },
                 init() {
-                    this.first();
+                    this.list();
                 },
                 post(url, body, success, error, complete) {
                     window.axios.post(url, body).then(success).catch(error).then(complete);
