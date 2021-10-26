@@ -6,8 +6,6 @@ use App\Action\Group\Group;
 use App\Action\Survey\SurveyForm;
 use App\Http\Controllers\Controller;
 use App\Models\Survey;
-use App\Models\SurveyAnswer;
-use App\Models\SurveyQuestion;
 use App\Models\UserGroup;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -20,7 +18,10 @@ class ApiManageUserController extends Controller
         $limit = $request->get('limit', 20);
 
         $surveyForms = Survey::where('name', 'like', 'join-application-%')->get(['id'])->pluck('id')->toArray();
-        $applicants = UserGroup::where('group_id', Group::ARMA_APPLY)->offset($offset * $limit)->limit($limit)->get();
+
+        $applicantQuery = UserGroup::where('group_id', Group::ARMA_APPLY);
+        $applicantCount = $applicantQuery->count();
+        $applicants = $applicantQuery->offset($offset * $limit)->limit($limit)->get();
 
         $items = [];
 
@@ -28,12 +29,13 @@ class ApiManageUserController extends Controller
         foreach ($applicants as $i){
             $user = $i->user()->first();
 
-            $survey = $user->surveys()->where('id', $surveyForms)->latest()->first();
-            $answers = $survey->answers()->get();
+            $survey = $user->surveys()->whereIn('survey_id', $surveyForms)->latest()->first();
+            $answers = $survey->answers()->latest()->get();
 
             $values = [
-                $user->nickname, '', '', '', '',
-                '<a href="'. route('staff.user.applicant.detail', $user->id) .'" class="underline text-blue-500 hover:text-blue-600" target="_blank">조회</a>'
+                "<a class='text-indigo-600 hover:text-indigo-900' href='https://steamcommunity.com/profiles/{$user->socials()->where('social_provider', 'steam')->latest()->first()->social_id}' target='_blank'>{$user->nickname}</a>",
+                '', '', '', '',
+                '<a class="text-indigo-600 hover:text-indigo-900" href="'. route('staff.user.applicant.detail', $user->id) .'" target="_blank">확인하기</a>'
             ];
 
             foreach ($answers as $it) {
@@ -43,7 +45,9 @@ class ApiManageUserController extends Controller
                 if (is_null($question)) continue;
 
                 switch ($question->title) {
-                    case '네이버 아이디': $values[1] = $v; break;
+                    case '네이버 아이디':
+                        $values[1] = "<a class='text-indigo-600 hover:text-indigo-900' href='https://cafe.naver.com/ca-fe/cafes/17091584/members?memberId={$v}' target='_blank'>{$v}</a>";
+                        break;
 
                     case '본인의 생년월일': $values[2] = $v; break;
 
@@ -57,8 +61,13 @@ class ApiManageUserController extends Controller
         }
 
         return $this->jsonResponse(200, 'OK', [
-            'fields' => ['스팀 닉네임', '네이버 아이디', '생년월일', '타 클랜 활동', '신청일' , '<span class="sr-only">자세히 보기</span>'],
-            'items' => $items
+            'fields' => ['스팀 닉네임', '네이버 아이디', '생년월일', '타 클랜 활동', '신청일' , '상세 정보'],
+            'items' => $items,
+            'count' => [
+                'offset' => $offset,
+                'limit' => $limit,
+                'total' => $applicantCount
+            ]
         ]);
     }
 }
