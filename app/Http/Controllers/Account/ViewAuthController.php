@@ -17,7 +17,7 @@ class ViewAuthController extends Controller
     public function login(Request $request): RedirectResponse|Factory|View|Application
     {
         if (Auth::check()) {
-            return redirect()->route('account.auth.login');
+            return redirect()->route('lounge.index');
         }
 
         $steam = Socialite::driver('steam')->redirect()->getTargetUrl();
@@ -93,7 +93,7 @@ class ViewAuthController extends Controller
             $query->where('password', $password);
         }
 
-        $user = $query->first();
+        $user = $query->latest()->first();
 
         return !is_null($user) ? $user : null;
     }
