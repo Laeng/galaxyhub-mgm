@@ -37,7 +37,7 @@ class ViewAuthController extends Controller
     public function callback(Request $request, string $provider = 'steam'): RedirectResponse|Factory|View|Application
     {
         if (Auth::check()) {
-            return redirect()->route('account.auth.login');
+            return redirect()->route('lounge.index');
         }
 
         $social = Socialite::driver($provider)->user();
@@ -85,12 +85,12 @@ class ViewAuthController extends Controller
         return redirect()->intended('lounge');
     }
 
-    private function authenticate(mixed $username, string $password = null, string $provider = 'default'): ?User
+    private function authenticate(int|string $username, string $password = null, string $provider = 'default'): ?User
     {
-        $query = User::where('provider', $provider)->where('username', $username);
+        $query = User::where('provider', $provider)->where('username', '=', (string) $username);
 
         if ($provider === 'default') {
-            $query->where('password', $password);
+            $query->where('password', '=', $password);
         }
 
         $user = $query->latest()->first();
