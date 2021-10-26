@@ -13,17 +13,17 @@ class ViewManageUserController extends Controller
 {
     public function list(Request $request): Factory|View|Application|RedirectResponse
     {
-        return view('staff.user-list');
+        return view('staff.userApplicantList');
     }
 
     public function detail(Request $request, string $user_id): Factory|View|Application|RedirectResponse
     {
-        return view('staff.user-list');
+        return view('staff.userApplicantList');
     }
 
     public function applicantList(Request $request): Factory|View|Application|RedirectResponse
     {
-        return view('staff.user-list', [
+        return view('staff.userApplicantList', [
             'title' => '가입 신청자',
             'alerts' => [
                 ['danger', '',now()->subYears(16)->year . '년생 이상만 가입을 허용해 주십시오. (' . now()->year . '년 기준)'],
@@ -36,6 +36,6 @@ class ViewManageUserController extends Controller
 
     public function applicantDetail(Request $request, string $user_id): Factory|View|Application|RedirectResponse
     {
-        return view('staff.user-list');
+        return view('staff.userApplicantList');
     }
 }

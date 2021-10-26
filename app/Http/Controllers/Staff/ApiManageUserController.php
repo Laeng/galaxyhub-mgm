@@ -51,7 +51,7 @@ class ApiManageUserController extends Controller
             $values = [
                 "<a class='text-indigo-600 hover:text-indigo-900' href='https://steamcommunity.com/profiles/{$user->socials()->where('social_provider', 'steam')->latest()->first()->social_id}' target='_blank'>{$user->nickname}</a>",
                 '', '', '', '',
-                '<a class="text-indigo-600 hover:text-indigo-900" href="'. route('staff.user.applicant.detail', $user->id) .'">확인하기</a>'
+                '<a class="text-indigo-600 hover:text-indigo-900" href="'. route('staff.user.applicant.detail', $user->id) .'">자세히 보기</a>'
             ];
 
             foreach ($answers as $it) {
