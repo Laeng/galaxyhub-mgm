@@ -7,7 +7,7 @@
                     @if($useCheckBox)
                         <th scope="col" class="w-4 px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                             <label :for="'check_' + data.component_id" class="sr-only">전체삭제</label>
-                            <input class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded" type="checkbox" :id="'check_' + data.component_id">
+                            <input class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded" type="checkbox" :id="'check_' + data.component_id" @click="checkbox()" >
                         </th>
                     @endif
 
@@ -22,7 +22,7 @@
                             @if($useCheckBox)
                                 <td class="w-4 px-3 py-4 whitespace-nowrap text-sm text-gray-900">
                                     <label :for="'check_' + data.component_id + '_' + index" class="sr-only"></label>
-                                    <input type="checkbox" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded" :name="data.check_box_name + '[]'" :value="data.list.data.index[index]" :id="'check_' + data.component_id + '_' + index">
+                                    <input type="checkbox" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded checkbox" :name="data.check_box_name + '[]'" :value="data.list.data.index[index]" :id="'check_' + data.component_id + '_' + index">
                                 </td>
                             @endif
                             <template x-for="value in item">
@@ -83,7 +83,8 @@
                                 total: 0
                             }
                         }
-                    }
+                    },
+                    checkbox: false
                 },
                 list(step = 0) {
                     this.data.list.body.step = step;
@@ -115,6 +116,14 @@
                         this.post(this.data.list.url, this.data.list.body, success, error, complete);
                         this.interval.list = setInterval(() => {this.post(this.data.list.url, this.data.list.body, success, error, complete)}, 5000);
                     }
+                },
+                checkbox() {
+                    this.data.checkbox = !this.data.checkbox;
+                    let checkboxes = document.querySelectorAll('.checkbox');
+                    [...checkboxes].map((el) => {
+                        el.checked = this.data.checkbox;
+                    })
+
                 },
                 init() {
                     this.list();
