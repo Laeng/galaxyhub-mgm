@@ -16,7 +16,8 @@ class CreateUserGroupsTable extends Migration
         Schema::create('user_groups', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id')->index();
-            $table->smallInteger('group_id');
+            $table->smallInteger('group_id')->index();
+            $table->text('reason')->nullable();
             $table->timestamps();
         });
     }
