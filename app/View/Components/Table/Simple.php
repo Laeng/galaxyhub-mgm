@@ -18,9 +18,9 @@ class Simple extends Component
      *
      * @return void
      */
-    public function __construct(string $apiUrl, bool $useCheckBox = false, string $checkBoxName = '')
+    public function __construct(string $componentId, string $apiUrl, bool $useCheckBox = false, string $checkBoxName = '')
     {
-        $this->componentId = \Str::random(8);
+        $this->componentId = $componentId;
         $this->apiUrl = $apiUrl;
         $this->useCheckBox = $useCheckBox;
         $this->checkBoxName = $checkBoxName;
