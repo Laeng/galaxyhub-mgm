@@ -17,8 +17,8 @@ class CreateUserGroupsTable extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id')->index();
             $table->smallInteger('group_id')->index();
-            $table->text('reason')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

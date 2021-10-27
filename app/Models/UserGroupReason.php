@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class UserReason extends Model
+class UserGroupReason extends Model
 {
     use HasFactory;
 
@@ -16,12 +16,8 @@ class UserReason extends Model
      */
     protected $fillable = [
         'user_id',
-        'group_id',
-        'reason',
-        'password',
-        'avatar',
-        'remember_token',
-        'email',
-        'agreed_at'
+        'user_group_id',
+        'staff_id',
+        'reason'
     ];
 }
