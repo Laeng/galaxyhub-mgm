@@ -36,7 +36,7 @@
             <nav class="bg-white px-3 py-3 flex items-center justify-between border-t border-gray-200 sm:px-3">
                 <div class="hidden sm:block">
                     <p class="text-sm text-gray-700">
-                        <span class="font-medium" x-text="(data.list.data.count.step * data.list.data.count.limit) + 1">1</span>
+                        <span class="font-medium" x-text="(data.list.data.count.step >= 0) ? (data.list.data.count.step * data.list.data.count.limit) + 1 : 0">1</span>
                         -
                         <span class="font-medium" x-text="((data.list.data.count.step + 1) * data.list.data.count.limit <= data.list.data.count.total) ? (data.list.data.count.step + 1) * data.list.data.count.limit : data.list.data.count.total"></span>
                         Total:
@@ -100,6 +100,7 @@
                                 if (this.interval.list >= 0) {
                                     clearInterval(this.interval.list);
                                 }
+
                             }
                         }
                     }
