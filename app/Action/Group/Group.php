@@ -2,8 +2,13 @@
 
 namespace App\Action\Group;
 
+use App\Exceptions\InstanceNotFoundException;
 use App\Models\User;
+use App\Models\UserGroup;
 use Auth;
+use Exception;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\RelationNotFoundException;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Group implements GroupContract
@@ -21,50 +26,92 @@ class Group implements GroupContract
 
     const STAFF = 90;
 
-    public function add(int $groupId): bool
+    /**
+     * @throws Exception
+     */
+    public function add(int $groupId, User|int|null $user = null, string|null $reason = null, User|int|null $by = null): bool
     {
-        if (!$this->has($groupId)) {
-            $user = $this->getUser();
-            $group = $this->getUserGroups();
-            $group->create(['user_id' => $user->id, 'group_id' => $groupId]);
+        $user = $this->validateUser($user);
+        $by = $this->validateUser($by, true);
 
-            return true;
-        }
+        if ($this->has($groupId, $user)) return false;
 
-        return false;
+        $group = $user->groups()->create(['user_id' => $user->id, 'group_id' => $groupId]);
+        $group->reason()->create(['user_id' => $user->id, 'user_group_id' => $group->id, 'reason' => $reason, 'staff_id' => !is_null($by) ? $by->id : null]);
+
+        return true;
     }
 
-    public function remove(int $groupId): bool
+    /**
+     * @throws Exception
+     */
+    public function remove(int $groupId, User|int|null $user = null, string|null $reason = null, User|int|null $by = null): bool
     {
-        if (!$this->has($groupId)) {
-            $group = $this->getUserGroups();
-            $group->where('group_id', $groupId)->delete();
+        $user = $this->validateUser($user);
+        $by = $this->validateUser($by, true);
 
-            return true;
-        }
+        if (!$this->has($groupId, $user)) return false;
 
-        return false;
+        $q = $user->groups()->where('group_id', $groupId);
+        $group = $q->first();
+        $group->reason()->create(['user_id' => $user->id, 'user_group_id' => $group->id, 'reason' => $reason, 'staff_id' => !is_null($by) ? $by->id : null]);
+        $q->delete();
+
+        return true;
     }
 
-    public function has(int|array $groupId): bool
+    /**
+     * @throws Exception
+     */
+    public function has(int|array $groupId, User|int|null $user = null): bool
     {
-        $group = $this->getUserGroups();
+        $user = $this->validateUser($user);
 
         if (is_array($groupId)) {
-            return $group->whereIn('group_id', $groupId)->exists();
+            return $user->groups()->whereIn('group_id', $groupId)->exists();
+        } else {
+            return $user->groups()->where('group_id', $groupId)->exists();
+        }
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function getUserGroups(User|int|null $user = null): Collection
+    {
+        $user = $this->validateUser($user);
+        return UserGroup::where('user_id', $user->id)->gat();
+    }
+
+    public function getSpecificGroupUsers(int $groupId, $offset = 0, $limit = 200, $latest = false): Collection
+    {
+        $q = UserGroup::where('group_id', $groupId);
+
+        if ($latest) $q->latest();
+
+        return $q->offset($offset)->limit($limit)->get();
+    }
+
+    public function countSpecificGroupUsers(int $groupId, $offset = 0, $limit = 200): int
+    {
+        return UserGroup::where('group_id', $groupId)->count();
+    }
+
+    /**
+     * @throws InstanceNotFoundException
+     */
+    private function validateUser(User|int|null $user, bool $ignoreException = false): ?User
+    {
+        $instance = $user;
+
+        if (is_null($user)) $instance = auth()->user();
+        if (is_int($user)) $instance = User::find($user);
+
+        if (is_null($instance)) {
+            if (!$ignoreException) throw new InstanceNotFoundException('', 500);
+            return null;
         }
 
-        return $group->where('group_id', $groupId)->exists();
-    }
-
-    private function getUser(): User
-    {
-        return Auth::user();
-    }
-
-    private function getUserGroups(): ?HasMany
-    {
-        $user = $this->getUser();
-        return (!is_null($user)) ? $user->groups() : null;
+        return $instance;
     }
 }
