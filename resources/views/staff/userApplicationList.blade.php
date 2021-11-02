@@ -37,17 +37,24 @@
                         function application_list_form() {
                             return {
                                 data: {
-                                  reject: {
-                                      lock: false
-                                  }
+                                    process: {
+                                        lock: false
+                                    }
                                 },
                                 process(type, title, message, prompt = true) {
+                                    let checked = this.checked(document.querySelectorAll("input[name='user_id[]']:checked"));
+
+                                    if (checked.length <= 0) {
+                                        window.modal.alert('오류', '처리할 신청자를 선택하여 주십시오.', (c) => {}, 'error');
+                                        return;
+                                    }
+
                                     let callback = (r) => {
                                         if (r.isConfirmed) {
                                             let body = {
-                                                type: 'reject',
-                                                user_id: this.checked(document.querySelectorAll("input[name='user_id[]']:checked")),
-                                                reason: (prompt) ? r.value : ''
+                                                type: type,
+                                                user_id: checked,
+                                                reason: (prompt) ? r.value : null
                                             };
 
                                             let success = (r) => {
@@ -63,12 +70,12 @@
                                             };
 
                                             let complete = () => {
-                                                this.data.list.lock = false;
+                                                this.data.process.lock = false;
                                             };
 
-                                            if (!this.data.list.lock) {
-                                                this.data.list.lock = true;
-                                                this.post(this.data.list.url, body, success, error, complete);
+                                            if (!this.data.process.lock) {
+                                                this.data.process.lock = true;
+                                                this.post('{{ route('staff.user.application.application.process') }}', body, success, error, complete);
                                             }
                                         }
                                     };
@@ -76,12 +83,12 @@
                                     if (prompt) {
                                         window.modal.prompt(title, message, (v) => {}, callback);
                                     } else {
-                                        window.modal.alert(title, message, callback, 'question');
+                                        window.modal.confirm(title, message, callback, 'question', '예', '아니요');
                                     }
                                 },
                                 checked(checkboxes) {
                                     let checked = [];
-                                    [...checkboxes].map((el) => {checked.add(el.value);});
+                                    [...checkboxes].map((el) => {checked.push(el.value);});
 
                                     return checked;
                                 },

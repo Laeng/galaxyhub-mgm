@@ -44,7 +44,7 @@ Route::middleware(['auth:web', \App\Http\Middleware\AllowOnlyStaff::class])->pre
     Route::get('/user/{user_id}', [ViewManageUserController::class, 'detail'])->name('staff.user.detail');
     Route::get('/user/application/list', [ViewManageUserController::class, 'applicantList'])->name('staff.user.application.list');
     Route::post('/user/application/list/get', [ApiManageUserApplicationController::class, 'getList'])->name('staff.user.application.list.get');
-    Route::any('/user/application/process', [ApiManageUserApplicationController::class, 'acceptApplication'])->name('staff.user.application.application.process');
+    Route::any('/user/application/process', [ApiManageUserApplicationController::class, 'process'])->name('staff.user.application.application.process');
     Route::get('/user/application/{user_id}', [ViewManageUserController::class, 'applicantDetail'])->name('staff.user.application.detail');
 });
 

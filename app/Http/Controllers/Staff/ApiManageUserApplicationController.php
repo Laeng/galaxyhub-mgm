@@ -13,18 +13,21 @@ use Str;
 
 class ApiManageUserApplicationController extends Controller
 {
-    public function getList(Request $request): JsonResponse
+    public function getList(Request $request, Group $group): JsonResponse
     {
         try {
+            $this->jsonValidator($request, [
+                'step' => 'int',
+                'limit' => 'int'
+            ]);
+
             $step = $request->get('step', 0);
             $limit = $request->get('limit', 20);
 
             if ($limit < 1 || $limit > 100) $limit = 20;
 
             $surveyForms = Survey::where('name', 'like', 'join-application-%')->get(['id'])->pluck('id')->toArray();
-
-            $applicantQuery = UserGroup::where('group_id', Group::ARMA_APPLY);
-            $applicantCount = $applicantQuery->count();
+            $applicantCount = $group->countSpecificGroupUsers($group::ARMA_APPLY);
 
             if ($step >= 0) {
                 $quotient = intdiv($applicantCount, $limit);
@@ -39,7 +42,7 @@ class ApiManageUserApplicationController extends Controller
                 $step = 0;
             }
 
-            $applicants = $applicantQuery->latest()->offset($step * $limit)->limit($limit)->get();
+            $applicants = $group->getSpecificGroupUsers($group::ARMA_APPLY, $step * $limit, $limit, true);
 
             $items = [];
             $index = [];
@@ -96,13 +99,18 @@ class ApiManageUserApplicationController extends Controller
         }
     }
 
-    public function processApplication(Request $request, Group $group): JsonResponse
+    public function process(Request $request, Group $group): JsonResponse
     {
         try {
             $this->jsonValidator($request, [
-                'type' => 'string|require',
-                'user_id' => 'array|require'
+                'type' => 'string|required',
+                'user_id' => 'array|required',
+                'reason' => ''
             ]);
+
+            if (count($request->get('user_id')) <= 0) {
+                throw new Exception(200, 'OK');
+            }
 
             $applicantQuery = UserGroup::where('group_id', $group::ARMA_APPLY);
             $applicants = $applicantQuery->whereIn('user_id', $request->get('user_id'))->get();
@@ -115,14 +123,19 @@ class ApiManageUserApplicationController extends Controller
             };
 
             if (is_null($toGroup)) {
-                throw new Exception('', 422);
+                throw new Exception('TYPE NOT FOUND', 422);
             }
 
-            foreach ($applicants as $i) {
-                $user = $i->user();
-                $group->remove($group::ARMA_APPLY, $user);
+            $reason = strip_tags($request->get('reason'));
 
-                $group->add($group::ARMA_MEMBER, $user);
+            foreach ($applicants as $i) {
+                $user = $i->user()->first();
+                $group->remove($group::ARMA_APPLY, $user, $reason);
+                $group->add($toGroup, $user, $reason);
+
+                if ($toGroup != $group::ARMA_MEMBER) {
+                    // 거부, 보류 이유 기록하기 blacklist 테이블 사용.
+                }
             }
 
             return $this->jsonResponse(200, 'OK', []);
