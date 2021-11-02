@@ -4,6 +4,7 @@ use App\Http\Controllers\Account\ViewAuthController;
 use App\Http\Controllers\Join\ApiJoinController;
 use App\Http\Controllers\Join\ViewJoinController;
 use App\Http\Controllers\Staff\ApiManageUserApplicationController;
+use App\Http\Controllers\Staff\ViewManageUserApplicationController;
 use App\Http\Controllers\Staff\ViewManageUserController;
 use App\Http\Middleware\CheckInactiveUser;
 use Illuminate\Support\Facades\Route;
@@ -40,11 +41,12 @@ Route::middleware(['auth:web', CheckInactiveUser::class])->prefix('lounge')->gro
 });
 
 Route::middleware(['auth:web', \App\Http\Middleware\AllowOnlyStaff::class])->prefix('staff')->group(function() {
-    Route::get('/user/list', [ViewManageUserController::class, 'list'])->name('staff.user.list');
-    Route::get('/user/{user_id}', [ViewManageUserController::class, 'detail'])->name('staff.user.detail');
-    Route::get('/user/application/list', [ViewManageUserController::class, 'applicantList'])->name('staff.user.application.list');
-    Route::post('/user/application/list/get', [ApiManageUserApplicationController::class, 'getList'])->name('staff.user.application.list.get');
-    Route::any('/user/application/process', [ApiManageUserApplicationController::class, 'process'])->name('staff.user.application.application.process');
-    Route::get('/user/application/{user_id}', [ViewManageUserController::class, 'applicantDetail'])->name('staff.user.application.detail');
+    Route::get('/user/all/list', [ViewManageUserController::class, 'list'])->name('staff.user.all.list');
+    Route::get('/user/all/{id}', [ViewManageUserController::class, 'detail'])->name('staff.user.all.detail');
+    Route::get('/user/application', [ViewManageUserApplicationController::class, 'list'])->name('staff.user.application');
+    Route::post('/user/application/get', [ApiManageUserApplicationController::class, 'get'])->name('staff.user.application.get');
+    Route::post('/user/application/process', [ApiManageUserApplicationController::class, 'process'])->name('staff.user.application.process');
+    Route::get('/user/application/{id}', [ViewManageUserApplicationController::class, 'detail'])->name('staff.user.application.detail');
+    Route::get('/user/application/{id}/revision/{survey_id}', [ViewManageUserApplicationController::class, 'detailRevision'])->name('staff.user.application.detail.revision');
 });
 

@@ -13,7 +13,7 @@ use Str;
 
 class ApiManageUserApplicationController extends Controller
 {
-    public function getList(Request $request, Group $group): JsonResponse
+    public function get(Request $request, Group $group): JsonResponse
     {
         try {
             $this->jsonValidator($request, [
