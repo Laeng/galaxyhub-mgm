@@ -18,7 +18,7 @@ class Controller extends BaseController
 
     public function jsonResponse(int $status, string $description, mixed $value): JsonResponse
     {
-        return response()->json(['status' => $status, 'description' => $description, 'data' => $value], $status);
+        return response()->json(['status' => $status, 'description' => $description, 'data' => $value], ($status == 0) ? 500 : $status);
     }
 
     /**

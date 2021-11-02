@@ -14,23 +14,25 @@ class ViewLoungeController extends Controller
 {
     public function index(Request $request, Group $group): Factory|View|Application|RedirectResponse
     {
-        if ($group->has($group::BANNED)) {
-            return view('lounge.banned');
+        try {
+            if ($group->has($group::BANNED)) {
+                return view('lounge.banned');
+            }
+
+            if ($group->has($group::INACTIVE)) {
+                return view('lounge.inactivated');
+            }
+
+            if ($group->has($group::ARMA_APPLY)) {
+                return view('lounge.applied');
+            }
+
+            if (!$group->has($group::ARMA_MEMBER)) {
+                return redirect()->route('join.agree');
+            }
+        } catch (\Exception $e) {
+            abort(500, $e->getMessage());
         }
-
-        if ($group->has($group::INACTIVE)) {
-            return view('lounge.inactivated');
-        }
-
-        if ($group->has($group::ARMA_APPLY)) {
-            return view('lounge.applied');
-        }
-
-        if (!$group->has($group::ARMA_MEMBER)) {
-            return redirect()->route('join.agree');
-        }
-
-
 
         return view('lounge.index');
     }
