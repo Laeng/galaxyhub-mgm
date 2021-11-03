@@ -2,26 +2,27 @@
 
 namespace App\View\Components\Survey\Question;
 
-use App\Models\Survey;
 use App\Models\SurveyQuestion;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
-use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\View\Component;
 
 class Single extends Component
 {
     public SurveyQuestion $question;
+    public int|null $answer;
 
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct(SurveyQuestion $question)
+    public function __construct(SurveyQuestion $question, int|null $answer = null)
     {
         $this->question = $question;
+        $this->answer = $answer;
     }
 
     /**

@@ -2,7 +2,6 @@
 
 namespace App\View\Components\Survey\Section;
 
-use App\Models\Survey;
 use App\Models\SurveySection;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -13,15 +12,17 @@ use Illuminate\View\Component;
 class Single extends Component
 {
     public SurveySection $section;
+    public int|null $answer;
 
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct(SurveySection $section)
+    public function __construct(SurveySection $section, int|null $answer = null)
     {
         $this->section = $section;
+        $this->answer = $answer;
     }
 
     /**
