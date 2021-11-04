@@ -10,9 +10,19 @@ class SurveyForm implements SurveyFormContract
     const JOIN_APPLICATION = 'join-application-2021-10-25';
     const MISSION_SURVEY = 'mission-survey';
 
-    public function getJoinApplicationForm(): SurveyModel
+    /**
+     * @param int|null $id 과거 가입 심사 폼에 대한 survey_id 입력.
+     * @return SurveyModel
+     */
+    public function getJoinApplicationForm(int $id = null): SurveyModel
     {
-        $survey = SurveyModel::where('name', self::JOIN_APPLICATION)->latest()->first();
+        $query = SurveyModel::where('name', self::JOIN_APPLICATION);
+
+        if (is_null($id)) {
+            $survey = $query->latest()->first();
+        } else {
+            $survey = $query->where('id', $id)->first() ?? $query->latest()->first();
+        }
 
         if (is_null($survey)) {
             $builder = SurveyModel::create([
@@ -41,7 +51,7 @@ class SurveyForm implements SurveyFormContract
 
             $one->questions()->create([
                 'title' => '이중 클랜 활동에 대한 제재 동의',
-                'content' => '이중 클랜 적발 시 영구 탈퇴 및 영구적인 애드온 차단 조치가 됨을 동의합니다.',
+                'content' => '이중 클랜 적발 시 탈퇴 처리와 함께 재가입 불가 및 애드온 차단 조치가 됨을 동의합니다.',
                 'type' => 'radio',
                 'options' => ['동의함'],
                 'rules' => ['required']
