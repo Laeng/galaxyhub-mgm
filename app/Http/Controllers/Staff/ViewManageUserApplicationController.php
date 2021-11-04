@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Staff;
 
+use App\Action\Survey\SurveyForm;
 use App\Http\Controllers\Controller;
 use App\Models\Survey;
 use App\Models\User;
@@ -9,6 +10,8 @@ use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
@@ -27,30 +30,35 @@ class ViewManageUserApplicationController extends Controller
         ]);
     }
 
-    public function detail(Request $request, int $id): Factory|View|Application|RedirectResponse
+    public function detail(SurveyForm $surveyForm, Request $request, int $id): Factory|View|Application|RedirectResponse
     {
-        try {
-            $user = User::find($id);
+        $user = User::find($id);
 
-            if (is_null($user)) {
-                throw new Exception('회원을 찾을 수 없습니다.');
-            }
-
-            $surveyForms = Survey::where('name', 'like', 'join-application-%')->get(['id'])->pluck('id')->toArray();
-            $userSurveys = $user->surveys()->whereIn('survey_id', $surveyForms);
-            $userApplication = $userSurveys->latest()->get();
-
-            return view('staff.userApplicationDetail', [
-                'title' => "{$user->nickname}님의 신청서",
-                'applications' => $userApplication,
-            ]);
-        } catch (Exception $e) {
-            return redirect()->route('staff.user.application')->withErrors(['danger' => $e->getMessage()]);
+        if (is_null($user)) {
+            return redirect()->route('staff.user.application')->withErrors(['danger' => '회원을 찾을 수 없습니다.']);
         }
+
+        $surveyForms = Survey::where('name', 'like', 'join-application-%')->get(['id'])->pluck('id')->toArray();
+        $userSurveys = $user->surveys()->whereIn('survey_id', $surveyForms)->latest()->get()->toArray();
+
+        return view('staff.userApplicationDetail', [
+            'title' => "{$user->nickname}님의 신청서",
+            'applications' => $userSurveys,
+            'surveyForm' => $surveyForm->getJoinApplicationForm($userSurveys[0]['survey_id']),
+            'answer' => $userSurveys[0]['id'],
+            'summaries' => $this->toJson($user->data()->where('name', 'steam_user_summaries')->latest()->first(), 'data'),
+            'infoArma3' => $this->toJson($user->data()->where('name', 'steam_game_info_arma3')->latest()->first(), 'data'),
+            'bans' => $this->toJson($user->data()->where('name', 'steam_user_bans')->latest()->first(), 'data'),
+        ]);
     }
 
     public function detailRevision(Request $request, int $id, int $survey_id): Factory|View|Application|RedirectResponse
     {
 
+    }
+
+    private function toJson(Model|null $collection, string $attribute): array|\stdClass|null
+    {
+        return !is_null($collection) ? json_decode($collection->getAttribute($attribute)) : null;
     }
 }
