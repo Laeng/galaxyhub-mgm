@@ -10,7 +10,7 @@ use Syntax\SteamApi\Facades\SteamApi;
 
 class ApiJoinController extends Controller
 {
-    public function checkSteamStatus(Request $request, Steam $steam) : JsonResponse
+    public function check_steam_status(Request $request, Steam $steam) : JsonResponse
     {
         $ownedGames = $steam->getOwnedGames(auth()->id());
         $profile = $steam->getPlayerSummaries(auth()->id())[0];

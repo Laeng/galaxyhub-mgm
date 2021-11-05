@@ -23,10 +23,10 @@
                             <x-button.filled.md-white @click="process('accept', '가입 승인', '가입을 승인 하시겠습니까?', false)" type="button">
                                 승인
                             </x-button.filled.md-white>
-                            <x-button.filled.md-white @click="process('reject', '가입 거부', '거부 사유를 입력해 주십시오.')" type="button">
+                            <x-button.filled.md-white @click="process('reject', '가입 거절', '거절 사유를 입력해 주십시오.')" type="button">
                                 거부
                             </x-button.filled.md-white>
-                            <x-button.filled.md-white @click="process('defer', '가입 거부', '거부 사유를 입력해 주십시오.')" type="button">
+                            <x-button.filled.md-white @click="process('defer', '가입 보류', '보류 사유를 입력해 주십시오.')" type="button">
                                 보류
                             </x-button.filled.md-white>
                         </div>

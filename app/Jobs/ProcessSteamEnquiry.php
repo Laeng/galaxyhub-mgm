@@ -43,12 +43,16 @@ class ProcessSteamEnquiry implements ShouldQueue
         $playerSummaries = $steam->getPlayerSummaries($userId)[0];
 
         if (!is_null($playerSummaries) && $playerSummaries->communityVisibilityState == 3) {
-            $userData->set($this->user, $userData::STEAM_USER_BANS, $steam->getPlayerBans($userId));
-            $userData->set($this->user, $userData::STEAM_USER_SUMMARIES, $steam->getPlayerSummaries($userId));
+
+
+            $userData->set($this->user, $userData::STEAM_USER_BANS, $steam->getPlayerBans($userId)[0]);
+            $userData->set($this->user, $userData::STEAM_USER_SUMMARIES, $playerSummaries);
             //$userData->set($this->user, $userData::STEAM_USER_FRIENDS, $steam->getPlayerFriends($userId)); // HTTP 401 오류 발생.
 
             $userData->set($this->user, $userData::STEAM_GAME_OWNED, $steam->getOwnedGames($userId));
             $userData->set($this->user, $userData::STEAM_GAME_INFO_ARMA3, $steam->getOwnedGameInfo($userId, 107410));
+
+            $userData->set($this->user, $userData::STEAM_GROUP_SUMMARIES, $steam->getGroupSummaries($playerSummaries->primaryClanId));
         }
     }
 }

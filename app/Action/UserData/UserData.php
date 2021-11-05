@@ -12,6 +12,7 @@ class UserData
     const STEAM_USER_FRIENDS = 'steam_user_friends';
     const STEAM_GAME_OWNED = 'steam_game_owned';
     const STEAM_GAME_INFO_ARMA3 = 'steam_game_info_arma3';
+    const STEAM_GROUP_SUMMARIES = 'steam_group_summaries';
 
     public function set(User $user, string $name, mixed $data)
     {

@@ -5,8 +5,10 @@ namespace App\Action\Steam;
 use App\Models\User;
 use Illuminate\Support\Collection;
 use Syntax\SteamApi\Containers\Game;
+use Syntax\SteamApi\Containers\Group;
 use Syntax\SteamApi\Facades\SteamApi;
 use Syntax\SteamApi\Steam\App as SteamApp;
+use Syntax\SteamApi\Steam\Group as SteamGroup;
 use Syntax\SteamApi\Steam\Player as SteamPlayer;
 use Syntax\SteamApi\Steam\User as SteamUser;
 
@@ -51,6 +53,12 @@ class Steam
     }
 
 
+    public function getGroupSummaries(int $groupId): ?Group
+    {
+        return $this->getGroup()->GetGroupSummary($groupId);
+    }
+
+
 
 
 
@@ -72,6 +80,11 @@ class Steam
     private function getUser(int $userId): SteamUser
     {
         return SteamApi::User($this->getId($userId));
+    }
+
+    private function getGroup(): SteamGroup
+    {
+        return SteamApi::group();
     }
 
 

@@ -33,7 +33,7 @@ Route::middleware('web')->prefix('lounge')->group(function() {
 
 Route::middleware(['auth:web', CheckInactiveUser::class])->prefix('lounge')->group(function() {
     Route::get('/join/agree', [ViewJoinController::class, 'agree'])->name('join.agree');
-    Route::post('/join/check/steam/status', [ApiJoinController::class, 'checkSteamStatus'])->name('join.check.steam.status');
+    Route::post('/join/check/steam/status', [ApiJoinController::class, 'check_steam_status'])->name('join.check.steam.status');
     Route::any('/join/apply', [ViewJoinController::class, 'apply'])->name('join.apply');
     Route::post('/join/submit', [ViewJoinController::class, 'submit'])->name('join.submit');
 
@@ -47,6 +47,7 @@ Route::middleware(['auth:web', \App\Http\Middleware\AllowOnlyStaff::class])->pre
     Route::post('/user/application/get', [ApiManageUserApplicationController::class, 'get'])->name('staff.user.application.get');
     Route::post('/user/application/process', [ApiManageUserApplicationController::class, 'process'])->name('staff.user.application.process');
     Route::get('/user/application/{id}', [ViewManageUserApplicationController::class, 'detail'])->name('staff.user.application.detail');
+    Route::post('/user/application/{id}/info', [ApiManageUserApplicationController::class, 'detail_info'])->name('staff.user.application.detail.info');
     Route::get('/user/application/{id}/revision/{survey_id}', [ViewManageUserApplicationController::class, 'detailRevision'])->name('staff.user.application.detail.revision');
 });
 

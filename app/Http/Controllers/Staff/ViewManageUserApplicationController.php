@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Staff;
 
+use App\Action\Steam\Steam;
 use App\Action\Survey\SurveyForm;
+use App\Action\UserData\UserData;
 use App\Http\Controllers\Controller;
 use App\Models\Survey;
 use App\Models\User;
@@ -41,24 +43,37 @@ class ViewManageUserApplicationController extends Controller
         $surveyForms = Survey::where('name', 'like', 'join-application-%')->get(['id'])->pluck('id')->toArray();
         $userSurveys = $user->surveys()->whereIn('survey_id', $surveyForms)->latest()->get()->toArray();
 
+        $status = null;
+        $userGroups = $user->groups()->orderBy('group_id', 'desc')->get()->pluck(['group_id'])->toArray(['group_id']);
+
+        if (!in_array(20, $userGroups)) {
+            foreach ($userGroups as $group) {
+                if ($group == 20) continue;
+
+                $status = match ($group) {
+                    21 => '보류',
+                    22 => '거절',
+                    30 => '승인',
+                    default => ''
+                };
+            }
+        } else {
+            $status = '접수';
+        }
+
         return view('staff.userApplicationDetail', [
             'title' => "{$user->nickname}님의 신청서",
+            'status' => $status,
+            'user' => $user,
             'applications' => $userSurveys,
             'surveyForm' => $surveyForm->getJoinApplicationForm($userSurveys[0]['survey_id']),
-            'answer' => $userSurveys[0]['id'],
-            'summaries' => $this->toJson($user->data()->where('name', 'steam_user_summaries')->latest()->first(), 'data'),
-            'infoArma3' => $this->toJson($user->data()->where('name', 'steam_game_info_arma3')->latest()->first(), 'data'),
-            'bans' => $this->toJson($user->data()->where('name', 'steam_user_bans')->latest()->first(), 'data'),
+            'answer' => $userSurveys[0]['id']
         ]);
     }
 
     public function detailRevision(Request $request, int $id, int $survey_id): Factory|View|Application|RedirectResponse
     {
-
+        return redirect()->back();
     }
 
-    private function toJson(Model|null $collection, string $attribute): array|\stdClass|null
-    {
-        return !is_null($collection) ? json_decode($collection->getAttribute($attribute)) : null;
-    }
 }

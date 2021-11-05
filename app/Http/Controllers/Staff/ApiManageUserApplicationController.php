@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Staff;
 
 use App\Action\Group\Group;
+use App\Action\UserData\UserData;
 use App\Http\Controllers\Controller;
 use App\Models\Survey;
+use App\Models\User;
 use App\Models\UserGroup;
 use Exception;
 use Illuminate\Http\JsonResponse;
@@ -109,7 +111,7 @@ class ApiManageUserApplicationController extends Controller
             ]);
 
             if (count($request->get('user_id')) <= 0) {
-                throw new Exception(200, 'OK');
+                throw new Exception('USER NOT SELECTED', 422);
             }
 
             $applicantQuery = UserGroup::where('group_id', $group::ARMA_APPLY);
@@ -140,6 +142,64 @@ class ApiManageUserApplicationController extends Controller
 
             return $this->jsonResponse(200, 'OK', []);
 
+        } catch (Exception $e) {
+            return $this->jsonResponse($e->getCode(), Str::upper($e->getMessage()), []);
+        }
+    }
+
+    public function detail_info(Request $request, int $id): JsonResponse
+    {
+        try {
+            $this->jsonValidator($request, [
+                'user_id' => 'int|required'
+            ]);
+
+            $user = User::find($request->get('user_id'));
+
+            if (is_null($user)) {
+                throw new Exception('NOT FOUND USER', 422);
+            }
+
+            $summaries = $user->data()->where('name', UserData::STEAM_USER_SUMMARIES)->latest()->first();
+            $group = $user->data()->where('name', UserData::STEAM_GROUP_SUMMARIES)->latest()->first();
+            $arma = $user->data()->where('name', UserData::STEAM_GAME_INFO_ARMA3)->latest()->first();
+            $ban = $user->data()->where('name', UserData::STEAM_USER_BANS)->latest()->first();
+
+            if (is_null($summaries) || is_null($arma) || is_null($ban) || is_null($group)) {
+                throw new Exception('DATA IS NOT READY', 500);
+            }
+
+            $summaries = json_decode($summaries->data);
+            $group = json_decode($group->data);
+            $arma = json_decode($arma->data);
+            $ban = json_decode($ban->data);
+
+            $arma->playtimeForeverReadable = date('H시간 i분', mktime(0, $arma->playtimeForever));
+
+            $surveyForms = Survey::where('name', 'like', 'join-application-%')->get(['id'])->pluck('id')->toArray();
+            $answers = $user->surveys()->whereIn('survey_id', $surveyForms)->latest()->first()->answers()->latest()->get();
+
+            foreach ($answers as $it) {
+                $question = $it->question()->first();
+                $v = $it->value;
+
+                $naver = match ($question->title) {
+                    '네이버 아이디' => $v,
+                    default => null,
+                };
+
+                if (!is_null($naver)) {
+                    break;
+                }
+            }
+
+            return $this->jsonResponse(200, 'OK', [
+                'summaries' => $summaries,
+                'group' => $group,
+                'arma' => $arma,
+                'ban' => $ban,
+                'naver_id' => $naver
+            ]);
         } catch (Exception $e) {
             return $this->jsonResponse($e->getCode(), Str::upper($e->getMessage()), []);
         }
