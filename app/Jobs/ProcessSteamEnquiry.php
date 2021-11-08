@@ -43,8 +43,6 @@ class ProcessSteamEnquiry implements ShouldQueue
         $playerSummaries = $steam->getPlayerSummaries($userId)[0];
 
         if (!is_null($playerSummaries) && $playerSummaries->communityVisibilityState == 3) {
-
-
             $userData->set($this->user, $userData::STEAM_USER_BANS, $steam->getPlayerBans($userId)[0]);
             $userData->set($this->user, $userData::STEAM_USER_SUMMARIES, $playerSummaries);
             //$userData->set($this->user, $userData::STEAM_USER_FRIENDS, $steam->getPlayerFriends($userId)); // HTTP 401 오류 발생.

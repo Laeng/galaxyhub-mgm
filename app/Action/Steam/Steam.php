@@ -55,6 +55,7 @@ class Steam
 
     public function getGroupSummaries(int $groupId): ?Group
     {
+        if ($groupId == 103582791429521408) return null;
         return $this->getGroup()->GetGroupSummary($groupId);
     }
 
