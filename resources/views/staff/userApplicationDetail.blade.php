@@ -27,16 +27,51 @@
                                 </div>
                             </li>
 
+                            @if ($status !== '접수')
+                                <li class="py-4">
+                                    <div class="flex justify-between">
+                                        <p class="text-sm font-medium text-gray-800">
+                                            담당자
+                                        </p>
+                                        <p class="text-sm text-gray-600">
+                                            {{ $assign['nickname'] }}
+                                        </p>
+                                    </div>
+                                </li>
+                            @endif
+
                             <li class="py-4">
                                 <div class="flex justify-between">
                                     <p class="text-sm font-medium text-gray-800">
-                                        신청일
+                                        신청 날짜
                                     </p>
                                     <p class="text-sm text-gray-600">
                                         {{ \Carbon\Carbon::instance(new DateTime($applications[0]['created_at']))->format('Y.m.d h:i') }}
                                     </p>
                                 </div>
                             </li>
+
+                            @if ($status !== '접수')
+                                <li class="py-4">
+                                    <div class="flex justify-between">
+                                        <p class="text-sm font-medium text-gray-800">
+                                            처리 날짜
+                                        </p>
+                                        <p class="text-sm text-gray-600">
+                                            {{ \Carbon\Carbon::instance(new DateTime($assign['created_at']))->format('Y.m.d h:i') }}
+                                        </p>
+                                    </div>
+                                </li>
+
+                                <li class="py-4">
+                                    <p class="text-sm font-medium text-gray-800 pb-2">
+                                        사유
+                                    </p>
+                                    <p class="text-sm text-gray-600">
+                                        {{ $assign['reason'] }}
+                                    </p>
+                                </li>
+                            @endif
 
                             <li class="py-4">
                                 <div class="flex justify-between">

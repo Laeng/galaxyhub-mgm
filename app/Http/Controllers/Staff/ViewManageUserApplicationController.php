@@ -44,26 +44,49 @@ class ViewManageUserApplicationController extends Controller
         $userSurveys = $user->surveys()->whereIn('survey_id', $surveyForms)->latest()->get()->toArray();
 
         $status = null;
-        $userGroups = $user->groups()->orderBy('group_id', 'desc')->get()->pluck(['group_id'])->toArray(['group_id']);
+        $assign = null;
+        $userGroups = $user->groups()->orderBy('group_id', 'asc')->get();
+        $groupsArray = $userGroups->pluck(['group_id'])->toArray('group_id');
 
-        if (!in_array(20, $userGroups)) {
-            foreach ($userGroups as $group) {
-                if ($group == 20) continue;
-
-                $status = match ($group) {
-                    21 => '보류',
-                    22 => '거절',
-                    30 => '승인',
-                    default => ''
-                };
+        foreach ($userGroups as $group) {
+            if ($group->group_id == 20) {
+                $status = '접수';
+                break;
             }
-        } else {
-            $status = '접수';
+
+            if ($group->group_id > 30) {
+                continue;
+            }
+
+            $status = match ($group->group_id) {
+                21 => '보류',
+                22 => '거절',
+                30 => '승인',
+                default => ''
+            };
+
+            $groupReason = $group->reason()->latest()->first();
+
+            if (!is_null($groupReason)) {
+                $staffInfo = $groupReason->staff()->latest()->first();
+
+                $assign = [
+                    'nickname' => '알 수 없음',
+                    'reason' => (is_null($groupReason->reason) || $groupReason->reason === '') ? '입력한 사유가 없습니다.' : $groupReason->reason,
+                    'created_at' => $groupReason->created_at
+                ];
+
+
+                if (!is_null($staffInfo)) {
+                    $assign['nickname'] = $staffInfo->nickname;
+                }
+            }
         }
 
         return view('staff.userApplicationDetail', [
             'title' => "{$user->nickname}님의 신청서",
             'status' => $status,
+            'assign' => $assign,
             'user' => $user,
             'applications' => $userSurveys,
             'surveyForm' => $surveyForm->getJoinApplicationForm($userSurveys[0]['survey_id']),

@@ -22,11 +22,6 @@ class UserGroup extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function staff(): BelongsTo
-    {
-        return $this->belongsTo(User::class, 'staff_id');
-    }
-
     public function reason(): HasOne
     {
         return $this->hasOne(UserGroupReason::class);
