@@ -68,7 +68,7 @@
                             </li>
 
                             <li class="py-4">
-                                <template x-if="data.load.data.summaries.primaryClanId === ''">
+                                <template x-if="data.load.data.group.groupID64 === ''">
                                     <div class="flex justify-between">
                                         <p class="text-sm font-medium text-gray-800">
                                             가입한 클랜
@@ -78,7 +78,7 @@
                                         </p>
                                     </div>
                                 </template>
-                                <template x-if="data.load.data.summaries.primaryClanId !== ''">
+                                <template x-if="data.load.data.group.groupID64 !== ''">
                                     <div>
                                         <p class="text-sm font-medium text-gray-800 pb-2">
                                             가입한 클랜 - <a class="text-blue-500 hover:text-blue-800" :href="'https://steamcommunity.com/profiles/' +  data.load.data.summaries.steamId + '/groups/'" target="_blank">더보기</a>
@@ -118,20 +118,22 @@
                             </template>
                         </div>
 
-                        <div class="grid grid-cols-3 gap-2 py-4">
-                            <x-button.filled.md-white @click="process('accept', '가입 승인', '가입을 승인 하시겠습니까?', false)" type="button">
-                                승인
-                            </x-button.filled.md-white>
-                            <x-button.filled.md-white @click="process('reject', '가입 거절', '거절 사유를 입력해 주십시오.')" type="button">
-                                거부
-                            </x-button.filled.md-white>
-                            <x-button.filled.md-white @click="process('defer', '가입 보류', '보류 사유를 입력해 주십시오.')" type="button">
-                                보류
-                            </x-button.filled.md-white>
-                            <x-button.filled.md-white onClick="location.href='{{ back()->getTargetUrl() }}'" type="button" class="col-span-3">
-                                돌아가기
-                            </x-button.filled.md-white>
-                        </div>
+                        @if ($status === '접수')
+                            <div class="grid grid-cols-3 gap-2 py-4">
+                                <x-button.filled.md-white @click="process('accept', '가입 승인', '가입을 승인 하시겠습니까?', false)" type="button">
+                                    승인
+                                </x-button.filled.md-white>
+                                <x-button.filled.md-white @click="process('reject', '가입 거절', '거절 사유를 입력해 주십시오.')" type="button">
+                                    거부
+                                </x-button.filled.md-white>
+                                <x-button.filled.md-white @click="process('defer', '가입 보류', '보류 사유를 입력해 주십시오.')" type="button">
+                                    보류
+                                </x-button.filled.md-white>
+                                <x-button.filled.md-white onClick="location.href='{{ back()->getTargetUrl() }}'" type="button" class="col-span-3">
+                                    돌아가기
+                                </x-button.filled.md-white>
+                            </div>
+                        @endif
 
                         <script type="text/javascript">
                             function application_detail() {
@@ -171,6 +173,7 @@
                                             }
                                         }
                                     },
+                                    @if($status === '접수')
                                     process(type, title, message, prompt = true) {
                                         let callback = (r) => {
                                             if (r.isConfirmed) {
@@ -208,11 +211,19 @@
                                             window.modal.confirm(title, message, callback, 'question', '예', '아니요');
                                         }
                                     },
+                                    @endif
                                     load() {
                                         let success = (r) => {
                                             if (r.data.data !== null) {
                                                 if (!(typeof r.data.data === 'undefined' || r.data.data.length <= 0)) {
-                                                    this.data.load.data = r.data.data;
+                                                    this.data.load.data.summaries = r.data.data.summaries;
+                                                    this.data.load.data.arma = r.data.data.arma;
+                                                    this.data.load.data.ban = r.data.data.ban;
+                                                    this.data.load.data.naver_id = r.data.data.naver_id;
+
+                                                    if (r.data.data.group != null) {
+                                                        this.data.load.data.group = r.data.data.group;
+                                                    }
 
                                                     if (this.interval.load >= 0) {
                                                         clearInterval(this.interval.load);
