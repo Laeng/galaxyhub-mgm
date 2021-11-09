@@ -26,13 +26,10 @@ class Group implements GroupContract
 
     const STAFF = 90;
 
-    /**
-     * @throws Exception
-     */
     public function add(int $groupId, User|int|null $user = null, string|null $reason = null, User|int|null $by = null): bool
     {
         $user = $this->validateUser($user);
-        $by = $this->validateUser($by, true);
+        $by = $this->validateUser($by);
 
         if ($this->has($groupId, $user)) return false;
 
@@ -42,9 +39,6 @@ class Group implements GroupContract
         return true;
     }
 
-    /**
-     * @throws Exception
-     */
     public function remove(int $groupId, User|int|null $user = null, string|null $reason = null, User|int|null $by = null): bool
     {
         $user = $this->validateUser($user);
@@ -60,9 +54,6 @@ class Group implements GroupContract
         return true;
     }
 
-    /**
-     * @throws Exception
-     */
     public function has(int|array $groupId, User|int|null $user = null): bool
     {
         $user = $this->validateUser($user);
@@ -74,13 +65,10 @@ class Group implements GroupContract
         }
     }
 
-    /**
-     * @throws Exception
-     */
     public function getUserGroups(User|int|null $user = null): Collection
     {
         $user = $this->validateUser($user);
-        return UserGroup::where('user_id', $user->id)->gat();
+        return UserGroup::where('user_id', $user->id)->get();
     }
 
     public function getSpecificGroupUsers(int $groupId, $offset = 0, $limit = 200, $latest = false): Collection
@@ -97,10 +85,7 @@ class Group implements GroupContract
         return UserGroup::where('group_id', $groupId)->count();
     }
 
-    /**
-     * @throws InstanceNotFoundException
-     */
-    private function validateUser(User|int|null $user, bool $ignoreException = false): ?User
+    private function validateUser(User|int|null $user): ?User
     {
         $instance = $user;
 
@@ -108,7 +93,6 @@ class Group implements GroupContract
         if (is_int($user)) $instance = User::find($user);
 
         if (is_null($instance)) {
-            if (!$ignoreException) throw new InstanceNotFoundException('', 500);
             return null;
         }
 

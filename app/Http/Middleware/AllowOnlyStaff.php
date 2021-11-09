@@ -19,11 +19,14 @@ class AllowOnlyStaff
     {
         $groups = $request->user()->groups()->get(['group_id']);
 
-        $isUser = $groups->every(function ($value, $key) {
-            return Group::STAFF != $value->group_id;
+        $isNotStaff = $groups->every(function ($value, $key) {
+            return match ($value->group_id) {
+                Group::STAFF => false,
+                default => true,
+            };
         });
 
-        if ($isUser) {
+        if ($isNotStaff) {
             //abort(404);
         }
 
