@@ -17,8 +17,8 @@ class PlayerHistory
         return PlayerHistoryModel::create([
             'identifier' => $identifier,
             'type' => $type,
-            '$description' => $description,
-            'staff' => (!is_null($staff)) ? $staff->id : null
+            'description' => $description,
+            'staff_id' => (!is_null($staff)) ? $staff->id : null
         ]);
     }
 

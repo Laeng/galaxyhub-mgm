@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Staff;
 
 use App\Action\Group\Group;
+use App\Action\PlayerHistory\PlayerHistory;
 use App\Action\UserData\UserData;
 use App\Http\Controllers\Controller;
 use App\Models\Survey;
@@ -101,7 +102,7 @@ class ApiManageUserApplicationController extends Controller
         }
     }
 
-    public function process(Request $request, Group $group): JsonResponse
+    public function process(Request $request, Group $group, PlayerHistory $history): JsonResponse
     {
         try {
             $this->jsonValidator($request, [
@@ -135,8 +136,20 @@ class ApiManageUserApplicationController extends Controller
                 $group->remove($group::ARMA_APPLY, $user, $reason);
                 $group->add($toGroup, $user, $reason);
 
-                if ($toGroup != $group::ARMA_MEMBER) {
-                    // 거부, 보류 이유 기록하기 blacklist 테이블 사용.
+                if ($toGroup === $group::ARMA_MEMBER) {
+                    foreach ([$group::ARMA_REJECT, $group::ARMA_DEFER] as $checkGroup) {
+                        if ($group->has($checkGroup, $user)) {
+                            $group->remove($checkGroup, $user, '가입 승인 됨.');
+                        }
+                    }
+
+                } else {
+                    $historyType = match($request->get('type')) {
+                        'reject' => $history::TYPE_APPLICATION_REJECTED,
+                        'defer' => $history::TYPE_APPLICATION_DEFERRED
+                    };
+
+                    $history->add($user->socials()->latest()->first()->social_id, $historyType, $reason, \Auth::user());
                 }
             }
 
