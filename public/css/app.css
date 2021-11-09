@@ -9841,6 +9841,11 @@ aspect-16\/10 {
 		margin-right: -2rem;
 	}
 
+	.lg\:my-6{
+		margin-top: 1.5rem;
+		margin-bottom: 1.5rem;
+	}
+
 	.lg\:ml-5{
 		margin-left: 1.25rem;
 	}
@@ -9966,6 +9971,10 @@ aspect-16\/10 {
 		padding: 4rem;
 	}
 
+	.lg\:p-8{
+		padding: 2rem;
+	}
+
 	.lg\:px-8{
 		padding-left: 2rem;
 		padding-right: 2rem;
@@ -9984,6 +9993,11 @@ aspect-16\/10 {
 	.lg\:py-32{
 		padding-top: 8rem;
 		padding-bottom: 8rem;
+	}
+
+	.lg\:px-16{
+		padding-left: 4rem;
+		padding-right: 4rem;
 	}
 
 	.lg\:pb-0{
