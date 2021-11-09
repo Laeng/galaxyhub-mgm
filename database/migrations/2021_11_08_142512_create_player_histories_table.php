@@ -15,7 +15,7 @@ class CreatePlayerHistoriesTable extends Migration
     {
         Schema::create('player_histories', function (Blueprint $table) {
             $table->id();
-            $table->string('identifier')->unique();
+            $table->string('identifier')->index();
             $table->unsignedInteger('staff_id')->nullable();
             $table->string('type')->nullable();
             $table->text('description')->nullable();
