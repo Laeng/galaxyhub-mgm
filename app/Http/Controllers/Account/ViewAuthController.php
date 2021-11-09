@@ -44,7 +44,7 @@ class ViewAuthController extends Controller
         $user = $this->authenticate($social->id, null, $provider);
 
         if (!is_null($user)) {
-            if ($user->avatar != $social->getAvatar() || $user->nickname || $social->getNickname()) { // 동일한 객체가 아님, 단순 값만 맞으면 된다.
+            if ($user->avatar != $social->getAvatar() || $user->nickname != $social->getNickname()) { // 동일한 객체가 아님, 단순 값만 맞으면 된다.
                 $user->update(['nickname' => $social->getNickname(), 'avatar' => $social->getAvatar()]);
             }
 
