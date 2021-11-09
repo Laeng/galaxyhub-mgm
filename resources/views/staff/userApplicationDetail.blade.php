@@ -159,7 +159,7 @@
                                     승인
                                 </x-button.filled.md-white>
                                 <x-button.filled.md-white @click="process('reject', '가입 거절', '거절 사유를 입력해 주십시오.')" type="button">
-                                    거부
+                                    거절
                                 </x-button.filled.md-white>
                                 <x-button.filled.md-white @click="process('defer', '가입 보류', '보류 사유를 입력해 주십시오.')" type="button">
                                     보류

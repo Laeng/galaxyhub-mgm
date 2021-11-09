@@ -1,4 +1,7 @@
 @import url("vendor/pretendard/pretendard-dynamic-subset.css");
+/**
+@import url("https://cdn.galaxyhub.kr/static/css/pretendard/pretendard-dynamic-subset.css");
+ */
 
 @tailwind base;
 @tailwind components;
