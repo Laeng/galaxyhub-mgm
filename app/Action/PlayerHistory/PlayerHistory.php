@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class PlayerHistory
 {
     const TYPE_USER_MEMO = 'user_memo';
+    const TYPE_USER_BANNED = 'user_banned';
     const TYPE_APPLICATION_REJECTED = 'application_rejected';
     const TYPE_APPLICATION_DEFERRED = 'application_DEFERRED';
 
