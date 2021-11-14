@@ -41,7 +41,7 @@ class ViewLoungeController extends Controller
         }
 
         if (in_array( Group::ARMA_APPLY, $groups)) return view('lounge.main.applied');
-        if (!in_array(Group::ARMA_MEMBER, $groups)) return view('join.agree');
+        if (!in_array(Group::ARMA_MEMBER, $groups)) return redirect()->route('join.agree');
 
 
         return view('lounge.main.index');
