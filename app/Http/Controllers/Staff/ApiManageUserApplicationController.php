@@ -130,6 +130,7 @@ class ApiManageUserApplicationController extends Controller
             }
 
             $reason = strip_tags($request->get('reason'));
+            $executor = $request->user();
 
             foreach ($applicants as $i) {
                 $user = $i->user()->first();
@@ -149,7 +150,7 @@ class ApiManageUserApplicationController extends Controller
                         'defer' => $history::TYPE_APPLICATION_DEFERRED
                     };
 
-                    $history->add($user->socials()->latest()->first()->social_id, $historyType, $reason, \Auth::user());
+                    $history->add($history->getIdentifierFromUser($user), $historyType, $reason, $executor);
                 }
             }
 

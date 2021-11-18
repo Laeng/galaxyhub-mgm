@@ -48,7 +48,6 @@ class ViewLoungeController extends Controller
     }
 
     private function getPlayerHistory(User $user, PlayerHistory $history, String $type) {
-        $social = $user->socials()->where('social_provider', 'steam')->latest()->first();
-        return $history->getModel($social->social_id, $type)->latest()->get();
+        return $history->getModel($history->getIdentifierFromUser($user), $type)->latest()->get();
     }
 }

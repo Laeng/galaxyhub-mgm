@@ -80,6 +80,8 @@ class ViewJoinController extends Controller
         $user->update(['created_at', 'agreed_at'], [$now, $now]);
         $group->add($group::ARMA_APPLY);
 
+        $history->add($history->getIdentifierFromUser($user), PlayerHistory::TYPE_USER_APPLY, '가입 신청');
+
         return redirect()->route('lounge.index')->withErrors(['success' => '가입 신청이 접수되었습니다.']);
     }
 
