@@ -20,6 +20,8 @@ class ViewAuthController extends Controller
             return redirect()->route('lounge.index');
         }
 
+        config(['services.steam.redirect' => route('account.auth.callback.steam')]);
+
         $steam = Socialite::driver('steam')->redirect()->getTargetUrl();
         return view('account.auth', ['steam' => $steam]);
     }
