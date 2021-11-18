@@ -66,4 +66,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(SurveyEntry::class, 'participant_id');
     }
+
+    public function missions(): HasMany
+    {
+        return $this->hasMany(UserMission::class);
+    }
 }

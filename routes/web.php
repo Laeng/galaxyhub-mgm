@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Account\ApiAccountController;
 use App\Http\Controllers\Account\ViewAuthController;
 use App\Http\Controllers\Join\ApiJoinController;
 use App\Http\Controllers\Join\ViewJoinController;
@@ -37,6 +38,8 @@ Route::middleware(['auth:web'])->prefix('lounge')->group(function () {
     Route::post('/join/check/steam/status', [ApiJoinController::class, 'check_steam_status'])->name('join.check.steam.status');
     Route::any( '/join/apply', [ViewJoinController::class, 'apply'])->name('join.apply');
     Route::post('/join/submit', [ViewJoinController::class, 'submit'])->name('join.submit');
+
+    Route::post('/account/leave', [ApiAccountController::class, 'leave'])->name('account.leave');
 
     Route::get('/', [ViewLoungeController::class, 'index'])->name('lounge.index');
 });
