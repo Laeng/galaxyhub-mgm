@@ -57,7 +57,7 @@ Route::middleware(['auth:web', \App\Http\Middleware\AllowOnlyStaff::class])->pre
     Route::post('/user/application/process', [ApiManageUserApplicationController::class, 'process'])->name('staff.user.application.process');
     Route::get( '/user/application/{id}', [ViewManageUserApplicationController::class, 'detail'])->name('staff.user.application.detail');
     Route::post('/user/application/{id}/info', [ApiManageUserApplicationController::class, 'detail_info'])->name('staff.user.application.detail.info');
-    Route::get( '/user/application/{id}/revision/{survey_id}', [ViewManageUserApplicationController::class, 'detailRevision'])->name('staff.user.application.detail.revision');
+    Route::get('/user/application/{id}/games', [ViewManageUserApplicationController::class, 'detailOwnedGames'])->name('staff.user.application.detail.games');
 
     Route::post('/user/memo/list', [ApiManageUserMemo::class, 'list'])->name('staff.user.memo.list');
     Route::post('/user/memo/remove', [ApiManageUserMemo::class, 'remove'])->name('staff.user.memo.remove');

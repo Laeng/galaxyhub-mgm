@@ -97,7 +97,7 @@
                                         구입한 게임
                                     </p>
                                     <p class="text-sm text-gray-600">
-                                        확인하기
+                                        <a href="{{ route('staff.user.application.detail.games', [$user->id]) }}" target="_blank">확인하기</a>
                                     </p>
                                 </div>
                             </li>

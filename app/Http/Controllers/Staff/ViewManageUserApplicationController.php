@@ -32,7 +32,7 @@ class ViewManageUserApplicationController extends Controller
         ]);
     }
 
-    public function detail(SurveyForm $surveyForm, Request $request, int $id): Factory|View|Application|RedirectResponse
+    public function detail(Request $request, int $id, SurveyForm $surveyForm): Factory|View|Application|RedirectResponse
     {
         $user = User::find($id);
 
@@ -93,9 +93,26 @@ class ViewManageUserApplicationController extends Controller
         ]);
     }
 
-    public function detailRevision(Request $request, int $id, int $survey_id): Factory|View|Application|RedirectResponse
-    {
-        return redirect()->back();
+
+    public function detailOwnedGames(Request $request, int $id, UserData $userData) {
+        $user = User::find($id);
+
+        if (is_null($user)) {
+            return redirect()->back()->withErrors(['danger' => '회원을 찾을 수 없습니다.']);
+        }
+
+        $games = [];
+        $data = $userData->get($user, UserData::STEAM_GAME_OWNED);
+
+        if (!is_null($data)) {
+            $games = $data->data;
+        }
+
+
+        return view('staff.userApplicationDetailOwnedGame', [
+            'title' => "{$user->nickname}님의 게임 목록",
+            'games' => $games
+        ]);
     }
 
 }

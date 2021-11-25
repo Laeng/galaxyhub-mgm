@@ -21,7 +21,7 @@
                 </template>
             </div>
             <div class="mt-1">
-                <p class="line-clamp-2 text-sm text-gray-600" x-text="item.description"></p>
+                <p class="text-sm text-gray-600" x-text="item.description"></p>
             </div>
         </li>
     </template>
@@ -149,7 +149,7 @@
                         this.post(this.data.add.url, this.data.add.body, success, error, complete);
 
                     } else {
-                        window.modal.alert('내용 없음', '내용을 입럭하여 주십시오', (c) => {}, 'error');
+                        window.modal.alert('내용 없음', '내용을 입력하여 주십시오', (c) => {}, 'error');
                     }
                 }
             },
