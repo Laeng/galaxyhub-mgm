@@ -30,14 +30,14 @@ class ApiManageUserApplicationController extends Controller
             if ($limit < 1 || $limit > 100) $limit = 20;
 
             $surveyForms = Survey::where('name', 'like', 'join-application-%')->get(['id'])->pluck('id')->toArray();
-            $applicantCount = $group->countSpecificGroupUsers($group::ARMA_APPLY);
+            $countApplicant = $group->countSpecificGroupUsers($group::ARMA_APPLY);
 
             if ($step >= 0) {
-                $quotient = intdiv($applicantCount, $limit);
+                $quotient = intdiv($countApplicant, $limit);
                 if ($quotient <= $step) {
                     $step = $quotient - 1; //step 값은 0부터 시작하기 떄문에 1를 빼준다.
 
-                    if ($applicantCount % $limit > 0) {
+                    if ($countApplicant % $limit > 0) {
                         $step += 1;
                     }
                 }
@@ -93,7 +93,7 @@ class ApiManageUserApplicationController extends Controller
                 'count' => [
                     'step' => $step,
                     'limit' => $limit,
-                    'total' => $applicantCount
+                    'total' => $countApplicant
                 ]
             ]);
 
@@ -168,6 +168,10 @@ class ApiManageUserApplicationController extends Controller
                 'user_id' => 'int|required'
             ]);
 
+            if ((int)$request->get('user_id') !== $id) {
+                throw new Exception('ID IS NOT MATCHED', 422);
+            }
+
             $user = User::find($request->get('user_id'));
 
             if (is_null($user)) {
@@ -218,5 +222,4 @@ class ApiManageUserApplicationController extends Controller
             return $this->jsonResponse($e->getCode(), Str::upper($e->getMessage()), []);
         }
     }
-
 }

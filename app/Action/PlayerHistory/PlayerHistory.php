@@ -37,8 +37,10 @@ class PlayerHistory
         return $query;
     }
 
-    public function getIdentifierFromUser(User $user): string
+    public function getIdentifierFromUser(User|int $user): string
     {
+        if (is_int($user)) $user = User::find($user);
+
         return $user->socials()->where('social_provider', 'steam')->latest()->first()->social_id;
     }
 
