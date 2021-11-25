@@ -153,6 +153,11 @@
                             </template>
                         </div>
 
+                        <div class="py-4">
+                            <p class="text-lg font-bold pb-4">유저 기록</p>
+                            <x-memo.simple user-id="{{$user->id}}"/>
+                        </div>
+
                         @if ($status === '접수')
                             <div class="grid grid-cols-3 gap-2 py-4">
                                 <x-button.filled.md-white @click="process('accept', '가입 승인', '가입을 승인 하시겠습니까?', false)" type="button">

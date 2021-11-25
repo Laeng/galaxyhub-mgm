@@ -6,6 +6,7 @@ use App\Http\Controllers\Join\ApiJoinController;
 use App\Http\Controllers\Join\ViewJoinController;
 use App\Http\Controllers\Lounge\ViewLoungeController;
 use App\Http\Controllers\Staff\ApiManageUserApplicationController;
+use App\Http\Controllers\Staff\ApiManageUserMemo;
 use App\Http\Controllers\Staff\ViewManageUserApplicationController;
 use App\Http\Controllers\Staff\ViewManageUserController;
 use App\Http\Middleware\CheckInactiveUser;
@@ -57,5 +58,9 @@ Route::middleware(['auth:web', \App\Http\Middleware\AllowOnlyStaff::class])->pre
     Route::get( '/user/application/{id}', [ViewManageUserApplicationController::class, 'detail'])->name('staff.user.application.detail');
     Route::post('/user/application/{id}/info', [ApiManageUserApplicationController::class, 'detail_info'])->name('staff.user.application.detail.info');
     Route::get( '/user/application/{id}/revision/{survey_id}', [ViewManageUserApplicationController::class, 'detailRevision'])->name('staff.user.application.detail.revision');
+
+    Route::post('/user/memo/list', [ApiManageUserMemo::class, 'list'])->name('staff.user.memo.list');
+    Route::post('/user/memo/remove', [ApiManageUserMemo::class, 'remove'])->name('staff.user.memo.remove');
+    Route::post('user/memo/add', [ApiManageUserMemo::class, 'add'])->name('staff.user.memo.add');
 });
 
