@@ -94,7 +94,8 @@ class ViewManageUserApplicationController extends Controller
     }
 
 
-    public function detailOwnedGames(Request $request, int $id, UserData $userData) {
+    public function detailOwnedGames(Request $request, int $id, UserData $userData): Factory|View|Application|RedirectResponse
+    {
         $user = User::find($id);
 
         if (is_null($user)) {

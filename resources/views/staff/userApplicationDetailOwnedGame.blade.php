@@ -25,13 +25,16 @@
                             },
                             sortByPlayTime() {
                                 let games = [];
-                                let k = Object.keys(this.data.games).sort((a,b)=> this.data.games[a].playtimeForever - this.data.games[b].playtimeForever).reverse();
 
-                                for (let i in k) {
-                                    games.push(this.data.games[k[i]])
+                                if (this.data.games !== null) {
+                                    let k = Object.keys(this.data.games).sort((a,b)=> this.data.games[a].playtimeForever - this.data.games[b].playtimeForever).reverse();
+
+                                    for (let i in k) {
+                                        games.push(this.data.games[k[i]])
+                                    }
+
+                                    this.data.games = games;
                                 }
-
-                                this.data.games = games;
                             },
                             init(){
                                 this.sortByPlayTime();

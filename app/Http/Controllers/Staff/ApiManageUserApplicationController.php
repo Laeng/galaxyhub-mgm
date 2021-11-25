@@ -47,12 +47,12 @@ class ApiManageUserApplicationController extends Controller
 
             $applicants = $group->getSpecificGroupUsers($group::ARMA_APPLY, $step * $limit, $limit, true);
 
+            $keys = [];
             $items = [];
-            $index = [];
 
             foreach ($applicants as $i){
                 $user = $i->user()->first();
-                $index[] = $user->id;
+                $keys[] = $user->id;
 
                 $survey = $user->surveys()->whereIn('survey_id', $surveyForms)->latest()->first();
                 $answers = $survey->answers()->latest()->get();
@@ -88,7 +88,7 @@ class ApiManageUserApplicationController extends Controller
 
             return $this->jsonResponse(200, 'OK', [
                 'fields' => ['스팀 닉네임', '네이버 아이디', '생년월일', '타 클랜 활동', '신청일', '상세 정보'],
-                'index' => $index,
+                'keys' => $keys,
                 'items' => $items,
                 'count' => [
                     'step' => $step,

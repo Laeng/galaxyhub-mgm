@@ -22,7 +22,7 @@
                         @if($useCheckBox)
                             <td class="w-4 px-3 py-4 whitespace-nowrap text-sm text-gray-900">
                                 <label :for="'check_' + data.component_id + '_' + index" class="sr-only"></label>
-                                <input type="checkbox" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded checkbox" :name="data.check_box_name + '[]'" :value="data.list.data.index[index]" :id="'check_' + data.component_id + '_' + index">
+                                <input type="checkbox" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded checkbox" :name="data.check_box_name + '[]'" :value="data.list.data.keys[index]" :id="'check_' + data.component_id + '_' + index">
                             </td>
                         @endif
                         <template x-for="value in item">
@@ -76,6 +76,7 @@
                         },
                         data: {
                             fields: {},
+                            keys: {},
                             items: {},
                             count: {
                                 step: 0,

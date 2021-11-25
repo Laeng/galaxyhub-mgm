@@ -225,7 +225,7 @@
 
                                                 let success = (r) => {
                                                     window.modal.alert('처리 완료', '정상적으로 처리되었습니다.', (c) => {
-                                                        location.href = '{{ back()->getTargetUrl() }}';
+                                                        location.href = '{{ route('staff.user.application') }}';
                                                     });
                                                 };
 

@@ -2,8 +2,8 @@
 
 use App\Http\Controllers\Account\ApiAccountController;
 use App\Http\Controllers\Account\ViewAuthController;
-use App\Http\Controllers\Join\ApiJoinController;
-use App\Http\Controllers\Join\ViewJoinController;
+use App\Http\Controllers\Lounge\Join\ApiJoinController;
+use App\Http\Controllers\Lounge\Join\ViewJoinController;
 use App\Http\Controllers\Lounge\ViewLoungeController;
 use App\Http\Controllers\Staff\ApiManageUserApplicationController;
 use App\Http\Controllers\Staff\ApiManageUserMemo;

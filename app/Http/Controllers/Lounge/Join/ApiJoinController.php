@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Join;
+namespace App\Http\Controllers\Lounge\Join;
 
 use App\Action\Steam\Steam;
 use App\Http\Controllers\Controller;
