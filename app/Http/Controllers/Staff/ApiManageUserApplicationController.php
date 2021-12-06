@@ -16,7 +16,7 @@ use Str;
 
 class ApiManageUserApplicationController extends Controller
 {
-    public function get(Request $request, Group $group): JsonResponse
+    public function list(Request $request, Group $group): JsonResponse
     {
         try {
             $this->jsonValidator($request, [
@@ -60,7 +60,7 @@ class ApiManageUserApplicationController extends Controller
                 $values = [
                     "<a class='text-indigo-600 hover:text-indigo-900' href='https://steamcommunity.com/profiles/{$user->socials()->where('social_provider', 'steam')->latest()->first()->social_id}' target='_blank'>{$user->nickname}</a>",
                     '', '', '', '',
-                    '<a class="text-indigo-600 hover:text-indigo-900" href="'. route('staff.user.application.detail', $user->id) .'">자세히 보기</a>'
+                    '<a class="text-indigo-600 hover:text-indigo-900" href="'. route('staff.user.application.read', $user->id) .'">자세히 보기</a>'
                 ];
 
                 foreach ($answers as $it) {
@@ -134,15 +134,17 @@ class ApiManageUserApplicationController extends Controller
 
             foreach ($applicants as $i) {
                 $user = $i->user()->first();
-                $group->remove($group::ARMA_APPLY, $user, $reason);
+                $group->delete($group::ARMA_APPLY, $user, $reason);
                 $group->add($toGroup, $user, $reason);
 
                 if ($toGroup === $group::ARMA_MEMBER) {
                     foreach ([$group::ARMA_REJECT, $group::ARMA_DEFER] as $checkGroup) {
                         if ($group->has($checkGroup, $user)) {
-                            $group->remove($checkGroup, $user, '가입 승인 됨.');
+                            $group->delete($checkGroup, $user, '가입 승인 됨.');
                         }
                     }
+
+                    $history->add($history->getIdentifierFromUser($user), $history::TYPE_USER_JOIN, $reason);
 
                 } else {
                     $historyType = match($request->get('type')) {

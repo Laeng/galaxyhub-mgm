@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Account;
+namespace App\Http\Controllers\Lounge\Account;
 
 use App\Action\PlayerHistory\PlayerHistory;
 use App\Http\Controllers\Controller;

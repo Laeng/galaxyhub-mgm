@@ -183,11 +183,11 @@
                                     },
                                     data: {
                                         process: {
-                                            url: '{{ route('staff.user.application.process') }}',
+                                            url: '{{ route('staff.user.api.application.process') }}',
                                             lock: false
                                         },
                                         load: {
-                                            url: '{{ route('staff.user.application.detail.info', [$user->id]) }}',
+                                            url: '{{ route('staff.user.api.application.detail.info', [$user->id]) }}',
                                             body: {
                                                 user_id: '{{ $user->id }}'
                                             },

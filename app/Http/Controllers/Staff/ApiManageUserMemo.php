@@ -86,7 +86,7 @@ class ApiManageUserMemo extends Controller
 
     }
 
-    public function remove(Request $request, PlayerHistory $history): JsonResponse
+    public function delete(Request $request, PlayerHistory $history): JsonResponse
     {
         try {
             $this->jsonValidator($request, [
@@ -119,7 +119,7 @@ class ApiManageUserMemo extends Controller
         }
     }
 
-    public function add(Request $request, PlayerHistory $history): JsonResponse
+    public function create(Request $request, PlayerHistory $history): JsonResponse
     {
         try {
             $this->jsonValidator($request, [

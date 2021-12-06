@@ -15,8 +15,8 @@ class ViewManageUserController
         return view('staff.userApplicationDetail');
     }
 
-    public function detail(Request $request, string $user_id): Factory|View|Application|RedirectResponse
+    public function read(Request $request, string $user_id): Factory|View|Application|RedirectResponse
     {
-        return view('staff.userApplicationDetail');
+        return view('staff.userApplicationRead');
     }
 }

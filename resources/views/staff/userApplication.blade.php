@@ -17,7 +17,7 @@
 
                 <div class="flex flex-col mb-4">
                     <div x-data="application_list_form()">
-                        <x-table.simple :component-id="$listComponentId" :api-url="$api" :use-check-box="true" :check-box-name="'user_id'" x-ref="applicants" />
+                        <x-table.simple :component-id="$listComponentId" :api-url="route('staff.user.api.application.list')" :use-check-box="true" :check-box-name="'user_id'" x-ref="applicants" />
 
                         <div class="flex justify-start space-x-3 mt-3">
                             <x-button.filled.md-white @click="process('accept', '가입 승인', '가입을 승인 하시겠습니까?', false)" type="button">
@@ -75,7 +75,7 @@
 
                                             if (!this.data.process.lock) {
                                                 this.data.process.lock = true;
-                                                this.post('{{ route('staff.user.application.process') }}', body, success, error, complete);
+                                                this.post('{{ route('staff.user.api.application.process') }}', body, success, error, complete);
                                             }
                                         }
                                     };

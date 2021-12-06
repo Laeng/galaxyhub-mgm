@@ -178,7 +178,8 @@ return [
         App\Providers\SurveyFormProvider::class,
         App\Providers\UserDataProvider::class,
         App\Providers\GroupProvider::class,
-        App\Providers\PlayerHistoryProvider::class
+        App\Providers\PlayerHistoryProvider::class,
+        App\Providers\MissionProvider::class
 
     ],
 

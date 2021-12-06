@@ -47,8 +47,8 @@ window.toast = {
     },
 }
 
-import alpine from 'alpinejs';
-window.alpine = alpine;
+import Alpine from 'alpinejs';
+window.alpine = Alpine;
 window.alpine.start();
 
 window.swal = require('sweetalert2');
@@ -87,3 +87,5 @@ window.modal = {
         }).then(callback); //(r) => {} 변수 하나 있다.
     }
 }
+
+window.ckeditor = require('@ckeditor/ckeditor5-build-classic')

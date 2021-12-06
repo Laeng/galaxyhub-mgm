@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Staff;
 
+use App\Action\Group\Group;
 use App\Action\Steam\Steam;
 use App\Action\Survey\SurveyForm;
 use App\Action\UserData\UserData;
@@ -27,12 +28,11 @@ class ViewManageUserApplicationController extends Controller
                 ['danger', '',now()->subYears(16)->year . '년생 이상만 가입을 허용해 주십시오. (' . now()->year . '년 기준)'],
                 ['warning', '', '미비 사항이 있다면 무조건 거절하시지 마시고 보류 처리 후 해당 부분을 보충할 기회를 주십시오.'],
                 ['warning', '', '거절, 보류 사유는 해당 신청자에게 표시됩니다. 민감한 사항은 \'유저 메모\' 에 별도 기록해 주십시오.']
-            ],
-            'api' => route('staff.user.application.get')
+            ]
         ]);
     }
 
-    public function detail(Request $request, int $id, SurveyForm $surveyForm): Factory|View|Application|RedirectResponse
+    public function read(Request $request, int $id, SurveyForm $surveyForm, Group $group): Factory|View|Application|RedirectResponse
     {
         $user = User::find($id);
 
@@ -42,6 +42,10 @@ class ViewManageUserApplicationController extends Controller
 
         $surveyForms = Survey::where('name', 'like', 'join-application-%')->get(['id'])->pluck('id')->toArray();
         $userSurveys = $user->surveys()->whereIn('survey_id', $surveyForms)->latest()->get()->toArray();
+
+        if (count($userSurveys) <= 0) {
+            return redirect()->back()->withErrors(['danger' => '가입 신청을 하지 않은 회원입니다.']);
+        }
 
         $status = null;
         $assign = null;
@@ -82,7 +86,7 @@ class ViewManageUserApplicationController extends Controller
             }
         }
 
-        return view('staff.userApplicationDetail', [
+        return view('staff.userApplicationRead', [
             'title' => "{$user->nickname}님의 신청서",
             'status' => $status,
             'assign' => $assign,
@@ -110,7 +114,7 @@ class ViewManageUserApplicationController extends Controller
         }
 
 
-        return view('staff.userApplicationDetailOwnedGame', [
+        return view('staff.userApplicationReadOwnedGame', [
             'title' => "{$user->nickname}님의 게임 목록",
             'games' => $games
         ]);

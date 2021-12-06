@@ -8,6 +8,10 @@
 @tailwind components;
 @tailwind utilities;
 
+*, ::before, ::after {
+    --ck-border-radius: 0.375rem;
+}
+
 [x-cloak] {
     display: none !important;
 }
@@ -150,4 +154,18 @@ aspect-16\/10 {
         stroke-dasharray: 90, 150;
         stroke-dashoffset: -124;
     }
+}
+
+.ck-editor__editable {
+    height: 20rem;
+}
+
+.prose p, .prose li{
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.prose h1, .prose h2, .prose h3 {
+    margin-top: 0.8em;
+    margin-bottom: 0;
 }

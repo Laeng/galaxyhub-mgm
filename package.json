@@ -18,6 +18,8 @@
         "tailwindcss": "^2.2.15"
     },
     "dependencies": {
+        "@ckeditor/ckeditor5-build-classic": "^31.0.0",
+        "@ckeditor/ckeditor5-upload": "^31.0.0",
         "@tailwindcss/forms": "^0.3.3",
         "@tailwindcss/line-clamp": "^0.2.2",
         "@tailwindcss/typography": "^0.4.1",

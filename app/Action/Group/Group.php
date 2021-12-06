@@ -39,7 +39,7 @@ class Group implements GroupContract
         return true;
     }
 
-    public function remove(int $groupId, User|int|null $user = null, string|null $reason = null, User|int|null $by = null): bool
+    public function delete(int $groupId, User|int|null $user = null, string|null $reason = null, User|int|null $by = null): bool
     {
         $user = $this->validateUser($user);
         $by = $this->validateUser($by, true);

@@ -19,15 +19,20 @@ class CheckInactiveUser
     {
         $groups = $request->user()->groups()->get(['group_id']);
 
-        $isNotMember = $groups->every(function ($value, $key) {
-            return match ($value->group_id) {
-                Group::ARMA_REJECT, Group::ARMA_DEFER, Group::ARMA_APPLY, Group::INACTIVE, Group::BANNED => false,
-                default => true,
-            };
-        });
+        if (count($groups) > 0) {
+            $isNotMember = $groups->every(function ($value, $key) {
+                return match ($value->group_id) {
+                    Group::ARMA_REJECT, Group::ARMA_DEFER, Group::ARMA_APPLY, Group::INACTIVE, Group::BANNED => true,
+                    default => false,
+                };
+            });
 
-        if (!$isNotMember) {
-            return redirect()->route('lounge');
+        } else {
+            $isNotMember = true;
+        }
+
+        if ($isNotMember) {
+            return redirect()->route('lounge.index');
         }
 
         return $next($request);
