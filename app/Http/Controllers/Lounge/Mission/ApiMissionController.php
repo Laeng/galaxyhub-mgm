@@ -55,14 +55,10 @@ class ApiMissionController extends Controller
             foreach ($missions as $v) {
                 $items[] = [
                     $v->id,
-                    match ($v->type) {
-                        0 => '아르마의 밤',
-                        1 => '일반 미션',
-                        default => ''
-                    },
+                    $v->getTypeName(),
                     $v->expected_at->format('m월 d일 H시 i분'),
                     $v->can_tardy ? '가능' : '불가능',
-                    $v->maker()->first()->nickname,
+                    $v->user()->first()->nickname,
                     "<a href='". route('mission.read', $v->id) . "' class='text-indigo-600 hover:text-indigo-900'>" . (($v->phase == 0 || ($v->can_tardy && $v->phase == 1)) ? '신청하기' : '상세보기') . '</a>'
                 ];
             }
@@ -134,7 +130,7 @@ class ApiMissionController extends Controller
                 'code' => mt_rand(1000, 9999),
                 'title' => "{$date->format('m월 d일')} {$mission_name}",
                 'body' => $request->get('body'),
-                'can_tardy' => !$request->get('tardy'),
+                'can_tardy' => $request->get('tardy'),
                 'expected_at' => $date,
                 'data' => [
                     'addons' => $request->get('addons'),
@@ -146,6 +142,13 @@ class ApiMissionController extends Controller
 
             $mission->survey_id = $survey->id;
             $mission->save();
+
+            $mission->participants()->create([
+                'user_id' => $user->id,
+                'mission_id' => $mission->id,
+                'is_maker' => true,
+                'is_attended' => true
+            ]);
 
             return $this->jsonResponse(200, 'OK', [
                 'url' => route('mission.read', $mission->id)

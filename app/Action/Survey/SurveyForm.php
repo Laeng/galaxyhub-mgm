@@ -107,18 +107,14 @@ class SurveyForm implements SurveyFormContract
 
     public function getMissionSurveyForm(Mission $mission): SurveyModel
     {
-        $user = $mission->maker()->first();
+        $user = $mission->user()->first();
 
         $survey = SurveyModel::create([
             'name' => "mission-survey-{$mission->id}",
             'user_id' => $user->id
         ]);
 
-        $mission_name = match ($mission->type) {
-            0 => '아르마의 밤',
-            1 => '일반 미션',
-            default => null
-        };
+        $mission_name = $mission->getTypeName();
 
         $one = $survey->sections()->create([
             'name' => "{$mission_name} 만족도 조사",

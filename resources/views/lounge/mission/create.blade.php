@@ -26,7 +26,7 @@
                                 </label>
                                 <div class="mt-1 grid grid-cols-2 gap-x-2">
                                     <input type="date" name="date" class="shadow-sm focus:ring-blue-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md" x-model="data.create.body.date" required>
-                                    <input type="time" name="time" class="shadow-sm focus:ring-blue-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md" x-model="data.create.body.time" step="60" required>
+                                    <input type="time" name="time" class="shadow-sm focus:ring-blue-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md" x-model="data.create.body.time" step="1800" required>
                                 </div>
                             </div>
                         </div>
