@@ -12,11 +12,11 @@
                                     미션 종류
                                 </label>
                                 <div class="mt-1">
-                                    <select id="type" name="type" class="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md" x-model="data.create.body.type" required>
+                                    <x-input.select.primary id="type" name="type" x-model="data.create.body.type" required>
                                         <option value="">종류 선택</option>
                                         <option value="0">아르마의 밤</option>
                                         <option value="1">일반 미션</option>
-                                    </select>
+                                    </x-input.select.primary>
                                 </div>
                             </div>
 
@@ -37,7 +37,7 @@
                                     사용할 맵
                                 </label>
                                 <div class="mt-1">
-                                    <select id="type" name="map" class="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md" x-model="data.create.body.map" required>
+                                    <x-input.select.primary id="type" name="map" x-model="data.create.body.map" required>
                                         <option value="">맵 선택</option>
                                         <option value="알티스">알티스</option>
                                         <option value="스트라티스">스트라티스</option>
@@ -46,7 +46,7 @@
                                         <option value="자가바드">자가바드</option>
                                         <option value="팔루자">팔루자</option>
                                         <option value="기타">기타</option>
-                                    </select>
+                                    </x-input.select.primary>
                                 </div>
                             </div>
                             <div class="pt-2 md:py-0 md:col-span-2">
