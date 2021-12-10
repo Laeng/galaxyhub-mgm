@@ -1308,6 +1308,9 @@ select{
 .flex-grow{
   flex-grow: 1;
 }
+.table-auto{
+  table-layout: auto;
+}
 .-rotate-12{
   --tw-rotate: -12deg;
   transform: var(--tw-transform);

@@ -17,7 +17,7 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
-    public function jsonResponse(int $status, string $description, mixed $value): JsonResponse
+    public function jsonResponse(int|string $status, string $description, mixed $value): JsonResponse
     {
         if (!array_key_exists($status, Response::$statusTexts)) {
             $status = 500;

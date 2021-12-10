@@ -60,7 +60,7 @@ class ApiManageUserApplicationController extends Controller
                 $values = [
                     "<a class='text-indigo-600 hover:text-indigo-900' href='https://steamcommunity.com/profiles/{$user->socials()->where('social_provider', 'steam')->latest()->first()->social_id}' target='_blank'>{$user->nickname}</a>",
                     '', '', '', '',
-                    '<a class="text-indigo-600 hover:text-indigo-900" href="'. route('staff.user.application.read', $user->id) .'">자세히 보기</a>'
+                    '<a class="text-indigo-600 hover:text-indigo-900" href="'. route('staff.user.application.read', $user->id) .'">확인하기</a>'
                 ];
 
                 foreach ($answers as $it) {
@@ -76,7 +76,6 @@ class ApiManageUserApplicationController extends Controller
 
                         case '본인의 생년월일': $values[2] = $v; break;
 
-                        case '타 커뮤니티(클랜) 활동 여부': //TODO 테스트 이후 지우기
                         case '아르마 커뮤니티(클랜) 활동 여부': $values[3] = $v; break;
                     }
                 }

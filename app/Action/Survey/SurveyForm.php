@@ -2,6 +2,7 @@
 
 namespace App\Action\Survey;
 
+use App\Models\Mission;
 use App\Models\Survey as SurveyModel;
 use Illuminate\Database\Eloquent\Builder;
 
@@ -104,17 +105,25 @@ class SurveyForm implements SurveyFormContract
         return $survey;
     }
 
-    public function getMissionSurveyForm(): SurveyModel
+    public function getMissionSurveyForm(Mission $mission): SurveyModel
     {
+        $user = $mission->maker()->first();
+
         $survey = SurveyModel::create([
-            'name' => 'join-application',
-            'user_id' => ''
+            'name' => "mission-survey-{$mission->id}",
+            'user_id' => $user->id
         ]);
 
+        $mission_name = match ($mission->type) {
+            0 => '아르마의 밤',
+            1 => '일반 미션',
+            default => null
+        };
+
         $one = $survey->sections()->create([
-            'name' => '미션 만족도 조사',
+            'name' => "{$mission_name} 만족도 조사",
             'description' =>
-                '<p>미션 만족도 조사의 결과는 더 재밌는 미션을 제작하실 수 있도록 해당 미션을 담당하신 미션 메이커 회원님께 익명으로 제공됩니다. 번거로우시더라도 참여해주시면 감사드립니다.</p>'.
+                "<p>미션 만족도 조사의 결과는 더 재밌는 미션을 제작하실 수 있도록 본 {$mission_name}을 담당하신 {$user->nickname}님께 익명으로 제공됩니다. 번거로우시더라도 참여해주시면 감사드립니다.</p>".
                 '<p>주관식 문항에서 욕설, 조롱, 비하 등이 담긴 답변으로 분쟁 발생시 중재 목적으로 MGM 아르마 클랜 스탭이 회원님의 설문 응답을 조회할 수 있는 점 참고 부탁드립니다.</p>'
         ]);
 

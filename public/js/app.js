@@ -5479,6 +5479,7 @@ window.modal = {
   }
 };
 window.ckeditor = __webpack_require__(/*! @ckeditor/ckeditor5-build-classic */ "./node_modules/@ckeditor/ckeditor5-build-classic/build/ckeditor.js");
+window.global = {};
 
 /***/ }),
 

@@ -38,6 +38,7 @@ Route::middleware('web')->prefix('lounge')->group(function() {
 
 Route::middleware(['auth:web'])->prefix('lounge')->group(function () {
     Route::get('/', [ViewLoungeController::class, 'index'])->name('lounge.index');
+    Route::post('/account/leave', [ApiAccountController::class, 'leave'])->name('account.leave');
 
     Route::prefix('join')->name('join.')->group(function () {
         Route::get( '/agree', [ViewJoinController::class, 'agree'])->name('agree');
@@ -45,20 +46,17 @@ Route::middleware(['auth:web'])->prefix('lounge')->group(function () {
         Route::any( '/apply', [ViewJoinController::class, 'apply'])->name('apply');
         Route::post('/submit', [ViewJoinController::class, 'submit'])->name('submit');
     });
-
-    Route::post('/account/leave', [ApiAccountController::class, 'leave'])->name('account.leave');
-    Route::get('/', [ViewLoungeController::class, 'index'])->name('lounge.index');
 });
 
 Route::middleware(['auth:web', CheckInactiveUser::class])->prefix('lounge')->group(function() {
     Route::prefix('mission')->name('mission.')->group(function () {
         Route::get( '/', [ViewMissionController::class, 'list'])->name('list');
         Route::post( '/list', [ApiMissionController::class, 'list'])->name('api.list');
-        Route::get( '/create', [ViewMissionController::class, 'create'])->name('api.create');
-        Route::get( '/store', [ApiMissionController::class, 'store'])->name('api.store');
-        Route::get( '/{id}', [ViewMissionController::class, 'read'])->name('api.read');
-        //Route::get( '/{id}/edit', [ViewMissionController::class, 'edit'])->name('edit');
-        //Route::get( '/{id}/delete', [ViewMissionController::class, 'delete'])->name('remove');
+        Route::get( '/create', [ViewMissionController::class, 'create'])->name('create');
+        Route::post( '/create/submit', [ApiMissionController::class, 'create'])->name('api.create');
+        Route::get( '/{id}', [ViewMissionController::class, 'read'])->name('read');
+        Route::get( '/{id}/update', [ViewMissionController::class, 'update'])->name('update');
+        Route::get( '/{id}/delete', [ViewMissionController::class, 'delete'])->name('remove');
     });
 
 });
