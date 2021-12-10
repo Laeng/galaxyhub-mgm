@@ -98,9 +98,11 @@
                                 this.data.list.body.step = this.data.list.data.count.step;
                                 this.data.list.body.limit = this.data.list.data.count.limit;
 
+                                /*
                                 if (this.interval.list >= 0) {
                                     clearInterval(this.interval.list);
                                 }
+                                 */
 
                             }
                         }
