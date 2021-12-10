@@ -67,7 +67,7 @@ return [
     |
     */
 
-    'timezone' => 'UTC',
+    'timezone' => 'Asia/Seoul',
 
     /*
     |--------------------------------------------------------------------------
@@ -80,7 +80,7 @@ return [
     |
     */
 
-    'locale' => 'en',
+    'locale' => 'ko',
 
     /*
     |--------------------------------------------------------------------------
@@ -93,7 +93,7 @@ return [
     |
     */
 
-    'fallback_locale' => 'en',
+    'fallback_locale' => 'ko',
 
     /*
     |--------------------------------------------------------------------------
@@ -106,7 +106,7 @@ return [
     |
     */
 
-    'faker_locale' => 'en_US',
+    'faker_locale' => 'ko_KR',
 
     /*
     |--------------------------------------------------------------------------
@@ -179,7 +179,6 @@ return [
         App\Providers\UserDataProvider::class,
         App\Providers\GroupProvider::class,
         App\Providers\PlayerHistoryProvider::class,
-        App\Providers\MissionProvider::class
 
     ],
 
