@@ -106,7 +106,7 @@ class ViewManageUserApplicationController extends Controller
             return redirect()->back()->withErrors(['danger' => '회원을 찾을 수 없습니다.']);
         }
 
-        $games = [];
+        $games = json_encode([]);
         $data = $userData->get($user, UserData::STEAM_GAME_OWNED);
 
         if (!is_null($data)) {

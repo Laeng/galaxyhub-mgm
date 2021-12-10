@@ -30,7 +30,7 @@
     <li class="relative bg-white pt-5 px-4">
         <div class="border border-gray-300 rounded-lg shadow-sm overflow-hidden focus-within:border-blue-500 focus-within:ring-1 focus-within:ring-blue-500">
             <label for="memo" class="sr-only">Add your comment</label>
-            <textarea rows="3" id="memo" x-model="data.add.body.content" class="block w-full py-3 border-0 resize-none focus:ring-0 sm:text-sm" placeholder="등록한 내용은 해당 유저와 공유되지 않습니다. 유저 기록은 개인정보취급방침에 따라 해당 회원이 탈퇴한 이후부터 최대 5년까지 저장됩니다."></textarea>
+            <textarea rows="3" id="memo" x-model="data.add.body.content" class="block w-full py-3 border-0 resize-none focus:ring-0 sm:text-sm" placeholder="등록한 내용은 해당 유저와 공유되지 않습니다. 유저 기록은 개인정보취급방침에 따라 해당 유저가 탈퇴한 이후부터 최대 5년까지 저장됩니다."></textarea>
 
             <div class="py-2" aria-hidden="true">
                 <!-- Matches height of button in toolbar (1px border + 36px content height) -->

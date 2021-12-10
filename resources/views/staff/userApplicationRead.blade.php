@@ -158,8 +158,8 @@
                             <x-memo.simple user-id="{{$user->id}}"/>
                         </div>
 
-                        @if ($status === '접수')
-                            <div class="grid grid-cols-3 gap-2 py-4">
+                        <div class="grid grid-cols-3 gap-2 py-4">
+                            @if ($status === '접수')
                                 <x-button.filled.md-white @click="process('accept', '가입 승인', '가입을 승인 하시겠습니까?', false)" type="button">
                                     승인
                                 </x-button.filled.md-white>
@@ -169,11 +169,11 @@
                                 <x-button.filled.md-white @click="process('defer', '가입 보류', '보류 사유를 입력해 주십시오.')" type="button">
                                     보류
                                 </x-button.filled.md-white>
-                                <x-button.filled.md-white onClick="location.href='{{ back()->getTargetUrl() }}'" type="button" class="col-span-3">
-                                    돌아가기
-                                </x-button.filled.md-white>
-                            </div>
-                        @endif
+                            @endif
+                            <x-button.filled.md-white onClick="location.href='{{ back()->getTargetUrl() }}'" type="button" class="col-span-3">
+                                돌아가기
+                            </x-button.filled.md-white>
+                        </div>
 
                         <script type="text/javascript">
                             function application_detail() {
