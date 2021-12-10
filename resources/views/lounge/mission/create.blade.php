@@ -168,7 +168,7 @@
                                 <x-button.filled.md-blue type="button" @click="store()">
                                     등록
                                 </x-button.filled.md-blue>
-                                <x-button.filled.md-white type="button" onClick="location.href='{{ back()->getTargetUrl() }}'">
+                                <x-button.filled.md-white type="button" onClick="location.replace('{{ back()->getTargetUrl() }}')">
                                     취소
                                 </x-button.filled.md-white>
                             </div>
@@ -201,15 +201,22 @@
                                     let success = (r) => {
                                         switch (r.data.description) {
                                             case 'OK':
-                                                location.href = r.data.data.url;
+                                                location.replace(r.data.data.url);
+                                                break;
+                                            case 'DATE OLD':
+                                                window.modal.alert('주의', '미션 시간은 지난 날짜로 설정할 수 없습니다.', (c) => {}, 'warning');
                                                 break;
                                             case 'DATE UNAVAILABLE':
-                                                window.modal.alert('등록 실패', '기존 등록된 미션 시간과 겹칩니다.', (c) => {}, 'error');
+                                                window.modal.alert('주의', '기존 등록된 미션 시간과 겹칩니다.', (c) => {}, 'warning');
+                                                break;
+                                            default:
+                                                window.modal.alert('오류', '알 수 없는 응답입니다.', (c) => {}, 'error');
+                                                console.log(r);
                                                 break;
                                         }
                                     }
                                     let error = (e) => {
-                                        window.modal.alert('등록 실패', '데이터 처리 중 문제가 발생하였습니다.', (c) => {}, 'error');
+                                        window.modal.alert('오류', '데이터 처리 중 문제가 발생하였습니다.', (c) => {}, 'error');
                                         console.log(e);
                                     }
                                     let complete = () => {

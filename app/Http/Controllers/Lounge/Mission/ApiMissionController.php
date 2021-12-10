@@ -67,8 +67,6 @@ class ApiMissionController extends Controller
                 ];
             }
 
-            //TODO
-
             return $this->jsonResponse(200, 'OK', [
                 'fields' => ['ID', '분류', '시작 시간', '중도 참여', '미션 메이커', '&nbsp;&nbsp;&nbsp;'],
                 'keys' => $keys,
@@ -98,8 +96,6 @@ class ApiMissionController extends Controller
                 'tardy' => 'boolean|required'
             ]);
 
-            $mission_name = null;
-
             switch ($request->get('type')) {
                 case 0:
                     if (!$group->has([Group::ARMA_MAKER2, Group::STAFF])) {
@@ -119,7 +115,14 @@ class ApiMissionController extends Controller
             $user = $request->user();
             $date = Carbon::createFromFormat('Y-m-d H:i', "{$request->get('date')} {$request->get('time')}");
 
-            if (Mission::whereBetween('expected_at', [$date->subHours(), $date->addHours()])->count() > 0) {
+            if (now()->unix() > $date->unix()) {
+                return $this->jsonResponse(200, 'DATE OLD', [
+                    'url' => null,
+                ]);
+            }
+
+
+            if (Mission::whereBetween('expected_at', [$date->copy()->subHours(), $date->copy()->addHours()])->count() > 0) {
                 return $this->jsonResponse(200, 'DATE UNAVAILABLE', [
                     'url' => null,
                 ]);
