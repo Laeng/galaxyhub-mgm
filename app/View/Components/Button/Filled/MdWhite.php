@@ -15,7 +15,7 @@ class MdWhite extends Component
      *
      * @return void
      */
-    public function __construct($class = "")
+    public function __construct($class = '')
     {
         $this->class = $class;
     }

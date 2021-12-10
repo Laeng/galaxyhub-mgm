@@ -1,12 +1,12 @@
 <?php
 
-namespace App\View\Components\Button\Filled;
+namespace App\View\Components\Input\Select;
 
 use Closure;
 use Illuminate\View\Component;
 use Illuminate\View\View;
 
-class MdBlue extends Component
+class Primary extends Component
 {
     public string $class;
 
@@ -23,10 +23,10 @@ class MdBlue extends Component
     /**
      * Get the view / contents that represent the component.
      *
-     * @return View|Closure|string
+     * @return \Illuminate\Contracts\View\View|Closure|string
      */
     public function render(): View|Closure|string
     {
-        return view('components.button.filled.md-blue');
+        return view('components.input.select.primary');
     }
 }
