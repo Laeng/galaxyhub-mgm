@@ -8,11 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Mission;
 use Carbon\Carbon;
 use Exception;
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\View\Factory;
-use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Str;
 
@@ -95,13 +91,13 @@ class ApiMissionController extends Controller
             switch ($request->get('type')) {
                 case 0:
                     if (!$group->has([Group::ARMA_MAKER2, Group::STAFF])) {
-                        //throw new Exception('PERMISSION ERROR', 422);
+                        throw new Exception('PERMISSION ERROR', 422);
                     }
                     $mission_name = '아르마의 밤';
                     break;
                 case 1:
                     if (!$group->has([Group::ARMA_MAKER1, Group::ARMA_MAKER2, Group::STAFF])) {
-                        //throw new Exception('PERMISSION ERROR', 422);
+                        throw new Exception('PERMISSION ERROR', 422);
                     }
                     $mission_name = '일반 미션';
                     break;

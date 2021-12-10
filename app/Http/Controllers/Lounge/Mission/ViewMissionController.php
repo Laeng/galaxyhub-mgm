@@ -49,7 +49,6 @@ class ViewMissionController extends Controller
 
     private function isMaker(User $user, Group $group): bool
     {
-        return true;
         return $group->has([Group::ARMA_MAKER1, Group::ARMA_MAKER2, Group::STAFF]);
     }
 }
