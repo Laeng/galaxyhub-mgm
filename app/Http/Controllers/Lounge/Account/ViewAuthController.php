@@ -46,9 +46,12 @@ class ViewAuthController extends Controller
         $user = $this->authenticate($social->id, null, $provider);
 
         if (!is_null($user)) {
+            $updateUser = ['visited_at' => now()];
             if ($user->avatar != $social->getAvatar() || $user->nickname != $social->getNickname()) { // 동일한 객체가 아님, 단순 값만 맞으면 된다.
-                $user->update(['nickname' => $social->getNickname(), 'avatar' => $social->getAvatar()]);
+                $updateUser = array_combine($updateUser, ['nickname' => $social->getNickname(), 'avatar' => $social->getAvatar()]);
             }
+
+            $user->update($updateUser);
 
             $userSocial = $user->socials()->where('social_provider', $provider)->first();
 
@@ -67,7 +70,8 @@ class ViewAuthController extends Controller
                 'username' => $social->getId(),
                 'nickname' => $social->getNickname(),
                 'password' => \Hash::make(\Str::random()),
-                'avatar' => $social->getAvatar()
+                'avatar' => $social->getAvatar(),
+                'visited_at' => now()
             ]);
 
             $user->socials()->create([
