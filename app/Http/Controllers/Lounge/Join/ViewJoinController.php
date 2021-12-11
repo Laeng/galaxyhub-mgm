@@ -73,7 +73,7 @@ class ViewJoinController extends Controller
 
         ProcessSteamEnquiry::dispatch($userId);
 
-        (new SurveyEntry())->for($survey)->by(auth()->user())->fromArray($answers)->push();
+        (new SurveyEntry())->for($survey)->by($request->user())->fromArray($answers)->push();
 
         $now = now();
 
