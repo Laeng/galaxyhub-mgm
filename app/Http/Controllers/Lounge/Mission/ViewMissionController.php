@@ -30,8 +30,12 @@ class ViewMissionController extends Controller
 
     }
 
-    public function create(Request $request): Factory|View|Application|RedirectResponse
+    public function create(Request $request, Group $group): Factory|View|Application|RedirectResponse
     {
+        if (!$this->isMaker($request->user(), $group)) {
+            abort(404);
+        }
+
         return view('lounge.mission.create', [
             'title' => '미션 생성',
         ]);
