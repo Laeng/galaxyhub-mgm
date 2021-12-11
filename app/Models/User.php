@@ -25,7 +25,8 @@ class User extends Authenticatable
         'avatar',
         'remember_token',
         'email',
-        'agreed_at'
+        'agreed_at',
+        'visited_at'
     ];
 
     /**
@@ -45,6 +46,9 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'agreed_at' => 'datetime',
+        'visited_at' => 'datetime',
+
     ];
 
     public function socials(): HasMany

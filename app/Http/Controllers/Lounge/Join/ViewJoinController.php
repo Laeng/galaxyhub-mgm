@@ -77,7 +77,11 @@ class ViewJoinController extends Controller
 
         $now = now();
 
-        $user->update(['created_at', 'agreed_at'], [$now, $now]);
+        $user->update([
+            'created_at' => $now,
+            'agreed_at' => $now
+        ]);
+
         $group->add($group::ARMA_APPLY);
 
         $history->add($history->getIdentifierFromUser($user), PlayerHistory::TYPE_USER_APPLY, '가입 신청');
