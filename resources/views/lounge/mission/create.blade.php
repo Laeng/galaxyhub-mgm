@@ -25,8 +25,8 @@
                                     시작 시간
                                 </label>
                                 <div class="mt-1 grid grid-cols-2 gap-x-2">
-                                    <input type="date" name="date" class="shadow-sm focus:ring-blue-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md" x-model="data.create.body.date" required>
-                                    <input type="time" name="time" class="shadow-sm focus:ring-blue-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md" x-model="data.create.body.time" step="1800" required>
+                                    <x-input.text.primary type="date" name="date" x-model="data.create.body.date" required/>
+                                    <x-input.text.primary type="time" name="date" x-model="data.create.body.time" step="1800" required/>
                                 </div>
                             </div>
                         </div>
@@ -199,9 +199,12 @@
                                     this.data.create.body.body = (body.length > 0) ? body : '미션 소개가 없습니다.';
 
                                     let success = (r) => {
-                                        switch (r.data.description) {
-                                            case 'OK':
-                                                location.replace(r.data.data.url);
+                                        location.replace(r.data.data.url);
+                                    }
+                                    let error = (e) => {
+                                        switch (e.response.data.description) {
+                                            case 'VALIDATION FAILED':
+                                                window.modal.alert('오류', '미션 종류, 시작 시간, 사용할 맵, 사용할 애드온 중 어느 하나에 빈칸이 있습니다.', (c) => {}, 'error');
                                                 break;
                                             case 'DATE OLD':
                                                 window.modal.alert('주의', '미션 시간은 지난 날짜로 설정할 수 없습니다.', (c) => {}, 'warning');
@@ -209,15 +212,13 @@
                                             case 'DATE UNAVAILABLE':
                                                 window.modal.alert('주의', '기존 등록된 미션 시간과 겹칩니다.', (c) => {}, 'warning');
                                                 break;
-                                            default:
-                                                window.modal.alert('오류', '알 수 없는 응답입니다.', (c) => {}, 'error');
-                                                console.log(r);
+                                            case 'PERMISSION ERROR':
+                                                window.modal.alert('오류', '권한이 없습니다.', (c) => {}, 'error');
                                                 break;
+                                            default:
+                                                window.modal.alert('오류', '데이터 처리 중 문제가 발생하였습니다.', (c) => {}, 'error');
+                                                console.log(e.response);
                                         }
-                                    }
-                                    let error = (e) => {
-                                        window.modal.alert('오류', '데이터 처리 중 문제가 발생하였습니다.', (c) => {}, 'error');
-                                        console.log(e);
                                     }
                                     let complete = () => {
                                         this.data.create.lock = false;

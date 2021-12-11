@@ -108,16 +108,12 @@ class ApiMissionController extends Controller
             $date = Carbon::createFromFormat('Y-m-d H:i', "{$request->get('date')} {$request->get('time')}");
 
             if (now()->unix() > $date->unix()) {
-                return $this->jsonResponse(200, 'DATE OLD', [
-                    'url' => null,
-                ]);
+                return $this->jsonResponse(422, 'DATE OLD', []);
             }
 
 
             if (Mission::whereBetween('expected_at', [$date->copy()->subHours(), $date->copy()->addHours()])->count() > 0) {
-                return $this->jsonResponse(200, 'DATE UNAVAILABLE', [
-                    'url' => null,
-                ]);
+                return $this->jsonResponse(422, 'DATE UNAVAILABLE', []);
             }
 
             $mission = Mission::create([

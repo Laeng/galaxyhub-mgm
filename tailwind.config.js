@@ -15,11 +15,7 @@ module.exports = {
             },
         },
     },
-    colors: {
-        green: colors.emerald,
-        yellow: colors.amber,
-        purple: colors.violet,
-    },
+    colors: {},
     variants: {
         extend: {},
     },
