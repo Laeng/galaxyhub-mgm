@@ -8,6 +8,7 @@ use App\Http\Controllers\Lounge\Mission\ApiMissionController;
 use App\Http\Controllers\Lounge\Mission\ViewMissionController;
 use App\Http\Controllers\Lounge\ViewLoungeController;
 use App\Http\Controllers\Staff\ApiManageUserApplicationController;
+use App\Http\Controllers\Staff\ApiManageUserController;
 use App\Http\Controllers\Staff\ApiManageUserMemo;
 use App\Http\Controllers\Staff\ViewManageUserApplicationController;
 use App\Http\Controllers\Staff\ViewManageUserController;
@@ -30,15 +31,16 @@ Route::get('/', function () {
 })->name('home');
 
 
-Route::middleware('web')->prefix('lounge')->group(function() {
+Route::middleware('web')->group(function() {
     Route::get( '/login', [ViewAuthController::class, 'login'])->name('account.auth.login');
     Route::get( '/callback', [ViewAuthController::class, 'callback'])->name('account.auth.callback.steam');
     Route::get( '/logout', [ViewAuthController::class, 'logout'])->name('account.auth.logout');
 });
 
-Route::middleware(['auth:web'])->prefix('lounge')->group(function () {
-    Route::get('/', [ViewLoungeController::class, 'index'])->name('lounge.index');
-    Route::post('/account/leave', [ApiAccountController::class, 'leave'])->name('account.leave');
+Route::middleware(['auth:web'])->group(function () {
+    Route::prefix('account')->name('account.')->group(function () {
+        Route::post('/leave', [ApiAccountController::class, 'leave'])->name('leave');
+    });
 
     Route::prefix('join')->name('join.')->group(function () {
         Route::get( '/agree', [ViewJoinController::class, 'agree'])->name('agree');
@@ -46,6 +48,10 @@ Route::middleware(['auth:web'])->prefix('lounge')->group(function () {
         Route::any( '/apply', [ViewJoinController::class, 'apply'])->name('apply');
         Route::post('/submit', [ViewJoinController::class, 'submit'])->name('submit');
     });
+});
+
+Route::middleware(['auth:web'])->prefix('lounge')->group(function () {
+    Route::get('/', [ViewLoungeController::class, 'index'])->name('lounge.index');
 });
 
 Route::middleware(['auth:web', CheckInactiveUser::class])->prefix('lounge')->group(function() {
@@ -63,7 +69,8 @@ Route::middleware(['auth:web', CheckInactiveUser::class])->prefix('lounge')->gro
 
 Route::middleware(['auth:web', \App\Http\Middleware\AllowOnlyStaff::class])->prefix('staff')->name('staff.')->group(function() {
     Route::prefix('user')->name('user.')->group(function () {
-        Route::get( '/all/list', [ViewManageUserController::class, 'list'])->name('all.list');
+        Route::get('/all', [ViewManageUserController::class, 'list'])->name('all');
+        Route::post( '/all/list', [ApiManageUserController::class, 'list'])->name('api.all.list');
         Route::get( '/all/{id}', [ViewManageUserController::class, 'read'])->name('all.read');
 
         Route::get( '/application', [ViewManageUserApplicationController::class, 'list'])->name('application');
