@@ -1,5 +1,5 @@
 @php
-    $listComponentId = 'l' . Str::random(5);
+    $listComponentId = 'table_' . Str::lower(Str::random(5));
 @endphp
 <x-sub-page website-name="MGM Lounge" title="{{ $title }}">
     <x-section.basic parent-class="py-4 sm:py-6 lg:py-16" class="flex justify-center">
@@ -16,7 +16,7 @@
                 </div>
 
                 <div class="flex flex-col mb-4">
-                    <div x-data="application_list_form()">
+                    <div x-data="application_list">
                         <x-table.simple :component-id="$listComponentId" :api-url="route('staff.user.api.application.list')" :use-check-box="true" :check-box-name="'user_id'" x-ref="applicants" />
 
                         <div class="flex justify-start space-x-3 mt-3">
@@ -32,10 +32,9 @@
                         </div>
                     </div>
 
-
                     <script type="text/javascript">
-                        function application_list_form() {
-                            return {
+                        window.document.addEventListener('alpine:init', () => {
+                            window.alpine.data('application_list', () => ({
                                 data: {
                                     process: {
                                         lock: false
@@ -95,8 +94,8 @@
                                 post(url, body, success, error, complete) {
                                     window.axios.post(url, body).then(success).catch(error).then(complete);
                                 }
-                            };
-                        }
+                            }));
+                        });
                     </script>
                 </div>
 

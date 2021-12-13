@@ -1,5 +1,5 @@
 @php
-    $listComponentId = 'list' . Str::random(5);
+    $listComponentId = 'table_' . Str::lower(Str::random(5));
 @endphp
 <x-sub-page website-name="MGM Lounge" title="{{ $title }}">
     <x-section.basic parent-class="py-4 sm:py-6 lg:py-16" class="flex justify-center">

@@ -176,8 +176,8 @@
                         </div>
 
                         <script type="text/javascript">
-                            function application_detail() {
-                                return {
+                            window.document.addEventListener('alpine:init', () => {
+                                window.alpine.data('application_detail', () => ({
                                     interval: {
                                         load: -1
                                     },
@@ -283,15 +283,14 @@
                                         }
                                     },
                                     init() {
-                                      this.load();
+                                        this.load();
                                     },
                                     post(url, body, success, error, complete) {
                                         window.axios.post(url, body).then(success).catch(error).then(complete);
                                     }
-                                };
-                            }
+                                }));
+                            });
                         </script>
-
                     </div>
                 </div>
 
