@@ -25,6 +25,7 @@ class User extends Authenticatable
         'avatar',
         'remember_token',
         'email',
+        'visit',
         'agreed_at',
         'visited_at'
     ];
