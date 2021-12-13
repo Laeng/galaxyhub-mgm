@@ -8,22 +8,24 @@ use Illuminate\View\View;
 
 class Simple extends Component
 {
-    private string $componentId;
-    private string $apiUrl;
-    private bool $useCheckBox;
-    private string $checkBoxName;
+    public string $componentId;
+    public string $apiUrl;
+    public bool $useCheckBox;
+    public string $checkBoxName;
+    public bool $refresh;
 
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct(string $componentId, string $apiUrl, bool $useCheckBox = false, string $checkBoxName = '')
+    public function __construct(string $componentId, string $apiUrl, bool $useCheckBox = false, string $checkBoxName = '', bool $refresh = false)
     {
         $this->componentId = $componentId;
         $this->apiUrl = $apiUrl;
         $this->useCheckBox = $useCheckBox;
         $this->checkBoxName = $checkBoxName;
+        $this->refresh = $refresh;
     }
 
     /**
@@ -33,11 +35,6 @@ class Simple extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.table.simple', [
-            'componentId' => $this->componentId,
-            'apiUrl' => $this->apiUrl,
-            'useCheckBox' => $this->useCheckBox,
-            'checkBoxName' => $this->checkBoxName
-        ]);
+        return view('components.table.simple');
     }
 }
