@@ -22,6 +22,7 @@ class CreateUsersTable extends Migration
             $table->string('avatar')->nullable();
             $table->string('email')->nullable();
             $table->timestamp('email_verified_at')->nullable();
+            $table->unsignedBigInteger('visit')->default(1);
             $table->rememberToken();
             $table->timestamp('agreed_at')->nullable();
             $table->timestamp('visited_at')->nullable();
