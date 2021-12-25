@@ -21,10 +21,30 @@ class Group implements GroupContract
     const ARMA_REJECT = 22;
 
     const ARMA_MEMBER = 30;
-    const ARMA_MAKER1 = 31;
-    const ARMA_MAKER2 = 32;
+
+    const ARMA_MAKER1 = 50;
+    const ARMA_MAKER2 = 51;
+
+    const ARMA_SENIOR = 70;
 
     const STAFF = 90;
+
+    public function getName(int $group_id): string
+    {
+        return match($group_id) {
+            10 => 'Banned User',
+            11 => 'Inactive User',
+            20 => '가입 신청',
+            21 => '가입 보류',
+            22 => '가입 거절',
+            30 => '멤버',
+            50 => '예비 메이커',
+            51 => '정식 메이커',
+            70 => '시니어',
+            90 => '관리자',
+            default => ''
+        };
+    }
 
     public function add(int $groupId, User|int|null $user = null, string|null $reason = null, User|int|null $by = null): bool
     {
