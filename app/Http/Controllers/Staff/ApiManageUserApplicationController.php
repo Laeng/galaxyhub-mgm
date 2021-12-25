@@ -31,20 +31,7 @@ class ApiManageUserApplicationController extends Controller
 
             $surveyForms = Survey::where('name', 'like', 'join-application-%')->get(['id'])->pluck('id')->toArray();
             $countApplicant = $group->countSpecificGroupUsers($group::ARMA_APPLY);
-
-            if ($step >= 0) {
-                $quotient = intdiv($countApplicant, $limit);
-                if ($quotient <= $step) {
-                    $step = $quotient - 1; //step 값은 0부터 시작하기 떄문에 1를 빼준다.
-
-                    if ($countApplicant % $limit > 0) {
-                        $step += 1;
-                    }
-                }
-            } else {
-                $step = 0;
-            }
-
+            $step = $this->getPaginationStep($step, $limit, $countApplicant);
             $applicants = $group->getSpecificGroupUsers($group::ARMA_APPLY, $step * $limit, $limit, true);
 
             $keys = [];
@@ -143,7 +130,7 @@ class ApiManageUserApplicationController extends Controller
                         }
                     }
 
-                    $history->add($history->getIdentifierFromUser($user), $history::TYPE_USER_JOIN, $reason);
+                    $history->add($history->getIdentifierFromUser($user), $history::TYPE_USER_JOIN, $reason, $executor);
 
                 } else {
                     $historyType = match($request->get('type')) {

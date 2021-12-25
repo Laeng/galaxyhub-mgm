@@ -37,4 +37,22 @@ class Controller extends BaseController
             throw new Exception('Validation failed', 422);
         }
     }
+
+    public function getPaginationStep(int $step, int $limit, int $total): int
+    {
+        if ($step >= 0) {
+            $quotient = intdiv($total, $limit);
+            if ($quotient <= $step) {
+                $step = $quotient - 1; //step 값은 0부터 시작하기 떄문에 1를 빼준다.
+
+                if ($total % $limit > 0) {
+                    $step += 1;
+                }
+            }
+        } else {
+            $step = 0;
+        }
+
+        return $step;
+    }
 }
