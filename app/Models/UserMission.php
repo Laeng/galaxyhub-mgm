@@ -16,11 +16,12 @@ class UserMission extends Model
         'role',
         'is_maker',
         'try_attends',
-        'is_attended'
+        'attended_at'
     ];
 
     protected $casts = [
-        'role' => 'array'
+        'role' => 'array',
+        'attended_at' => 'datetime'
     ];
 
     public function user():BelongsTo

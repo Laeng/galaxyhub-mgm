@@ -20,7 +20,7 @@ class CreateUserMissionsTable extends Migration
             $table->mediumText('role')->nullable(); // 아르마의 밤 과 같은 역할들 중 하나를 선택한 값 // 추후 릴리즈
             $table->boolean('is_maker')->default(false); // 진행자인지 아닌지
             $table->tinyInteger('try_attends')->default(0);
-            $table->boolean('is_attended')->default(false); // 출석체크 여부
+            $table->timestamp('attended_at')->nullable(); // 출석체크 시간
             $table->timestamps();
         });
     }
