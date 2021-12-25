@@ -40,16 +40,13 @@ class ViewMissionController extends Controller
             'title' => '미션 생성',
         ]);
     }
-
-    public function update(Request $request): Factory|View|Application|RedirectResponse
+    public function update(Request $request, Group $group): Factory|View|Application|RedirectResponse
     {
-
+        if (!$this->isMaker($request->user(), $group)) {
+            abort(404);
+        }
     }
 
-    public function delete(Request $request): Factory|View|Application|RedirectResponse
-    {
-
-    }
 
     private function isMaker(User $user, Group $group): bool
     {
