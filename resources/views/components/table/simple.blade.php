@@ -1,6 +1,6 @@
 <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8" x-data="$store.{{$componentId}}">
     <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
-        <div class="overflow-hidden border border-gray-200 rounded-lg">
+        <div class="relative overflow-hidden border border-gray-200 rounded-lg">
             <table class="min-w-full divide-y divide-gray-200 table-auto">
                 <thead class="bg-gray-50">
                 <tr>
@@ -52,6 +52,15 @@
                     </x-button.filled.md-white>
                 </div>
             </nav>
+
+            <div class="absolute top-0 right-0" x-cloak x-show="load.list">
+                <div class="p-2.5 text-gray-500">
+                    <svg class="animate-spin h-5 w-5" viewBox="0 0 24 24" fill="none">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -72,7 +81,8 @@
                         url: '{{$apiUrl}}',
                         body: {
                             step: 0,
-                            limit: 20
+                            limit: 20,
+                            query: {}
                         },
                         data: {
                             fields: {},
@@ -88,6 +98,7 @@
                     checkbox: false
                 },
                 list(step = 0) {
+                    this.load.list = true;
                     this.data.list.body.step = step;
 
                     let success = (r) => {
@@ -98,12 +109,11 @@
                                 this.data.list.body.step = this.data.list.data.count.step;
                                 this.data.list.body.limit = this.data.list.data.count.limit;
 
-                                /*
+                                @if(!$refresh)
                                 if (this.interval.list >= 0) {
                                     clearInterval(this.interval.list);
                                 }
-                                 */
-
+                                @endif
                             }
                         }
                     }
@@ -112,6 +122,7 @@
                     }
                     let complete = () => {
                         this.data.list.lock = false;
+                        this.load.list = false;
                     }
 
                     if (!this.data.list.lock) {
