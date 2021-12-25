@@ -12,7 +12,11 @@ class ViewManageUserController
 {
     public function list(Request $request): Factory|View|Application|RedirectResponse
     {
-        return view('staff.userApplicationDetail');
+        return view('staff.userAll',[
+            'title' => '전체 회원 관리',
+            'alerts' => [
+            ]
+        ]);
     }
 
     public function read(Request $request, string $user_id): Factory|View|Application|RedirectResponse
