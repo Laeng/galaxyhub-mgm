@@ -68,14 +68,14 @@ Route::middleware(['auth:web', CheckInactiveUser::class])->prefix('lounge')->gro
 });
 
 Route::middleware(['auth:web', \App\Http\Middleware\AllowOnlyStaff::class])->prefix('staff')->name('staff.')->group(function() {
-    Route::prefix('user')->name('user.')->group(function () {
-        Route::get('/all', [ViewManageUserController::class, 'list'])->name('all');
-        Route::post( '/all/list', [ApiManageUserController::class, 'list'])->name('api.all.list');
-        Route::get( '/all/{id}', [ViewManageUserController::class, 'read'])->name('all.read');
 
-        Route::get( '/application', [ViewManageUserApplicationController::class, 'list'])->name('application');
-        Route::post('/application/list', [ApiManageUserApplicationController::class, 'list'])->name('api.application.list');
-        Route::post('/application/process', [ApiManageUserApplicationController::class, 'process'])->name('api.application.process');
+// USER
+    Route::prefix('user')->name('user.')->group(function () {
+        Route::redirect('/', '/staff/users');
+        Route::redirect('/application', '/staff/applications');
+        Route::get( '/applications', [ViewManageUserApplicationController::class, 'list'])->name('application');
+        Route::post('/applications/list', [ApiManageUserApplicationController::class, 'list'])->name('api.application.list');
+        Route::post('/applications/process', [ApiManageUserApplicationController::class, 'process'])->name('api.application.process');
         Route::get( '/application/{id}', [ViewManageUserApplicationController::class, 'read'])->name('application.read');
         Route::post('/application/{id}/info', [ApiManageUserApplicationController::class, 'detail_info'])->name('api.application.detail.info');
         Route::get('/application/{id}/games', [ViewManageUserApplicationController::class, 'detailOwnedGames'])->name('application.detail.games');
@@ -83,10 +83,19 @@ Route::middleware(['auth:web', \App\Http\Middleware\AllowOnlyStaff::class])->pre
         Route::post('/memo/list', [ApiManageUserMemo::class, 'list'])->name('api.memo.list');
         Route::post('/memo/delete', [ApiManageUserMemo::class, 'delete'])->name('api.memo.delete');
         Route::post('/memo/create', [ApiManageUserMemo::class, 'create'])->name('api.memo.create');
-    });
 
+        Route::get( '/{id}', [ViewManageUserController::class, 'read'])->name('all.read');
+    });
+    Route::prefix('users')->group(function () {
+        Route::get('/', [ViewManageUserController::class, 'list'])->name('user.all');
+        Route::post( '/list', [ApiManageUserController::class, 'list'])->name('user.api.all.list');
+    });
+////
+
+// MISSION
     Route::prefix('mission')->name('mission.')->group(function () {
 
     });
+////
 });
 
