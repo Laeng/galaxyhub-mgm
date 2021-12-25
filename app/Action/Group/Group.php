@@ -32,8 +32,8 @@ class Group implements GroupContract
     public function getName(int $group_id): string
     {
         return match($group_id) {
-            10 => 'Banned User',
-            11 => 'Inactive User',
+            10 => '활동정지',
+            11 => '장기미접속',
             20 => '가입 신청',
             21 => '가입 보류',
             22 => '가입 거절',
