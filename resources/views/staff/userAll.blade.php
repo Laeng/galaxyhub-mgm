@@ -36,7 +36,7 @@
                                     <x-input.select.primary id="group" name="group" x-model="data.list.body.query.group" required>
                                         <option value="">전체 회원</option>
                                         <option value="10">활동정지</option>
-                                        <option value="11">장기미접속</option>
+                                        <option value="11">장기 미접속</option>
                                         <option value="20">가입 신청</option>
                                         <option value="21">가입 보류</option>
                                         <option value="22">가입 거절</option>
