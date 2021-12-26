@@ -202,6 +202,15 @@
                                         location.replace(r.data.data.url);
                                     }
                                     let error = (e) => {
+                                        /*
+                                        if (e.response.status === 415) {
+                                            //CSRF 토큰 오류 발생
+                                            window.modal.alert('처리 실패', '로그인 정보를 확인할 수 없습니다.', (c) => {
+                                                Location.reload();
+                                            }, 'error');
+                                            return;
+                                        }
+                                        */
                                         switch (e.response.data.description) {
                                             case 'VALIDATION FAILED':
                                                 window.modal.alert('오류', '미션 종류, 시작 시간, 사용할 맵, 사용할 애드온 중 어느 하나에 빈칸이 있습니다.', (c) => {}, 'error');

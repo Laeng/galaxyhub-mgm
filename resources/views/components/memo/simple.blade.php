@@ -21,7 +21,7 @@
                 </template>
             </div>
             <div class="mt-1">
-                <p class="text-sm text-gray-600" x-text="item.description"></p>
+                <p class="text-sm text-gray-600" x-html="item.description"></p>
             </div>
         </li>
     </template>
