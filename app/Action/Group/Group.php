@@ -13,9 +13,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Group implements GroupContract
 {
-    const BANNED = 10;
-    const INACTIVE = 11;
-
     const ARMA_APPLY = 20;
     const ARMA_DEFER = 21;
     const ARMA_REJECT = 22;
@@ -29,21 +26,23 @@ class Group implements GroupContract
 
     const STAFF = 90;
 
-    public function getName(int $group_id): string
+    public array $names = [
+        20 => '가입 신청',
+        21 => '가입 보류',
+        22 => '가입 거절',
+        30 => '멤버',
+        50 => '예비 메이커',
+        51 => '정식 메이커',
+        90 => '관리자'
+    ];
+
+    public function getName(int $group_id): ?string
     {
-        return match($group_id) {
-            10 => '활동정지',
-            11 => '장기미접속',
-            20 => '가입 신청',
-            21 => '가입 보류',
-            22 => '가입 거절',
-            30 => '멤버',
-            50 => '예비 메이커',
-            51 => '정식 메이커',
-            70 => '시니어',
-            90 => '관리자',
-            default => ''
-        };
+        if (array_key_exists($group_id, $this->names)) {
+            return $this->names[$group_id];
+        } else {
+            return null;
+        }
     }
 
     public function add(int $groupId, User|int|null $user = null, string|null $reason = null, User|int|null $by = null): bool
