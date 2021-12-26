@@ -5,14 +5,14 @@
                 <thead class="bg-gray-50">
                 <tr>
                     @if($useCheckBox)
-                        <th scope="col" class="w-4 px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        <th scope="col" class="w-4 px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">
                             <label :for="'check_' + data.component_id" class="sr-only">전체삭제</label>
-                            <input class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded checkbox" type="checkbox" :id="'check_' + data.component_id" @click="checkbox()" >
+                            <input class="focus:ring-0 focus:ring-offset-0 h-4 w-4 text-indigo-600 border-gray-300 rounded checkbox" type="checkbox" :id="'check_' + data.component_id" @click="checkbox()" >
                         </th>
                     @endif
 
                     <template x-for="field in data.list.data.fields">
-                        <th scope="col" class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" x-html="field"></th>
+                        <th scope="col" class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap" x-html="field"></th>
                     </template>
                 </tr>
                 </thead>
@@ -20,13 +20,13 @@
                 <template x-for="(item, index) in data.list.data.items">
                     <tr>
                         @if($useCheckBox)
-                            <td class="w-4 px-3 py-4 whitespace-nowrap text-sm text-gray-900">
+                            <td class="w-4 px-3 py-4 text-sm text-gray-900 whitespace-nowrap">
                                 <label :for="'check_' + data.component_id + '_' + index" class="sr-only"></label>
-                                <input type="checkbox" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded checkbox" :name="data.check_box_name + '[]'" :value="data.list.data.keys[index]" :id="'check_' + data.component_id + '_' + index">
+                                <input type="checkbox" class="focus:ring-0 focus:ring-offset-0 h-4 w-4 text-indigo-600 border-gray-300 rounded checkbox" :name="data.check_box_name + '[]'" :value="data.list.data.keys[index]" :id="'check_' + data.component_id + '_' + index">
                             </td>
                         @endif
                         <template x-for="value in item">
-                            <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-500" x-html="value"></td>
+                            <td class="px-3 py-4 text-sm text-gray-500 whitespace-nowrap" x-html="value"></td>
                         </template>
                     </tr>
                 </template>
@@ -43,7 +43,7 @@
                         <span class="font-medium" x-text="data.list.data.count.total"></span>
                     </p>
                 </div>
-                <div class="flex-1 flex justify-start sm:justify-end space-x-3">
+                <div class="sticky left-0 flex flex-1 justify-start sm:justify-end space-x-3">
                     <x-button.filled.md-white type="button" @click="list(data.list.body.step -= 1)">
                         이전
                     </x-button.filled.md-white>
@@ -118,6 +118,14 @@
                         }
                     }
                     let error = (e) => {
+                        if (e.response.status === 415) {
+                            //CSRF 토큰 오류 발생
+                            window.modal.alert('처리 실패', '로그인 정보를 확인할 수 없습니다.', (c) => {
+                                Location.reload();
+                            }, 'error');
+                            return;
+                        }
+
                         console.log(e);
                     }
                     let complete = () => {
