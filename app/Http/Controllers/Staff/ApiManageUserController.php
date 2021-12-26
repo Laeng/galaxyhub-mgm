@@ -36,9 +36,11 @@ class ApiManageUserController extends Controller
             $items = [];
 
             $query = User::leftJoin('user_missions', function($join) {
-                $join->on('user_missions.user_id', '=', 'users.id')->on('user_missions.id', '=', DB::raw("(select max(id) from user_missions WHERE user_missions.user_id = users.id AND user_missions.attended_at IS NOT NULL)"));
+                $join->on('user_missions.user_id', '=', 'users.id')->on('user_missions.id', '=', DB::raw("(SELECT max(id) FROM user_missions WHERE user_missions.user_id = users.id AND user_missions.attended_at IS NOT NULL)"));
             })->leftJoin('user_groups', function ($join) {
-                $join->on('user_groups.user_id', '=', 'users.id')->on('user_groups.group_id', '=', DB::raw("(select max(group_id) from user_groups WHERE user_groups.user_id = users.id AND user_groups.deleted_at IS NULL)"));
+                $join->on('user_groups.user_id', '=', 'users.id')
+                    ->on('user_groups.group_id', '=', DB::raw("(select max(group_id) FROM user_groups WHERE user_groups.user_id = users.id AND user_groups.deleted_at IS NULL)"))
+                    ->on('user_groups.id', '=', DB::raw("(select max(id) FROM user_groups WHERE user_groups.user_id = users.id AND user_groups.deleted_at IS NULL)"));
             });
 
             $query =  $query->whereNotNull('users.agreed_at');
