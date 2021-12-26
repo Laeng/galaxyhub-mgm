@@ -89,6 +89,7 @@ Route::middleware(['auth:web', \App\Http\Middleware\AllowOnlyStaff::class])->pre
     Route::prefix('users')->group(function () {
         Route::get('/', [ViewManageUserController::class, 'list'])->name('user.all');
         Route::post( '/list', [ApiManageUserController::class, 'list'])->name('user.api.all.list');
+        Route::post('/process', [ApiManageUserController::class, 'process'])->name('user.api.all.process');
     });
 ////
 

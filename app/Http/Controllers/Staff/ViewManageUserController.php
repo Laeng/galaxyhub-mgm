@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Staff;
 
+use App\Action\Group\Group;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -10,12 +11,11 @@ use Illuminate\Http\Request;
 
 class ViewManageUserController
 {
-    public function list(Request $request): Factory|View|Application|RedirectResponse
+    public function list(Request $request, Group $group): Factory|View|Application|RedirectResponse
     {
         return view('staff.userAll',[
-            'title' => '전체 회원 관리',
-            'alerts' => [
-            ]
+            'title' => '전체 회원',
+            'groups' => $group->names
         ]);
     }
 

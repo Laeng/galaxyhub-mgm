@@ -42,16 +42,19 @@ class ApiManageUserMemo extends Controller
 
                 switch ($datum->type) {
                     case PlayerHistory::TYPE_USER_BANNED:
-                        $item['description'] = "영구 정지";
+                        $item['description'] = "<span class='text-indigo-600 mr-3'>활동 정지</span> {$datum->description}";
+                        break;
+                    case PlayerHistory::TYPE_USER_UNBANNED:
+                        $item['description'] = "<span class='text-indigo-600 mr-3'>활동 정지 해제</span> {$datum->description}";
                         break;
                     case PlayerHistory::TYPE_USER_APPLY:
-                        $item['description'] = "클랜 가입 신청";
+                        $item['description'] = "<span class='text-indigo-600'>가입 신청</span>";
                         break;
                     case PlayerHistory::TYPE_USER_JOIN:
-                        $item['description'] = "클랜 가입 승인";
+                        $item['description'] = "<span class='text-indigo-600'>가입 승인</span>";
                         break;
                     case PlayerHistory::TYPE_USER_LEAVE:
-                        $item['description'] = "자진 탈퇴";
+                        $item['description'] = "<span class='text-indigo-600'>자진 탈퇴</span>";
                         break;
                     case PlayerHistory::TYPE_USER_MEMO:
                         $item['description'] = $datum->description;
@@ -61,10 +64,10 @@ class ApiManageUserMemo extends Controller
                         }
                         break;
                     case PlayerHistory::TYPE_APPLICATION_REJECTED:
-                        $item['description'] = "클랜 가입 거절 -> 거절 사유: {$datum->description}";
+                        $item['description'] = "<span class='text-indigo-600 mr-3'>가입 거절</span> {$datum->description}";
                         break;
                     case PlayerHistory::TYPE_APPLICATION_DEFERRED:
-                        $item['description'] = "클랜 가입 보류 -> 보류 사유: {$datum->description}";
+                        $item['description'] = "<span class='text-indigo-600 mr-3'>가입 보류</span> {$datum->description}";
                         break;
                     default:
                         break;

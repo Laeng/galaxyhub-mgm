@@ -14,6 +14,7 @@ class PlayerHistory
     const TYPE_USER_APPLY = 'user_apply';
     const TYPE_USER_LEAVE = 'user_leave';
     const TYPE_USER_BANNED = 'user_banned';
+    const TYPE_USER_UNBANNED = 'user_unbanned';
     const TYPE_APPLICATION_REJECTED = 'application_rejected';
     const TYPE_APPLICATION_DEFERRED = 'application_DEFERRED';
 
