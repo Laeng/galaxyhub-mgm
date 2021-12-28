@@ -50,7 +50,7 @@
 
                         <x-table.simple :component-id="$listComponentId" :api-url="route('staff.user.api.all.list')" :use-check-box="true" check-box-name="user_id" x-ref="users" />
 
-                        <div class="flex divide-x-2 divide-gray-300 flex-wrap">
+                        <div class="flex divide-x divide-gray-200 flex-wrap">
                             <div class="flex items-center space-x-3 pr-3">
                                 <div class="flex items-center space-x-3">
                                     <div>

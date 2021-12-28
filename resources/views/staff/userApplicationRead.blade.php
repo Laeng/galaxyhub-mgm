@@ -46,7 +46,7 @@
                                         신청 날짜
                                     </p>
                                     <p class="text-sm text-gray-600">
-                                        {{ \Carbon\Carbon::instance(new DateTime($applications[0]['created_at']))->format('Y.m.d h:i') }}
+                                        {{ \Carbon\Carbon::instance(new DateTime($applications[0]['created_at']))->format('Y-m-d h:i') }}
                                     </p>
                                 </div>
                             </li>
@@ -58,7 +58,7 @@
                                             처리 날짜
                                         </p>
                                         <p class="text-sm text-gray-600">
-                                            {{ \Carbon\Carbon::instance(new DateTime($assign['created_at']))->format('Y.m.d h:i') }}
+                                            {{ \Carbon\Carbon::instance(new DateTime($assign['created_at']))->format('Y-m-d h:i') }}
                                         </p>
                                     </div>
                                 </li>

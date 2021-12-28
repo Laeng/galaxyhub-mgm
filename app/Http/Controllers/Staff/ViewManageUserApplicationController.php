@@ -48,7 +48,29 @@ class ViewManageUserApplicationController extends Controller
         }
 
         $status = null;
-        $assign = null;
+        $assign = [
+            'nickname' => null,
+            'created_at' => null,
+            'reason' => null
+        ];
+
+        $userGroup = $user->groups()->orderBy('group_id', 'asc')->first();
+
+        if (!is_null($userGroup)) {
+            $status = $group->getName($userGroup->group_id);
+
+            $groupReason = $userGroup->reason()->latest()->first();
+            $staff = $groupReason->staff()->latest()->first();
+
+            $assign['reason'] = (is_null($groupReason->reason) || $groupReason->reason === '') ? '입력한 사유가 없습니다.' : $groupReason->reason;
+            $assign['created_at'] = $groupReason->created_at;
+
+            if (!is_null($staff)) {
+                $assign['nickname'] = $staff->nickname;
+            }
+        }
+
+        /* 태그 방식 등급
         $userGroups = $user->groups()->orderBy('group_id', 'asc')->get();
 
         foreach ($userGroups as $group) {
@@ -85,6 +107,7 @@ class ViewManageUserApplicationController extends Controller
                 }
             }
         }
+        */
 
         return view('staff.userApplicationRead', [
             'title' => "{$user->nickname}님의 신청서",
