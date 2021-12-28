@@ -98,17 +98,19 @@ class ApiManageUserController extends Controller
             $rows = $query->get();
 
             foreach ($rows as $row) {
-              $keys[] = $row->id;
-              $items[] = [
-                  $row->nickname,
-                  $group->getName($row->group_id),
-                  Ban::where('bannable_id', '=', $row->id)->count() > 0 ? '○' : '⨉',
-                  $row->created_at->toDateString(),
-                  $row->visited_at->toDateString(),
-                  is_null($row->attended_at) ? '' : Carbon::createFromFormat('Y-m-d H:i:s', $row->attended_at)->toDateString(),
-                  UserMission::whereNotNull('attended_at')->where('user_id', $row->id)->count(),
-                  "<a class='text-indigo-600 hover:text-indigo-900' href='". route('staff.user.all.read', $row->id) ."'>확인하기</a>"
-              ];
+                $ban = Ban::where('bannable_id', '=', $row->id)->latest()->first();
+
+                $keys[] = $row->id;
+                $items[] = [
+                    $row->nickname,
+                    $group->getName($row->group_id),
+                    is_null($ban) ? '⨉' : (is_null($ban->expired_at) ? '무기한' : $ban->expired_at->toDateString()),
+                    $row->created_at->toDateString(),
+                    $row->visited_at->toDateString(),
+                    is_null($row->attended_at) ? '⨉' : Carbon::createFromFormat('Y-m-d H:i:s', $row->attended_at)->toDateString(),
+                    UserMission::whereNotNull('attended_at')->where('user_id', $row->id)->count(),
+                    "<a class='text-indigo-600 hover:text-indigo-900' href='". route('staff.user.all.read', $row->id) ."'>확인하기</a>"
+                ];
             }
 
             return $this->jsonResponse(200, 'OK', [
@@ -149,7 +151,7 @@ class ApiManageUserController extends Controller
             switch ($request->get('type')) {
                 case 'ban':
                     $users->each(function ($i, $k) use ($history, $executor, $reason, $q) {
-                        $b = ['comment' => 'Enjoy your ban!'];
+                        $b = ['comment' => $reason];
 
                         if (!empty($q['days'])) {
                             $b['expired_at'] = now()->addDays((int) $q['days']);

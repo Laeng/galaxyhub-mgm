@@ -9,7 +9,7 @@
 
                 <div class="flex flex-col mb-4">
                     <div class="space-y-3" x-data="all_list">
-                        <div class="xl:ml-auto hidden md:flex items-center space-x-3 py-px">
+                        <div class="xl:ml-auto hidden md:flex items-center space-x-3">
                             <div class="w-full lg:w-auto">
                                 <x-input.select.primary id="group" name="group" x-model="data.list.body.query.group" required>
                                     <option value="">전체 회원</option>
@@ -50,43 +50,47 @@
 
                         <x-table.simple :component-id="$listComponentId" :api-url="route('staff.user.api.all.list')" :use-check-box="true" check-box-name="user_id" x-ref="users" />
 
-                        <div class="flex items-center space-x-3 overflow-x-auto py-px">
-                            <div class="flex items-center space-x-3">
-                                <div>
-                                    <x-input.select.primary id="group" name="group" x-model="data.process.body.query.group" required>
-                                        <option value="">권한 선택</option>
-                                        @foreach($groups as $key => $item)
-                                            <option value="{{ $key }}">{{ $item }}</option>
-                                        @endforeach
-                                    </x-input.select.primary>
+                        <div class="flex divide-x-2 divide-gray-300 flex-wrap">
+                            <div class="flex items-center space-x-3 pr-3">
+                                <div class="flex items-center space-x-3">
+                                    <div>
+                                        <x-input.select.primary id="group" name="group" x-model="data.process.body.query.group" required>
+                                            <option value="">권한 선택</option>
+                                            @foreach($groups as $key => $item)
+                                                <option value="{{ $key }}">{{ $item }}</option>
+                                            @endforeach
+                                        </x-input.select.primary>
+                                    </div>
+                                    <x-button.filled.md-white @click="process('group', '등급 변경', '변경 사유를 입력해 주십시오.')" type="button">
+                                        변경
+                                    </x-button.filled.md-white>
                                 </div>
-                                <x-button.filled.md-white @click="process('group', '등급 변경', '변경 사유를 입력해 주십시오.')" type="button">
-                                    변경
+                            </div>
+                            <div class="flex items-center space-x-3 px-3">
+                                <div class="flex items-center space-x-3">
+                                    <div>
+                                        <x-input.select.primary id="days" name="days" x-model="data.process.body.query.days" required>
+                                            <option value="">무기한</option>
+                                            <option value="1">1일</option>
+                                            <option value="3">3일</option>
+                                            <option value="7">7일</option>
+                                            <option value="14">14일</option>
+                                            <option value="30">30일</option>
+                                        </x-input.select.primary>
+                                    </div>
+                                    <x-button.filled.md-white @click="process('ban', '활동 정지', '정지 사유를 입력해 주십시오.')" type="button">
+                                        활동 정지
+                                    </x-button.filled.md-white>
+                                </div>
+                                <x-button.filled.md-white @click="process('unban', '활동 정지 해제', '해제 사유를 입력해 주십시오.')" type="button">
+                                    정지 해제
                                 </x-button.filled.md-white>
                             </div>
-                            <p class="border h-6"></p>
-                            <div class="flex items-center space-x-3">
-                                <div>
-                                    <x-input.select.primary id="days" name="days" x-model="data.process.body.query.days" required>
-                                        <option value="">무기한</option>
-                                        <option value="1">1일</option>
-                                        <option value="3">3일</option>
-                                        <option value="7">7일</option>
-                                        <option value="14">14일</option>
-                                        <option value="30">30일</option>
-                                    </x-input.select.primary>
-                                </div>
-                                <x-button.filled.md-white @click="process('ban', '활동 정지', '정지 사유를 입력해 주십시오.')" type="button">
-                                    활동 정지
+                            <div class="flex items-center space-x-3 px-3">
+                                <x-button.filled.md-white @click="process('defer', '강제 탈퇴', '강제 탈퇴 사유를 입력해 주십시오.')" type="button">
+                                    강제 탈퇴
                                 </x-button.filled.md-white>
                             </div>
-                            <x-button.filled.md-white @click="process('unban', '활동 정지 해제', '해제 사유를 입력해 주십시오.')" type="button">
-                                정지 해제
-                            </x-button.filled.md-white>
-                            <p class="border h-6"></p>
-                            <x-button.filled.md-white @click="process('defer', '강제 탈퇴', '강제 탈퇴 사유를 입력해 주십시오.')" type="button">
-                                강제 탈퇴
-                            </x-button.filled.md-white>
                         </div>
                     </div>
 
