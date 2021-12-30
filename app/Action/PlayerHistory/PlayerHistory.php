@@ -15,8 +15,32 @@ class PlayerHistory
     const TYPE_USER_LEAVE = 'user_leave';
     const TYPE_USER_BANNED = 'user_banned';
     const TYPE_USER_UNBANNED = 'user_unbanned';
+    const TYPE_USER_CHANGED_GROUP = 'user_changed_group';
     const TYPE_APPLICATION_REJECTED = 'application_rejected';
-    const TYPE_APPLICATION_DEFERRED = 'application_DEFERRED';
+    const TYPE_APPLICATION_DEFERRED = 'application_deferred';
+    const TYPE_STEAM_DISPLAY_NAME_CHANGED = 'steam_display_name_changed';
+
+    public array $names = [
+        'user_memo' => '메모',
+        'user_join' => '가입 승인',
+        'user_apply' => '가입 신청',
+        'user_leave' => '탈퇴',
+        'user_banned' => '활동 정지',
+        'user_unbanned' => '활동 정지 해제',
+        'user_changed_group' => '등급 변경',
+        'application_rejected' => '가입 거절',
+        'application_deferred' => '가입 보류',
+        'steam_display_name_changed' => '닉네임 변경'
+    ];
+
+    public function getName(string $type): ?string
+    {
+        if (array_key_exists($type, $this->names)) {
+            return $this->names[$type];
+        } else {
+            return null;
+        }
+    }
 
     public function add(string $identifier, string $type, mixed $description, User|null $staff = null): PlayerHistoryModel
     {

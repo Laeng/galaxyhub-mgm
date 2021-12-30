@@ -40,34 +40,23 @@ class ApiManageUserMemo extends Controller
                     $staffName = !is_null($staff) ? $staff->nickname : '';
                 }
 
+                $item['description'] = "<span class='text-indigo-600 mr-3'>{$history->getName($datum->type)}</span>";
+
                 switch ($datum->type) {
                     case PlayerHistory::TYPE_USER_BANNED:
-                        $item['description'] = "<span class='text-indigo-600 mr-3'>활동 정지</span> {$datum->description}";
-                        break;
                     case PlayerHistory::TYPE_USER_UNBANNED:
-                        $item['description'] = "<span class='text-indigo-600 mr-3'>활동 정지 해제</span> {$datum->description}";
+                    case PlayerHistory::TYPE_APPLICATION_REJECTED:
+                    case PlayerHistory::TYPE_APPLICATION_DEFERRED:
+                    case PlayerHistory::TYPE_STEAM_DISPLAY_NAME_CHANGED:
+                        $item['description'] .= " {$datum->description}";
                         break;
-                    case PlayerHistory::TYPE_USER_APPLY:
-                        $item['description'] = "<span class='text-indigo-600'>가입 신청</span>";
-                        break;
-                    case PlayerHistory::TYPE_USER_JOIN:
-                        $item['description'] = "<span class='text-indigo-600'>가입 승인</span>";
-                        break;
-                    case PlayerHistory::TYPE_USER_LEAVE:
-                        $item['description'] = "<span class='text-indigo-600'>자진 탈퇴</span>";
-                        break;
+
                     case PlayerHistory::TYPE_USER_MEMO:
                         $item['description'] = $datum->description;
 
                         if (!is_null($staff) && $request->user()->id === $staff->id) {
                             $item['removable'] = true;
                         }
-                        break;
-                    case PlayerHistory::TYPE_APPLICATION_REJECTED:
-                        $item['description'] = "<span class='text-indigo-600 mr-3'>가입 거절</span> {$datum->description}";
-                        break;
-                    case PlayerHistory::TYPE_APPLICATION_DEFERRED:
-                        $item['description'] = "<span class='text-indigo-600 mr-3'>가입 보류</span> {$datum->description}";
                         break;
                     default:
                         break;
