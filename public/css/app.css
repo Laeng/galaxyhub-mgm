@@ -1086,6 +1086,9 @@ select{
 .col-span-2{
   grid-column: span 2 / span 2;
 }
+.m-4{
+  margin: 1rem;
+}
 .my-4{
   margin-top: 1rem;
   margin-bottom: 1rem;
@@ -1176,6 +1179,9 @@ select{
 }
 .-mt-px{
   margin-top: -1px;
+}
+.mb-8{
+  margin-bottom: 2rem;
 }
 .block{
   display: block;
@@ -1313,6 +1319,9 @@ select{
   flex-shrink: 0;
 }
 .flex-grow{
+  flex-grow: 1;
+}
+.grow{
   flex-grow: 1;
 }
 .table-auto{
@@ -1619,6 +1628,10 @@ select{
 .bg-yellow-100{
   --tw-bg-opacity: 1;
   background-color: rgb(254 249 195 / var(--tw-bg-opacity));
+}
+.bg-gray-300{
+  --tw-bg-opacity: 1;
+  background-color: rgb(209 213 219 / var(--tw-bg-opacity));
 }
 .bg-cover{
   background-size: cover;

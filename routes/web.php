@@ -76,15 +76,15 @@ Route::middleware(['auth:web', \App\Http\Middleware\AllowOnlyStaff::class])->pre
         Route::get( '/applications', [ViewManageUserApplicationController::class, 'list'])->name('application');
         Route::post('/applications/list', [ApiManageUserApplicationController::class, 'list'])->name('api.application.list');
         Route::post('/applications/process', [ApiManageUserApplicationController::class, 'process'])->name('api.application.process');
-        Route::get( '/application/{id}', [ViewManageUserApplicationController::class, 'read'])->name('application.read');
-        Route::post('/application/{id}/info', [ApiManageUserApplicationController::class, 'detail_info'])->name('api.application.detail.info');
-        Route::get('/application/{id}/games', [ViewManageUserApplicationController::class, 'detailOwnedGames'])->name('application.detail.games');
+        Route::get( '/application/{id}', [ViewManageUserApplicationController::class, 'read'])->name('application.read')->whereNumber('id');
+        Route::post('/application/{id}/info', [ApiManageUserApplicationController::class, 'detail_info'])->name('api.application.detail.info')->whereNumber('id');
+        Route::get('/application/{id}/games', [ViewManageUserApplicationController::class, 'detailOwnedGames'])->name('application.detail.games')->whereNumber('id');
 
         Route::post('/memo/list', [ApiManageUserMemo::class, 'list'])->name('api.memo.list');
         Route::post('/memo/delete', [ApiManageUserMemo::class, 'delete'])->name('api.memo.delete');
         Route::post('/memo/create', [ApiManageUserMemo::class, 'create'])->name('api.memo.create');
 
-        Route::get( '/{id}', [ViewManageUserController::class, 'read'])->name('all.read');
+        Route::get( '/{id}', [ViewManageUserController::class, 'read'])->name('all.read')->whereNumber('id');
     });
     Route::prefix('users')->group(function () {
         Route::get('/', [ViewManageUserController::class, 'list'])->name('user.all');

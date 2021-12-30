@@ -36,7 +36,8 @@ class ApiManageUserController extends Controller
             $items = [];
 
             $query = User::leftJoin('user_missions', function($join) {
-                $join->on('user_missions.user_id', '=', 'users.id')->on('user_missions.id', '=', DB::raw("(SELECT max(id) FROM user_missions WHERE user_missions.user_id = users.id AND user_missions.attended_at IS NOT NULL)"));
+                $join->on('user_missions.user_id', '=', 'users.id')
+                    ->on('user_missions.id', '=', DB::raw("(SELECT max(id) FROM user_missions WHERE user_missions.user_id = users.id AND user_missions.attended_at IS NOT NULL)"));
             })->leftJoin('user_groups', function ($join) {
                 $join->on('user_groups.user_id', '=', 'users.id')
                     ->on('user_groups.group_id', '=', DB::raw("(select max(group_id) FROM user_groups WHERE user_groups.user_id = users.id AND user_groups.deleted_at IS NULL)"))
@@ -187,8 +188,27 @@ class ApiManageUserController extends Controller
                             });
 
                             $group->add($group_id, $i, $reason, $executor);
+
+                            $history->add($history->getIdentifierFromUser($i), $history::TYPE_USER_CHANGED_GROUP, $reason, $executor);
                         }
                     });
+                    break;
+                case 'drop':
+                    $users->each(function ($i, $k) use ($history, $executor, $reason) {
+                        $i->missions()->delete();
+                        $i->socials()->delete();
+                        $i->groups()->get()->each(function ($item, $key) {
+                            $item->reason()->delete();
+                        });
+                        $i->groups()->forceDelete(); //soft delete 이기 때문.
+                        $i->surveys()->delete();
+                        $i->data()->delete();
+                        $i->delete();
+
+                        $history->add($history->getIdentifierFromUser($i), PlayerHistory::TYPE_USER_LEAVE, $reason, $executor);
+                    });
+                    break;
+                default:
                     break;
             }
 
