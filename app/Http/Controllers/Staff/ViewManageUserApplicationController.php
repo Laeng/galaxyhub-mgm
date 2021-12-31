@@ -37,13 +37,15 @@ class ViewManageUserApplicationController extends Controller
         $user = User::find($id);
 
         if (is_null($user)) {
-            return redirect()->route('staff.user.application')->withErrors(['danger' => '회원을 찾을 수 없습니다.']);
+            abort(404, 'CAN NOT FOUND USER');
+            return redirect()->back()->withErrors(['danger' => '없는 회원입니다.']);
         }
 
         $surveyForms = Survey::where('name', 'like', 'join-application-%')->get(['id'])->pluck('id')->toArray();
         $userSurveys = $user->surveys()->whereIn('survey_id', $surveyForms)->latest()->get()->toArray();
 
         if (count($userSurveys) <= 0) {
+            abort(404, 'NOT REGISTERED USER');
             return redirect()->back()->withErrors(['danger' => '가입 신청을 하지 않은 회원입니다.']);
         }
 

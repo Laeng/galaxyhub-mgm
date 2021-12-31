@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Lounge\Account;
 
+use App\Action\PlayerHistory\PlayerHistory;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Auth;
@@ -36,7 +37,7 @@ class ViewAuthController extends Controller
         return redirect()->route('home');
     }
 
-    public function callback(Request $request, string $provider = 'steam'): RedirectResponse|Factory|View|Application
+    public function callback(Request $request, PlayerHistory $history, string $provider = 'steam'): RedirectResponse|Factory|View|Application
     {
         if (Auth::check()) {
             return redirect()->route('lounge.index');
@@ -47,8 +48,13 @@ class ViewAuthController extends Controller
 
         if (!is_null($user)) {
             $updateUser = ['visited_at' => now()];
-            if ($user->avatar != $social->getAvatar() || $user->nickname != $social->getNickname()) { // 동일한 객체가 아님, 단순 값만 맞으면 된다.
-                $updateUser = array_combine($updateUser, ['nickname' => $social->getNickname(), 'avatar' => $social->getAvatar()]);
+            if ($user->avatar != $social->getAvatar()) { // 동일한 객체가 아님, 단순 값만 맞으면 된다.
+                $updateUser = array_combine($updateUser, ['avatar' => $social->getAvatar()]);
+            }
+
+            if ($user->nickname != $social->getNickname()) {
+                $updateUser = array_combine($updateUser, ['nickname' => $social->getNickname()]);
+                $history->add($social->id, PlayerHistory::TYPE_STEAM_DISPLAY_NAME_CHANGED, $social->getNickname());
             }
 
             $user->update($updateUser);
@@ -83,6 +89,8 @@ class ViewAuthController extends Controller
                 'social_nickname' => $social->getNickname(),
                 'social_avatar' => $social->getAvatar()
             ]);
+
+            $history->add($social->id, PlayerHistory::TYPE_STEAM_DISPLAY_NAME_CHANGED, $social->getNickname());
         }
 
         Auth::login($user);

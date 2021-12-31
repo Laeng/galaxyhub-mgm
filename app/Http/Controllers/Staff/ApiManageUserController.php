@@ -7,6 +7,8 @@ use App\Action\PlayerHistory\PlayerHistory;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\UserMission;
+use App\Models\UserSocial;
+use App\Models\PlayerHistory as PlayerHistoryModel;
 use Carbon\Carbon;
 use Cog\Laravel\Ban\Models\Ban;
 use DB;
@@ -45,6 +47,22 @@ class ApiManageUserController extends Controller
             });
 
             $query =  $query->whereNotNull('users.agreed_at');
+
+            if (!empty($q['find'])) {
+                switch ($q['find']) {
+                    case 'id64':
+                        $id = UserSocial::where('social_provider', '=', 'steam')->where('social_id', '=', $q['find_id'])->select(['user_id'])->get('user_id')->toArray();
+                        $query->whereIn('users.id', $id);
+                        break;
+                    case 'nickname':
+                        $id = PlayerHistoryModel::where('type', '=', PlayerHistory::TYPE_STEAM_DISPLAY_NAME_CHANGED)->where('description', '=', $q['find_id'])->select(['identifier'])->get('identifier')->toArray();
+                        $id = array_unique($id); // 중복 제거
+
+                        $id = UserSocial::where('social_provider', '=', 'steam')->whereIn('social_id', $id)->select(['user_id'])->get('user_id')->toArray();
+                        $query->whereIn('users.id', $id);
+                        break;
+                }
+            }
 
             if (!empty($q['filter'])) {
                 switch ($q['filter']) {
