@@ -12,7 +12,8 @@ use App\Http\Controllers\Staff\ApiManageUserController;
 use App\Http\Controllers\Staff\ApiManageUserMemo;
 use App\Http\Controllers\Staff\ViewManageUserApplicationController;
 use App\Http\Controllers\Staff\ViewManageUserController;
-use App\Http\Middleware\CheckInactiveUser;
+use App\Http\Middleware\ForbidBannedUser;
+use App\Http\Middleware\ForbidUser;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -54,7 +55,7 @@ Route::middleware(['auth:web'])->prefix('lounge')->group(function () {
     Route::get('/', [ViewLoungeController::class, 'index'])->name('lounge.index');
 });
 
-Route::middleware(['auth:web', CheckInactiveUser::class])->prefix('lounge')->group(function() {
+Route::middleware(['auth:web', ForbidBannedUser::class])->prefix('lounge')->group(function() {
     Route::prefix('mission')->name('mission.')->group(function () {
         Route::get( '/', [ViewMissionController::class, 'list'])->name('list');
         Route::post( '/list', [ApiMissionController::class, 'list'])->name('api.list');
@@ -67,7 +68,7 @@ Route::middleware(['auth:web', CheckInactiveUser::class])->prefix('lounge')->gro
 
 });
 
-Route::middleware(['auth:web', \App\Http\Middleware\AllowOnlyStaff::class])->prefix('staff')->name('staff.')->group(function() {
+Route::middleware(['auth:web', ForbidUser::class])->prefix('staff')->name('staff.')->group(function() {
 
 // USER
     Route::prefix('user')->name('user.')->group(function () {
