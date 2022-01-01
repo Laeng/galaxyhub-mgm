@@ -52,7 +52,7 @@ class ApiMissionController extends Controller
                 $items[] = [
                     $v->id,
                     $v->getTypeName(),
-                    $v->expected_at->format('m월 d일 H시 i분'),
+                    $v->expected_at->format('Y-m-d H:i'),
                     $v->can_tardy ? '가능' : '불가능',
                     $v->user()->first()->nickname,
                     "<a href='". route('mission.read', $v->id) . "' class='text-indigo-600 hover:text-indigo-900'>" . (($v->phase == 0 || ($v->can_tardy && $v->phase == 1)) ? '신청하기' : '상세보기') . '</a>'
@@ -79,6 +79,7 @@ class ApiMissionController extends Controller
     {
         try {
             $this->jsonValidator($request, [
+                'id' => 'int',
                 'type' => 'int|required',
                 'date' => 'string|required',
                 'time' => 'string|required',
@@ -93,27 +94,33 @@ class ApiMissionController extends Controller
                     if (!$group->has([Group::ARMA_MAKER2, Group::STAFF])) {
                         throw new Exception('PERMISSION ERROR', 422);
                     }
-                    $mission_name = '아르마의 밤';
                     break;
                 case 1:
                     if (!$group->has([Group::ARMA_MAKER1, Group::ARMA_MAKER2, Group::STAFF])) {
                         throw new Exception('PERMISSION ERROR', 422);
                     }
-                    $mission_name = '일반 미션';
+                    break;
+                case 2:
+                case 3:
+                    if (!$group->has([Group::STAFF])) {
+                        throw new Exception('PERMISSION ERROR', 422);
+                    }
                     break;
                 default: throw new Exception('TYPE NOT SELECTED', 422);
             }
+
+            $mission_name = Mission::$typeNames[$request->get('type')];
 
             $user = $request->user();
             $date = Carbon::createFromFormat('Y-m-d H:i', "{$request->get('date')} {$request->get('time')}");
 
             if (now()->unix() > $date->unix()) {
-                return $this->jsonResponse(422, 'DATE OLD', []);
+                throw new Exception('DATE OLD', 422);
             }
 
 
             if (Mission::whereBetween('expected_at', [$date->copy()->subHours(), $date->copy()->addHours()])->count() > 0) {
-                return $this->jsonResponse(422, 'DATE UNAVAILABLE', []);
+                throw new Exception('DATE UNAVAILABLE', 422);
             }
 
             $mission = Mission::create([
@@ -151,13 +158,113 @@ class ApiMissionController extends Controller
         }
     }
 
-    public function update(Request $request): JsonResponse
+    public function update(Request $request, Group $group): JsonResponse
     {
+        try {
+            $this->jsonValidator($request, [
+                'id' => 'int|required',
+                'type' => 'int|required',
+                'date' => 'string|required',
+                'time' => 'string|required',
+                'map' => 'string|required',
+                'addons' => 'array|required',
+                'body' => 'string',
+                'tardy' => 'boolean|required'
+            ]);
 
+            $mission = Mission::find($request->get('id'));
+
+            if (is_null($mission)) {
+                throw new Exception('CAN NOT FOUND MISSION', 422);
+            }
+
+            switch ($request->get('type')) {
+                case 0:
+                    if (!$group->has([Group::ARMA_MAKER2, Group::STAFF])) {
+                        throw new Exception('PERMISSION ERROR', 422);
+                    }
+                    break;
+                case 1:
+                    if (!$group->has([Group::ARMA_MAKER1, Group::ARMA_MAKER2, Group::STAFF])) {
+                        throw new Exception('PERMISSION ERROR', 422);
+                    }
+                    break;
+                case 2:
+                case 3:
+                    if (!$group->has([Group::STAFF])) {
+                        throw new Exception('PERMISSION ERROR', 422);
+                    }
+                    break;
+                default: throw new Exception('TYPE NOT SELECTED', 422);
+            }
+
+            $mission_name = Mission::$typeNames[$request->get('type')];
+
+            $user = $request->user();
+            $date = Carbon::createFromFormat('Y-m-d H:i', "{$request->get('date')} {$request->get('time')}");
+
+            if (now()->unix() > $date->unix()) {
+                throw new Exception('DATE OLD', 422);
+            }
+
+            if (Mission::whereBetween('expected_at', [$date->copy()->subHours(), $date->copy()->addHours()])->count() > 0) {
+                throw new Exception('DATE UNAVAILABLE', 422);
+            }
+
+            $mission->update([
+                'user_id' => $user->id,
+                'type' => $request->get('type'),
+                'code' => mt_rand(1000, 9999),
+                'title' => "{$date->format('m월 d일')} {$mission_name}",
+                'body' => $request->get('body'),
+                'can_tardy' => $request->get('tardy'),
+                'expected_at' => $date,
+                'data' => [
+                    'addons' => $request->get('addons'),
+                    'map' => $request->get('map')
+                ]
+            ]);
+
+            return $this->jsonResponse(200, 'OK', [
+                'url' => route('mission.read', $mission->id)
+            ]);
+
+        } catch (Exception $e) {
+            return $this->jsonResponse($e->getCode(), Str::upper($e->getMessage()), []);
+        }
     }
 
-    public function delete(Request $request): JsonResponse
+    public function delete(Request $request, Group $group): JsonResponse
     {
+        try {
+            $this->jsonValidator($request, [
+                'id' => 'int|required',
+            ]);
 
+            $mission = Mission::find($request->get('id'));
+
+            if (is_null($mission)) {
+                throw new Exception('CAN NOT FOUND MISSION', 422);
+            }
+
+            $user = $request->user();
+
+            if ($user->id == $mission->user_id || $group->has(Group::STAFF, $user)) {
+                if ($mission->phase > 0) {
+                    throw new Exception('CAN NOT DELETE MISSION BECAUSE MISSION STATUS IS NOT READY', 422);
+                }
+
+                $mission->survey()->sections()->questions()->delete();
+                $mission->survey()->sections()->delete();
+                $mission->survey()->questions()->delete();
+                $mission->survey()->delete();
+                $mission->participants()->delete();
+                $mission->delete();
+            }
+
+        } catch (Exception $e) {
+            return $this->jsonResponse($e->getCode(), Str::upper($e->getMessage()), []);
+        }
     }
+
 }
