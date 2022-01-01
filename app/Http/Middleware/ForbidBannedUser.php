@@ -12,12 +12,18 @@ class ForbidBannedUser extends ForbidBannedUserAlias
     public function handle($request, Closure $next)
     {
         $user = $this->auth->user();
-        $isNotMember = $user->groups()->get()->every(function ($value, $key) {
-            return match ($value->group_id) {
-                Group::ARMA_REJECT, Group::ARMA_DEFER, Group::ARMA_APPLY => true,
-                default => false,
-            };
-        });
+        $groups = $user->groups()->get();
+
+        if (count($groups) > 0) { // 권한이 없는 유저는 미가입 유저
+            $isNotMember = $groups->every(function ($value, $key) {
+                return match ($value->group_id) {
+                    Group::ARMA_REJECT, Group::ARMA_DEFER, Group::ARMA_APPLY => true,
+                    default => false,
+                };
+            });
+        } else {
+            return true;
+        }
 
         if ($isNotMember) {
             return redirect()->route('lounge.index');
