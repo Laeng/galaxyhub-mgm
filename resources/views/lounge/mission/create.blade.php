@@ -14,8 +14,9 @@
                                 <div class="mt-1">
                                     <x-input.select.primary id="type" name="type" x-model="data.create.body.type" required>
                                         <option value="">종류 선택</option>
-                                        <option value="0">아르마의 밤</option>
-                                        <option value="1">일반 미션</option>
+                                        @foreach($types as $k => $v)
+                                            <option value="{{$k}}">{{$v}}</option>
+                                        @endforeach
                                     </x-input.select.primary>
                                 </div>
                             </div>
@@ -39,13 +40,9 @@
                                 <div class="mt-1">
                                     <x-input.select.primary id="type" name="map" x-model="data.create.body.map" required>
                                         <option value="">맵 선택</option>
-                                        <option value="알티스">알티스</option>
-                                        <option value="스트라티스">스트라티스</option>
-                                        <option value="타노아">타노아</option>
-                                        <option value="체르나러스">체르나러스</option>
-                                        <option value="자가바드">자가바드</option>
-                                        <option value="팔루자">팔루자</option>
-                                        <option value="기타">기타</option>
+                                        @foreach($maps as $k => $v)
+                                            <option value="{{$k}}">{{$v}}</option>
+                                        @endforeach
                                     </x-input.select.primary>
                                 </div>
                             </div>
@@ -54,78 +51,16 @@
                                     사용할 애드온
                                 </label>
                                 <div class="h-11 flex justify-between items-center flex-wrap">
-                                    <div class="flex items-start">
-                                        <div class="flex items-center h-5">
-                                            <input id="RHS" aria-describedby="offers-description" name="addons[]" value="RHS" type="checkbox" class="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300 rounded" x-model="data.create.body.addons">
+                                    @foreach($addons as $k => $v)
+                                        <div class="flex items-start">
+                                            <div class="flex items-center h-5">
+                                                <input id="{{$k}}" aria-describedby="offers-description" name="addons[]" value="{{$k}}" type="checkbox" class="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300 rounded" x-model="data.create.body.addons">
+                                            </div>
+                                            <div class="ml-2 text-sm">
+                                                <label for="{{$k}}" class="font-medium text-gray-700">{{$v}}</label>
+                                            </div>
                                         </div>
-                                        <div class="ml-2 text-sm">
-                                            <label for="RHS" class="font-medium text-gray-700">RHS</label>
-                                        </div>
-                                    </div>
-
-                                    <div class="flex items-start">
-                                        <div class="flex items-center h-5">
-                                            <input id="F1" aria-describedby="offers-description" name="addons[]" value="F1" type="checkbox" class="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300 rounded" x-model="data.create.body.addons">
-                                        </div>
-                                        <div class="ml-2 text-sm">
-                                            <label for="F1" class="font-medium text-gray-700">F1</label>
-                                        </div>
-                                    </div>
-
-                                    <div class="flex items-start">
-                                        <div class="flex items-center h-5">
-                                            <input id="F2" aria-describedby="offers-description" name="addons[]" value="F2" type="checkbox" class="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300 rounded" x-model="data.create.body.addons">
-                                        </div>
-                                        <div class="ml-2 text-sm">
-                                            <label for="F2" class="font-medium text-gray-700">F2</label>
-                                        </div>
-                                    </div>
-
-                                    <div class="flex items-start">
-                                        <div class="flex items-center h-5">
-                                            <input id="WAR" aria-describedby="offers-description" name="addons[]" value="WAR" type="checkbox" class="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300 rounded" x-model="data.create.body.addons">
-                                        </div>
-                                        <div class="ml-2 text-sm">
-                                            <label for="WAR" class="font-medium text-gray-700">WAR</label>
-                                        </div>
-                                    </div>
-
-                                    <div class="flex items-start">
-                                        <div class="flex items-center h-5">
-                                            <input id="MAPS" aria-describedby="offers-description" name="addons[]" value="MAPS" type="checkbox" class="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300 rounded" x-model="data.create.body.addons">
-                                        </div>
-                                        <div class="ml-2 text-sm">
-                                            <label for="MAPS" class="font-medium text-gray-700">MAPS</label>
-                                        </div>
-                                    </div>
-
-                                    <div class="flex items-start">
-                                        <div class="flex items-center h-5">
-                                            <input id="MAPS2" aria-describedby="offers-description" name="addons[]" value="MAPS2" type="checkbox" class="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300 rounded" x-model="data.create.body.addons">
-                                        </div>
-                                        <div class="ml-2 text-sm">
-                                            <label for="MAPS2" class="font-medium text-gray-700">MAPS2</label>
-                                        </div>
-                                    </div>
-
-                                    <div class="flex items-start">
-                                        <div class="flex items-center h-5">
-                                            <input id="NAVY" aria-describedby="offers-description" name="addons[]" value="NAVY" type="checkbox" class="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300 rounded" x-model="data.create.body.addons">
-                                        </div>
-                                        <div class="ml-2 text-sm">
-                                            <label for="NAVY" class="font-medium text-gray-700">NAVY</label>
-                                        </div>
-                                    </div>
-
-                                    <div class="flex items-start">
-                                        <div class="flex items-center h-5">
-                                            <input id="etc" aria-describedby="offers-description" name="addons[]" value="기타" type="checkbox" class="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300 rounded" x-model="data.create.body.addons">
-                                        </div>
-                                        <div class="ml-2 text-sm">
-                                            <label for="etc" class="font-medium text-gray-700">기타</label>
-                                        </div>
-                                    </div>
-
+                                    @endforeach
                                 </div>
                             </div>
                         </div>
@@ -155,7 +90,7 @@
                         <div class="flex justify-start">
                             <div class="flex items-start">
                                 <div class="flex items-center h-5">
-                                    <input id="tardy" aria-describedby="offers-description" name="tardy" type="checkbox" class="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300 rounded" @click="data.create.body.tardy = !data.create.body.tardy">
+                                    <input id="tardy" aria-describedby="offers-description" name="tardy" type="checkbox" class="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300 rounded" x-model="data.create.body.tardy">
                                 </div>
                                 <div class="ml-2 text-sm">
                                     <label for="tardy" class="font-medium text-gray-700">중도 참여 비허용</label>
@@ -181,13 +116,8 @@
                             return {
                                 data: {
                                     create: {
-                                        url: '@if($edit) {{route('mission.api.update', $contents['id'])}} @else {{route('mission.api.create')}} @endif',
-                                        body:
-                                        @if($edit)
-                                            {!! json_encode($contents) !!},
-                                        @else
-                                            { type: '', date: '', time: '', map: '', addons: [], body: '', tardy: true },
-                                        @endif
+                                        url: @if($edit) '{{route('mission.api.update', $contents['id'])}}' @else '{{route('mission.api.create')}}' @endif,
+                                        body: {!! json_encode($contents) !!},
                                         lock: false
                                     }
                                 },
