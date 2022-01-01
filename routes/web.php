@@ -59,15 +59,18 @@ Route::middleware(['auth:web', ForbidBannedUser::class])->prefix('lounge')->grou
     Route::prefix('mission')->name('mission.')->group(function () {
         Route::get( '/', [ViewMissionController::class, 'list'])->name('list');
         Route::post( '/list', [ApiMissionController::class, 'list'])->name('api.list');
-        Route::get( '/create', [ViewMissionController::class, 'create'])->name('create');
-        Route::post( '/create/submit', [ApiMissionController::class, 'create'])->name('api.create');
-        Route::get( '/{id}', [ViewMissionController::class, 'read'])->name('read');
-        Route::get( '/{id}/update', [ViewMissionController::class, 'update'])->name('update');
-        Route::get( '/{id}/delete', [ViewMissionController::class, 'delete'])->name('remove');
+        Route::get( '/new', [ViewMissionController::class, 'create'])->name('create');
+        Route::post( '/create', [ApiMissionController::class, 'create'])->name('api.create');
+        Route::get( '/{id}', [ViewMissionController::class, 'read'])->name('read')->whereNumber('id');
+        Route::get('/{id}/edit', [ViewMissionController::class, 'update'])->name('update')->whereNumber('id');
+        Route::post( '/{id}/update', [ApiMissionController::class, 'update'])->name('api.update')->whereNumber('id');
+        Route::post( '/{id}/delete', [ApiMissionController::class, 'delete'])->name('api.remove')->whereNumber('id');
     });
 
 });
 
+
+////// 설정
 Route::middleware(['auth:web', ForbidUser::class])->prefix('staff')->name('staff.')->group(function() {
 
 // USER
