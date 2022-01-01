@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Survey;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -12,6 +13,13 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 class Mission extends Model
 {
     use HasFactory;
+
+    public static array $typeNames = [
+        0 => '아르마의 밤',
+        1 => '일반 미션',
+        2 => '부트캠프',
+        3 => '약장 시험',
+    ];
 
     /**
      * The attributes that are mass assignable.
@@ -35,6 +43,11 @@ class Mission extends Model
     ];
 
     protected $casts = [
+        'type' => 'integer',
+        'phase' => 'integer',
+        'code' => 'integer',
+        'count' => 'integer',
+        'can_tardy' => 'boolean',
         'expected_at' => 'datetime',
         'started_at' => 'datetime',
         'ended_at' => 'datetime',
@@ -43,11 +56,11 @@ class Mission extends Model
 
     public function getTypeName(): ?string
     {
-        return match ($this->type) {
-            0 => '아르마의 밤',
-            1 => '일반 미션',
-            default => null
-        };
+        if (array_key_exists($this->type, self::$typeNames)) {
+            return self::$typeNames[$this->type];
+        } else {
+            return null;
+        }
     }
 
     public function user(): BelongsTo
@@ -58,5 +71,10 @@ class Mission extends Model
     public function participants(): HasMany
     {
         return $this->hasMany(UserMission::class);
+    }
+
+    public function survey(): HasOne
+    {
+        return $this->hasOne(Survey::class, 'id', 'survey_id');
     }
 }

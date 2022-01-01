@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Lounge\Mission;
 
 use App\Action\Group\Group;
 use App\Http\Controllers\Controller;
+use App\Models\Mission;
 use App\Models\User;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -38,18 +39,39 @@ class ViewMissionController extends Controller
 
         return view('lounge.mission.create', [
             'title' => '미션 생성',
+            'edit' => false,
+            'contents' => []
         ]);
     }
-    public function update(Request $request, Group $group): Factory|View|Application|RedirectResponse
+    public function update(Request $request, Group $group, int $id): Factory|View|Application|RedirectResponse
     {
         if (!$this->isMaker($request->user(), $group)) {
             abort(404);
         }
+
+        $mission = Mission::find($id);
+
+        if (is_null($mission)) {
+            abort(404);
+        }
+
+        return view('lounge.mission.create', [
+            'title' => '미션 수정',
+            'edit' => true,
+            'contents' => [
+
+            ]
+        ]);
     }
 
 
     private function isMaker(User $user, Group $group): bool
     {
         return $group->has([Group::ARMA_MAKER1, Group::ARMA_MAKER2, Group::STAFF]);
+    }
+
+    private function getMissionTypes(User $user, Group $group): array
+    {
+
     }
 }
