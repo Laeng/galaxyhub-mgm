@@ -181,16 +181,13 @@
                             return {
                                 data: {
                                     create: {
-                                        url: '{{route('mission.api.create')}}',
-                                        body: {
-                                            type: '',
-                                            date: '',
-                                            time: '',
-                                            map: '',
-                                            addons: [],
-                                            body: '',
-                                            tardy: true,
-                                        },
+                                        url: '@if($edit) {{route('mission.api.update', $contents['id'])}} @else {{route('mission.api.create')}} @endif',
+                                        body:
+                                        @if($edit)
+                                            {!! json_encode($contents) !!},
+                                        @else
+                                            { type: '', date: '', time: '', map: '', addons: [], body: '', tardy: true },
+                                        @endif
                                         lock: false
                                     }
                                 },

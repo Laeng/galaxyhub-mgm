@@ -59,7 +59,14 @@ class ViewMissionController extends Controller
             'title' => '미션 수정',
             'edit' => true,
             'contents' => [
-
+                'id' => $mission->id,
+                'type' => $mission->type,
+                'date' => $mission->expected_at->format('Y-m-d'),
+                'time' => $mission->expected_at->format('H:i'),
+                'map' => $mission->data['map'],
+                'addons' => $mission->data['addons'],
+                'body' => $mission->body,
+                'tardy' => "{$mission->can_tardy}",
             ]
         ]);
     }

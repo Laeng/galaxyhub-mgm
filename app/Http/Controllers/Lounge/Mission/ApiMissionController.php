@@ -158,7 +158,7 @@ class ApiMissionController extends Controller
         }
     }
 
-    public function update(Request $request, Group $group): JsonResponse
+    public function update(Request $request, Group $group, int $id): JsonResponse
     {
         try {
             $this->jsonValidator($request, [
@@ -171,6 +171,10 @@ class ApiMissionController extends Controller
                 'body' => 'string',
                 'tardy' => 'boolean|required'
             ]);
+
+            if ($id != $request->get('id')) {
+                throw new Exception('ID MISMATCHED', 422);
+            }
 
             $mission = Mission::find($request->get('id'));
 
@@ -207,7 +211,13 @@ class ApiMissionController extends Controller
                 throw new Exception('DATE OLD', 422);
             }
 
-            if (Mission::whereBetween('expected_at', [$date->copy()->subHours(), $date->copy()->addHours()])->count() > 0) {
+            $duplicate_missions = Mission::whereBetween('expected_at', [$date->copy()->subHours(), $date->copy()->addHours()])->get();
+
+            $isNotDuplicate = $duplicate_missions->every(function ($v, $k) use($mission) {
+                return $v->id == $mission->id;
+            });
+
+            if (!$isNotDuplicate) {
                 throw new Exception('DATE UNAVAILABLE', 422);
             }
 
