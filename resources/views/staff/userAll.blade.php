@@ -4,11 +4,32 @@
 <x-sub-page website-name="MGM Lounge" title="{{ $title }}">
     <x-section.basic parent-class="py-4 sm:py-6 lg:py-16" class="flex justify-center">
         <div class="w-full">
-            <div class="bg-white rounded-lg p-4 lg:p-16">
+            <div class="bg-white rounded-lg p-4 lg:p-16" x-data="all_list">
                 <h1 class="text-2xl lg:text-3xl font-bold text-center lg:text-left my-4 lg:mt-0 lg:mb-6">{{$title}}</h1>
 
+                <div class="rounded border border-gray-200 bg-gray-50 p-4 mb-8 w-full">
+                    <div class="flex items-center space-x-3">
+                        <div>
+                            <x-input.select.primary id="find" name="find" x-model="data.list.body.query.find" required>
+                                <option value="">검색 조건</option>
+                                <option value="id64">SteamID64</option>
+                                <option value="nickname">STEAM 닉네임</option>
+                            </x-input.select.primary>
+                        </div>
+                        <div class="grow">
+                            <x-input.text.primary type="text" class="w-full" id="find_id" name="find_id" x-model="data.list.body.query.find_id" placeholder="회원 검색"/>
+                        </div>
+                        <x-button.filled.md-white @click="find()" type="button">
+                            검색
+                        </x-button.filled.md-white>
+                        <x-button.filled.md-white @click="find(true)" type="button">
+                            초기화
+                        </x-button.filled.md-white>
+                    </div>
+                </div>
+
                 <div class="flex flex-col mb-4">
-                    <div class="space-y-3" x-data="all_list">
+                    <div class="space-y-3">
                         <div class="xl:ml-auto hidden md:flex items-center space-x-3">
                             <div class="w-full lg:w-auto">
                                 <x-input.select.primary id="group" name="group" x-model="data.list.body.query.group" required>
@@ -27,7 +48,6 @@
                                     <option value="방문일 내림차순">방문일 내림차순</option>
                                     <option value="미션 참가일 오른차순">미션 참가일 오른차순</option>
                                     <option value="미션 참가일 내림차순">미션 참가일 내림차순</option>
-
                                 </x-input.select.primary>
                             </div>
                             <div class="w-full lg:w-auto">
@@ -87,7 +107,7 @@
                                 </x-button.filled.md-white>
                             </div>
                             <div class="flex items-center space-x-3 px-3">
-                                <x-button.filled.md-white @click="process('defer', '강제 탈퇴', '강제 탈퇴 사유를 입력해 주십시오.')" type="button">
+                                <x-button.filled.md-white @click="process('drop', '강제 탈퇴', '강제 탈퇴 사유를 입력해 주십시오.')" type="button">
                                     강제 탈퇴
                                 </x-button.filled.md-white>
                             </div>
@@ -105,7 +125,9 @@
                                             query: {
                                                 group: '',
                                                 order: '가입일 내림차순',
-                                                filter: ''
+                                                filter: '',
+                                                find: '',
+                                                find_id: '',
                                             },
                                         },
                                     },
@@ -126,7 +148,7 @@
                                     let checked = this.checked(document.querySelectorAll("input[name='user_id[]']:checked"));
 
                                     if (checked.length <= 0) {
-                                        window.modal.alert('오류', '처리할 신청자를 선택하여 주십시오.', (c) => {}, 'error');
+                                        window.modal.alert('오류', '처리할 회원을 선택하여 주십시오.', (c) => {}, 'error');
                                         return;
                                     }
 
@@ -173,6 +195,27 @@
                                         window.modal.confirm(title, message, callback, 'question', '예', '아니요');
                                     }
                                 },
+                                find(init = false) {
+                                    let table = this.$store.{{$listComponentId}};
+
+                                    if (init) {
+                                        this.data.list.body.query.find = '';
+                                        this.data.list.body.query.find_id = '';
+                                    } else {
+                                        if (this.data.list.body.query.find.length <= 0) {
+                                            window.modal.alert('오류', '조건을 선택해 주십시오.', (c) => {}, 'error');
+                                            return;
+                                        }
+                                        if (this.data.list.body.query.find_id.length <= 0) {
+                                            window.modal.alert('오류', '값을 입력해 주십시오', (c) => {}, 'error');
+                                            return;
+                                        }
+                                    }
+
+                                    table.data.list.body.query.find = this.data.list.body.query.find;
+                                    table.data.list.body.query.find_id = this.data.list.body.query.find_id;
+                                    table.list();
+                                },
                                 init() {
                                     let table = this.$store.{{$listComponentId}};
 
@@ -195,6 +238,7 @@
                                         table.data.list.body.query.filter = v;
                                         table.list();
                                     });
+
                                 },
                                 checked(checkboxes) {
                                     let checked = [];
