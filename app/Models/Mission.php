@@ -17,8 +17,9 @@ class Mission extends Model
     public static array $typeNames = [
         0 => '아르마의 밤',
         1 => '일반 미션',
-        2 => '부트캠프',
-        3 => '약장 시험',
+        2 => '논미메',
+        10 => '부트캠프',
+        11 => '약장 시험',
     ];
 
     /**
