@@ -63,6 +63,17 @@ class Mission extends Model
         }
     }
 
+    public function getPhaseName(): ?string
+    {
+        return match($this->phase) {
+            0 => '대기',
+            1 => '진행',
+            2 => '출석',
+            3 => '종료',
+            default => ''
+        };
+    }
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);

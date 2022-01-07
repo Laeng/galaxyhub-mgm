@@ -30,7 +30,7 @@ class ApiMissionController extends Controller
             $keys = [];
             $items = [];
 
-            $query = Mission::whereBetween('phase', [0, 2])->latest();
+            $query = Mission::select(['id', 'type', 'expected_at', 'can_tardy', 'user_id', 'phase']);
             $countMission = $query->count();
 
             if ($step >= 0) {
@@ -46,13 +46,14 @@ class ApiMissionController extends Controller
                 $step = 0;
             }
 
-            $missions = $query->offset($step * $limit)->limit($limit)->get(['id', 'type', 'expected_at', 'can_tardy', 'user_id', 'phase']);
+            $missions = $query->latest()->offset($step * $limit)->limit($limit)->get(['id', 'type', 'expected_at', 'can_tardy', 'user_id', 'phase']);
 
             foreach ($missions as $v) {
                 $items[] = [
                     $v->id,
                     $v->getTypeName(),
-                    $v->expected_at->format('Y-m-d H:i'),
+                    $v->getPhaseName(),
+                    $v->expected_at->format('m월 d일 H시 i분'),
                     $v->can_tardy ? '가능' : '불가능',
                     $v->user()->first()->nickname,
                     "<a href='". route('mission.read', $v->id) . "' class='text-indigo-600 hover:text-indigo-900'>" . (($v->phase == 0 || ($v->can_tardy && $v->phase == 1)) ? '신청하기' : '상세보기') . '</a>'
@@ -60,7 +61,7 @@ class ApiMissionController extends Controller
             }
 
             return $this->jsonResponse(200, 'OK', [
-                'fields' => ['ID', '분류', '시작 시간', '중도 참여', '미션 메이커', '&nbsp;&nbsp;&nbsp;'],
+                'fields' => ['ID', '분류', '상태', '시작 시간', '중도 참여', '미션 메이커', '&nbsp;&nbsp;&nbsp;'],
                 'keys' => $keys,
                 'items' => $items,
                 'count' => [
@@ -128,7 +129,7 @@ class ApiMissionController extends Controller
                 'type' => $request->get('type'),
                 'code' => mt_rand(1000, 9999),
                 'title' => "{$date->format('m월 d일')} {$mission_name}",
-                'body' => $request->get('body'),
+                'body' => strip_tags($request->get('body'), '<h2><h3><h4><p><a><i><br><strong><sub><sup><ol><ul><li><blockquote>'),
                 'can_tardy' => $request->get('tardy'),
                 'expected_at' => $date,
                 'data' => [
@@ -226,7 +227,7 @@ class ApiMissionController extends Controller
                 'type' => $request->get('type'),
                 'code' => mt_rand(1000, 9999),
                 'title' => "{$date->format('m월 d일')} {$mission_name}",
-                'body' => $request->get('body'),
+                'body' => strip_tags($request->get('body'), '<h2><h3><h4><p><a><i><br><strong><sub><sup><ol><ul><li><blockquote>'),
                 'can_tardy' => $request->get('tardy'),
                 'expected_at' => $date,
                 'data' => [
