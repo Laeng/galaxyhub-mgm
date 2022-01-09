@@ -71,6 +71,7 @@ class Mission extends Model
             1 => '진행',
             2 => '출석',
             3 => '종료',
+            4 => '취소',
             default => ''
         };
     }

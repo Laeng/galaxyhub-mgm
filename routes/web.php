@@ -7,11 +7,11 @@ use App\Http\Controllers\Lounge\Join\ViewJoinController;
 use App\Http\Controllers\Lounge\Mission\ApiMissionController;
 use App\Http\Controllers\Lounge\Mission\ViewMissionController;
 use App\Http\Controllers\Lounge\ViewLoungeController;
-use App\Http\Controllers\Staff\ApiManageUserApplicationController;
-use App\Http\Controllers\Staff\ApiManageUserController;
-use App\Http\Controllers\Staff\ApiManageUserMemo;
-use App\Http\Controllers\Staff\ViewManageUserApplicationController;
-use App\Http\Controllers\Staff\ViewManageUserController;
+use App\Http\Controllers\Staff\User\All\ApiUserAllController;
+use App\Http\Controllers\Staff\User\All\ViewUserAllController;
+use App\Http\Controllers\Staff\User\Application\ApiUserApplicationController;
+use App\Http\Controllers\Staff\User\Application\ViewUserApplicationController;
+use App\Http\Controllers\Staff\User\Memo\ApiUserMemo;
 use App\Http\Middleware\ForbidBannedUser;
 use App\Http\Middleware\ForbidUser;
 use Illuminate\Support\Facades\Route;
@@ -57,8 +57,7 @@ Route::middleware(['auth:web'])->prefix('lounge')->group(function () {
 
 Route::middleware(['auth:web', ForbidBannedUser::class])->prefix('lounge')->group(function() {
     Route::prefix('mission')->name('mission.')->group(function () {
-        Route::get( '/', [ViewMissionController::class, 'list'])->name('list');
-        Route::post( '/list', [ApiMissionController::class, 'list'])->name('api.list');
+        Route::redirect('/', '/lounge/missions');
         Route::get( '/new', [ViewMissionController::class, 'create'])->name('create');
         Route::post( '/create', [ApiMissionController::class, 'create'])->name('api.create');
         Route::get( '/{id}', [ViewMissionController::class, 'read'])->name('read')->whereNumber('id');
@@ -67,33 +66,51 @@ Route::middleware(['auth:web', ForbidBannedUser::class])->prefix('lounge')->grou
         Route::post( '/{id}/delete', [ApiMissionController::class, 'delete'])->name('api.remove')->whereNumber('id');
     });
 
+    Route::prefix('missions')->name('mission.')->group(function () {
+        Route::get( '/', [ViewMissionController::class, 'list'])->name('list');
+        Route::post( '/list', [ApiMissionController::class, 'list'])->name('api.list');
+    });
+
 });
 
 
-////// 설정
+////// STAFF //////
 Route::middleware(['auth:web', ForbidUser::class])->prefix('staff')->name('staff.')->group(function() {
 
-// USER
+    // USER
     Route::prefix('user')->name('user.')->group(function () {
         Route::redirect('/', '/staff/users');
-        Route::redirect('/application', '/staff/applications');
-        Route::get( '/applications', [ViewManageUserApplicationController::class, 'list'])->name('application');
-        Route::post('/applications/list', [ApiManageUserApplicationController::class, 'list'])->name('api.application.list');
-        Route::post('/applications/process', [ApiManageUserApplicationController::class, 'process'])->name('api.application.process');
-        Route::get( '/application/{id}', [ViewManageUserApplicationController::class, 'read'])->name('application.read')->whereNumber('id');
-        Route::post('/application/{id}/info', [ApiManageUserApplicationController::class, 'detail_info'])->name('api.application.detail.info')->whereNumber('id');
-        Route::get('/application/{id}/games', [ViewManageUserApplicationController::class, 'detailOwnedGames'])->name('application.detail.games')->whereNumber('id');
 
-        Route::post('/memo/list', [ApiManageUserMemo::class, 'list'])->name('api.memo.list');
-        Route::post('/memo/delete', [ApiManageUserMemo::class, 'delete'])->name('api.memo.delete');
-        Route::post('/memo/create', [ApiManageUserMemo::class, 'create'])->name('api.memo.create');
+        // APPLICATION
+        Route::prefix('application')->name('application.')->group(function () {
+            Route::redirect('/', '/staff/user/applications');
 
-        Route::get( '/{id}', [ViewManageUserController::class, 'read'])->name('all.read')->whereNumber('id');
+
+        });
+        Route::prefix('applications')->name('application.')->group(function () {
+            Route::get( '/', [ViewUserApplicationController::class, 'list'])->name('list');
+            Route::post('/list', [ApiUserApplicationController::class, 'list'])->name('list.api');
+            Route::post('/process', [ApiUserApplicationController::class, 'process'])->name('process.api');
+
+            Route::get( '/{id}', [ViewUserApplicationController::class, 'read'])->name('read')->whereNumber('id');
+            Route::post('/{id}/info', [ApiUserApplicationController::class, 'read_info'])->name('read.info.api')->whereNumber('id');
+            Route::get('/{id}/games', [ViewUserApplicationController::class, 'read_games'])->name('read.games')->whereNumber('id');
+        });
+
+        // MEMO
+        Route::prefix('memo')->name('memo.')->group(function () {
+            Route::post('/list', [ApiUserMemo::class, 'list'])->name('list.api');
+            Route::post('/delete', [ApiUserMemo::class, 'delete'])->name('delete.api');
+            Route::post('/create', [ApiUserMemo::class, 'create'])->name('create.api');
+        });
+
+        // USER
+        Route::get( '/{id}', [ViewUserAllController::class, 'read'])->name('read')->whereNumber('id');
     });
-    Route::prefix('users')->group(function () {
-        Route::get('/', [ViewManageUserController::class, 'list'])->name('user.all');
-        Route::post( '/list', [ApiManageUserController::class, 'list'])->name('user.api.all.list');
-        Route::post('/process', [ApiManageUserController::class, 'process'])->name('user.api.all.process');
+    Route::prefix('users')->name('user.')->group(function () {
+        Route::get('/', [ViewUserAllController::class, 'list'])->name('list');
+        Route::post( '/list', [ApiUserAllController::class, 'list'])->name('list.api');
+        Route::post('/process', [ApiUserAllController::class, 'process'])->name('process.api');
     });
 ////
 

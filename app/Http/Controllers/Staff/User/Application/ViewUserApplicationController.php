@@ -1,28 +1,27 @@
 <?php
 
-namespace App\Http\Controllers\Staff;
+namespace App\Http\Controllers\Staff\User\Application;
 
 use App\Action\Group\Group;
-use App\Action\Steam\Steam;
 use App\Action\Survey\SurveyForm;
 use App\Action\UserData\UserData;
 use App\Http\Controllers\Controller;
 use App\Models\Survey;
 use App\Models\User;
-use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use function abort;
+use function redirect;
+use function view;
 
-class ViewManageUserApplicationController extends Controller
+class ViewUserApplicationController extends Controller
 {
     public function list(Request $request): Factory|View|Application|RedirectResponse
     {
-        return view('staff.userApplication', [
+        return view('staff.user.application.list', [
             'title' => '가입 신청자',
             'alerts' => [
                 ['danger', '',now()->subYears(16)->year . '년생 이상만 가입을 허용해 주십시오. (' . now()->year . '년 기준)'],
@@ -111,7 +110,7 @@ class ViewManageUserApplicationController extends Controller
         }
         */
 
-        return view('staff.userApplicationRead', [
+        return view('staff.user.application.read', [
             'title' => "{$user->nickname}님의 신청서",
             'status' => $status,
             'assign' => $assign,
@@ -123,7 +122,7 @@ class ViewManageUserApplicationController extends Controller
     }
 
 
-    public function detailOwnedGames(Request $request, int $id, UserData $userData): Factory|View|Application|RedirectResponse
+    public function read_games(Request $request, int $id, UserData $userData): Factory|View|Application|RedirectResponse
     {
         $user = User::find($id);
 
@@ -139,7 +138,7 @@ class ViewManageUserApplicationController extends Controller
         }
 
 
-        return view('staff.userApplicationReadOwnedGame', [
+        return view('staff.user.application.read-games', [
             'title' => "{$user->nickname}님의 게임 목록",
             'games' => $games
         ]);

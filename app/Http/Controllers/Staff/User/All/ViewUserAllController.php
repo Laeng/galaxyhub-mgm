@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Staff;
+namespace App\Http\Controllers\Staff\User\All;
 
 use App\Action\Group\Group;
 use App\Models\User;
@@ -9,12 +9,15 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use function abort;
+use function redirect;
+use function view;
 
-class ViewManageUserController
+class ViewUserAllController
 {
     public function list(Request $request, Group $group): Factory|View|Application|RedirectResponse
     {
-        return view('staff.userAll',[
+        return view('staff.user.all.list',[
             'title' => '전체 회원',
             'groups' => $group->names
         ]);
@@ -29,7 +32,7 @@ class ViewManageUserController
             return redirect()->back()->withErrors(['danger' => '없는 회원입니다.']);
         }
 
-        return view('staff.userAllRead', [
+        return view('staff.user.all.read', [
             'title' => "{$user->nickname}님의 정보",
         ]);
 

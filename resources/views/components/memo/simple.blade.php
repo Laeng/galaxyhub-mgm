@@ -60,7 +60,7 @@
             },
             data: {
                 list: {
-                    url: '{{ route('staff.user.api.memo.list') }}',
+                    url: '{{ route('staff.user.memo.list.api') }}',
                     body: {
                         user_id: {{ $id }}
                     },
@@ -69,7 +69,7 @@
                     }
                 },
                 remove: {
-                    url: '{{ route('staff.user.api.memo.delete') }}',
+                    url: '{{ route('staff.user.memo.delete.api') }}',
                     body: {
                         user_id: {{ $id }},
                         memo_id: null,
@@ -77,7 +77,7 @@
                     lock: false
                 },
                 add: {
-                    url: '{{ route('staff.user.api.memo.create') }}',
+                    url: '{{ route('staff.user.memo.create.api') }}',
                     body: {
                         user_id: {{ $id }},
                         content: ''

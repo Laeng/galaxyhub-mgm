@@ -65,7 +65,7 @@
                             </div>
                         </div>
 
-                        <div class="prose max-w-full">
+                        <div class="mission-body prose max-w-full">
                             <label for="body" class="block text-sm font-medium text-gray-700 pb-1">
                                 미션 정보
                             </label>

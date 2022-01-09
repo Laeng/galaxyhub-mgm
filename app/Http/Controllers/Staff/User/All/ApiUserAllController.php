@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Http\Controllers\Staff;
+namespace App\Http\Controllers\Staff\User\All;
 
 use App\Action\Group\Group;
 use App\Action\PlayerHistory\PlayerHistory;
 use App\Http\Controllers\Controller;
+use App\Models\PlayerHistory as PlayerHistoryModel;
 use App\Models\User;
 use App\Models\UserMission;
 use App\Models\UserSocial;
-use App\Models\PlayerHistory as PlayerHistoryModel;
 use Carbon\Carbon;
 use Cog\Laravel\Ban\Models\Ban;
 use DB;
@@ -16,8 +16,10 @@ use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Str;
+use function now;
+use function route;
 
-class ApiManageUserController extends Controller
+class ApiUserAllController extends Controller
 {
     public function list(Request $request, Group $group): JsonResponse
     {
@@ -128,7 +130,7 @@ class ApiManageUserController extends Controller
                     $row->visited_at->toDateString(),
                     is_null($row->attended_at) ? '⨉' : Carbon::createFromFormat('Y-m-d H:i:s', $row->attended_at)->toDateString(),
                     UserMission::whereNotNull('attended_at')->where('user_id', $row->id)->count(),
-                    "<a class='text-indigo-600 hover:text-indigo-900' href='". route('staff.user.all.read', $row->id) ."'>확인하기</a>"
+                    "<a class='text-indigo-600 hover:text-indigo-900' href='". route('staff.user.read', $row->id) ."'>확인하기</a>"
                 ];
             }
 

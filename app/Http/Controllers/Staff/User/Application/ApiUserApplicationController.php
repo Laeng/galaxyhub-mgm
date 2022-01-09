@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Staff;
+namespace App\Http\Controllers\Staff\User\Application;
 
 use App\Action\Group\Group;
 use App\Action\PlayerHistory\PlayerHistory;
@@ -13,8 +13,9 @@ use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Str;
+use function route;
 
-class ApiManageUserApplicationController extends Controller
+class ApiUserApplicationController extends Controller
 {
     public function list(Request $request, Group $group): JsonResponse
     {
@@ -149,18 +150,14 @@ class ApiManageUserApplicationController extends Controller
         }
     }
 
-    public function detail_info(Request $request, int $id): JsonResponse
+    public function read_info(Request $request, int $id): JsonResponse
     {
         try {
             $this->jsonValidator($request, [
-                'user_id' => 'int|required'
+
             ]);
 
-            if ((int)$request->get('user_id') !== $id) {
-                throw new Exception('ID IS NOT MATCHED', 422);
-            }
-
-            $user = User::find($request->get('user_id'));
+            $user = User::find($id);
 
             if (is_null($user)) {
                 throw new Exception('NOT FOUND USER', 422);
@@ -174,11 +171,6 @@ class ApiManageUserApplicationController extends Controller
             if (is_null($summaries) || is_null($arma) || is_null($ban) || is_null($group)) {
                 throw new Exception('DATA IS NOT READY', 500);
             }
-
-            $summaries = json_decode($summaries->data);
-            $group = json_decode($group->data);
-            $arma = json_decode($arma->data);
-            $ban = json_decode($ban->data);
 
             $arma->playtimeForeverReadable = date('H시간 i분', mktime(0, $arma->playtimeForever));
 
@@ -200,10 +192,11 @@ class ApiManageUserApplicationController extends Controller
             }
 
             return $this->jsonResponse(200, 'OK', [
-                'summaries' => $summaries,
-                'group' => $group,
-                'arma' => $arma,
-                'ban' => $ban,
+                'summaries' => json_decode($summaries->data),
+                'group' => json_decode($group->data),
+                'arma' => json_decode($arma->data),
+                'ban' => json_decode($ban->data),
+                'created_at' => $summaries->updated_at->toDateString(),
                 'naver_id' => $naver
             ]);
         } catch (Exception $e) {

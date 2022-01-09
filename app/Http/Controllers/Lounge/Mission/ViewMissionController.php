@@ -17,19 +17,56 @@ class ViewMissionController extends Controller
 {
     public function list(Request $request, Group $group): Factory|View|Application|RedirectResponse
     {
+        $now = now();
+        $user = $request->user();
+
+        $alerts = [];
+
+        if ($user->missions()->count() <= 0) {
+            $expired_at = $user->agreed_at->addDays(14);
+
+            if ($user->agreed_at->diffInDays($expired_at, false) <= 0) { // diffInDays() 기본 반환은 절대 값으로 반환
+                $alerts[] = ['danger', '미션 참여 필요', "{$expired_at->format('Y년 m월 d일')} 이전까지 미션에 참석하여 주십시오. 미 참석시 규정에 따라 가입이 취소됩니다."];
+            }
+        } else {
+            $missionLatest = $user->missions()->latest()->first();
+
+            if ($missionLatest->created_at->diffInDays($now, false) >= 15) {
+                $alerts[] = ['info', '출석 체크 안내', '30일 이상 미 출석자는 규정에 따라 권한이 정지 됩니다. 반드시 미션 참가 신청과 출석 체크를 해주십시오.'];
+            }
+        }
+
         return view('lounge.mission.list', [
             'title' => '미션 목록',
-            'alerts' => [
-                ['danger', '미션 참여 필요','2022년 1월 23일 이전까지 미션에 참석하여 주십시오. 미 참석시 규정에 따라 가입이 취소됩니다.'],
-                ['info', '출석 체크 안내', '30일 이상 미 출석자는 규정에 따라 권한이 해지됩니다. 반드시 미션 참가 신청과 출석 체크를 해주십시오.']
-            ],
+            'alerts' => $alerts,
             'isMaker' => $this->isMaker($request->user(), $group)
         ]);
     }
 
     public function read(Request $request, int $id): Factory|View|Application|RedirectResponse
     {
+        $user = $request->user();
 
+        //if (!$this->isMaker($user, $group)) {
+        //    abort(404);
+        //}
+
+        $mission = Mission::find($id);
+
+        if (is_null($mission) || $mission->user_id != $user->id) {
+            abort(404);
+        }
+
+        $maker = $mission->user()->first();
+        $isMaker = ($maker->id == $user->id);
+
+        return view('lounge.mission.read', [
+            'id' => $id,
+            'mission' => $mission,
+            'maker' => $maker,
+            'type' => $mission->getTypeName(),
+            'isMaker' => $isMaker,
+        ]);
     }
 
     public function create(Request $request, Group $group): Factory|View|Application|RedirectResponse
@@ -107,11 +144,12 @@ class ViewMissionController extends Controller
 
         if ($group->has([Group::ARMA_MAKER1, Group::ARMA_MAKER2, Group::STAFF])) {
             $types[1] = $original[1];
+            $types[2] = $original[2];
         }
 
         if ($group->has([Group::STAFF])) {
-            $types[2] = $original[2];
-            $types[3] = $original[3];
+            $types[10] = $original[10];
+            $types[11] = $original[11];
         }
 
         return $types;

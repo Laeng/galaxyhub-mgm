@@ -46,22 +46,21 @@ class ApiMissionController extends Controller
                 $step = 0;
             }
 
-            $missions = $query->latest()->offset($step * $limit)->limit($limit)->get(['id', 'type', 'expected_at', 'can_tardy', 'user_id', 'phase']);
+            $missions = $query->latest('expected_at')->offset($step * $limit)->limit($limit)->get(['id', 'type', 'expected_at', 'can_tardy', 'user_id', 'phase']);
 
             foreach ($missions as $v) {
                 $items[] = [
-                    $v->id,
                     $v->getTypeName(),
-                    $v->getPhaseName(),
                     $v->expected_at->format('m월 d일 H시 i분'),
                     $v->can_tardy ? '가능' : '불가능',
                     $v->user()->first()->nickname,
+                    $v->getPhaseName(),
                     "<a href='". route('mission.read', $v->id) . "' class='text-indigo-600 hover:text-indigo-900'>" . (($v->phase == 0 || ($v->can_tardy && $v->phase == 1)) ? '신청하기' : '상세보기') . '</a>'
                 ];
             }
 
             return $this->jsonResponse(200, 'OK', [
-                'fields' => ['ID', '분류', '상태', '시작 시간', '중도 참여', '미션 메이커', '&nbsp;&nbsp;&nbsp;'],
+                'fields' => ['분류', '시작 시간', '중도 참여', '미션 메이커', '상태', '&nbsp;&nbsp;&nbsp;'],
                 'keys' => $keys,
                 'items' => $items,
                 'count' => [
@@ -90,19 +89,22 @@ class ApiMissionController extends Controller
                 'tardy' => 'boolean|required'
             ]);
 
-            switch ($request->get('type')) {
+            $type = (int) $request->get('type');
+
+            switch ($type) {
                 case 0:
                     if (!$group->has([Group::ARMA_MAKER2, Group::STAFF])) {
                         throw new Exception('PERMISSION ERROR', 422);
                     }
                     break;
                 case 1:
+                case 2:
                     if (!$group->has([Group::ARMA_MAKER1, Group::ARMA_MAKER2, Group::STAFF])) {
                         throw new Exception('PERMISSION ERROR', 422);
                     }
                     break;
-                case 2:
-                case 3:
+                case 10:
+                case 11:
                     if (!$group->has([Group::STAFF])) {
                         throw new Exception('PERMISSION ERROR', 422);
                     }
@@ -110,7 +112,7 @@ class ApiMissionController extends Controller
                 default: throw new Exception('TYPE NOT SELECTED', 422);
             }
 
-            $mission_name = Mission::$typeNames[$request->get('type')];
+            $mission_name = Mission::$typeNames[$type];
 
             $user = $request->user();
             $date = Carbon::createFromFormat('Y-m-d H:i', "{$request->get('date')} {$request->get('time')}");
@@ -126,9 +128,9 @@ class ApiMissionController extends Controller
 
             $mission = Mission::create([
                 'user_id' => $user->id,
-                'type' => $request->get('type'),
+                'type' => $type,
                 'code' => mt_rand(1000, 9999),
-                'title' => "{$date->format('m월 d일')} {$mission_name}",
+                'title' => "{$date->format('m월 d일 H시 i분')} {$mission_name}",
                 'body' => strip_tags($request->get('body'), '<h2><h3><h4><p><a><i><br><strong><sub><sup><ol><ul><li><blockquote>'),
                 'can_tardy' => $request->get('tardy'),
                 'expected_at' => $date,
@@ -183,19 +185,22 @@ class ApiMissionController extends Controller
                 throw new Exception('CAN NOT FOUND MISSION', 422);
             }
 
-            switch ($request->get('type')) {
+            $type = (int) $request->get('type');
+
+            switch ($type) {
                 case 0:
                     if (!$group->has([Group::ARMA_MAKER2, Group::STAFF])) {
                         throw new Exception('PERMISSION ERROR', 422);
                     }
                     break;
                 case 1:
+                case 2:
                     if (!$group->has([Group::ARMA_MAKER1, Group::ARMA_MAKER2, Group::STAFF])) {
                         throw new Exception('PERMISSION ERROR', 422);
                     }
                     break;
-                case 2:
-                case 3:
+                case 10:
+                case 11:
                     if (!$group->has([Group::STAFF])) {
                         throw new Exception('PERMISSION ERROR', 422);
                     }
@@ -203,7 +208,7 @@ class ApiMissionController extends Controller
                 default: throw new Exception('TYPE NOT SELECTED', 422);
             }
 
-            $mission_name = Mission::$typeNames[$request->get('type')];
+            $mission_name = Mission::$typeNames[$type];
 
             $user = $request->user();
             $date = Carbon::createFromFormat('Y-m-d H:i', "{$request->get('date')} {$request->get('time')}");
@@ -278,4 +283,27 @@ class ApiMissionController extends Controller
         }
     }
 
+    public function read_process(Request $request, Group $group): JsonResponse
+    {
+        try {
+            $this->jsonValidator($request, [
+                'id' => 'int|required',
+            ]);
+
+            $mission = Mission::find($request->get('id'));
+
+            if (is_null($mission)) {
+                throw new Exception('CAN NOT FOUND MISSION', 422);
+            }
+
+            $user = $request->user();
+
+            if ($user->id == $mission->user_id || $group->has(Group::STAFF, $user)) {
+
+            }
+
+        } catch (Exception $e) {
+            return $this->jsonResponse($e->getCode(), Str::upper($e->getMessage()), []);
+        }
+    }
 }

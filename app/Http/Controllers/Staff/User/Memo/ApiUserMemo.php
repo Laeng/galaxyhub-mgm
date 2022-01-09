@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Staff;
+namespace App\Http\Controllers\Staff\User\Memo;
 
 use App\Action\PlayerHistory\PlayerHistory;
 use App\Http\Controllers\Controller;
@@ -9,7 +9,7 @@ use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
-class ApiManageUserMemo extends Controller
+class ApiUserMemo extends Controller
 {
     public function list(Request $request, PlayerHistory $history): JsonResponse
     {

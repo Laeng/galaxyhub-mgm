@@ -13,7 +13,7 @@
                     </div>
 
                     <div class="md:col-span-2 lg:col-span-1" x-data="application_detail">
-                        <p class="text-lg font-bold">부가 정보</p>
+                        <p class="text-lg font-bold">부가 정보 <span class="text-sm" x-text="'(' + data.load.data.created_at + ' 기준)'"></span></p>
                         <ul class="divide-y divide-gray-200">
 
                             <li class="py-4">
@@ -27,7 +27,7 @@
                                 </div>
                             </li>
 
-                            @if ($status !== '접수')
+                            @if ($status !== '가입 신청')
                                 <li class="py-4">
                                     <div class="flex justify-between">
                                         <p class="text-sm font-medium text-gray-800">
@@ -51,7 +51,7 @@
                                 </div>
                             </li>
 
-                            @if ($status !== '접수')
+                            @if ($status !== '가입 신청')
                                 <li class="py-4">
                                     <div class="flex justify-between">
                                         <p class="text-sm font-medium text-gray-800">
@@ -97,7 +97,7 @@
                                         구입한 게임
                                     </p>
                                     <p class="text-sm text-gray-600">
-                                        <a href="{{ route('staff.user.application.detail.games', [$user->id]) }}" target="_blank">확인하기</a>
+                                        <a href="{{ route('staff.user.application.read.games', [$user->id]) }}" target="_blank">확인하기</a>
                                     </p>
                                 </div>
                             </li>
@@ -159,7 +159,7 @@
                         </div>
 
                         <div class="grid grid-cols-3 gap-2 py-4">
-                            @if ($status === '접수')
+                            @if ($status === '가입 신청')
                                 <x-button.filled.md-white @click="process('accept', '가입 승인', '가입을 승인 하시겠습니까?', false)" type="button">
                                     승인
                                 </x-button.filled.md-white>
@@ -183,14 +183,13 @@
                                     },
                                     data: {
                                         process: {
-                                            url: '{{ route('staff.user.api.application.process') }}',
+                                            url: '{{ route('staff.user.application.process.api') }}',
+                                            body: {},
                                             lock: false
                                         },
                                         load: {
-                                            url: '{{ route('staff.user.api.application.detail.info', [$user->id]) }}',
-                                            body: {
-                                                user_id: '{{ $user->id }}'
-                                            },
+                                            url: '{{ route('staff.user.application.read.info.api', [$user->id]) }}',
+                                            body: {},
                                             data: {
                                                 summaries: {
                                                     steamId: ''
@@ -209,6 +208,7 @@
                                                     },
                                                     groupID64: ''
                                                 },
+                                                created_at: '',
                                                 naver_id: ''
                                             }
                                         }
@@ -217,7 +217,7 @@
                                     process(type, title, message, prompt = true) {
                                         let callback = (r) => {
                                             if (r.isConfirmed) {
-                                                let body = {
+                                                this.data.process.body = {
                                                     type: type,
                                                     user_id: ["{{ $user->id }}"],
                                                     reason: (prompt) ? r.value : null
@@ -240,7 +240,7 @@
 
                                                 if (!this.data.process.lock) {
                                                     this.data.process.lock = true;
-                                                    this.post(this.data.process.url, body, success, error, complete);
+                                                    this.post(this.data.process.url, this.data.process.body, success, error, complete);
                                                 }
                                             }
                                         };
@@ -260,6 +260,7 @@
                                                     this.data.load.data.arma = r.data.data.arma;
                                                     this.data.load.data.ban = r.data.data.ban;
                                                     this.data.load.data.naver_id = r.data.data.naver_id;
+                                                    this.data.load.data.created_at = r.data.data.created_at;
 
                                                     if (r.data.data.group != null) {
                                                         this.data.load.data.group = r.data.data.group;

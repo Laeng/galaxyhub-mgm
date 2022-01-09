@@ -68,7 +68,7 @@
                             </div>
                         </div>
 
-                        <x-table.simple :component-id="$listComponentId" :api-url="route('staff.user.api.all.list')" :use-check-box="true" check-box-name="user_id" x-ref="users" />
+                        <x-table.simple :component-id="$listComponentId" :api-url="route('staff.user.list.api')" :use-check-box="true" check-box-name="user_id" x-ref="users" />
 
                         <div class="flex divide-x divide-gray-200 flex-wrap">
                             <div class="flex items-center space-x-3 pr-3">
@@ -133,6 +133,7 @@
                                     },
                                     process: {
                                         lock: false,
+                                        url: '{{ route('staff.user.process.api') }}',
                                         body: {
                                             type: '',
                                             user_id: [],
@@ -184,7 +185,7 @@
 
                                             if (!this.data.process.lock) {
                                                 this.data.process.lock = true;
-                                                this.post('{{ route('staff.user.api.all.process') }}', this.data.process.body, success, error, complete);
+                                                this.post(this.data.process.url, this.data.process.body, success, error, complete);
                                             }
                                         }
                                     };
