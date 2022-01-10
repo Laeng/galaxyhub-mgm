@@ -43,13 +43,9 @@ class ViewMissionController extends Controller
         ]);
     }
 
-    public function read(Request $request, int $id): Factory|View|Application|RedirectResponse
+    public function read(Request $request, Group $group, int $id): Factory|View|Application|RedirectResponse
     {
         $user = $request->user();
-
-        //if (!$this->isMaker($user, $group)) {
-        //    abort(404);
-        //}
 
         $mission = Mission::find($id);
 
@@ -58,14 +54,26 @@ class ViewMissionController extends Controller
         }
 
         $maker = $mission->user()->first();
-        $isMaker = ($maker->id == $user->id);
+        $isStaff = $group->has(Group::STAFF, $user);
+        $isOwner = ($maker->id == $user->id) || $isStaff;
+        $isParticipant = ($user->missions()->where('mission_id', $id)->exists() && !$isOwner);
+
+        $display_timestamp = match ($mission->phase) {
+            -1, 0 => $mission->expected_at,
+            1, 3 => $mission->started_at,
+            2 => $mission->closed_at
+        };
 
         return view('lounge.mission.read', [
             'id' => $id,
             'mission' => $mission,
             'maker' => $maker,
             'type' => $mission->getTypeName(),
-            'isMaker' => $isMaker,
+            'code' => ($mission->phase >= 2) ? $mission->code : '',
+            'timestamp' => $display_timestamp,
+            'isStaff' => $isStaff,
+            'isOwner' => $isOwner,
+            'isParticipant' => $isParticipant
         ]);
     }
 
@@ -108,10 +116,14 @@ class ViewMissionController extends Controller
             abort(404);
         }
 
+        // 미션 수정은 미션 타입을 바꿀 수 없다!
+
         return view('lounge.mission.create', [
             'title' => '미션 수정',
             'edit' => true,
-            'types' => $this->getMissionTypes($user, $group),
+            'types' => [
+                $mission->type => Mission::$typeNames[$mission->type]
+            ],
             'maps' => $this->getMissionMaps(),
             'addons' => $this->getMissionAddons(),
             'contents' => [
@@ -138,16 +150,16 @@ class ViewMissionController extends Controller
         $original = Mission::$typeNames;
         $types = [];
 
-        if ($group->has([Group::ARMA_MAKER2, Group::STAFF])) {
+        if ($group->has([Group::ARMA_MAKER2, Group::STAFF], $user)) {
             $types[0] = $original[0];
         }
 
-        if ($group->has([Group::ARMA_MAKER1, Group::ARMA_MAKER2, Group::STAFF])) {
+        if ($group->has([Group::ARMA_MAKER1, Group::ARMA_MAKER2, Group::STAFF], $user)) {
             $types[1] = $original[1];
             $types[2] = $original[2];
         }
 
-        if ($group->has([Group::STAFF])) {
+        if ($group->has([Group::STAFF], $user)) {
             $types[10] = $original[10];
             $types[11] = $original[11];
         }

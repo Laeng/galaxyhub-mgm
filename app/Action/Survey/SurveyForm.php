@@ -114,13 +114,12 @@ class SurveyForm implements SurveyFormContract
             'user_id' => $user->id
         ]);
 
-        $mission_name = $mission->getTypeName();
-
         $one = $survey->sections()->create([
-            'name' => "{$mission_name} 만족도 조사",
+            'name' => '만족도 조사',
             'description' =>
-                "<p>미션 만족도 조사의 결과는 더 재밌는 미션을 제작하실 수 있도록 본 {$mission_name}을 담당하신 {$user->nickname}님께 익명으로 제공됩니다. 번거로우시더라도 참여해주시면 감사드립니다.</p>".
-                '<p>주관식 문항에서 욕설, 조롱, 비하 등이 담긴 답변으로 분쟁 발생시 중재 목적으로 MGM 아르마 클랜 스탭이 회원님의 설문 응답을 조회할 수 있는 점 참고 부탁드립니다.</p>'
+                "<p>본 미션은 아르마3를 함께 즐기고자 {$user->nickname}님께서 제작해 주셨으며 설문 결과는 {$user->nickname}님께 익명으로 제공됩니다.</p>".
+                '<p>설문과 관련된 분쟁 발생시 원활한 중재를 위해 MGM 아르마 클랜 스탭이 회원님의 설문 응답을 조회할 수 있는 점 양해 부탁드립니다.</p>'.
+                '<p>출석체크는 본 만족도 조사가 끝나면 하실 수 있으며 잠시 시간을 내어 참여해주시면 감사드립니다.</p>'
         ]);
 
         return $survey;

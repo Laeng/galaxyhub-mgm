@@ -66,6 +66,9 @@ Route::middleware(['auth:web', ForbidBannedUser::class])->prefix('lounge')->name
         Route::get('/{id}/edit', [ViewMissionController::class, 'update'])->name('update')->whereNumber('id');
         Route::post( '/{id}/update', [ApiMissionController::class, 'update'])->name('update.api')->whereNumber('id');
         Route::post( '/{id}/delete', [ApiMissionController::class, 'delete'])->name('delete.api')->whereNumber('id');
+        Route::post( '/{id}/process', [ApiMissionController::class, 'read_process'])->name('read.process.api')->whereNumber('id');
+        Route::post( '/{id}/refresh', [ApiMissionController::class, 'read_refresh'])->name('read.refresh.api')->whereNumber('id');
+        Route::post( '/{id}/participants', [ApiMissionController::class, 'read_participants'])->name('read.participants.api')->whereNumber('id');
     });
     Route::prefix('missions')->name('mission.')->group(function () {
         Route::get( '/', [ViewMissionController::class, 'list'])->name('list');

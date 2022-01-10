@@ -160,12 +160,12 @@ aspect-16\/10 {
     height: 20rem;
 }
 
-.mission-body .prose p, .prose li{
-    margin-top: 0;
-    margin-bottom: 0;
+.mission-body.prose p, .mission-body.prose li{
+    margin-top: 0.1em;
+    margin-bottom: 0.1em;
 }
 
-.mission-body .prose h1, .prose h2, .prose h3 {
-    margin-top: 0.8em;
-    margin-bottom: 0;
+.mission-body.prose h1, .mission-body.prose h2, .mission-body.prose h3 {
+    margin-top: 0.4em;
+    margin-bottom: 0.4em;
 }

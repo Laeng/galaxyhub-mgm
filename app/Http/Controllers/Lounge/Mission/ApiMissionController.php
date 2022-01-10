@@ -48,15 +48,30 @@ class ApiMissionController extends Controller
 
             $user = $request->user();
             $missions = $query->latest('expected_at')->offset($step * $limit)->limit($limit)->get(['id', 'type', 'expected_at', 'can_tardy', 'user_id', 'phase']);
+            $userMissions = $user->missions()->select(['mission_id'])->get()->pluck('mission_id')->toArray();
 
             foreach ($missions as $v) {
+                $button = '상세보기';
+
+                if ($v->user_id != $user->id) {
+                    if (in_array($v->id, $userMissions)) {
+                        if ($v->phase == 2) {
+                            $button = '출석하기';
+                        }
+                    } else {
+                        if ($v->phase = 0 || ($v->can_tardy == 1 && $v->phase == 1)) {
+                            $button = '신청하기';
+                        }
+                    }
+                }
+
                 $items[] = [
                     $v->getTypeName(),
                     $v->expected_at->format('m월 d일 H시 i분'),
                     $v->can_tardy ? '가능' : '불가능',
                     $v->user()->first()->nickname,
                     $v->getPhaseName(),
-                    "<a href='". route('lounge.mission.read', $v->id) . "' class='text-indigo-600 hover:text-indigo-900'>" . (($v->phase != 0 && ($v->can_tardy == 1 && $v->phase == 1)) || ($v->user_id == $user->id) ? '상세보기' : '신청하기') . '</a>'
+                    "<a href='". route('lounge.mission.read', $v->id) . "' class='text-indigo-600 hover:text-indigo-900'>{$button}</a>"
                 ];
             }
 
@@ -154,7 +169,7 @@ class ApiMissionController extends Controller
             ]);
 
             return $this->jsonResponse(200, 'OK', [
-                'url' => route('mission.read', $mission->id)
+                'url' => route('lounge.mission.read', $mission->id)
             ]);
 
         } catch (Exception $e) {
@@ -230,7 +245,7 @@ class ApiMissionController extends Controller
 
             $mission->update([
                 'user_id' => $user->id,
-                'type' => $request->get('type'),
+                'type' => $mission->type, //'type' => $request->get('type'), // 미션 수정시 미션 타입을 변경할 수 없다.
                 'code' => mt_rand(1000, 9999),
                 'title' => "{$date->format('m월 d일')} {$mission_name}",
                 'body' => strip_tags($request->get('body'), '<h2><h3><h4><p><a><i><br><strong><sub><sup><ol><ul><li><blockquote>'),
@@ -243,7 +258,7 @@ class ApiMissionController extends Controller
             ]);
 
             return $this->jsonResponse(200, 'OK', [
-                'url' => route('mission.read', $mission->id)
+                'url' => route('lounge.mission.read', $mission->id)
             ]);
 
         } catch (Exception $e) {
@@ -254,10 +269,6 @@ class ApiMissionController extends Controller
     public function delete(Request $request, Group $group, int $id): JsonResponse
     {
         try {
-            $this->jsonValidator($request, [
-
-            ]);
-
             $mission = Mission::find($id);
 
             if (is_null($mission)) {
@@ -268,7 +279,7 @@ class ApiMissionController extends Controller
 
             if ($user->id == $mission->user_id || $group->has(Group::STAFF, $user)) {
                 if ($mission->phase > 0) {
-                    throw new Exception('CAN NOT DELETE MISSION BECAUSE MISSION STATUS IS NOT READY', 422);
+                    throw new Exception('MISSION STATUS DOES\'T MATCH THE CONDITIONS', 422);
                 }
 
                 $mission->survey()->delete();
@@ -283,14 +294,66 @@ class ApiMissionController extends Controller
         }
     }
 
-    public function read_process(Request $request, Group $group): JsonResponse
+    public function read_process(Request $request, Group $group, int $id): JsonResponse
     {
         try {
             $this->jsonValidator($request, [
-                'id' => 'int|required',
+                'type' => 'string|required',
             ]);
 
-            $mission = Mission::find($request->get('id'));
+            $mission = Mission::find($id);
+
+            if (is_null($mission)) {
+                throw new Exception('CAN NOT FOUND MISSION', 422);
+            }
+
+            $user = $request->user();
+            $type = $request->get('type');
+            $now = now();
+
+            if ($user->id == $mission->user_id || $group->has(Group::STAFF, $user)) {
+                switch ($type) {
+                    case 'start':
+                        if ($mission->phase != 0) {
+                            throw new Exception('MISSION STATUS DOES\'T MATCH THE CONDITIONS', 422);
+                        }
+                        $mission->phase = 1;
+                        $mission->started_at = $now;
+                        $mission->save();
+                        break;
+
+                    case 'end':
+                        if ($mission->phase != 1) {
+                            throw new Exception('MISSION STATUS DOES\'T MATCH THE CONDITIONS', 422);
+                        }
+                        $mission->phase = 2;
+                        $mission->ended_at = $now;
+                        $mission->closed_at = $now->copy()->addHours(Mission::$attendTerm);
+                        $mission->save();
+                        break;
+
+                    case 'cancel':
+                        if ($mission->phase != 1) {
+                            throw new Exception('MISSION STATUS DOES\'T MATCH THE CONDITIONS', 422);
+                        }
+
+                        $mission->phase = -1;
+                        $mission->save();
+                        break;
+                }
+            }
+
+            return $this->jsonResponse(200, 'SUCCESS', []);
+
+        } catch (Exception $e) {
+            return $this->jsonResponse($e->getCode(), Str::upper($e->getMessage()), []);
+        }
+    }
+
+    public function read_refresh(Request $request, Group $group, int $id): jsonResponse
+    {
+        try {
+            $mission = Mission::find($id);
 
             if (is_null($mission)) {
                 throw new Exception('CAN NOT FOUND MISSION', 422);
@@ -298,9 +361,65 @@ class ApiMissionController extends Controller
 
             $user = $request->user();
 
-            if ($user->id == $mission->user_id || $group->has(Group::STAFF, $user)) {
+            $display_timestamp = match ($mission->phase) {
+                -1, 0 => $mission->expected_at,
+                1, 3 => $mission->started_at,
+                2 => $mission->closed_at
+            };
 
+
+            $data = [
+                'phase' => $mission->phase,
+                'status' => $mission->getPhaseName(),
+                'timestamp' => [
+                    'display_date' => $display_timestamp->format('Y년 m월 d일'),
+                    'display_time' => $display_timestamp->format('H시 i분'),
+                    'created_at' => $mission->created_at->format('Y-m-d H:i'),
+                    'started_at' => (!is_null($mission->started_at)) ? $mission->started_at->format('Y-m-d H:i') : '',
+                    'ended_at' => (!is_null($mission->ended_at)) ? $mission->ended_at->format('Y-m-d H:i') : '',
+                    'closed_at' => (!is_null($mission->closed_at)) ? $mission->closed_at->format('Y-m-d H:i') : '',
+                ],
+                'code' => '',
+                'body' => $mission->body,
+                'can_tardy' => $mission->can_tardy,
+                'isParticipant' => ($user->missions()->where('mission_id', $id)->exists() && $mission->user_id == $user->id),
+            ];
+
+            if ($user->id == $mission->user_id || $group->has(Group::STAFF, $user)) {
+                $data['code'] = ($mission->phase >= 2) ? $mission->code : '';
             }
+
+            return $this->jsonResponse(200, 'SUCCESS', $data);
+
+        } catch (Exception $e) {
+            return $this->jsonResponse($e->getCode(), Str::upper($e->getMessage()), []);
+        }
+    }
+
+    public function read_participants(Request $request, int $id)
+    {
+        try {
+            $mission = Mission::find($id);
+
+            if (is_null($mission)) {
+                throw new Exception('CAN NOT FOUND MISSION', 422);
+            }
+
+            $data = [];
+            $participants = $mission->participants()->select(['user_id', 'is_maker', 'created_at'])->oldest()->get();
+
+            foreach ($participants as $v) {
+                $user = $v->user()->first();
+                $data[] = [
+                    'nickname' => $user->nickname,
+                    'avatar' => $user->avatar,
+                    'attend' => $user->missions()->whereNotNull('attended_at')->count()
+                ];
+            }
+
+            return $this->jsonResponse(200, 'SUCCESS', [
+                'participants' => $data
+            ]);
 
         } catch (Exception $e) {
             return $this->jsonResponse($e->getCode(), Str::upper($e->getMessage()), []);

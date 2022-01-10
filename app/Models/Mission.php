@@ -22,6 +22,8 @@ class Mission extends Model
         11 => '약장 시험',
     ];
 
+    public static int $attendTerm = 12; // 미션 종료 후 12시간 동안 출석 가능
+
     /**
      * The attributes that are mass assignable.
      *
@@ -41,17 +43,19 @@ class Mission extends Model
         'expected_at',
         'started_at',
         'ended_at',
+        'closed_at'
     ];
 
     protected $casts = [
         'type' => 'integer',
         'phase' => 'integer',
-        'code' => 'integer',
+        'code' => 'string', //0000 ~ 9999 를 지원하기 위해서
         'count' => 'integer',
         //'can_tardy' => 'boolean', // 사용 하지 않음.
         'expected_at' => 'datetime',
         'started_at' => 'datetime',
         'ended_at' => 'datetime',
+        'closed_at' => 'datetime',
         'data' => 'array'
     ];
 
@@ -67,11 +71,11 @@ class Mission extends Model
     public function getPhaseName(): ?string
     {
         return match($this->phase) {
-            0 => '대기',
+            -1 => '취소',
+            0 => '모집',
             1 => '진행',
             2 => '출석',
             3 => '종료',
-            4 => '취소',
             default => ''
         };
     }

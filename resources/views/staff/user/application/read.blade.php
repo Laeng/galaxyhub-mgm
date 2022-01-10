@@ -230,7 +230,7 @@
                                                 };
 
                                                 let error = (e) => {
-                                                    if (e.response.status === 415) {
+                                                    if (typeof e.response !== 'undefined' && e.response.status === 415) {
                                                         //CSRF 토큰 오류 발생
                                                         window.modal.alert('처리 실패', '로그인 정보를 확인할 수 없습니다.', (c) => {
                                                             Location.reload();

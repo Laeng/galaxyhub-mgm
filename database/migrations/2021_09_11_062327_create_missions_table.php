@@ -28,6 +28,7 @@ class CreateMissionsTable extends Migration
             $table->timestamp('expected_at')->nullable(); // 예정 시간
             $table->timestamp('started_at')->nullable(); // 시작 버튼 누른 시간
             $table->timestamp('ended_at')->nullable(); // 끝난 시간
+            $table->timestamp('closed_at')->nullable(); //출석 마감 시간
             $table->timestamps();
         });
     }

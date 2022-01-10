@@ -116,9 +116,10 @@
                                 @endif
                             }
                         }
-                    }
+                    };
+
                     let error = (e) => {
-                        if (e.response.status === 415) {
+                        if (typeof e.response !== 'undefined' && e.response.status === 415) {
                             //CSRF 토큰 오류 발생
                             window.modal.alert('처리 실패', '로그인 정보를 확인할 수 없습니다.', (c) => {
                                 Location.reload();
@@ -126,12 +127,14 @@
                             return;
                         }
 
+                        window.modal.alert('처리 실패', '데이터 처리 중 문제가 발생하였습니다.', (c) => {}, 'error');
                         console.log(e);
-                    }
+                    };
+
                     let complete = () => {
                         this.data.list.lock = false;
                         this.load.list = false;
-                    }
+                    };
 
                     if (!this.data.list.lock) {
                         this.data.list.lock = true;

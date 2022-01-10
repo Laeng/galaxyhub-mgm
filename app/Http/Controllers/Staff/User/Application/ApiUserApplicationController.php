@@ -94,7 +94,7 @@ class ApiUserApplicationController extends Controller
         try {
             $this->jsonValidator($request, [
                 'type' => 'string|required',
-                'user_id' => 'array|required',
+                'user_id' => 'array|required', // 없애면 안된다! 가입 신청자 리스트에서 처리를 해야하기 때문
                 'reason' => ''
             ]);
 

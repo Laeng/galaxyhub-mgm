@@ -17,7 +17,7 @@
 
                 <div class="flex flex-col mb-4">
                     <div>
-                        <x-table.simple :component-id="$listComponentId" :api-url="route('lounge.mission.list.api')" :use-check-box="false" x-ref="missions" />
+                        <x-table.simple :component-id="$listComponentId" :api-url="route('lounge.mission.list.api')" :use-check-box="false" :refresh="true" x-ref="missions" />
                     </div>
                 </div>
 

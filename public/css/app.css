@@ -1213,6 +1213,9 @@ select{
 .h-16{
   height: 4rem;
 }
+.h-12{
+  height: 3rem;
+}
 .h-14{
   height: 3.5rem;
 }
@@ -1224,9 +1227,6 @@ select{
 }
 .h-96{
   height: 24rem;
-}
-.h-12{
-  height: 3rem;
 }
 .h-\[3\.75rem\]{
   height: 3.75rem;
@@ -1372,11 +1372,11 @@ select{
 .grid-cols-3{
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
-.grid-cols-1{
-  grid-template-columns: repeat(1, minmax(0, 1fr));
-}
 .grid-cols-2{
   grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.grid-cols-1{
+  grid-template-columns: repeat(1, minmax(0, 1fr));
 }
 .flex-col{
   flex-direction: column;
@@ -1508,11 +1508,15 @@ select{
 .rounded-lg{
   border-radius: 0.5rem;
 }
+.rounded{
+  border-radius: 0.25rem;
+}
 .rounded-full{
   border-radius: 9999px;
 }
-.rounded{
-  border-radius: 0.25rem;
+.rounded-t{
+  border-top-left-radius: 0.25rem;
+  border-top-right-radius: 0.25rem;
 }
 .rounded-t-lg{
   border-top-left-radius: 0.5rem;
@@ -1521,10 +1525,6 @@ select{
 .rounded-b-lg{
   border-bottom-right-radius: 0.5rem;
   border-bottom-left-radius: 0.5rem;
-}
-.rounded-t{
-  border-top-left-radius: 0.25rem;
-  border-top-right-radius: 0.25rem;
 }
 .border{
   border-width: 1px;
@@ -1900,6 +1900,10 @@ select{
   --tw-text-opacity: 1;
   color: rgb(185 28 28 / var(--tw-text-opacity));
 }
+.text-gray-700{
+  --tw-text-opacity: 1;
+  color: rgb(55 65 81 / var(--tw-text-opacity));
+}
 .text-black{
   --tw-text-opacity: 1;
   color: rgb(0 0 0 / var(--tw-text-opacity));
@@ -1915,10 +1919,6 @@ select{
 .text-indigo-600{
   --tw-text-opacity: 1;
   color: rgb(79 70 229 / var(--tw-text-opacity));
-}
-.text-gray-700{
-  --tw-text-opacity: 1;
-  color: rgb(55 65 81 / var(--tw-text-opacity));
 }
 .text-gray-400{
   --tw-text-opacity: 1;
@@ -2393,14 +2393,14 @@ aspect-16\/10 {
     height: 20rem;
 }
 
-.mission-body .prose p, .prose li{
-    margin-top: 0;
-    margin-bottom: 0;
+.mission-body.prose p, .mission-body.prose li{
+    margin-top: 0.1em;
+    margin-bottom: 0.1em;
 }
 
-.mission-body .prose h1, .prose h2, .prose h3 {
-    margin-top: 0.8em;
-    margin-bottom: 0;
+.mission-body.prose h1, .mission-body.prose h2, .mission-body.prose h3 {
+    margin-top: 0.4em;
+    margin-bottom: 0.4em;
 }
 
 .focus-within\:border-blue-500:focus-within{
@@ -2691,13 +2691,13 @@ aspect-16\/10 {
   }
 
 
-  .md\:grid-cols-2{
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+  .md\:grid-cols-3{
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
 
-  .md\:grid-cols-3{
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+  .md\:grid-cols-2{
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
 
