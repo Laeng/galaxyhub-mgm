@@ -164,7 +164,7 @@
                         <div class="mb-6 space-y-2">
                             @if($isMaker)
                                 <template x-if='data.phase === 0'>
-                                    <x-button.filled.md-white class="w-full" type="button" onclick="location.href='{{ route('mission.update', $id) }}'" x-cloak>
+                                    <x-button.filled.md-white class="w-full" type="button" onclick="location.href='{{ route('lounge.mission.update', $id) }}'" x-cloak>
                                         {{ $type }} 수정
                                     </x-button.filled.md-white>
                                 </template>
@@ -190,7 +190,7 @@
                                 </x-button.filled.md-blue>
                             @endif
 
-                            <x-button.filled.md-white class="w-full" onclick="location.href='{{ back()->getTargetUrl() }}'" type="button" >
+                            <x-button.filled.md-white class="w-full" onclick="location.href='{{ route('lounge.mission.list') }}'" type="button" >
                                 목록
                             </x-button.filled.md-white>
                         </div>
@@ -268,17 +268,17 @@
 
                         @if($isMaker)
                             <div class="space-y-2">
-                                <template x-if='data.phase === 0'>
-                                    <x-button.filled.md-red class="w-full" type="button" @click="delete()">
+                                <template x-if="data.phase === 0">
+                                    <x-button.filled.md-red class="w-full" type="button" @click="remove()">
                                         {{ $type }} 삭제
                                     </x-button.filled.md-red>
                                 </template>
-                                <template x-if='data.phase === 1'>
+                                <template x-if="data.phase === 1">
                                     <x-button.filled.md-red class="w-full" type="button">
                                         {{ $type }} 취소
                                     </x-button.filled.md-red>
                                 </template>
-                                <template x-if='data.phase === 3'>
+                                <template x-if="data.phase === 3">
                                     <x-button.filled.md-blue class="w-full" type="button">
                                         설문 결과
                                     </x-button.filled.md-blue>
@@ -287,64 +287,71 @@
                         @endif
 
                     </div>
+                </div>
 
-                    <script type="text/javascript">
-                        window.document.addEventListener('alpine:init', () => {
-                            window.alpine.data('mission_read', () => ({
-                                interval: {
-                                  delete: -1
-                                },
-                                data: {
-                                    id: {{$mission->id}},
-                                    phase: {{ $mission->phase }},
-                                    status: '{{ $mission->getPhaseName() }}',
-                                    view: {
-                                        participant: {
+                <script type="text/javascript">
+                    window.document.addEventListener('alpine:init', () => {
+                        window.alpine.data('mission_read', () => ({
+                            interval: {},
+                            data: {
+                                id: {{$mission->id}},
+                                phase: {{ $mission->phase }},
+                                status: '{{ $mission->getPhaseName() }}',
+                                view: {
+                                    participant: {
 
-                                        },
-                                        maker: {
-
-                                        },
                                     },
-                                    delete: {
-                                        url: '{{route('lounge.mission.delete.api', $id)}}',
-                                        body: {
-                                            id: {{ $id }}
-                                        }
-                                    }
-                                },
-                                delete() {
-                                    window.modal.prompt('미션 삭제', '정말 삭제하시겠습니까?', (v) => {}, (r) => {
-                                        if (r.isConfirmed) {
-                                            let success = (r) => {
-                                                if (r.data.data !== null) {
-                                                    if (!(typeof r.data.data === 'undefined' || r.data.data.length <= 0)) {
+                                    maker: {
 
-                                                    }
+                                    },
+                                },
+                                remove: {
+                                    url: '{{route('lounge.mission.delete.api', $id)}}',
+                                    body: {}
+                                }
+                            },
+                            remove() {
+                                window.modal.confirm('미션 삭제', '정말 삭제하시겠습니까?', (r) => {
+                                    if (r.isConfirmed) {
+                                        let success = (r) => {
+                                            if (r.data.data !== null) {
+                                                if (!(typeof r.data.data === 'undefined' || r.data.data.length <= 0)) {
+                                                    location.href = '{{route('lounge.mission.list')}}';
                                                 }
                                             }
-                                            let error = (e) => {
-                                                console.log(e);
-                                            }
-                                            let complete = () => {}
-
-                                            if (!this.data.delete.lock) {
-                                                this.post(this.data.delete.url, this.data.delete.body, success, error, complete);
-                                                this.interval.delete = setInterval(() => {this.post(this.data.delete.url, this.data.delete.body, success, error, complete)}, 5000);
-                                            }
                                         }
-                                    });
-                                },
-                                init() {
+                                        let error = (e) => {
+                                            if (e.response.status === 415) {
+                                                //CSRF 토큰 오류 발생
+                                                window.modal.alert('처리 실패', '로그인 정보를 확인할 수 없습니다.', (c) => {
+                                                    Location.reload();
+                                                }, 'error');
+                                                return;
+                                            }
 
-                                },
-                                post(url, body, success, error, complete) {
-                                    window.axios.post(url, body).then(success).catch(error).then(complete);
-                                }
-                            }));
-                        });
-                    </script>
-                </div>
+                                            if (e.response.status === 422) {
+                                                if (e.response.data.data.description === 'CAN NOT DELETE MISSION BECAUSE MISSION STATUS IS NOT READY') {
+                                                    window.modal.alert('처리 실패', '해당 미션이 시작 처리되어 삭제할 수 없습니다.', (c) => {}, 'error');
+                                                }
+                                            }
+                                            window.modal.alert('처리 실패', '데이터 처리 중 문제가 발생하였습니다.', (c) => {}, 'error');
+                                            console.log(e);
+                                        }
+                                        let complete = () => {}
+
+                                        this.post(this.data.remove.url, this.data.remove.body, success, error, complete);
+                                    }
+                                });
+                            },
+                            init() {
+
+                            },
+                            post(url, body, success, error, complete) {
+                                window.axios.post(url, body).then(success).catch(error).then(complete);
+                            }
+                        }));
+                    });
+                </script>
             </div>
         </div>
     </x-section.basic>

@@ -46,6 +46,7 @@ class ApiMissionController extends Controller
                 $step = 0;
             }
 
+            $user = $request->user();
             $missions = $query->latest('expected_at')->offset($step * $limit)->limit($limit)->get(['id', 'type', 'expected_at', 'can_tardy', 'user_id', 'phase']);
 
             foreach ($missions as $v) {
@@ -55,7 +56,7 @@ class ApiMissionController extends Controller
                     $v->can_tardy ? '가능' : '불가능',
                     $v->user()->first()->nickname,
                     $v->getPhaseName(),
-                    "<a href='". route('mission.read', $v->id) . "' class='text-indigo-600 hover:text-indigo-900'>" . (($v->phase == 0 || ($v->can_tardy && $v->phase == 1)) ? '신청하기' : '상세보기') . '</a>'
+                    "<a href='". route('lounge.mission.read', $v->id) . "' class='text-indigo-600 hover:text-indigo-900'>" . (($v->phase != 0 && ($v->can_tardy == 1 && $v->phase == 1)) || ($v->user_id == $user->id) ? '상세보기' : '신청하기') . '</a>'
                 ];
             }
 
@@ -250,14 +251,14 @@ class ApiMissionController extends Controller
         }
     }
 
-    public function delete(Request $request, Group $group): JsonResponse
+    public function delete(Request $request, Group $group, int $id): JsonResponse
     {
         try {
             $this->jsonValidator($request, [
-                'id' => 'int|required',
+
             ]);
 
-            $mission = Mission::find($request->get('id'));
+            $mission = Mission::find($id);
 
             if (is_null($mission)) {
                 throw new Exception('CAN NOT FOUND MISSION', 422);
@@ -270,13 +271,12 @@ class ApiMissionController extends Controller
                     throw new Exception('CAN NOT DELETE MISSION BECAUSE MISSION STATUS IS NOT READY', 422);
                 }
 
-                $mission->survey()->sections()->questions()->delete();
-                $mission->survey()->sections()->delete();
-                $mission->survey()->questions()->delete();
                 $mission->survey()->delete();
                 $mission->participants()->delete();
                 $mission->delete();
             }
+
+            return $this->jsonResponse(200, 'SUCCESS', []);
 
         } catch (Exception $e) {
             return $this->jsonResponse($e->getCode(), Str::upper($e->getMessage()), []);
