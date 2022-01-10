@@ -2454,6 +2454,10 @@ aspect-16\/10 {
   background-color: rgb(185 28 28 / var(--tw-bg-opacity));
 }
 
+.hover\:font-bold:hover{
+  font-weight: 700;
+}
+
 .hover\:text-blue-800:hover{
   --tw-text-opacity: 1;
   color: rgb(30 64 175 / var(--tw-text-opacity));
@@ -2492,6 +2496,10 @@ aspect-16\/10 {
 .hover\:text-red-600:hover{
   --tw-text-opacity: 1;
   color: rgb(220 38 38 / var(--tw-text-opacity));
+}
+
+.hover\:no-underline:hover{
+  text-decoration: none;
 }
 
 .hover\:shadow-inner:hover{

@@ -59,11 +59,13 @@ class ApiMissionController extends Controller
                             $button = '출석하기';
                         }
                     } else {
-                        if ($v->phase = 0 || ($v->can_tardy == 1 && $v->phase == 1)) {
+                        if ($v->phase == 0 || ($v->can_tardy && $v->phase == 1)) {
                             $button = '신청하기';
                         }
                     }
                 }
+
+                $link =  route('lounge.mission.read', $v->id);
 
                 $items[] = [
                     $v->getTypeName(),
@@ -71,7 +73,7 @@ class ApiMissionController extends Controller
                     $v->can_tardy ? '가능' : '불가능',
                     $v->user()->first()->nickname,
                     $v->getPhaseName(),
-                    "<a href='". route('lounge.mission.read', $v->id) . "' class='text-indigo-600 hover:text-indigo-900'>{$button}</a>"
+                    "<a href='{$link}' class='text-indigo-600 hover:text-indigo-900'>{$button}</a>"
                 ];
             }
 
@@ -148,7 +150,7 @@ class ApiMissionController extends Controller
                 'code' => mt_rand(1000, 9999),
                 'title' => "{$date->format('m월 d일 H시 i분')} {$mission_name}",
                 'body' => strip_tags($request->get('body'), '<h2><h3><h4><p><a><i><br><strong><sub><sup><ol><ul><li><blockquote>'),
-                'can_tardy' => $request->get('tardy'),
+                'can_tardy' => !boolval($request->get('tardy')),
                 'expected_at' => $date,
                 'data' => [
                     'addons' => $request->get('addons'),
@@ -164,8 +166,7 @@ class ApiMissionController extends Controller
             $mission->participants()->create([
                 'user_id' => $user->id,
                 'mission_id' => $mission->id,
-                'is_maker' => true,
-                'is_attended' => true
+                'is_maker' => true
             ]);
 
             return $this->jsonResponse(200, 'OK', [
@@ -249,7 +250,7 @@ class ApiMissionController extends Controller
                 'code' => mt_rand(1000, 9999),
                 'title' => "{$date->format('m월 d일')} {$mission_name}",
                 'body' => strip_tags($request->get('body'), '<h2><h3><h4><p><a><i><br><strong><sub><sup><ol><ul><li><blockquote>'),
-                'can_tardy' => $request->get('tardy'),
+                'can_tardy' => !boolval($request->get('tardy')),
                 'expected_at' => $date,
                 'data' => [
                     'addons' => $request->get('addons'),
@@ -317,6 +318,9 @@ class ApiMissionController extends Controller
                         if ($mission->phase != 0) {
                             throw new Exception('MISSION STATUS DOES\'T MATCH THE CONDITIONS', 422);
                         }
+
+                        //TODO - 미션 시작일에만 미션 시작 가능하게 하기.
+
                         $mission->phase = 1;
                         $mission->started_at = $now;
                         $mission->save();
@@ -330,6 +334,10 @@ class ApiMissionController extends Controller
                         $mission->ended_at = $now;
                         $mission->closed_at = $now->copy()->addHours(Mission::$attendTerm);
                         $mission->save();
+
+                        $makerMission = $mission->participants()->where('user_id', $mission->user_id)->first();
+                        $makerMission->attended_at = $now;
+                        $makerMission->save();
                         break;
 
                     case 'cancel':
@@ -341,6 +349,30 @@ class ApiMissionController extends Controller
                         $mission->save();
                         break;
                 }
+            }
+
+            switch ($type) {
+                case 'join':
+                    if (!($mission->phase == 1 && $mission->can_tardy == 1) && $mission->phase != 0) {
+                        throw new Exception('MISSION STATUS DOES\'T MATCH THE CONDITIONS', 422);
+                    }
+
+                    if (!$mission->participants()->where('user_id', $user->id)->where('mission_id', $mission->id)->exists()) {
+                        $mission->participants()->create([
+                            'user_id' => $user->id,
+                            'mission_id' => $mission->id,
+                            'is_maker' => false,
+                        ]);
+                    }
+                    break;
+
+                case 'leave':
+                    if ($mission->phase >= 1) {
+                        throw new Exception('MISSION STATUS DOES\'T MATCH THE CONDITIONS', 422);
+                    }
+
+                    $mission->participants()->where('user_id', $user->id)->where('mission_id', $mission->id)->delete();
+                    break;
             }
 
             return $this->jsonResponse(200, 'SUCCESS', []);
@@ -382,7 +414,7 @@ class ApiMissionController extends Controller
                 'code' => '',
                 'body' => $mission->body,
                 'can_tardy' => $mission->can_tardy,
-                'isParticipant' => ($user->missions()->where('mission_id', $id)->exists() && $mission->user_id == $user->id),
+                'is_participant' => ($user->missions()->where('mission_id', $id)->exists() && $mission->user_id != $user->id),
             ];
 
             if ($user->id == $mission->user_id || $group->has(Group::STAFF, $user)) {

@@ -51,7 +51,7 @@ class Mission extends Model
         'phase' => 'integer',
         'code' => 'string', //0000 ~ 9999 를 지원하기 위해서
         'count' => 'integer',
-        //'can_tardy' => 'boolean', // 사용 하지 않음.
+        'can_tardy' => 'boolean', // 사용 하지 않음.
         'expected_at' => 'datetime',
         'started_at' => 'datetime',
         'ended_at' => 'datetime',

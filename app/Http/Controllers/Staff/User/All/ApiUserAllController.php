@@ -124,7 +124,7 @@ class ApiUserAllController extends Controller
                 $keys[] = $row->id;
                 $items[] = [
                     $row->nickname,
-                    $group->getName($row->group_id),
+                    !is_null($row->group_id) ? $group->getName($row->group_id) : '',
                     is_null($ban) ? '⨉' : (is_null($ban->expired_at) ? '무기한' : $ban->expired_at->toDateString()),
                     $row->created_at->toDateString(),
                     $row->visited_at->toDateString(),

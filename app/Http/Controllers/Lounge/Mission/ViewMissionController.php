@@ -49,10 +49,6 @@ class ViewMissionController extends Controller
 
         $mission = Mission::find($id);
 
-        if (is_null($mission) || $mission->user_id != $user->id) {
-            abort(404);
-        }
-
         $maker = $mission->user()->first();
         $isStaff = $group->has(Group::STAFF, $user);
         $isOwner = ($maker->id == $user->id) || $isStaff;
@@ -134,7 +130,7 @@ class ViewMissionController extends Controller
                 'map' => $mission->data['map'],
                 'addons' => $mission->data['addons'],
                 'body' => $mission->body,
-                'tardy' => boolval($mission->can_tardy),
+                'tardy' => !$mission->can_tardy, //체크 박스의 기본값 => 중도 참여 비허용
             ]
         ]);
     }

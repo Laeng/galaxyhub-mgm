@@ -28,7 +28,7 @@
                                 @else
                                     <x-alert.info title="지켜주세요!">
                                         <ul>
-                                            <li>아르마 밤 참가 신청 후 불참 또는 지각시 커뮤니티에 사유를 남겨주세요.</li>
+                                            <li>아르마 밤 참가 신청 후 불참 또는 지각시 <a href="https://cafe.naver.com/gamemmakers" class="underline hover:no-underline" target="_blank">커뮤니티</a>에 사유를 남겨주세요.</li>
                                             <li>DDOS 방지를 위하여 게임 접속 전 스팀 프로필 상태를 오프라인으로 변경해주세요.</li>
                                             <li>게임 접속 전 팀스피크 디스크랩션을 읽어주셔야 서버 접속이 가능합니다.</li>
                                         </ul>
@@ -104,7 +104,7 @@
                                         참가 신청
                                     </x-button.filled.md-blue>
                                 </template>
-                                <template x-if="data.load.data.is_participant">
+                                <template x-if="data.load.data.is_participant && data.load.data.phase <= 0">
                                     <x-button.filled.md-blue class="w-full" type="button" @click="process('leave')" x-cloak>
                                         참가 취소
                                     </x-button.filled.md-blue>
@@ -119,16 +119,6 @@
                         <div class="mb-3">
                             <p class="text-lg font-bold">{{ $type }} 정보</p>
                             <ul class="divide-y divide-gray-200">
-
-                                <li class="py-4">
-                                    <div class="flex justify-between">
-                                        <p class="text-sm font-medium text-gray-800">
-                                            미션 상태
-                                        </p>
-                                        <p class="text-sm text-gray-600" x-text="data.load.data.status"></p>
-                                    </div>
-                                </li>
-
                                 <li class="py-4">
                                     <div class="flex justify-between">
                                         <p class="text-sm font-medium text-gray-800">
@@ -137,6 +127,15 @@
                                         <p class="text-sm text-gray-600">
                                             {{ $maker->nickname }}
                                         </p>
+                                    </div>
+                                </li>
+
+                                <li class="py-4">
+                                    <div class="flex justify-between">
+                                        <p class="text-sm font-medium text-gray-800">
+                                            미션 상태
+                                        </p>
+                                        <p class="text-sm text-gray-600" x-text="data.load.data.status"></p>
                                     </div>
                                 </li>
 
@@ -321,7 +320,7 @@
 
                                         if (e.response.status === 422) {
                                             let msg = '';
-                                            cons
+
                                             switch (e.response.data.description) {
                                                 case "MISSION STATUS DOES'T MATCH THE CONDITIONS":
                                                     msg = '현재 미션 상태에서 실행할 수 없는 요청입니다.';
@@ -332,6 +331,7 @@
                                             }
 
                                             window.modal.alert('처리 실패', msg, (c) => {}, 'error');
+                                            return;
                                         }
                                     }
 
@@ -364,7 +364,7 @@
                                 let complete = () => {};
 
                                 if (this.interval.load === -1) {
-                                    this.interval.load = setInterval(() => {this.post(this.data.load.url, this.data.load.body, success, error, complete)}, 5000);
+                                    this.interval.load = setInterval(() => {this.post(this.data.load.url, this.data.load.body, success, error, complete)}, 3000);
                                 } else {
                                     this.post(this.data.load.url, this.data.load.body, success, error, complete);
                                 }
