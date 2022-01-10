@@ -47,7 +47,11 @@ class ViewAuthController extends Controller
         $user = $this->authenticate($social->id, null, $provider);
 
         if (!is_null($user)) {
-            $updateUser = ['visited_at' => now()];
+            $updateUser = [
+                'visit' => $user->visit + 1,
+                'visited_at' => now()
+            ];
+
             if ($user->avatar != $social->getAvatar()) { // 동일한 객체가 아님, 단순 값만 맞으면 된다.
                 $updateUser = array_combine($updateUser, ['avatar' => $social->getAvatar()]);
             }
