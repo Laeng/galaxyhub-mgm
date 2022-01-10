@@ -129,28 +129,46 @@
                                         location.replace(r.data.data.url);
                                     }
                                     let error = (e) => {
-                                        if (typeof e.response !== 'undefined' && e.response.status === 415) {
-                                            //CSRF 토큰 오류 발생
-                                            window.modal.alert('처리 실패', '로그인 정보를 확인할 수 없습니다.', (c) => {}, 'error');
-                                            return;
+                                        if (typeof e.response !== 'undefined') {
+                                            if (e.response.status === 415) {
+                                                //CSRF 토큰 오류 발생
+                                                window.modal.alert('처리 실패', '로그인 정보를 확인할 수 없습니다.', (c) => {
+                                                    Location.reload();
+                                                }, 'error');
+                                                return;
+                                            }
+
+                                            if (e.response.status === 422) {
+                                                let msg = '';
+                                                switch (e.response.data.description) {
+                                                    case "MISSION STATUS DOES'T MATCH THE CONDITIONS":
+                                                        msg = '현재 미션 상태에서 실행할 수 없는 요청입니다.';
+                                                        break;
+                                                    case 'VALIDATION FAILED':
+                                                        msg = '미션 종류, 시작 시간, 사용할 맵, 사용할 애드온 중 어느 하나에 빈칸이 있습니다.'
+                                                        break;
+                                                    case 'DATE OLD':
+                                                        msg = '미션 시간은 지난 날짜로 설정할 수 없습니다.';
+                                                        break;
+                                                    case 'DATE UNAVAILABLE':
+                                                        msg = '기존 등록된 미션 시간과 겹칩니다.';
+                                                        break;
+                                                    case 'PERMISSION ERROR':
+                                                        msg = '권한이 없습니다.';
+                                                        break;
+                                                    default:
+                                                        msg = e.response.data.description;
+                                                        break;
+                                                }
+
+                                                window.modal.alert('처리 실패', msg, (c) => {}, 'error');
+                                                return;
+                                            }
                                         }
-                                        switch (e.response.data.description) {
-                                            case 'VALIDATION FAILED':
-                                                window.modal.alert('오류', '미션 종류, 시작 시간, 사용할 맵, 사용할 애드온 중 어느 하나에 빈칸이 있습니다.', (c) => {}, 'error');
-                                                break;
-                                            case 'DATE OLD':
-                                                window.modal.alert('주의', '미션 시간은 지난 날짜로 설정할 수 없습니다.', (c) => {}, 'warning');
-                                                break;
-                                            case 'DATE UNAVAILABLE':
-                                                window.modal.alert('주의', '기존 등록된 미션 시간과 겹칩니다.', (c) => {}, 'warning');
-                                                break;
-                                            case 'PERMISSION ERROR':
-                                                window.modal.alert('오류', '권한이 없습니다.', (c) => {}, 'error');
-                                                break;
-                                            default:
-                                                window.modal.alert('오류', '데이터 처리 중 문제가 발생하였습니다.', (c) => {}, 'error');
-                                                console.log(e.response);
-                                        }
+
+                                        window.modal.alert('처리 실패', '데이터 처리 중 문제가 발생하였습니다.', (c) => {}, 'error');
+                                        console.log(e);
+
                                     }
                                     let complete = () => {
                                         this.data.create.lock = false;

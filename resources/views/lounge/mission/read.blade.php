@@ -94,18 +94,18 @@
                                     </x-button.filled.md-white>
                                 </template>
                             @else
-                                <template x-if="data.load.data.is_participant && data.load.data.phase === 2">
+                                <template x-if="data.load.data.is_participant && data.load.data.phase === 2" x-cloak>
                                     <x-button.filled.md-blue class="w-full" type="button">
                                         출석 체크
                                     </x-button.filled.md-blue>
                                 </template>
                                 <template x-if="!data.load.data.is_participant && ((data.load.data.can_tardy === 1 && data.load.data.phase === 1) || data.load.data.phase === 0)">
-                                    <x-button.filled.md-blue class="w-full" type="button">
+                                    <x-button.filled.md-blue class="w-full" type="button" @click="process('join')" x-cloak>
                                         참가 신청
                                     </x-button.filled.md-blue>
                                 </template>
                                 <template x-if="data.load.data.is_participant">
-                                    <x-button.filled.md-blue class="w-full" type="button">
+                                    <x-button.filled.md-blue class="w-full" type="button" @click="process('leave')" x-cloak>
                                         참가 취소
                                     </x-button.filled.md-blue>
                                 </template>
@@ -261,19 +261,31 @@
                                             }
                                         }
                                         let error = (e) => {
-                                            if (typeof e.response !== 'undefined' && e.response.status === 415) {
-                                                //CSRF 토큰 오류 발생
-                                                window.modal.alert('처리 실패', '로그인 정보를 확인할 수 없습니다.', (c) => {
-                                                    Location.reload();
-                                                }, 'error');
-                                                return;
-                                            }
+                                            if (typeof e.response !== 'undefined') {
+                                                if (e.response.status === 415) {
+                                                    //CSRF 토큰 오류 발생
+                                                    window.modal.alert('처리 실패', '로그인 정보를 확인할 수 없습니다.', (c) => {
+                                                        Location.reload();
+                                                    }, 'error');
+                                                    return;
+                                                }
 
-                                            if (e.response.status === 422) {
-                                                if (e.response.data.data.description === 'MISSION STATUS DOES\'T MATCH THE CONDITIONS') {
-                                                    window.modal.alert('처리 실패', '해당 미션이 시작 처리되어 삭제할 수 없습니다.', (c) => {}, 'error');
+                                                if (e.response.status === 422) {
+                                                    let msg = '';
+                                                    switch (e.response.data.description) {
+                                                        case "MISSION STATUS DOES'T MATCH THE CONDITIONS":
+                                                            msg = '현재 미션 상태에서 실행할 수 없는 요청입니다.';
+                                                            break;
+                                                        default:
+                                                            msg = e.response.data.description;
+                                                            break;
+                                                    }
+
+                                                    window.modal.alert('처리 실패', msg, (c) => {}, 'error');
+                                                    return;
                                                 }
                                             }
+
                                             window.modal.alert('처리 실패', '데이터 처리 중 문제가 발생하였습니다.', (c) => {}, 'error');
                                             console.log(e);
                                         }
@@ -293,21 +305,33 @@
 
                                 let success = (r) => {
                                     this.load();
+                                    this.participants();
                                     window.modal.alert('처리 완료', '성공적으로 처리하였습니다.', (c) => {});
                                 };
 
                                 let error = (e) => {
-                                    if (typeof e.response !== 'undefined' && e.response.status === 415) {
-                                        //CSRF 토큰 오류 발생
-                                        window.modal.alert('처리 실패', '로그인 정보를 확인할 수 없습니다.', (c) => {
-                                            Location.reload();
-                                        }, 'error');
-                                        return;
-                                    }
+                                    if (typeof e.response !== 'undefined') {
+                                        if (e.response.status === 415) {
+                                            //CSRF 토큰 오류 발생
+                                            window.modal.alert('처리 실패', '로그인 정보를 확인할 수 없습니다.', (c) => {
+                                                Location.reload();
+                                            }, 'error');
+                                            return;
+                                        }
 
-                                    if (e.response.status === 422) {
-                                        if (e.response.data.data.description === 'MISSION STATUS DOES\'T MATCH THE CONDITIONS') {
-                                            window.modal.alert('처리 실패', '이미 처리되었습니다.', (c) => {}, 'error');
+                                        if (e.response.status === 422) {
+                                            let msg = '';
+                                            cons
+                                            switch (e.response.data.description) {
+                                                case "MISSION STATUS DOES'T MATCH THE CONDITIONS":
+                                                    msg = '현재 미션 상태에서 실행할 수 없는 요청입니다.';
+                                                    break;
+                                                default:
+                                                    msg = e.response.data.description;
+                                                    break;
+                                            }
+
+                                            window.modal.alert('처리 실패', msg, (c) => {}, 'error');
                                         }
                                     }
 
