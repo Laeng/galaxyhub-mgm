@@ -307,7 +307,7 @@
                                         },
                                     },
                                     delete: {
-                                        url: '{{route('mission.api.remove', $id)}}',
+                                        url: '{{route('lounge.mission.delete.api', $id)}}',
                                         body: {
                                             id: {{ $id }}
                                         }

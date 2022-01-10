@@ -51,24 +51,25 @@ Route::middleware(['auth:web'])->group(function () {
     });
 });
 
-Route::middleware(['auth:web'])->prefix('lounge')->group(function () {
-    Route::get('/', [ViewLoungeController::class, 'index'])->name('lounge.index');
+Route::middleware(['auth:web'])->prefix('lounge')->name('lounge.')->group(function () {
+    Route::get('/', [ViewLoungeController::class, 'index'])->name('index');
 });
 
-Route::middleware(['auth:web', ForbidBannedUser::class])->prefix('lounge')->group(function() {
+Route::middleware(['auth:web', ForbidBannedUser::class])->prefix('lounge')->name('lounge.')->group(function() {
+
+    // MISSION
     Route::prefix('mission')->name('mission.')->group(function () {
         Route::redirect('/', '/lounge/missions');
         Route::get( '/new', [ViewMissionController::class, 'create'])->name('create');
-        Route::post( '/create', [ApiMissionController::class, 'create'])->name('api.create');
+        Route::post( '/create', [ApiMissionController::class, 'create'])->name('create.api');
         Route::get( '/{id}', [ViewMissionController::class, 'read'])->name('read')->whereNumber('id');
         Route::get('/{id}/edit', [ViewMissionController::class, 'update'])->name('update')->whereNumber('id');
-        Route::post( '/{id}/update', [ApiMissionController::class, 'update'])->name('api.update')->whereNumber('id');
-        Route::post( '/{id}/delete', [ApiMissionController::class, 'delete'])->name('api.remove')->whereNumber('id');
+        Route::post( '/{id}/update', [ApiMissionController::class, 'update'])->name('update.api')->whereNumber('id');
+        Route::post( '/{id}/delete', [ApiMissionController::class, 'delete'])->name('delete.api')->whereNumber('id');
     });
-
     Route::prefix('missions')->name('mission.')->group(function () {
         Route::get( '/', [ViewMissionController::class, 'list'])->name('list');
-        Route::post( '/list', [ApiMissionController::class, 'list'])->name('api.list');
+        Route::post( '/list', [ApiMissionController::class, 'list'])->name('list.api');
     });
 
 });
@@ -112,9 +113,8 @@ Route::middleware(['auth:web', ForbidUser::class])->prefix('staff')->name('staff
         Route::post( '/list', [ApiUserAllController::class, 'list'])->name('list.api');
         Route::post('/process', [ApiUserAllController::class, 'process'])->name('process.api');
     });
-////
 
-// MISSION
+    // MISSION
     Route::prefix('mission')->name('mission.')->group(function () {
 
     });

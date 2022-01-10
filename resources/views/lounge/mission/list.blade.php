@@ -17,14 +17,14 @@
 
                 <div class="flex flex-col mb-4">
                     <div>
-                        <x-table.simple :component-id="$listComponentId" :api-url="route('mission.api.list')" :use-check-box="false" x-ref="missions" />
+                        <x-table.simple :component-id="$listComponentId" :api-url="route('lounge.mission.list.api')" :use-check-box="false" x-ref="missions" />
                     </div>
                 </div>
 
                 <div>
                     @if($isMaker)
                         <div class="flex justify-end space-x-2">
-                            <x-button.filled.md-blue type="button" onClick="location.href='{{ route('mission.create') }}'">
+                            <x-button.filled.md-blue type="button" onClick="location.href='{{ route('lounge.mission.create') }}'">
                                 미션 생성
                             </x-button.filled.md-blue>
                         </div>

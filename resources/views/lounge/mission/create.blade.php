@@ -116,7 +116,7 @@
                             return {
                                 data: {
                                     create: {
-                                        url: @if($edit) '{{route('mission.api.update', $contents['id'])}}' @else '{{route('mission.api.create')}}' @endif,
+                                        url: @if($edit) '{{route('lounge.mission.update.api', $contents['id'])}}' @else '{{route('lounge.mission.create.api')}}' @endif,
                                         body: {!! json_encode($contents) !!},
                                         lock: false
                                     }
