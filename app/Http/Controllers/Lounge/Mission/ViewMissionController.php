@@ -51,7 +51,7 @@ class ViewMissionController extends Controller
 
         $maker = $mission->user()->first();
         $isStaff = $group->has(Group::STAFF, $user);
-        $isOwner = ($maker->id == $user->id) || $isStaff;
+        $isOwner = ($maker->id == $user->id);
         $isParticipant = ($user->missions()->where('mission_id', $id)->exists() && !$isOwner);
 
         $display_timestamp = match ($mission->phase) {
@@ -98,6 +98,7 @@ class ViewMissionController extends Controller
             ]
         ]);
     }
+
     public function update(Request $request, Group $group, int $id): Factory|View|Application|RedirectResponse
     {
         $user = $request->user();
@@ -108,7 +109,7 @@ class ViewMissionController extends Controller
 
         $mission = Mission::find($id);
 
-        if (is_null($mission) || $mission->user_id != $user->id) {
+        if (is_null($mission) || ($mission->user_id != $user->id && !$group->has(Group::STAFF, $user))) {
             abort(404);
         }
 
@@ -133,6 +134,12 @@ class ViewMissionController extends Controller
                 'tardy' => !$mission->can_tardy, //체크 박스의 기본값 => 중도 참여 비허용
             ]
         ]);
+    }
+
+    public function survey(Request $request, Group $group, int $id): Factory|View|Application|RedirectResponse
+    {
+
+        return view('');
     }
 
 

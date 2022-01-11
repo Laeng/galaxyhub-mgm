@@ -66,7 +66,7 @@
                             </div>
                         </div>
 
-                        @if ($isOwner)
+                        @if ($isOwner || $isStaff)
                             <p class="text-lg font-bold mb-2">{{ $type }} 출석 코드</p>
                             <div class="mb-3">
                                 <div class="p-4 bg-gray-50 rounded-lg overflow-hidden">
@@ -77,7 +77,22 @@
                         @endif
 
                         <div class="mb-6 space-y-2">
-                            @if($isOwner)
+                            @if($isOwner || $isStaff)
+                                @if($isStaff)
+                                    <template x-if="data.load.data.phase === 0 || data.load.data.phase === 1">
+                                        <div class="relative">
+                                            <div class="absolute inset-0 flex items-center" aria-hidden="true">
+                                                <div class="w-full border-t border-gray-300"></div>
+                                            </div>
+                                            <div class="relative flex justify-center">
+                                            <span class="px-2 bg-white text-sm text-gray-500">
+                                                관리자
+                                            </span>
+                                            </div>
+                                        </div>
+                                    </template>
+                                @endif
+
                                 <template x-if="data.load.data.phase === 0">
                                     <x-button.filled.md-white class="w-full" type="button" onclick="location.href='{{ route('lounge.mission.update', $id) }}'" x-cloak>
                                         {{ $type }} 수정
@@ -93,7 +108,20 @@
                                         {{ $type }} 종료
                                     </x-button.filled.md-white>
                                 </template>
-                            @else
+                            @endif
+                            @if(!$isOwner)
+                                @if($isStaff)
+                                    <div class="relative">
+                                        <div class="absolute inset-0 flex items-center" aria-hidden="true">
+                                            <div class="w-full border-t border-gray-300"></div>
+                                        </div>
+                                        <div class="relative flex justify-center">
+                                            <span class="px-2 bg-white text-sm text-gray-500">
+                                                일반 회원
+                                            </span>
+                                        </div>
+                                    </div>
+                                @endif
                                 <template x-if="data.load.data.is_participant && data.load.data.phase === 2" x-cloak>
                                     <x-button.filled.md-blue class="w-full" type="button">
                                         출석 체크
@@ -178,7 +206,19 @@
                             </ul>
                         </div>
 
-                        @if($isOwner)
+                        @if($isOwner || $isStaff)
+                            @if($isStaff)
+                                <div class="relative">
+                                    <div class="absolute inset-0 flex items-center" aria-hidden="true">
+                                        <div class="w-full border-t border-gray-300"></div>
+                                    </div>
+                                    <div class="relative flex justify-center">
+                                            <span class="px-2 bg-white text-sm text-gray-500">
+                                                관리자
+                                            </span>
+                                    </div>
+                                </div>
+                            @endif
                             <div class="space-y-2">
                                 <template x-if="data.load.data.phase === 0">
                                     <x-button.filled.md-red class="w-full" type="button" @click="remove()">
