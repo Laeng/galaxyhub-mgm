@@ -2930,6 +2930,11 @@ aspect-16\/10 {
   }
 
 
+  .lg\:justify-between{
+    justify-content: space-between;
+  }
+
+
   .lg\:gap-16{
     gap: 4rem;
   }

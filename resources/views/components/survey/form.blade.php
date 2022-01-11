@@ -11,10 +11,14 @@
             @endforeach
         </div>
         @if(is_null($answer))
-            <div class="flex justify-center mt-4">
-                <x-button.filled.md-blue>
+            <div class="flex justify-center mt-4 space-x-2">
+                <x-button.filled.md-blue type="submit">
                     {{ $submitText }}
                 </x-button.filled.md-blue>
+
+                <x-button.filled.md-white type="button" onclick="location.href='{{ back()->getTargetUrl() }}'">
+                    돌아가기
+                </x-button.filled.md-white>
             </div>
         @endif
     </form>

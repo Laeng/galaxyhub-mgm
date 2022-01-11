@@ -67,7 +67,7 @@
 
                         <div class="mission-body prose max-w-full">
                             <label for="body" class="block text-sm font-medium text-gray-700 pb-1">
-                                미션 정보
+                                미션 소개
                             </label>
                             <textarea id="body" name="body" class="shadow-sm block w-full focus:ring-blue-500 focus:border-blue-500 sm:text-sm border border-gray-300 rounded-md" placeholder="미션 정보 입력" x-model="data.create.body.body"></textarea>
 
