@@ -69,10 +69,10 @@ class ApiUserAllController extends Controller
             if (!empty($q['filter'])) {
                 switch ($q['filter']) {
                     case '신규가입 미참여':
-                        $query = $query->whereNull('user_missions.attended_at')->whereDate('users.created_at', '>=', now()->subDays(14));
+                        $query = $query->whereNull('user_missions.attended_at')->whereDate('users.created_at', '<=', now()->subDays(14));
                         break;
                     case '30일이상 미참여':
-                        $query = $query->whereNotNull('user_missions.attended_at')->whereDate('user_missions.attended_at', '>=', now()->subDays(30));
+                        $query = $query->whereNotNull('user_missions.attended_at')->whereDate('user_missions.attended_at', '<=', now()->subDays(30));
                         break;
                 }
             }
