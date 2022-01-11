@@ -108,25 +108,36 @@ class ApiMissionController extends Controller
             ]);
 
             $type = (int) $request->get('type');
+            $isSurvey = false;
 
             switch ($type) {
                 case 0:
                     if (!$group->has([Group::ARMA_MAKER2, Group::STAFF])) {
                         throw new Exception('PERMISSION ERROR', 422);
                     }
+                    $isSurvey = true;
                     break;
+
                 case 1:
+                    if (!$group->has([Group::ARMA_MAKER1, Group::ARMA_MAKER2, Group::STAFF])) {
+                        throw new Exception('PERMISSION ERROR', 422);
+                    }
+                    $isSurvey = true;
+                    break;
+
                 case 2:
                     if (!$group->has([Group::ARMA_MAKER1, Group::ARMA_MAKER2, Group::STAFF])) {
                         throw new Exception('PERMISSION ERROR', 422);
                     }
                     break;
+
                 case 10:
                 case 11:
                     if (!$group->has([Group::STAFF])) {
                         throw new Exception('PERMISSION ERROR', 422);
                     }
                     break;
+
                 default: throw new Exception('TYPE NOT SELECTED', 422);
             }
 
@@ -158,10 +169,12 @@ class ApiMissionController extends Controller
                 ]
             ]);
 
-            $survey = $form->getMissionSurveyForm($mission);
+            if ($isSurvey) {
+                $survey = $form->getMissionSurveyForm($mission);
 
-            $mission->survey_id = $survey->id;
-            $mission->save();
+                $mission->survey_id = $survey->id;
+                $mission->save();
+            }
 
             $mission->participants()->create([
                 'user_id' => $user->id,

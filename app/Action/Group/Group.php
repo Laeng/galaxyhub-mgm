@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Group implements GroupContract
 {
+    // 권한 해지 및 장기 미접속은 laravel-ban(활동정지 기능) 을 사용. 장기 미접속 신청시 유저 기록에 "장기 미접속"이라고 삽입하기.
     const ARMA_APPLY = 20;
     const ARMA_DEFER = 21;
     const ARMA_REJECT = 22;
