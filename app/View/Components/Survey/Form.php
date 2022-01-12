@@ -15,20 +15,24 @@ class Form extends Component
     public string $action;
     public string $class;
     public string $submitText;
-    public int|null $answer;
+    public ?int $answer;
+    public string $backText;
+    public ?string $backLink;
 
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct(Survey $survey, string $action, string $class = '', string $submitText = '제출', int|null $answer = null)
+    public function __construct(Survey $survey, string $action, string $class = '', string $submitText = '제출', ?int $answer = null, string $backText = '돌아가기', ?string $backLink = null)
     {
         $this->survey = $survey;
         $this->action = $action;
         $this->class = $class;
         $this->submitText = $submitText;
         $this->answer = $answer;
+        $this->backText = $backText;
+        $this->backLink = $backLink;
     }
 
     /**

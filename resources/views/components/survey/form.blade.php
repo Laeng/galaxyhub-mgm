@@ -16,9 +16,11 @@
                     {{ $submitText }}
                 </x-button.filled.md-blue>
 
-                <x-button.filled.md-white type="button" onclick="location.href='{{ back()->getTargetUrl() }}'">
-                    돌아가기
-                </x-button.filled.md-white>
+                @if(!is_null($backLink))
+                    <x-button.filled.md-white type="button" onclick="location.href='{{ $backLink }}'">
+                        {{ $backText }}
+                    </x-button.filled.md-white>
+                @endif
             </div>
         @endif
     </form>

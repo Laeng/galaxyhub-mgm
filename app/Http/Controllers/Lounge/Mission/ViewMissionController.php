@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Lounge\Mission;
 use App\Action\Group\Group;
 use App\Http\Controllers\Controller;
 use App\Models\Mission;
+use App\Models\Survey;
 use App\Models\User;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -49,10 +50,14 @@ class ViewMissionController extends Controller
 
         $mission = Mission::find($id);
 
+        if (is_null($mission)) {
+            abort(404);
+        }
+
         $maker = $mission->user()->first();
         $isStaff = $group->has(Group::STAFF, $user);
         $isOwner = ($maker->id == $user->id);
-        $isParticipant = ($user->missions()->where('mission_id', $id)->exists() && !$isOwner);
+        $isParticipant = ($user->missions()->where('mission_id', $mission->id)->exists() && !$isOwner);
 
         $display_timestamp = match ($mission->phase) {
             -1, 0 => $mission->expected_at,
@@ -102,24 +107,17 @@ class ViewMissionController extends Controller
     public function update(Request $request, Group $group, int $id): Factory|View|Application|RedirectResponse
     {
         $user = $request->user();
-
-        if (!$this->isMaker($user, $group)) {
-            abort(404);
-        }
-
         $mission = Mission::find($id);
 
         if (is_null($mission) || ($mission->user_id != $user->id && !$group->has(Group::STAFF, $user))) {
             abort(404);
         }
 
-        // 미션 수정은 미션 타입을 바꿀 수 없다!
-
         return view('lounge.mission.create', [
             'title' => '미션 수정',
             'edit' => true,
             'types' => [
-                $mission->type => Mission::$typeNames[$mission->type]
+                $mission->type => Mission::$typeNames[$mission->type] //미션 수정은 미션 타입을 바꿀 수 없다!
             ],
             'maps' => $this->getMissionMaps(),
             'addons' => $this->getMissionAddons(),
@@ -138,8 +136,78 @@ class ViewMissionController extends Controller
 
     public function survey(Request $request, Group $group, int $id): Factory|View|Application|RedirectResponse
     {
+        $user = $request->user();
+        $mission = Mission::find($id);
 
-        return view('');
+        if (is_null($mission) || $mission->user_id == $user->id || $mission->phase != 2) {
+            abort(404);
+        }
+
+        if (is_null($mission->survey_id)) {
+            return redirect()->route('lounge.mission.attend');
+        }
+
+        $userMission = $user->missions()->where('mission_id', $mission->id)->first();
+
+        if (is_null($userMission)) {
+            abort(404);
+        }
+
+        $survey = Survey::find($mission->survey_id);
+        $userSurvey = $survey->entries()->where('participant_id', $user->id)->latest()->first();
+
+        $hasAttend = !is_null($userMission->attended_at);
+        $hasSurvey = !is_null($userSurvey);
+        $isClosed = $mission->phase != 2; // 스케쥴러에 의해 phase 가 변경됨
+
+        if (!$hasAttend && $isClosed) {
+            abort(404); // 출석체크를 하지 않고, 만족도 조사도 하지 않았다면 거부
+        }
+
+        $answer = ($hasSurvey) ? $userSurvey->id : null;
+
+        return view('lounge.mission.survey', [
+            'id' => $mission->id,
+            'title' => '만족도 조사',
+            'type' => $mission->getTypeName(),
+            'survey' => $survey,
+            'answer' => $answer,
+            'action' => '',
+            'hasAttend' => $hasAttend,
+            'hasSurvey' => $hasSurvey,
+            'isClosed' => $isClosed,
+        ]);
+    }
+
+    public function attend(Request $request, int $id): Factory|View|Application|RedirectResponse
+    {
+        $method = $request->getMethod();
+
+        $user = $request->user();
+        $mission = Mission::find($id);
+
+        if (is_null($mission)) {
+            abort(404);
+        }
+
+        if ($method == 'GET') {
+            if (!is_null($mission->survey_id)) {
+                abort(404); // 만족도 조사를 거치치 않고 온 것으로 간주
+            }
+        }
+
+        $userMission = $user->missions()->where('mission_id', $mission->id)->first();
+
+        if (is_null($userMission)) {
+            abort(404);
+        }
+
+        $canAttend = is_null($userMission->attended_at) || $userMission->try_attends <= Mission::$attendTry;
+        $isAttended = !is_null($userMission->attended_at);
+
+        return view('lounge.mission.attend', [
+            'title' => '출석',
+        ]);
     }
 
 

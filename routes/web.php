@@ -69,6 +69,9 @@ Route::middleware(['auth:web', ForbidBannedUser::class])->prefix('lounge')->name
         Route::post( '/{id}/process', [ApiMissionController::class, 'read_process'])->name('read.process.api')->whereNumber('id');
         Route::post( '/{id}/refresh', [ApiMissionController::class, 'read_refresh'])->name('read.refresh.api')->whereNumber('id');
         Route::post( '/{id}/participants', [ApiMissionController::class, 'read_participants'])->name('read.participants.api')->whereNumber('id');
+        Route::get( '/{id}/survey', [ViewMissionController::class, 'survey'])->name('survey')->whereNumber('id');
+        Route::any( '/{id}/attend', [ViewMissionController::class, 'survey'])->name('attend')->whereNumber('id');
+
     });
     Route::prefix('missions')->name('mission.')->group(function () {
         Route::get( '/', [ViewMissionController::class, 'list'])->name('list');
