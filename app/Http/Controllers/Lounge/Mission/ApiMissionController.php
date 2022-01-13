@@ -151,7 +151,7 @@ class ApiMissionController extends Controller
             }
 
 
-            if (Mission::whereBetween('expected_at', [$date->copy()->subHours(), $date->copy()->addHours()])->count() > 0) {
+            if (Mission::whereBetween('expected_at', [$date->copy()->subHours(2), $date->copy()->addHours(2)])->count() > 0) {
                 throw new Exception('DATE UNAVAILABLE', 422);
             }
 
@@ -247,7 +247,7 @@ class ApiMissionController extends Controller
                 throw new Exception('DATE OLD', 422);
             }
 
-            $duplicate_missions = Mission::whereBetween('expected_at', [$date->copy()->subHours(), $date->copy()->addHours()])->get();
+            $duplicate_missions = Mission::whereBetween('expected_at', [$date->copy()->subHours(2), $date->copy()->addHours(2)])->get();
 
             $isNotDuplicate = $duplicate_missions->every(function ($v, $k) use($mission) {
                 return $v->id == $mission->id;
@@ -441,7 +441,7 @@ class ApiMissionController extends Controller
         }
     }
 
-    public function read_participants(Request $request, int $id)
+    public function read_participants(Request $request, int $id): JsonResponse
     {
         try {
             $mission = Mission::find($id);
@@ -465,6 +465,67 @@ class ApiMissionController extends Controller
             return $this->jsonResponse(200, 'SUCCESS', [
                 'participants' => $data
             ]);
+
+        } catch (Exception $e) {
+            return $this->jsonResponse($e->getCode(), Str::upper($e->getMessage()), []);
+        }
+    }
+
+    public function attend(Request $request, int $id): JsonResponse
+    {
+        try {
+            $this->jsonValidator($request, [
+                'code' => 'string|required',
+            ]);
+
+            $mission = Mission::find($id);
+
+            if (is_null($mission)) {
+                throw new Exception('CAN NOT FOUND MISSION', 422);
+            }
+
+            if ($mission->phase != 2) {
+                throw new Exception('ATTEND TIME EXPIRES', 422);
+            }
+
+            $code = trim($request->get('code'));
+            $user = $request->user();
+            $userMission = $mission->participants()->where('user_id', $user->id)->first();
+
+            $data = [
+                'result' => false,
+                'count' => $userMission->try_attends,
+                'limit' => Mission::$attendTry
+            ];
+
+            if (!is_null($mission->survey_id)) {
+                if (!$mission->survey()->first()->entries()->where('participant_id', $user->id)->exists()) {
+                    throw new Exception('NOT PARTICIPATE IN THE SURVEY', 422);
+                }
+            }
+
+            if (!is_null($userMission->attended_at)) {
+                throw new Exception('ALREADY IN ATTENDANCE', 422);
+            }
+
+            if ($mission->try_attends > Mission::$attendTry) {
+                throw new Exception('ATTEMPTS EXCEEDED', 422);
+            }
+
+            if ($mission->code != $code) {
+                $data['result'] = false;
+
+            } else {
+                $data['result'] = true;
+                $userMission->attended_at = now();
+            }
+
+            $data['count'] += 1;
+            $userMission->try_attends += 1;
+
+            $userMission->save();
+
+            return $this->jsonResponse(200, 'SUCCESS', $data);
 
         } catch (Exception $e) {
             return $this->jsonResponse($e->getCode(), Str::upper($e->getMessage()), []);

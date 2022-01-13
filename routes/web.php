@@ -46,7 +46,7 @@ Route::middleware(['auth:web'])->group(function () {
     Route::prefix('join')->name('join.')->group(function () {
         Route::get( '/agree', [ViewJoinController::class, 'agree'])->name('agree');
         Route::post('/check/steam/status', [ApiJoinController::class, 'check_steam_status'])->name('check.steam.status');
-        Route::any( '/apply', [ViewJoinController::class, 'apply'])->name('apply');
+        Route::match(['get', 'post'], '/apply', [ViewJoinController::class, 'apply'])->name('apply');
         Route::post('/submit', [ViewJoinController::class, 'submit'])->name('submit');
     });
 });
@@ -70,7 +70,8 @@ Route::middleware(['auth:web', ForbidBannedUser::class])->prefix('lounge')->name
         Route::post( '/{id}/refresh', [ApiMissionController::class, 'read_refresh'])->name('read.refresh.api')->whereNumber('id');
         Route::post( '/{id}/participants', [ApiMissionController::class, 'read_participants'])->name('read.participants.api')->whereNumber('id');
         Route::get( '/{id}/survey', [ViewMissionController::class, 'survey'])->name('survey')->whereNumber('id');
-        Route::any( '/{id}/attend', [ViewMissionController::class, 'survey'])->name('attend')->whereNumber('id');
+        Route::match(['get', 'post'], '/{id}/attend', [ViewMissionController::class, 'attend'])->name('attend')->whereNumber('id');
+        Route::post( '/{id}/attend/process', [ApiMissionController::class, 'attend'])->name('attend.process.api')->whereNumber('id');
 
     });
     Route::prefix('missions')->name('mission.')->group(function () {

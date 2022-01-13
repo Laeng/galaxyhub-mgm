@@ -16,13 +16,14 @@ class Mission extends Model
 
     public static array $typeNames = [
         0 => '아르마의 밤',
-        1 => '일반 미션',
+        1 => '미션',
         2 => '논미메',
         10 => '부트캠프',
         11 => '약장 시험',
     ];
 
     public static int $attendTerm = 12; // 미션 종료 후 12시간 동안 출석 가능
+    public static int $attendTry = 5; // 출석 시도 5회까지 허용
 
     /**
      * The attributes that are mass assignable.
@@ -72,9 +73,9 @@ class Mission extends Model
     {
         return match($this->phase) {
             -1 => '취소',
-            0 => '모집',
-            1 => '진행',
-            2 => '출석',
+            0 => '모집 중',
+            1 => '진행 중',
+            2 => '출석 중',
             3 => '종료',
             default => ''
         };

@@ -6,6 +6,7 @@ use App\Action\Group\Group;
 use App\Http\Controllers\Controller;
 use App\Models\Mission;
 use App\Models\Survey;
+use App\Models\SurveyEntry;
 use App\Models\User;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -144,7 +145,7 @@ class ViewMissionController extends Controller
         }
 
         if (is_null($mission->survey_id)) {
-            return redirect()->route('lounge.mission.attend');
+            return redirect()->route('lounge.mission.attend', $mission->id);
         }
 
         $userMission = $user->missions()->where('mission_id', $mission->id)->first();
@@ -172,7 +173,6 @@ class ViewMissionController extends Controller
             'type' => $mission->getTypeName(),
             'survey' => $survey,
             'answer' => $answer,
-            'action' => '',
             'hasAttend' => $hasAttend,
             'hasSurvey' => $hasSurvey,
             'isClosed' => $isClosed,
@@ -181,8 +181,6 @@ class ViewMissionController extends Controller
 
     public function attend(Request $request, int $id): Factory|View|Application|RedirectResponse
     {
-        $method = $request->getMethod();
-
         $user = $request->user();
         $mission = Mission::find($id);
 
@@ -190,23 +188,42 @@ class ViewMissionController extends Controller
             abort(404);
         }
 
-        if ($method == 'GET') {
-            if (!is_null($mission->survey_id)) {
-                abort(404); // 만족도 조사를 거치치 않고 온 것으로 간주
+        $userMission = $user->missions()->where('mission_id', $mission->id)->first();
+
+        $canAttend = $userMission->try_attends < Mission::$attendTry;
+        $hasAttend = !is_null($userMission->attended_at);
+        $hasSurvey = !is_null($mission->survey_id);
+
+        if (!$canAttend || $hasAttend) {
+            return redirect()->route('lounge.mission.read', $mission->id)->withErrors([
+                'error' => '출석 실패 또는 출석 마감이 되어 출석할 수 없습니다.'
+            ]);
+        }
+
+        $survey = ($hasSurvey) ? $mission->survey()->first() : null;
+        $hasUserSurvey = (!is_null($survey)) ? $survey->entries()->where('participant_id', $user->id)->exists() : false;
+
+        if ($request->isMethod('GET')) {
+            if ($hasSurvey) {
+                if (!$hasUserSurvey) {
+                    return redirect()->route('lounge.mission.survey', $mission->id);
+                }
+            }
+
+        } else {
+            if (!$hasSurvey) {
+                return abort(405);
+            }
+
+            if (!$hasUserSurvey) {
+                $answers = $this->validate($request, $survey->validateRules());
+                (new SurveyEntry())->for($survey)->by($user)->fromArray($answers)->push();
             }
         }
 
-        $userMission = $user->missions()->where('mission_id', $mission->id)->first();
-
-        if (is_null($userMission)) {
-            abort(404);
-        }
-
-        $canAttend = is_null($userMission->attended_at) || $userMission->try_attends <= Mission::$attendTry;
-        $isAttended = !is_null($userMission->attended_at);
-
         return view('lounge.mission.attend', [
-            'title' => '출석',
+            'id' => $mission->id,
+            'title' => '출석'
         ]);
     }
 

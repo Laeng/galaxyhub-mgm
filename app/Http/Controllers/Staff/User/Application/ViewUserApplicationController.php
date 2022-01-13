@@ -32,7 +32,7 @@ class ViewUserApplicationController extends Controller
 
         if (is_null($user)) {
             abort(404, 'CAN NOT FOUND USER');
-            return redirect()->back()->withErrors(['danger' => '없는 회원입니다.']);
+            //return redirect()->back()->withErrors(['danger' => '없는 회원입니다.']);
         }
 
         $surveyForms = Survey::where('name', 'like', 'join-application-%')->get(['id'])->pluck('id')->toArray();
@@ -40,7 +40,7 @@ class ViewUserApplicationController extends Controller
 
         if (count($userSurveys) <= 0) {
             abort(404, 'NOT REGISTERED USER');
-            return redirect()->back()->withErrors(['danger' => '가입 신청을 하지 않은 회원입니다.']);
+            //return redirect()->back()->withErrors(['danger' => '가입 신청을 하지 않은 회원입니다.']);
         }
 
         $status = null;
