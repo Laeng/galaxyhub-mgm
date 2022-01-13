@@ -85,27 +85,27 @@
 }
 
 .toastify.success {
-    @apply bg-green-50;
+    @apply bg-green-600;
 }
 
 .toastify.success > p {
-    @apply text-green-800;
+    @apply text-green-50;
 }
 
 .toastify.success > div > div > button {
-    @apply bg-green-50 text-green-500 hover:bg-green-100 focus:ring-offset-green-50 focus:ring-green-600;
+    @apply bg-green-600 text-green-50 hover:text-green-600 hover:bg-green-50 focus:ring-offset-0 focus:ring-0;
 }
 
 .toastify.error {
-    @apply bg-red-50;
+    @apply bg-red-600;
 }
 
 .toastify.error > p {
-    @apply text-red-800;
+    @apply text-red-50;
 }
 
 .toastify.error > div > div > button {
-    @apply bg-red-50 text-red-500 hover:bg-red-100 focus:ring-offset-red-50 focus:ring-red-600;
+    @apply bg-red-600 text-red-50 hover:text-red-600 hover:bg-red-50 focus:ring-offset-0 focus:ring-0;
 }
 
 @keyframes scroll {

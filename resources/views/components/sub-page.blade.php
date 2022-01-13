@@ -12,13 +12,3 @@
 
     <x-layout.footer/>
 </x-layout.layout>
-
-@if($errors->has('error') || $errors->has('success'))
-    <script type="text/javascript">
-    @foreach($errors->getMessages() as $name => $messages)
-        @foreach($messages as $message)
-            window.toast.show('{{ $name }}', '{{ $message }}', {{ $name == 'error' ? -1 : 3000 }});
-        @endforeach
-    @endforeach
-    </script>
-@endif

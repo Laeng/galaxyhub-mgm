@@ -83,7 +83,6 @@
                                         console.error(e.stack);
                                     });
                                 });
-
                             </script>
                         </div>
 

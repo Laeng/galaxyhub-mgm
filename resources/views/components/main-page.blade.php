@@ -223,14 +223,6 @@
             let v = y / d;
             return (v > l) ? l : v;
         }
-
-        @if($errors->has('error') || $errors->has('success'))
-            @foreach($errors->getMessages() as $name => $messages)
-                @foreach($messages as $message)
-                    window.toast.show('{{ $name }}', '{{ $message }}', {{ $name == 'error' ? -1 : 3000 }});
-                @endforeach
-            @endforeach
-        @endif
     </script>
 
     <x-layout.footer/>
