@@ -16,6 +16,7 @@
     <title>{{ $title }}</title>
 
     <!-- Styles -->
+    <link rel="preconnect" href="https://cdn.galaxyhub.kr">
     <link rel="stylesheet" href="{{ mix('css/app.css') }}">
     @stack('css')
 
@@ -27,13 +28,20 @@
 <div class="font-sans text-gray-900 antialiased {{ $class }}" {{$attributes}}>
     {{ $slot }}
 </div>
-@if($errors->has('error') || $errors->has('success'))
+
+@php
+    $hasErrors = !empty($errors);
+    $errorMessages = ($hasErrors) ? $errors->getMessages() : [];
+@endphp
+@if($hasErrors && (array_key_exists('error', $errorMessages) || array_key_exists('sucess', $errorMessages)))
     <script type="text/javascript">
-        @foreach($errors->getMessages() as $name => $messages)
-        @foreach($messages as $message)
-        window.toast.show('{{ $name }}', '{{ $message }}', {{ $name == 'error' ? -1 : 3000 }});
-        @endforeach
-        @endforeach
+        window.addEventListener('load', function(){
+            @foreach($errorMessages as $k => $v)
+            @foreach($v as $vv)
+            window.toast.show('{{ $k }}', '{{ $vv }}', {{ $k == 'error' ? -1 : 3000 }});
+            @endforeach
+            @endforeach
+        });
     </script>
 @endif
 <noscript>
