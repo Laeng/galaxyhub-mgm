@@ -1,9 +1,9 @@
-<x-sub-page website-name="MGM Lounge" title="{{$title}}">
+<x-sub-page website-name="MGM Lounge" title="{{ $type }} {{ $title }}">
     <x-section.basic parent-class="py-4 sm:py-6 lg:py-16" class="flex justify-center lg:px-48">
         <div class="w-full">
             <div class="bg-white rounded-lg p-16 lg:p-16">
                 <div class="text-center mb-4 lg:mb-6">
-                    <h1 class="text-2xl lg:text-3xl font-bold">일반 미션 출석</h1>
+                    <h1 class="text-2xl lg:text-3xl font-bold">{{ "{$type} {$title}" }}</h1>
                     <p class="mt-2 flex justify-center">
                         <span class="hidden lg:block">미션 메이커가 여러분들께 전달해 드린&nbsp;</span>출석 코드를 입력해주세요.
                     </p>

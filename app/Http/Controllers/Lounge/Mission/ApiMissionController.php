@@ -492,12 +492,6 @@ class ApiMissionController extends Controller
             $user = $request->user();
             $userMission = $mission->participants()->where('user_id', $user->id)->first();
 
-            $data = [
-                'result' => false,
-                'count' => $userMission->try_attends,
-                'limit' => Mission::$attendTry
-            ];
-
             if (!is_null($mission->survey_id)) {
                 if (!$mission->survey()->first()->entries()->where('participant_id', $user->id)->exists()) {
                     throw new Exception('NOT PARTICIPATE IN THE SURVEY', 422);
@@ -508,24 +502,25 @@ class ApiMissionController extends Controller
                 throw new Exception('ALREADY IN ATTENDANCE', 422);
             }
 
-            if ($mission->try_attends > Mission::$attendTry) {
+            if ($userMission->try_attends >= Mission::$attendTry) {
                 throw new Exception('ATTEMPTS EXCEEDED', 422);
             }
 
-            if ($mission->code != $code) {
-                $data['result'] = false;
+            $result = false;
 
-            } else {
-                $data['result'] = true;
+            if ($mission->code === $code) {
+                $result = true;
                 $userMission->attended_at = now();
             }
 
-            $data['count'] += 1;
             $userMission->try_attends += 1;
-
             $userMission->save();
 
-            return $this->jsonResponse(200, 'SUCCESS', $data);
+            return $this->jsonResponse(200, 'SUCCESS', [
+                'result' => $result,
+                'count' => $userMission->try_attends,
+                'limit' => Mission::$attendTry
+            ]);
 
         } catch (Exception $e) {
             return $this->jsonResponse($e->getCode(), Str::upper($e->getMessage()), []);

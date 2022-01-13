@@ -140,42 +140,44 @@ class ViewMissionController extends Controller
         $user = $request->user();
         $mission = Mission::find($id);
 
-        if (is_null($mission) || $mission->user_id == $user->id || $mission->phase != 2) {
+        if (is_null($mission)) {
             abort(404);
         }
 
-        if (is_null($mission->survey_id)) {
-            return redirect()->route('lounge.mission.attend', $mission->id);
+        $isOwner = $mission->user_id == $user->id;
+        $hasSurvey = !is_null($mission->survey_id);
+
+        if (!$hasSurvey) {
+            abort(404);
         }
 
         $userMission = $user->missions()->where('mission_id', $mission->id)->first();
 
-        if (is_null($userMission)) {
-            abort(404);
+        $isFailAttend = $userMission->try_attends >= Mission::$attendTry;
+        $canAttend = !$isFailAttend && $mission->phase == 2;
+        $hasAttend = !is_null($userMission->attended_at);
+
+        if (!$canAttend && !$hasAttend && !$isFailAttend) {
+            return redirect()->route('lounge.mission.read', $mission->id)->withErrors([
+                'error' => '만족도 조사에 참여하시지 않으셨습니다.'
+            ]);
         }
 
         $survey = Survey::find($mission->survey_id);
         $userSurvey = $survey->entries()->where('participant_id', $user->id)->latest()->first();
-
-        $hasAttend = !is_null($userMission->attended_at);
-        $hasSurvey = !is_null($userSurvey);
-        $isClosed = $mission->phase != 2; // 스케쥴러에 의해 phase 가 변경됨
-
-        if (!$hasAttend && $isClosed) {
-            abort(404); // 출석체크를 하지 않고, 만족도 조사도 하지 않았다면 거부
-        }
-
-        $answer = ($hasSurvey) ? $userSurvey->id : null;
+        $hasUserSurvey = !is_null($userSurvey);
+        $surveyAnswerId = $hasUserSurvey ? $userSurvey->id : null;
 
         return view('lounge.mission.survey', [
             'id' => $mission->id,
             'title' => '만족도 조사',
             'type' => $mission->getTypeName(),
             'survey' => $survey,
-            'answer' => $answer,
+            'answer' => $surveyAnswerId,
+            'canAttend' => $canAttend,
             'hasAttend' => $hasAttend,
-            'hasSurvey' => $hasSurvey,
-            'isClosed' => $isClosed,
+            'hasUserSurvey' => $hasUserSurvey,
+            'hasUserSurveyDate' => ($hasUserSurvey) ? $userSurvey->created_at : ''
         ]);
     }
 
@@ -190,13 +192,27 @@ class ViewMissionController extends Controller
 
         $userMission = $user->missions()->where('mission_id', $mission->id)->first();
 
-        $canAttend = $userMission->try_attends < Mission::$attendTry;
+        $isOwner = $mission->user_id == $user->id;
+        $isFailAttend = $userMission->try_attends >= Mission::$attendTry;
+        $canAttend = !$isFailAttend && $mission->phase == 2;
         $hasAttend = !is_null($userMission->attended_at);
         $hasSurvey = !is_null($mission->survey_id);
 
-        if (!$canAttend || $hasAttend) {
+        if (!$canAttend && !$isFailAttend) {
             return redirect()->route('lounge.mission.read', $mission->id)->withErrors([
-                'error' => '출석 실패 또는 출석 마감이 되어 출석할 수 없습니다.'
+                'error' => '출석 마감이 되어 출석할 수 없습니다.'
+            ]);
+        }
+
+        if ($isFailAttend) {
+            return redirect()->route('lounge.mission.read', $mission->id)->withErrors([
+                'error' => '출석 시도 횟수 초과로 출석 할 수 없습니다.'
+            ]);
+        }
+
+        if ($hasAttend) {
+            return redirect()->route('lounge.mission.read', $mission->id)->withErrors([
+                'error' => '이미 출석 하셨습니다.'
             ]);
         }
 
@@ -206,7 +222,15 @@ class ViewMissionController extends Controller
         if ($request->isMethod('GET')) {
             if ($hasSurvey) {
                 if (!$hasUserSurvey) {
-                    return redirect()->route('lounge.mission.survey', $mission->id);
+                    return redirect()->route('lounge.mission.survey', $mission->id)->withErrors([
+                        'error' => '출석 체크 전 만족도 조사에 참여하여 주십시오.'
+                    ]);
+                }
+
+                if ($isOwner) {
+                    return redirect()->route('lounge.mission.survey', $mission->id)->withErrors([
+                        'error' => '미션 메이커는 미션 종료시 자동으로 출석 체크 되므로 출석 체크를 할 필요가 없습니다.'
+                    ]);
                 }
             }
 
@@ -223,6 +247,7 @@ class ViewMissionController extends Controller
 
         return view('lounge.mission.attend', [
             'id' => $mission->id,
+            'type' => $mission->getTypeName(),
             'title' => '출석'
         ]);
     }

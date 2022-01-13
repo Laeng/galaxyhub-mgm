@@ -1,17 +1,21 @@
-<x-sub-page website-name="MGM Lounge" title="{{$title}}">
+<x-sub-page website-name="MGM Lounge" title="{{ $type }} {{ $title }}">
     <x-section.basic parent-class="py-4 sm:py-6 lg:py-16" class="flex justify-center lg:px-48">
         <div class="w-full">
             <div class="bg-white rounded-lg p-4 lg:p-16">
-                <h1 class="text-2xl lg:text-3xl font-bold text-center my-4 lg:mt-0 lg:mb-6">
-                    {{ "{$type} {$title}" }}
-                </h1>
+                <div class="text-center my-4 lg:mt-0 lg:mb-6">
+                    <h1 class="text-2xl lg:text-3xl font-bold">
+                        {{ "{$type} {$title}" }}
+                    </h1>
+                    @if($hasUserSurvey)
+                        <p>{{ $hasUserSurveyDate->format('Y년 m월 d일 H시 i분') }}에 참여해 주셨습니다.</p>
+                    @endif
+                </div>
 
                 <div class="">
-                    @if($hasSurvey)
+                    @if($hasUserSurvey)
                         <x-survey.form :survey="$survey" action="" :answer="$answer"/>
-
                         <div class="flex justify-center mt-4 space-x-2">
-                            @if(!$hasAttend && !$isClosed)
+                            @if($canAttend && !$hasAttend)
                                 <x-button.filled.md-blue type="button" onclick="location.href='{{ route('lounge.mission.attend', $id) }}'">
                                     출석하기
                                 </x-button.filled.md-blue>
