@@ -153,13 +153,17 @@ class ViewMissionController extends Controller
 
         $userMission = $user->missions()->where('mission_id', $mission->id)->first();
 
+        if (is_null($userMission)) {
+            abort(404);
+        }
+
         $isFailAttend = $userMission->try_attends >= Mission::$attendTry;
         $canAttend = !$isFailAttend && $mission->phase == 2;
         $hasAttend = !is_null($userMission->attended_at);
 
         if (!$canAttend && !$hasAttend && !$isFailAttend) {
             return redirect()->route('lounge.mission.read', $mission->id)->withErrors([
-                'error' => '만족도 조사에 참여하시지 않으셨습니다.'
+                'error' => '만족도 조사 기간이 아닙니다.'
             ]);
         }
 
@@ -192,6 +196,10 @@ class ViewMissionController extends Controller
 
         $userMission = $user->missions()->where('mission_id', $mission->id)->first();
 
+        if (is_null($userMission)) {
+            abort(404);
+        }
+
         $isOwner = $mission->user_id == $user->id;
         $isFailAttend = $userMission->try_attends >= Mission::$attendTry;
         $canAttend = !$isFailAttend && $mission->phase == 2;
@@ -200,7 +208,7 @@ class ViewMissionController extends Controller
 
         if (!$canAttend && !$isFailAttend) {
             return redirect()->route('lounge.mission.read', $mission->id)->withErrors([
-                'error' => '출석 마감이 되어 출석할 수 없습니다.'
+                'error' => '출석 기간이 아닙니다.'
             ]);
         }
 
