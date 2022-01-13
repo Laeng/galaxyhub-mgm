@@ -48,24 +48,46 @@ class ApiMissionController extends Controller
 
             $user = $request->user();
             $missions = $query->latest('expected_at')->offset($step * $limit)->limit($limit)->get(['id', 'type', 'expected_at', 'can_tardy', 'user_id', 'phase']);
-            $userMissions = $user->missions()->select(['mission_id'])->get()->pluck('mission_id')->toArray();
+            $userMissions = $user->missions()->get();
+            $userMissionIds = $userMissions->pluck('mission_id')->toArray();
 
             foreach ($missions as $v) {
-                $button = '상세보기';
+                $link =  route('lounge.mission.read', $v->id);
+                $button = "<a href='{$link}' class='link-primary'>미션 정보</a>";
 
-                if ($v->user_id != $user->id) {
-                    if (in_array($v->id, $userMissions)) {
-                        if ($v->phase == 2) {
-                            $button = '출석하기';
-                        }
-                    } else {
-                        if ($v->phase == 0 || ($v->can_tardy && $v->phase == 1)) {
-                            $button = '신청하기';
+                if (in_array($v->id, $userMissionIds)) {
+                    if ($v->user_id != $user->id) {
+                        $userMission = $userMissions->first(function ($i) use ($v) {
+                            return $i->mission_id == $v->id;
+                        });
+
+                        $isFailAttend = $userMission->try_attends >= Mission::$attendTry;
+                        $canAttend = !$isFailAttend && $v->phase == 2;
+                        $hasAttend = !is_null($userMission->attended_at);
+
+                        if ($v->phase >= 2) {
+                            if (!$hasAttend) {
+                                if ($canAttend) {
+                                    $button = "<a href='{$link}' class='link-primary'>출석 체크</a>";
+
+                                } else {
+                                    if ($isFailAttend) {
+                                        $button = "<a href='{$link}' class='link-danger'>출석 실패</a>";
+                                    } else {
+                                        $button = "<a href='{$link}' class='link-danger'>출석 마감</a>";
+                                    }
+                                }
+
+                            } else {
+                                $button = "<a href='{$link}' class='link-success'>출석 성공</a>";
+                            }
                         }
                     }
+                } else {
+                    if ($v->phase == 0 || ($v->can_tardy && $v->phase == 1)) {
+                        $button = '참가 신청';
+                    }
                 }
-
-                $link =  route('lounge.mission.read', $v->id);
 
                 $items[] = [
                     $v->getTypeName(),
@@ -73,7 +95,7 @@ class ApiMissionController extends Controller
                     $v->can_tardy ? '가능' : '불가능',
                     $v->user()->first()->nickname,
                     $v->getPhaseName(),
-                    "<a href='{$link}' class='text-indigo-600 hover:text-indigo-900'>{$button}</a>"
+                    $button
                 ];
             }
 

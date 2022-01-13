@@ -1163,14 +1163,14 @@ select{
 .mb-1{
   margin-bottom: 0.25rem;
 }
+.mt-3{
+  margin-top: 0.75rem;
+}
 .mt-0{
   margin-top: 0px;
 }
 .mt-\[3\.75rem\]{
   margin-top: 3.75rem;
-}
-.mt-3{
-  margin-top: 0.75rem;
 }
 .mb-8{
   margin-bottom: 2rem;
@@ -2466,6 +2466,46 @@ aspect-16\/10 {
 .mission-body.prose h1, .mission-body.prose h2, .mission-body.prose h3 {
     margin-top: 0.4em;
     margin-bottom: 0.4em;
+}
+
+.link-danger{
+  --tw-text-opacity: 1;
+  color: rgb(239 68 68 / var(--tw-text-opacity));
+}
+
+.link-danger:hover{
+  -webkit-text-decoration-line: underline;
+          text-decoration-line: underline;
+}
+
+.link-success{
+  --tw-text-opacity: 1;
+  color: rgb(16 185 129 / var(--tw-text-opacity));
+}
+
+.link-success:hover{
+  -webkit-text-decoration-line: underline;
+          text-decoration-line: underline;
+}
+
+.link-warning{
+  --tw-text-opacity: 1;
+  color: rgb(234 179 8 / var(--tw-text-opacity));
+}
+
+.link-warning:hover{
+  -webkit-text-decoration-line: underline;
+          text-decoration-line: underline;
+}
+
+.link-primary{
+  --tw-text-opacity: 1;
+  color: rgb(99 102 241 / var(--tw-text-opacity));
+}
+
+.link-primary:hover{
+  -webkit-text-decoration-line: underline;
+          text-decoration-line: underline;
 }
 
 .focus-within\:border-blue-500:focus-within{

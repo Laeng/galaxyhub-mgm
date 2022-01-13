@@ -169,3 +169,19 @@ aspect-16\/10 {
     margin-top: 0.4em;
     margin-bottom: 0.4em;
 }
+
+.link-danger {
+    @apply text-red-500 hover:underline;
+}
+
+.link-success {
+    @apply text-success-500 hover:underline;
+}
+
+.link-warning {
+    @apply text-yellow-500 hover:underline;
+}
+
+.link-primary {
+    @apply text-indigo-500 hover:underline;
+}
