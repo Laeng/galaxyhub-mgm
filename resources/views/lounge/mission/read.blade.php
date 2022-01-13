@@ -9,7 +9,7 @@
                         <div>
                             <p class="text-lg font-bold mb-2">{{ $type }} 소개</p>
                             <div class="space-y-3 mb-3">
-                                @if($isStaff)
+                                @if($isStaff && !$isOwner)
                                     <x-alert.danger title="주의">
                                         <ul>
                                             <li>관리자는 다른 미션 메이커가 생성한 미션을 수정 및 처리할 수 있습니다.</li>
@@ -50,7 +50,7 @@
                                         <div class="flex-1 min-w-0">
                                             <span class="absolute inset-0" aria-hidden="true"></span>
                                             <p class="text-sm font-medium text-gray-900" x-text="i.nickname"></p>
-                                            <p class="text-sm text-gray-500 truncate" x-text="i.attend + '회 참가'"></p>
+                                            <p class="text-sm text-gray-500 truncate tabular-nums" x-text="i.attend + '회 참가'"></p>
                                         </div>
                                     </div>
                                 </template>
@@ -59,7 +59,7 @@
                     </div>
                     <div class="md:col-span-2 lg:col-span-1">
                         <p class="text-lg font-bold mb-2" x-text="(data.load.data.phase === 2) ? '{{ $type }} 출석 마감' : '{{ $type }} 시간'"></p>
-                        <div class="mb-3">
+                        <div class="mb-3 tabular-nums">
                             <div class="p-4 bg-gray-50 rounded-lg overflow-hidden">
                                 <dt class="text-sm font-medium text-gray-500 truncate" x-text="data.load.data.timestamp.display_date"></dt>
                                 <dd class="mt-1 text-3xl font-semibold text-gray-900" x-text="data.load.data.timestamp.display_time"></dd>
@@ -69,16 +69,16 @@
                         @if ($isOwner || $isStaff)
                             <p class="text-lg font-bold mb-2">{{ $type }} 출석 코드</p>
                             <div class="mb-3">
-                                <div class="p-4 bg-gray-50 rounded-lg overflow-hidden">
+                                <div class="p-4 bg-gray-50 rounded-lg overflow-hidden tabular-nums">
                                     <dt class="text-sm font-medium text-gray-500 truncate" x-text="(data.load.data.phase < 2) ? '{{ $type }} 종료 후 발급됩니다.' : '4자리 숫자'"></dt>
-                                    <dd class="mt-1 text-3xl font-semibold text-gray-900" :class="{ 'blur': data.load.data.phase < 2 }" x-text="(data.load.data.phase < 2) ? 'XXXX' : data.load.data.code"></dd>
+                                    <dd class="mt-1 text-3xl font-semibold text-gray-900 select-all" :class="{ 'blur': data.load.data.phase < 2 }" x-text="(data.load.data.phase < 2) ? 'XXXX' : data.load.data.code"></dd>
                                 </div>
                             </div>
                         @endif
 
                         <div class="mb-6 space-y-2">
                             @if($isOwner || $isStaff)
-                                @if($isStaff)
+                                @if($isStaff && !$isOwner)
                                     <template x-if="data.load.data.phase === 0 || data.load.data.phase === 1">
                                         <div class="relative">
                                             <div class="absolute inset-0 flex items-center" aria-hidden="true">
@@ -110,7 +110,7 @@
                                 </template>
                             @endif
                             @if(!$isOwner)
-                                @if($isStaff)
+                                @if($isStaff && !$isOwner)
                                     <div class="relative">
                                         <div class="absolute inset-0 flex items-center" aria-hidden="true">
                                             <div class="w-full border-t border-gray-300"></div>
@@ -127,7 +127,7 @@
                                         출석 체크
                                     </x-button.filled.md-blue>
                                 </template>
-                                <template x-if="!data.load.data.is_participant && ((data.load.data.can_tardy === 1 && data.load.data.phase === 1) || data.load.data.phase === 0)">
+                                <template x-if="!data.load.data.is_participant && ((data.load.data.can_tardy && data.load.data.phase === 1) || data.load.data.phase === 0)">
                                     <x-button.filled.md-blue class="w-full" type="button" @click="process('join')" x-cloak>
                                         참가 신청
                                     </x-button.filled.md-blue>
@@ -152,7 +152,7 @@
                                         <p class="text-sm font-medium text-gray-800">
                                             메이커
                                         </p>
-                                        <p class="text-sm text-gray-600">
+                                        <p class="text-sm text-gray-600 tabular-nums">
                                             {{ $maker->nickname }}
                                         </p>
                                     </div>
@@ -163,7 +163,7 @@
                                         <p class="text-sm font-medium text-gray-800">
                                             미션 상태
                                         </p>
-                                        <p class="text-sm text-gray-600" x-text="data.load.data.status"></p>
+                                        <p class="text-sm text-gray-600 tabular-nums" x-text="data.load.data.status"></p>
                                     </div>
                                 </li>
 
@@ -172,7 +172,7 @@
                                         <p class="text-sm font-medium text-gray-800">
                                             미션 생성
                                         </p>
-                                        <p class="text-sm text-gray-600" x-text="data.load.data.timestamp.created_at"></p>
+                                        <p class="text-sm text-gray-600 tabular-nums" x-text="data.load.data.timestamp.created_at"></p>
                                     </div>
                                 </li>
 
@@ -181,7 +181,7 @@
                                         <p class="text-sm font-medium text-gray-800">
                                             미션 시작
                                         </p>
-                                        <p class="text-sm text-gray-600" x-text="data.load.data.timestamp.started_at"></p>
+                                        <p class="text-sm text-gray-600 tabular-nums" x-text="data.load.data.timestamp.started_at"></p>
                                     </div>
                                 </li>
 
@@ -190,7 +190,7 @@
                                         <p class="text-sm font-medium text-gray-800">
                                             미션 종료
                                         </p>
-                                        <p class="text-sm text-gray-600" x-text="data.load.data.timestamp.ended_at"></p>
+                                        <p class="text-sm text-gray-600 tabular-nums" x-text="data.load.data.timestamp.ended_at"></p>
                                     </div>
                                 </li>
 
@@ -199,7 +199,7 @@
                                         <p class="text-sm font-medium text-gray-800">
                                             출석 마감
                                         </p>
-                                        <p class="text-sm text-gray-600" x-text="data.load.data.timestamp.closed_at"></p>
+                                        <p class="text-sm text-gray-600 tabular-nums" x-text="data.load.data.timestamp.closed_at"></p>
                                     </div>
                                 </li>
 
@@ -207,17 +207,19 @@
                         </div>
 
                         @if($isOwner || $isStaff)
-                            @if($isStaff)
-                                <div class="relative">
-                                    <div class="absolute inset-0 flex items-center" aria-hidden="true">
-                                        <div class="w-full border-t border-gray-300"></div>
-                                    </div>
-                                    <div class="relative flex justify-center">
+                            @if($isStaff && !$isOwner)
+                                <template x-if="data.load.data.phase !== -1 && data.load.data.phase !== 2">
+                                    <div class="relative">
+                                        <div class="absolute inset-0 flex items-center" aria-hidden="true">
+                                            <div class="w-full border-t border-gray-300"></div>
+                                        </div>
+                                        <div class="relative flex justify-center">
                                             <span class="px-2 bg-white text-sm text-gray-500">
                                                 관리자
                                             </span>
+                                        </div>
                                     </div>
-                                </div>
+                                </template>
                             @endif
                             <div class="space-y-2">
                                 <template x-if="data.load.data.phase === 0">

@@ -26,7 +26,7 @@
                             </td>
                         @endif
                         <template x-for="value in item">
-                            <td class="px-3 py-4 text-sm text-gray-500 whitespace-nowrap" x-html="value"></td>
+                            <td class="px-3 py-4 text-sm text-gray-500 whitespace-nowrap tabular-nums" x-html="value"></td>
                         </template>
                     </tr>
                 </template>
@@ -35,7 +35,7 @@
 
             <nav class="bg-white px-3 py-3 flex items-center justify-between border-t border-gray-200 sm:px-3">
                 <div class="hidden sm:block">
-                    <p class="text-sm text-gray-700">
+                    <p class="text-sm text-gray-700 tabular-nums">
                         <span class="font-medium" x-text="(data.list.data.count.step >= 0) ? (data.list.data.count.step * data.list.data.count.limit) + 1 : 0"></span>
                         -
                         <span class="font-medium" x-text="((data.list.data.count.step + 1) * data.list.data.count.limit <= data.list.data.count.total) ? (data.list.data.count.step + 1) * data.list.data.count.limit : data.list.data.count.total"></span>
