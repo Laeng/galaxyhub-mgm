@@ -13,19 +13,21 @@ class Simple extends Component
     public bool $useCheckBox;
     public string $checkBoxName;
     public bool $refresh;
+    public int $limit;
 
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct(string $componentId, string $apiUrl, bool $useCheckBox = false, string $checkBoxName = '', bool $refresh = false)
+    public function __construct(string $componentId, string $apiUrl, bool $useCheckBox = false, string $checkBoxName = '', bool $refresh = false, int $limit = 20)
     {
         $this->componentId = $componentId;
         $this->apiUrl = $apiUrl;
         $this->useCheckBox = $useCheckBox;
         $this->checkBoxName = $checkBoxName;
         $this->refresh = $refresh;
+        $this->limit = $limit;
     }
 
     /**

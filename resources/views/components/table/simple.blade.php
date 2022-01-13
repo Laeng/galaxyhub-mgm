@@ -81,7 +81,7 @@
                         url: '{{$apiUrl}}',
                         body: {
                             step: 0,
-                            limit: 20,
+                            limit: {{$limit}},
                             query: {}
                         },
                         data: {
