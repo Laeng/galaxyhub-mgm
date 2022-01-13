@@ -130,7 +130,7 @@ class ApiUserAllController extends Controller
                     $row->visited_at->toDateString(),
                     is_null($row->attended_at) ? '⨉' : Carbon::createFromFormat('Y-m-d H:i:s', $row->attended_at)->toDateString(),
                     UserMission::whereNotNull('attended_at')->where('user_id', $row->id)->count(),
-                    "<a class='text-indigo-600 hover:text-indigo-900' href='". route('staff.user.read', $row->id) ."'>확인하기</a>"
+                    "<a class='link-indigo' href='". route('staff.user.read', $row->id) ."'>확인하기</a>"
                 ];
             }
 

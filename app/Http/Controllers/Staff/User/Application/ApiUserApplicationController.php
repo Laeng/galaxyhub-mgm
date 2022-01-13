@@ -46,9 +46,9 @@ class ApiUserApplicationController extends Controller
                 $answers = $survey->answers()->latest()->get();
 
                 $values = [
-                    "<a class='text-indigo-600 hover:text-indigo-900' href='https://steamcommunity.com/profiles/{$user->socials()->where('social_provider', 'steam')->latest()->first()->social_id}' target='_blank'>{$user->nickname}</a>",
+                    "<a class='link-indigo' href='https://steamcommunity.com/profiles/{$user->socials()->where('social_provider', 'steam')->latest()->first()->social_id}' target='_blank'>{$user->nickname}</a>",
                     '', '', '', '',
-                    '<a class="text-indigo-600 hover:text-indigo-900" href="'. route('staff.user.application.read', $user->id) .'">확인하기</a>'
+                    '<a class="link-indigo" href="'. route('staff.user.application.read', $user->id) .'">확인하기</a>'
                 ];
 
                 foreach ($answers as $it) {
@@ -59,7 +59,7 @@ class ApiUserApplicationController extends Controller
 
                     switch ($question->title) {
                         case '네이버 아이디':
-                            $values[1] = "<a class='text-indigo-600 hover:text-indigo-900' href='https://cafe.naver.com/ca-fe/cafes/17091584/members?memberId={$v}' target='_blank'>{$v}</a>";
+                            $values[1] = "<a class='link-indigo' href='https://cafe.naver.com/ca-fe/cafes/17091584/members?memberId={$v}' target='_blank'>{$v}</a>";
                             break;
 
                         case '본인의 생년월일': $values[2] = $v; break;

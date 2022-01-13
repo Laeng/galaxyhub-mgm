@@ -2468,42 +2468,52 @@ aspect-16\/10 {
     margin-bottom: 0.4em;
 }
 
-.link-danger{
+.link-red{
   --tw-text-opacity: 1;
   color: rgb(239 68 68 / var(--tw-text-opacity));
 }
 
-.link-danger:hover{
+.link-red:hover{
   -webkit-text-decoration-line: underline;
           text-decoration-line: underline;
 }
 
-.link-success{
+.link-green{
   --tw-text-opacity: 1;
-  color: rgb(16 185 129 / var(--tw-text-opacity));
+  color: rgb(34 197 94 / var(--tw-text-opacity));
 }
 
-.link-success:hover{
+.link-green:hover{
   -webkit-text-decoration-line: underline;
           text-decoration-line: underline;
 }
 
-.link-warning{
+.link-yellow{
   --tw-text-opacity: 1;
   color: rgb(234 179 8 / var(--tw-text-opacity));
 }
 
-.link-warning:hover{
+.link-yellow:hover{
   -webkit-text-decoration-line: underline;
           text-decoration-line: underline;
 }
 
-.link-primary{
+.link-indigo{
   --tw-text-opacity: 1;
   color: rgb(99 102 241 / var(--tw-text-opacity));
 }
 
-.link-primary:hover{
+.link-indigo:hover{
+  -webkit-text-decoration-line: underline;
+          text-decoration-line: underline;
+}
+
+.link-fuchsia{
+  --tw-text-opacity: 1;
+  color: rgb(217 70 239 / var(--tw-text-opacity));
+}
+
+.link-fuchsia:hover{
   -webkit-text-decoration-line: underline;
           text-decoration-line: underline;
 }

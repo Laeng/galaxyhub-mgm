@@ -170,18 +170,22 @@ aspect-16\/10 {
     margin-bottom: 0.4em;
 }
 
-.link-danger {
+.link-red {
     @apply text-red-500 hover:underline;
 }
 
-.link-success {
-    @apply text-success-500 hover:underline;
+.link-green {
+    @apply text-green-500 hover:underline;
 }
 
-.link-warning {
+.link-yellow {
     @apply text-yellow-500 hover:underline;
 }
 
-.link-primary {
+.link-indigo {
     @apply text-indigo-500 hover:underline;
+}
+
+.link-fuchsia {
+    @apply text-fuchsia-500 hover:underline;
 }

@@ -53,7 +53,7 @@ class ApiMissionController extends Controller
 
             foreach ($missions as $v) {
                 $link =  route('lounge.mission.read', $v->id);
-                $button = "<a href='{$link}' class='link-primary'>미션 정보</a>";
+                $button = "<a href='{$link}' class='link-indigo'>미션 정보</a>";
 
                 if (in_array($v->id, $userMissionIds)) {
                     if ($v->user_id != $user->id) {
@@ -68,24 +68,24 @@ class ApiMissionController extends Controller
                         if ($v->phase >= 2) {
                             if (!$hasAttend) {
                                 if ($canAttend) {
-                                    $button = "<a href='{$link}' class='link-primary'>출석 체크</a>";
+                                    $button = "<a href='{$link}' class='link-indigo'>출석 체크</a>";
 
                                 } else {
                                     if ($isFailAttend) {
-                                        $button = "<a href='{$link}' class='link-danger'>출석 실패</a>";
+                                        $button = "<a href='{$link}' class='link-red'>출석 실패</a>";
                                     } else {
-                                        $button = "<a href='{$link}' class='link-danger'>출석 마감</a>";
+                                        $button = "<a href='{$link}' class='link-red'>출석 마감</a>";
                                     }
                                 }
 
                             } else {
-                                $button = "<a href='{$link}' class='link-success'>출석 성공</a>";
+                                $button = "<a href='{$link}' class='link-green'>출석 성공</a>";
                             }
                         }
                     }
                 } else {
                     if ($v->phase == 0 || ($v->can_tardy && $v->phase == 1)) {
-                        $button = '참가 신청';
+                        $button = "<a href='{$link}' class='link-fuchsiaf'>참가 신청</a>";
                     }
                 }
 
