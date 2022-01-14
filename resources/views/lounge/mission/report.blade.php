@@ -3,10 +3,10 @@
 @endpush
 
 <x-sub-page website-name="MGM Lounge" title="{{ $type }} {{ $title }}">
-    <x-section.basic parent-class="py-4 sm:py-6 lg:py-16" class="flex justify-center lg:px-48">
+    <x-section.basic parent-class="py-4 sm:py-6 lg:py-16" class="flex justify-center">
         <div class="w-full">
             <div class="bg-white rounded-lg p-4 lg:p-16">
-                <div class="text-center my-4 lg:mt-0 lg:mb-6">
+                <div class="text-center lg:text-left my-4 lg:mt-0 lg:mb-6">
                     <h1 class="text-2xl lg:text-3xl font-bold">
                         {{ "{$title}" }}
                     </h1>
@@ -23,16 +23,16 @@
                     </x-alert.info>
                 </div>
 
-                <div class="">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
                     @foreach($data as $datum)
-                        <div class="pb-8">
+                        <div class="@if($datum['type'] !== 'radio') lg:col-span-2 @endif">
                             <div class="flex space-x-2">
-                                @if($datum['type'] == 'radio')
-                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                @if($datum['type'] === 'radio')
+                                    <span class="h-6 w-14 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 justify-center">
                                         객관식
                                     </span>
                                 @else
-                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800">
+                                    <span class="h-6 w-14 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800 justify-center">
                                         주관식
                                     </span>
                                 @endif
@@ -41,7 +41,7 @@
 
                             @if($datum['type'] === 'radio')
                                 <div class="py-4 flex justify-center">
-                                    <div class="lg:w-1/2 mb-4">
+                                    <div class="mb-4">
                                         <canvas id="{{ "question{$loop->index}" }}"></canvas>
                                     </div>
                                 </div>
@@ -75,6 +75,8 @@
                             @endif
                         </div>
                     @endforeach
+
+
                 </div>
 
                 <script type="text/javascript">
