@@ -1,3 +1,7 @@
+@push('js')
+    <script defer src="https://cdn.ckeditor.com/ckeditor5/31.1.0/classic/ckeditor.js"></script>
+@endpush
+
 <x-sub-page website-name="MGM Lounge" title="{{ $title }}">
     <x-section.basic parent-class="py-4 sm:py-6 lg:py-16" class="flex justify-center">
         <div class="w-full">
@@ -73,7 +77,7 @@
 
                             <script>
                                 window.addEventListener('load', function(){
-                                    window.ckeditor.create(document.querySelector('#body'), {
+                                    ClassicEditor.create(document.querySelector('#body'), {
                                         viewportTopOffset : 50,
                                         toolbar: ['heading', '|', 'bold', 'italic', 'link',  'bulletedList', 'numberedList', '|', 'outdent', 'indent', '|', 'blockQuote'],
                                         language: 'ko'

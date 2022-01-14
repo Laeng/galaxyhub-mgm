@@ -1,3 +1,5 @@
+import {Chart} from "chart.js";
+
 window._ = require('lodash');
 
 /**
@@ -88,6 +90,6 @@ window.modal = {
     }
 }
 
-window.ckeditor = require('@ckeditor/ckeditor5-build-classic')
+// window.ckeditor = require('@ckeditor/ckeditor5-build-classic')
 
 window.global = {}

@@ -260,6 +260,90 @@ class ViewMissionController extends Controller
         ]);
     }
 
+    public function report(Request $request, Group $group, int $id): Factory|View|Application|RedirectResponse
+    {
+        $user = $request->user();
+        $mission = Mission::find($id);
+
+        if (is_null($mission) || is_null($mission->survey_id)) {
+            abort(404);
+        }
+
+        $isOwner = $mission->user_id === $user->id;
+        $isStaff = $group->has(Group::STAFF, $user);
+
+        if (!$isStaff && !$isOwner) {
+            abort(404);
+        }
+
+        $survey = $mission->survey()->first();
+        $sections = $survey->sections()->get();
+        //$questions = $survey->questions()->get();
+
+        $countParticipant = $survey->entries()->count();
+
+        $data = [];
+
+        foreach ($sections as $section) {
+            $sectionQuestions = $section->questions;
+
+            foreach($sectionQuestions as $question) {
+                $type = $question->type;
+
+                $answers = $question->answers()->get();
+                $options = $question->options;
+
+                $countAnswers = count($answers);
+                $countOptions = [];
+                $userAnswers = [];
+
+                if ($type === 'radio') {
+                    $countOptions = array_fill_keys($options, 0);
+
+                    foreach ($answers as $answer) {
+                        $countOptions[$answer->value] += 1;
+                    }
+                } else {
+                    foreach ($answers as $answer) {
+                        $userAnswer = [
+                            'answer' => $answer->value
+                        ];
+
+                        if ($isStaff) {
+                            $userAnswer['user'] = $answer->entry()->first()->participant()->first();
+                        }
+
+                        $userAnswers[] = $userAnswer;
+                    }
+
+                    shuffle($userAnswers);
+                }
+
+                $data[] = [
+                    'title' => $question->title,
+                    'type' => $type,
+                    'options' => $options,
+                    'countAnswers' => $countAnswers,
+                    'countOptions' => $countOptions,
+                    'userAnswer' => $userAnswers,
+                ];
+            }
+        }
+
+        // TODO 만약 섹션 없이 질문들로만 구성된 설문을 만든다면, 추가하기.
+
+
+        return view('lounge.mission.report', [
+            'id' => $mission->id,
+            'type' => $mission->getTypeName(),
+            'title' => '만족도 조사 결과',
+            'isStaff' => $isStaff,
+            'mission' => $mission,
+            'countParticipant' => $countParticipant,
+            'data' => $data
+        ]);
+    }
+
 
     private function isMaker(User $user, Group $group): bool
     {

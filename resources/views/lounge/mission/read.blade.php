@@ -233,7 +233,7 @@
                                     </x-button.filled.md-red>
                                 </template>
                                 <template x-if="data.load.data.phase === 3">
-                                    <x-button.filled.md-blue class="w-full" type="button">
+                                    <x-button.filled.md-blue class="w-full" type="button" onclick="location.href='{{ route('lounge.mission.report', $id) }}'">
                                         설문 결과
                                     </x-button.filled.md-blue>
                                 </template>

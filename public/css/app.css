@@ -1768,6 +1768,18 @@ select{
   padding-top: 1px;
   padding-bottom: 1px;
 }
+.px-2\.5{
+  padding-left: 0.625rem;
+  padding-right: 0.625rem;
+}
+.py-0\.5{
+  padding-top: 0.125rem;
+  padding-bottom: 0.125rem;
+}
+.py-0{
+  padding-top: 0px;
+  padding-bottom: 0px;
+}
 .pb-2{
   padding-bottom: 0.5rem;
 }
@@ -2010,6 +2022,14 @@ select{
 .text-yellow-700{
   --tw-text-opacity: 1;
   color: rgb(161 98 7 / var(--tw-text-opacity));
+}
+.text-green-800{
+  --tw-text-opacity: 1;
+  color: rgb(22 101 52 / var(--tw-text-opacity));
+}
+.text-indigo-800{
+  --tw-text-opacity: 1;
+  color: rgb(55 48 163 / var(--tw-text-opacity));
 }
 .underline{
   -webkit-text-decoration-line: underline;

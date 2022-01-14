@@ -68,7 +68,7 @@ class ApiMissionController extends Controller
                         if ($v->phase >= 2) {
                             if (!$hasAttend) {
                                 if ($canAttend) {
-                                    $button = "<a href='{$link}' class='link-indigo'>출석 체크</a>";
+                                    $button = "<a href='{$link}' class='link-yellow'>출석 체크</a>";
 
                                 } else {
                                     if ($isFailAttend) {
@@ -85,7 +85,7 @@ class ApiMissionController extends Controller
                     }
                 } else {
                     if ($v->phase == 0 || ($v->can_tardy && $v->phase == 1)) {
-                        $button = "<a href='{$link}' class='link-fuchsiaf'>참가 신청</a>";
+                        $button = "<a href='{$link}' class='link-fuchsia'>참가 신청</a>";
                     }
                 }
 

@@ -23,6 +23,7 @@
     "dependencies": {
         "@ckeditor/ckeditor5-build-classic": "^31.1.0",
         "alpinejs": "^3.7.1",
+        "chart.js": "^3.7.0",
         "sweetalert2": "^11.3.4"
     }
 }

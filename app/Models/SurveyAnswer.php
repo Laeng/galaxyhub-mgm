@@ -24,7 +24,7 @@ class SurveyAnswer extends Model
      */
     public function entry(): BelongsTo
     {
-        return $this->belongsTo(SurveyEntry::class);
+        return $this->belongsTo(SurveyEntry::class, 'survey_entry_id');
     }
 
     /**
