@@ -13,6 +13,7 @@ class ForbidBannedUser extends ForbidBannedUserAlias
     {
         $user = $this->auth->user();
         $groups = $user->groups()->get();
+        $isNotMember = true;
 
         if (count($groups) > 0) { // 권한이 없는 유저는 미가입 유저
             $isNotMember = $groups->every(function ($value, $key) {
@@ -21,8 +22,6 @@ class ForbidBannedUser extends ForbidBannedUserAlias
                     default => false,
                 };
             });
-        } else {
-            return true;
         }
 
         if ($isNotMember) {

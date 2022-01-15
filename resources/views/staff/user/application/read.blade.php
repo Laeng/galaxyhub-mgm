@@ -213,7 +213,7 @@
                                             }
                                         }
                                     },
-                                    @if($status === '접수')
+                                    @if($status === '가입 신청')
                                     process(type, title, message, prompt = true) {
                                         let callback = (r) => {
                                             if (r.isConfirmed) {
@@ -225,7 +225,7 @@
 
                                                 let success = (r) => {
                                                     window.modal.alert('처리 완료', '정상적으로 처리되었습니다.', (c) => {
-                                                        location.href = '{{ route('staff.user.application') }}';
+                                                        location.href = '{{ route('staff.user.application.list') }}';
                                                     });
                                                 };
 

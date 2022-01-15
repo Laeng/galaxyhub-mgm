@@ -40,6 +40,11 @@ class ApiUserApplicationController extends Controller
 
             foreach ($applicants as $i){
                 $user = $i->user()->first();
+
+                if (is_null($user)) {
+                    continue;
+                }
+
                 $keys[] = $user->id;
 
                 $survey = $user->surveys()->whereIn('survey_id', $surveyForms)->latest()->first();
@@ -153,10 +158,6 @@ class ApiUserApplicationController extends Controller
     public function read_info(Request $request, int $id): JsonResponse
     {
         try {
-            $this->jsonValidator($request, [
-
-            ]);
-
             $user = User::find($id);
 
             if (is_null($user)) {

@@ -27,7 +27,7 @@ class ViewJoinController extends Controller
             return $redirect;
         }
 
-        if ($group->has([$group::ARMA_MEMBER, $group::BANNED, $group::ARMA_APPLY])) {
+        if ($group->has([$group::ARMA_MEMBER, $group::ARMA_APPLY])) {
             return redirect()->route('lounge.index');
         }
 
@@ -97,7 +97,7 @@ class ViewJoinController extends Controller
         $banned = $history->getModel($steamAccount->social_id, PlayerHistory::TYPE_USER_BANNED)->latest()->get();
         if (!is_null($banned) && count($banned) > 0) {
             foreach ($banned as $i) {
-                $group->add(Group::BANNED, $user, $i->description);
+                //$group->add(Group::BANNED, $user, $i->description);
                 break;
             }
         }
@@ -110,7 +110,7 @@ class ViewJoinController extends Controller
             }
         }
 
-        if ($group->has([Group::ARMA_MEMBER, Group::BANNED, Group::ARMA_APPLY])) {
+        if ($group->has([Group::ARMA_MEMBER, Group::ARMA_APPLY])) {
             return redirect()->route('lounge.index');
         }
 

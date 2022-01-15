@@ -17,7 +17,7 @@ class CreateSurveyAnswersTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('survey_question_id');
             $table->unsignedInteger('survey_entry_id')->nullable();
-            $table->string('value');
+            $table->mediumText('value');
             $table->timestamps();
         });
     }

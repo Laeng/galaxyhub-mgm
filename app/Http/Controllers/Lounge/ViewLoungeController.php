@@ -19,8 +19,8 @@ class ViewLoungeController extends Controller
         $user = $request->user();
         $groups = $group->getUserGroups($user)->pluck(['group_id'])->toArray();
 
-        if (in_array( Group::BANNED, $groups)) return view('lounge.main.banned');
-        if (in_array( Group::INACTIVE, $groups)) return view('lounge.main.inactivated');
+        //if (in_array( Group::BANNED, $groups)) return view('lounge.main.banned');
+        //if (in_array( Group::INACTIVE, $groups)) return view('lounge.main.inactivated');
 
         // 가입 신청 접수 안내 페이지
         // 거절된 사람, 보류된 사람 이여도 가입 신청을 했다면 출력 되도록 해야함.
