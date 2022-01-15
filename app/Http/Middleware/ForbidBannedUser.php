@@ -15,7 +15,7 @@ class ForbidBannedUser extends ForbidBannedUserAlias
         $groups = $user->groups()->get();
         $isNotMember = true;
 
-        if (count($groups) > 0) { // 권한이 없는 유저는 미가입 유저
+        if (count($groups) > 0) { // 미가입 유저는 권한 자체가 없다.
             $isNotMember = $groups->every(function ($value, $key) {
                 return match ($value->group_id) {
                     Group::ARMA_REJECT, Group::ARMA_DEFER, Group::ARMA_APPLY => true,
@@ -25,7 +25,7 @@ class ForbidBannedUser extends ForbidBannedUserAlias
         }
 
         if ($isNotMember) {
-            return redirect()->route('lounge.index');
+            return redirect()->route('home');
         }
 
         return parent::handle($request, $next);

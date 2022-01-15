@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Lounge\Account\ApiAccountController;
+use App\Http\Controllers\Lounge\Account\ViewAccountController;
 use App\Http\Controllers\Lounge\Account\ViewAuthController;
 use App\Http\Controllers\Lounge\Join\ApiJoinController;
 use App\Http\Controllers\Lounge\Join\ViewJoinController;
@@ -41,6 +42,7 @@ Route::middleware('web')->group(function() {
 Route::middleware(['auth:web'])->group(function () {
     Route::prefix('account')->name('account.')->group(function () {
         Route::post('/leave', [ApiAccountController::class, 'leave'])->name('leave');
+        Route::get('/suspended', [ViewAccountController::class, 'suspended'])->name('suspended');
     });
 
     Route::prefix('join')->name('join.')->group(function () {
@@ -52,10 +54,12 @@ Route::middleware(['auth:web'])->group(function () {
 });
 
 Route::middleware(['auth:web'])->prefix('lounge')->name('lounge.')->group(function () {
-    Route::get('/', [ViewLoungeController::class, 'index'])->name('index');
+
 });
 
 Route::middleware(['auth:web', ForbidBannedUser::class])->prefix('lounge')->name('lounge.')->group(function() {
+    Route::get('/', [ViewLoungeController::class, 'index'])->name('index');
+
 
     // MISSION
     Route::prefix('mission')->name('mission.')->group(function () {
