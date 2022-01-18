@@ -74,20 +74,6 @@
                                 미션 소개
                             </label>
                             <textarea id="body" name="body" class="shadow-sm block w-full focus:ring-blue-500 focus:border-blue-500 sm:text-sm border border-gray-300 rounded-md" placeholder="미션 정보 입력" x-model="data.create.body.body"></textarea>
-
-                            <script>
-                                window.addEventListener('load', function(){
-                                    ClassicEditor.create(document.querySelector('#body'), {
-                                        viewportTopOffset : 50,
-                                        toolbar: ['heading', '|', 'bold', 'italic', 'link',  'bulletedList', 'numberedList', '|', 'outdent', 'indent', '|', 'blockQuote'],
-                                        language: 'ko'
-                                    }).then(e => {
-                                        window.global.editor = e;
-                                    }).catch(e => {
-                                        console.error(e.stack);
-                                    });
-                                });
-                            </script>
                         </div>
 
                         <div class="flex justify-start">
@@ -115,7 +101,7 @@
                     </div>
 
                     <script type="text/javascript">
-                        function mission_create() {
+                        window.document.addEventListener('alpine:init', () => {
                             return {
                                 data: {
                                     create: {
@@ -186,7 +172,19 @@
                                     window.axios.post(url, body).then(success).catch(error).then(complete);
                                 }
                             }
-                        }
+                        });
+
+                        window.addEventListener('load', () => {
+                            ClassicEditor.create(document.querySelector('#body'), {
+                                viewportTopOffset : 50,
+                                toolbar: ['heading', '|', 'bold', 'italic', 'link',  'bulletedList', 'numberedList', '|', 'outdent', 'indent', '|', 'blockQuote'],
+                                language: 'ko'
+                            }).then(e => {
+                                window.global.editor = e;
+                            }).catch(e => {
+                                console.error(e.stack);
+                            });
+                        });
                     </script>
                 </div>
 

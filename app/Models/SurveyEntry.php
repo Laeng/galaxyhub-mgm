@@ -87,10 +87,16 @@ class SurveyEntry extends Model
                 continue;
             }
 
+            if (is_array($value)) {
+                $value = json_encode($value);
+            } else {
+                $value = strip_tags($value);
+            }
+
             $this->answers->add(SurveyAnswer::make([
                 'survey_question_id' => substr($key, 1),
                 'survey_entry_id' => $this->id,
-                'value' => strip_tags($value), //html, php 태그 지우기
+                'value' => $value, //html, php 태그 지우기
             ]));
         }
 

@@ -78,4 +78,9 @@ class User extends Authenticatable implements BannableContract
     {
         return $this->hasMany(UserMission::class);
     }
+
+    public function files(): HasMany
+    {
+        return $this->hasMany(File::class);
+    }
 }

@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\ServiceProvider;
+use Storage;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -13,7 +15,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+
     }
 
     /**

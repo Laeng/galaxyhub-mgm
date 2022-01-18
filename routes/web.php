@@ -3,10 +3,12 @@
 use App\Http\Controllers\Lounge\Account\ApiAccountController;
 use App\Http\Controllers\Lounge\Account\ViewAccountController;
 use App\Http\Controllers\Lounge\Account\ViewAuthController;
+use App\Http\Controllers\Lounge\File\ApiFilepondController;
 use App\Http\Controllers\Lounge\Join\ApiJoinController;
 use App\Http\Controllers\Lounge\Join\ViewJoinController;
 use App\Http\Controllers\Lounge\Mission\ApiMissionController;
 use App\Http\Controllers\Lounge\Mission\ViewMissionController;
+use App\Http\Controllers\Lounge\File\ApiFileController;
 use App\Http\Controllers\Lounge\ViewLoungeController;
 use App\Http\Controllers\Staff\User\All\ApiUserAllController;
 use App\Http\Controllers\Staff\User\All\ViewUserAllController;
@@ -50,6 +52,17 @@ Route::middleware(['auth:web'])->group(function () {
         Route::post('/check/steam/status', [ApiJoinController::class, 'check_steam_status'])->name('check.steam.status');
         Route::match(['get', 'post'], '/apply', [ViewJoinController::class, 'apply'])->name('apply');
         Route::post('/submit', [ViewJoinController::class, 'submit'])->name('submit');
+    });
+
+    Route::prefix('file')->name('file.')->group(function () {
+        Route::prefix('upload')->name('upload.')->group(function () {
+            Route::post('/filepond', [ApiFilepondController::class, 'filepond_upload'])->name('filepond.api');
+        });
+
+        Route::prefix('delete')->name('delete.')->group(function () {
+            Route::post('/filepond', [ApiFilepondController::class, 'filepond_delete'])->name('filepond.api');
+        });
+
     });
 });
 
