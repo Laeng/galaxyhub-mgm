@@ -163,6 +163,10 @@ aspect-16\/10 {
     min-height: 20rem;
 }
 
+.ck .ck-sticky-panel .ck-sticky-panel__content_sticky{
+    margin-top: 3.75rem;
+}
+
 .mission-body.prose p, .mission-body.prose li{
     margin-top: 0.1em;
     margin-bottom: 0.1em;

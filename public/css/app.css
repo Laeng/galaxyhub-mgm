@@ -1287,9 +1287,6 @@ select{
   -webkit-animation: spin 1s linear infinite;
           animation: spin 1s linear infinite;
 }
-.cursor-help{
-  cursor: help;
-}
 .cursor-pointer{
   cursor: pointer;
 }
@@ -1936,6 +1933,10 @@ select{
   --tw-text-opacity: 1;
   color: rgb(30 58 138 / var(--tw-text-opacity));
 }
+.text-yellow-700{
+  --tw-text-opacity: 1;
+  color: rgb(161 98 7 / var(--tw-text-opacity));
+}
 .text-\[\#ffffff\]{
   --tw-text-opacity: 1;
   color: rgb(255 255 255 / var(--tw-text-opacity));
@@ -1947,10 +1948,6 @@ select{
 .text-indigo-700{
   --tw-text-opacity: 1;
   color: rgb(67 56 202 / var(--tw-text-opacity));
-}
-.text-yellow-700{
-  --tw-text-opacity: 1;
-  color: rgb(161 98 7 / var(--tw-text-opacity));
 }
 .text-gray-300{
   --tw-text-opacity: 1;
@@ -2397,6 +2394,10 @@ aspect-16\/10 {
 
 .ck-editor__editable {
     min-height: 20rem;
+}
+
+.ck .ck-sticky-panel .ck-sticky-panel__content_sticky{
+    margin-top: 3.75rem;
 }
 
 .mission-body.prose p, .mission-body.prose li{

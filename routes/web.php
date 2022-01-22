@@ -3,6 +3,7 @@
 use App\Http\Controllers\Lounge\Account\ApiAccountController;
 use App\Http\Controllers\Lounge\Account\ViewAccountController;
 use App\Http\Controllers\Lounge\Account\ViewAuthController;
+use App\Http\Controllers\Lounge\File\ApiFileCKEditorController;
 use App\Http\Controllers\Lounge\File\ApiFilepondController;
 use App\Http\Controllers\Lounge\Join\ApiJoinController;
 use App\Http\Controllers\Lounge\Join\ViewJoinController;
@@ -56,11 +57,12 @@ Route::middleware(['auth:web'])->group(function () {
 
     Route::prefix('file')->name('file.')->group(function () {
         Route::prefix('upload')->name('upload.')->group(function () {
-            Route::post('/filepond', [ApiFilepondController::class, 'filepond_upload'])->name('filepond.api');
+            Route::post('/filepond', [ApiFileController::class, 'filepond_upload'])->name('filepond.api');
+            Route::post('/ckeditor', [ApiFileController::class, 'ckeditor_upload'])->name('ckeditor.api');
         });
 
         Route::prefix('delete')->name('delete.')->group(function () {
-            Route::post('/filepond', [ApiFilepondController::class, 'filepond_delete'])->name('filepond.api');
+            Route::post('/filepond', [ApiFileController::class, 'filepond_delete'])->name('filepond.api');
         });
 
     });
