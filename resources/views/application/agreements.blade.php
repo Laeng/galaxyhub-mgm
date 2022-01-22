@@ -1,4 +1,4 @@
-<x-sub-page website-name="MGM Lounge" title="가입">
+<x-sub-page website-name="MGM Lounge" title="약관 동의">
     <x-section.basic parent-class="py-4 sm:py-6 lg:py-16" class="flex justify-center lg:px-48">
         <div class="w-full" x-data="steam_status_check()">
             <div class="bg-white rounded-lg p-4 lg:p-16">
@@ -35,7 +35,7 @@
                 </div>
 
                 <div class="flex justify-center pt-2 space-x-4" style="display: none" x-show="(data.check.load && !data.check.status)">
-                    <x-button.filled.md-white type="button" onclick="location.href='{{route('join.agree')}}'">
+                    <x-button.filled.md-white type="button" onclick="location.href='{{route('application.agreements')}}'">
                         새로고침
                     </x-button.filled.md-white>
                 </div>
@@ -44,7 +44,7 @@
                     <p class="py-2 text-center">
                         개인정보처리방침 및 이용약관을 읽으셨으며 모두 동의하십니까?
                     </p>
-                    <form action="{{ route('join.apply') }}" method="post" onsubmit="return (data.check.load && data.check.status)">
+                    <form action="{{ route('application.form') }}" method="post" onsubmit="return (data.check.load && data.check.status)">
                         @csrf
                         <div class="flex justify-center pt-2 space-x-4">
                             <x-button.filled.md-blue x-html="(data.check.load && data.check.status) ? '예, 모두 동의합니다.' : $el.innerHTML">
@@ -69,7 +69,7 @@
                         }
                     },
                     check() {
-                        let url = '{{route('join.validate.steam.api')}}';
+                        let url = '{{route('application.validate.steam.api')}}';
                         let body = {};
                         let success = (r) => {
                             this.data.check.status = r.data.data;

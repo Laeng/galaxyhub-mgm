@@ -1957,6 +1957,28 @@ select{
   -webkit-text-decoration-line: underline;
           text-decoration-line: underline;
 }
+.decoration-sky-500\/30{
+  -webkit-text-decoration-color: rgb(14 165 233 / 0.3);
+          text-decoration-color: rgb(14 165 233 / 0.3);
+}
+.decoration-sky-500{
+  -webkit-text-decoration-color: #0ea5e9;
+          text-decoration-color: #0ea5e9;
+}
+.decoration-sky-500\/40{
+  -webkit-text-decoration-color: rgb(14 165 233 / 0.4);
+          text-decoration-color: rgb(14 165 233 / 0.4);
+}
+.decoration-wavy{
+  -webkit-text-decoration-style: wavy;
+          text-decoration-style: wavy;
+}
+.underline-offset-2{
+  text-underline-offset: 2px;
+}
+.underline-offset-4{
+  text-underline-offset: 4px;
+}
 .antialiased{
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -2912,6 +2934,14 @@ aspect-16\/10 {
 
   .lg\:mt-4{
     margin-top: 1rem;
+  }
+
+  .lg\:mb-12{
+    margin-bottom: 3rem;
+  }
+
+  .lg\:mb-8{
+    margin-bottom: 2rem;
   }
 
   .lg\:block{

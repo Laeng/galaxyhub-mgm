@@ -7,14 +7,14 @@ use Closure;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\Request;
 
-class ForbidUser
+class ForbidApplicant
 {
     /**
      * The Guard implementation.
      *
      * @var Guard
      */
-    protected $auth;
+    protected Guard $auth;
 
     /**
      * @param Guard $auth
@@ -35,18 +35,21 @@ class ForbidUser
      */
     public function handle(Request $request, Closure $next): mixed
     {
-        $user = $request->user();
-        $groups = $user->groups()->get(['group_id']);
+        $user = $this->auth->user();
+        $groups = $user->groups()->get();
+        $isNotMember = true;
 
-        $isNotStaff = $groups->every(function ($value, $key) {
-            return match ($value->group_id) {
-                Group::STAFF => false,
-                default => true,
-            };
-        });
+        if (count($groups) > 0) { // 미가입 유저는 권한 자체가 없다.
+            $isNotMember = $groups->every(function ($value, $key) {
+                return match ($value->group_id) {
+                    Group::ARMA_REJECT, Group::ARMA_DEFER, Group::ARMA_APPLY => true,
+                    default => false,
+                };
+            });
+        }
 
-        if ($isNotStaff && !config('app.debug')) {
-            abort(404);
+        if ($isNotMember) {
+            return redirect()->route('application.index');
         }
 
         return $next($request);

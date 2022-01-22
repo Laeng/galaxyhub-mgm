@@ -3,8 +3,8 @@
 use App\Http\Controllers\Lounge\Account\ApiAccountController;
 use App\Http\Controllers\Lounge\Account\ViewAccountController;
 use App\Http\Controllers\Lounge\Account\ViewAuthController;
-use App\Http\Controllers\Lounge\Join\ApiJoinController;
-use App\Http\Controllers\Lounge\Join\ViewJoinController;
+use App\Http\Controllers\Lounge\Application\ApiApplicationController;
+use App\Http\Controllers\Lounge\Application\ViewApplicationController;
 use App\Http\Controllers\Lounge\Mission\ApiMissionController;
 use App\Http\Controllers\Lounge\Mission\ViewMissionController;
 use App\Http\Controllers\Lounge\File\ApiFileController;
@@ -14,8 +14,10 @@ use App\Http\Controllers\Staff\User\All\ViewUserAllController;
 use App\Http\Controllers\Staff\User\Application\ApiUserApplicationController;
 use App\Http\Controllers\Staff\User\Application\ViewUserApplicationController;
 use App\Http\Controllers\Staff\User\Memo\ApiUserMemo;
+use App\Http\Middleware\ForbidApplicant;
 use App\Http\Middleware\ForbidBannedUser;
 use App\Http\Middleware\ForbidUser;
+use App\Http\Middleware\OnlyApplicant;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -41,18 +43,13 @@ Route::middleware('web')->group(function() {
 });
 
 Route::middleware(['auth:web'])->group(function () {
+    // ACCOUNT
     Route::prefix('account')->name('account.')->group(function () {
         Route::post('/leave', [ApiAccountController::class, 'leave'])->name('leave');
         Route::get('/suspended', [ViewAccountController::class, 'suspended'])->name('suspended');
     });
 
-    Route::prefix('join')->name('join.')->group(function () {
-        Route::get( '/agree', [ViewJoinController::class, 'agree'])->name('agree');
-        Route::post('/validate/steam', [ApiJoinController::class, 'steam_validate'])->name('validate.steam.api');
-        Route::match(['get', 'post'], '/apply', [ViewJoinController::class, 'apply'])->name('apply');
-        Route::post('/submit', [ViewJoinController::class, 'submit'])->name('submit');
-    });
-
+    // FILE
     Route::prefix('file')->name('file.')->group(function () {
         Route::prefix('upload')->name('upload.')->group(function () {
             Route::post('/filepond', [ApiFileController::class, 'filepond_upload'])->name('filepond.api');
@@ -66,13 +63,30 @@ Route::middleware(['auth:web'])->group(function () {
     });
 });
 
-Route::middleware(['auth:web'])->prefix('lounge')->name('lounge.')->group(function () {
+Route::middleware(['auth:web', OnlyApplicant::class])->group(function () {
+    // APPLICATION
+    Route::prefix('application')->name('application.')->group(function () {
+        Route::get( '/', [ViewApplicationController::class, 'index'])->name('index');
+        Route::get( '/applied', [ViewApplicationController::class, 'apply'])->name('apply');
+        Route::get( '/deferred', [ViewApplicationController::class, 'defer'])->name('defer');
+        Route::get( '/rejected', [ViewApplicationController::class, 'reject'])->name('reject');
+    });
 
 });
 
-Route::middleware(['auth:web', ForbidBannedUser::class])->prefix('lounge')->name('lounge.')->group(function() {
-    Route::get('/', [ViewLoungeController::class, 'index'])->name('index');
+Route::middleware(['auth:web', ForbidBannedUser::class, OnlyApplicant::class])->group(function () {
+    // APPLICATION
+    Route::prefix('application')->name('application.')->group(function () {
+        Route::get( '/agreements', [ViewApplicationController::class, 'agreements'])->name('agreements');
+        Route::post('/validate/steam', [ApiApplicationController::class, 'steam_validate'])->name('validate.steam.api');
+        Route::match(['get', 'post'], '/form', [ViewApplicationController::class, 'form'])->name('form');
+        Route::post('/submit', [ViewApplicationController::class, 'submit'])->name('submit');
+    });
 
+});
+
+Route::middleware(['auth:web', ForbidBannedUser::class, ForbidApplicant::class])->prefix('lounge')->name('lounge.')->group(function() {
+    Route::get('/', [ViewLoungeController::class, 'index'])->name('index');
 
     // MISSION
     Route::prefix('mission')->name('mission.')->group(function () {

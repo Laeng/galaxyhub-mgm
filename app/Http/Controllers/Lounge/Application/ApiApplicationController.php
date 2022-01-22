@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Lounge\Join;
+namespace App\Http\Controllers\Lounge\Application;
 
 use App\Action\Steam\Steam;
 use App\Http\Controllers\Controller;
@@ -8,7 +8,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Syntax\SteamApi\Facades\SteamApi;
 
-class ApiJoinController extends Controller
+class ApiApplicationController extends Controller
 {
     public function steam_validate(Request $request, Steam $steam) : JsonResponse
     {

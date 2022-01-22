@@ -19,6 +19,10 @@ class PlayerHistory extends Model
         'description'
     ];
 
+    protected $casts = [
+        'created_at' => 'datetime',
+    ];
+
     public function staff(): hasOne
     {
         return $this->hasOne(User::class, 'id', 'staff_id');

@@ -17,6 +17,10 @@ class UserGroup extends Model
         'group_id'
     ];
 
+    protected $casts = [
+        'created_at' => 'datetime',
+    ];
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);

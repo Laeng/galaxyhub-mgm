@@ -7,7 +7,7 @@ use Closure;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\Request;
 
-class ForbidUser
+class OnlyApplicant
 {
     /**
      * The Guard implementation.
@@ -36,16 +36,18 @@ class ForbidUser
     public function handle(Request $request, Closure $next): mixed
     {
         $user = $request->user();
-        $groups = $user->groups()->get(['group_id']);
+        $groups = $user->groups()->get();
+        $isNotApplicant = false;
 
-        $isNotStaff = $groups->every(function ($value, $key) {
-            return match ($value->group_id) {
-                Group::STAFF => false,
-                default => true,
-            };
-        });
+        if (!is_null($groups)) {
 
-        if ($isNotStaff && !config('app.debug')) {
+        }
+
+        $isNotApplicant = (!is_null($user->agreed_at) && count($groups) >= 0);
+
+
+
+        if ($isNotApplicant && !config('app.debug')) {
             abort(404);
         }
 
