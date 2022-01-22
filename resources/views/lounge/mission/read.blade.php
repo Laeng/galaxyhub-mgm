@@ -1,10 +1,13 @@
+@push('js')
+    <script defer src="//cdn.embedly.com/widgets/platform.js"></script>
+@endpush
 <x-sub-page website-name="MGM Lounge" title="{{ $mission->title }}">
     <x-section.basic parent-class="py-4 sm:py-6 lg:py-16" class="flex justify-center">
         <div class="w-full">
             <div class="bg-white rounded-lg p-4 lg:p-16">
                 <h1 class="text-2xl lg:text-3xl font-bold text-center lg:text-left my-4 lg:mt-0 lg:mb-6">{{ $type }}</h1>
 
-                <div class="grid md:grid-cols-5 lg:grid-cols-3 gap-4" x-data="mission_read">
+                <div class="grid grid-cols-1 md:grid-cols-5 lg:grid-cols-3 gap-4" x-data="mission_read">
                     <div class="md:col-span-3 lg:col-span-2">
                         <div>
                             <p class="text-lg font-bold mb-2">{{ $type }} 소개</p>
@@ -34,6 +37,13 @@
                                         </ul>
                                     </x-alert.info>
                                 @endif
+                                <template x-if="data.load.data.is_edit">
+                                    <x-alert.warning title="새로고침 필요">
+                                        <ul>
+                                            <li>{{ $type }} 소개가 변경되었습니다. - <span class="font-bold text-yellow-700 underline hover:no-underline cursor-pointer" @click="load(true)">새로고침</span></li>
+                                        </ul>
+                                    </x-alert.warning>
+                                </template>
                             </div>
                             <div class="h-fit w-full rounded-md bg-gray-50 p-4">
                                 <div class="mission-body prose max-w-full" x-html="data.load.data.body"></div>
@@ -269,6 +279,7 @@
                                         body: '{!! $mission->body !!}',
                                         can_tardy: {{ var_export($mission->can_tardy) }},
                                         is_participant: {{ var_export($isParticipant) }},
+                                        is_edit: false
                                     },
                                 },
                                 participants: {
@@ -390,11 +401,27 @@
                                     this.post(this.data.process.url, this.data.process.body, success, error, complete);
                                 }
                             },
-                            load() {
+                            load(update = false) {
                                 let success = (r) => {
                                     if (r.data.data !== null) {
                                         if (!(typeof r.data.data === 'undefined' || r.data.data.length <= 0)) {
-                                            this.data.load.data = r.data.data;
+                                            if (!update) {
+                                                if (this.data.load.data.body !== r.data.data.body) {
+                                                    this.data.load.data.is_edit = true;
+                                                    delete r.data.data.body;
+                                                }
+
+                                            } else {
+                                                this.data.load.data.is_edit = false;
+                                            }
+
+                                            this.data.load.data = window._.merge(this.data.load.data, r.data.data);
+
+                                            if (update) {
+                                                window.alpine.nextTick(() => {
+                                                    window.global.embedly();
+                                                });
+                                            }
                                         }
                                     }
                                 };
@@ -440,6 +467,29 @@
                                 window.axios.post(url, body).then(success).catch(error).then(complete);
                             }
                         }));
+                    });
+
+                    window.addEventListener('load', function(){
+                        window.global = {
+                            embedly() {
+                                document.querySelectorAll('oembed[url]').forEach(element => {
+                                    const anchor = document.createElement('a');
+
+                                    anchor.setAttribute('href', element.getAttribute('url'));
+                                    anchor.className = 'embedly-card';
+
+                                    element.appendChild(anchor);
+                                });
+                            }
+                        }
+
+                        window.global.embedly();
+
+                        embedly("defaults", {
+                            cards: {
+                                align: 'center',
+                            }
+                        });
                     });
                 </script>
             </div>

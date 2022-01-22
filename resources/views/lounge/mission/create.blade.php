@@ -1,5 +1,5 @@
 @push('js')
-    <script defer src="https://cdn.ckeditor.com/ckeditor5/31.1.0/classic/ckeditor.js"></script>
+    <script defer src="{{ asset('/js/ckeditor.js') }}"></script>
 @endpush
 
 <x-sub-page website-name="MGM Lounge" title="{{ $title }}">
@@ -8,7 +8,7 @@
             <div class="bg-white rounded-lg p-4 lg:p-16">
                 <h1 class="text-2xl lg:text-3xl font-bold text-center lg:text-left my-4 lg:mt-0 lg:mb-6">{{$title}}</h1>
 
-                <div class="" x-data="mission_create()">
+                <div class="" x-data="mission_create">
                     <div class="mt-6 grid grid-cols-1 gap-y-6 gap-x-4">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4">
                             <div class="">
@@ -70,10 +70,10 @@
                         </div>
 
                         <div class="mission-body prose max-w-full">
-                            <label for="body" class="block text-sm font-medium text-gray-700 pb-1">
+                            <label for="editor" class="block text-sm font-medium text-gray-700 pb-1">
                                 미션 소개
                             </label>
-                            <textarea id="body" name="body" class="shadow-sm block w-full focus:ring-blue-500 focus:border-blue-500 sm:text-sm border border-gray-300 rounded-md" placeholder="미션 정보 입력" x-model="data.create.body.body"></textarea>
+                            <textarea id="editor" name="body" class="shadow-sm block w-full focus:ring-blue-500 focus:border-blue-500 sm:text-sm border border-gray-300 rounded-md" placeholder="미션 정보 입력" x-model="data.create.body.body"></textarea>
                         </div>
 
                         <div class="flex justify-start">
@@ -102,7 +102,7 @@
 
                     <script type="text/javascript">
                         window.document.addEventListener('alpine:init', () => {
-                            return {
+                            window.alpine.data('mission_create', () => ({
                                 data: {
                                     create: {
                                         url: @if($edit) '{{route('lounge.mission.update.api', $contents['id'])}}' @else '{{route('lounge.mission.create.api')}}' @endif,
@@ -171,14 +171,18 @@
                                 post(url, body, success, error, complete) {
                                     window.axios.post(url, body).then(success).catch(error).then(complete);
                                 }
-                            }
+                            }));
                         });
 
-                        window.addEventListener('load', () => {
-                            ClassicEditor.create(document.querySelector('#body'), {
+                        window.addEventListener('load', function(){
+                            ClassicEditor.create(document.querySelector('#editor'), {
                                 viewportTopOffset : 50,
-                                toolbar: ['heading', '|', 'bold', 'italic', 'link',  'bulletedList', 'numberedList', '|', 'outdent', 'indent', '|', 'blockQuote'],
-                                language: 'ko'
+                                simpleUpload: {
+                                    uploadUrl: '{{route('file.upload.ckeditor.api')}}',
+                                    headers: {
+                                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                                    }
+                                },
                             }).then(e => {
                                 window.global.editor = e;
                             }).catch(e => {

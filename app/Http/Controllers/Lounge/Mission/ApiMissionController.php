@@ -182,7 +182,7 @@ class ApiMissionController extends Controller
                 'type' => $type,
                 'code' => mt_rand(1000, 9999),
                 'title' => "{$date->format('m월 d일 H시 i분')} {$mission_name}",
-                'body' => strip_tags($request->get('body'), '<h2><h3><h4><p><a><i><br><strong><sub><sup><ol><ul><li><blockquote>'),
+                'body' => strip_tags($request->get('body'), '<h2><h3><h4><p><a><i><br><u><strong><sub><sup><ol><ul><li><blockquote><span><figure><table><tbody><tr><td><oembed>'),
                 'can_tardy' => !boolval($request->get('tardy')),
                 'expected_at' => $date,
                 'data' => [
@@ -284,7 +284,7 @@ class ApiMissionController extends Controller
                 'type' => $mission->type, //'type' => $request->get('type'), // 미션 수정시 미션 타입을 변경할 수 없다.
                 'code' => mt_rand(1000, 9999),
                 'title' => "{$date->format('m월 d일')} {$mission_name}",
-                'body' => strip_tags($request->get('body'), '<h2><h3><h4><p><a><i><br><strong><sub><sup><ol><ul><li><blockquote>'),
+                'body' => strip_tags($request->get('body'), '<h2><h3><h4><p><a><i><br><u><strong><sub><sup><ol><ul><li><blockquote><span><figure><table><tbody><tr><td><oembed>'),
                 'can_tardy' => !boolval($request->get('tardy')),
                 'expected_at' => $date,
                 'data' => [
@@ -447,8 +447,8 @@ class ApiMissionController extends Controller
                     'closed_at' => (!is_null($mission->closed_at)) ? $mission->closed_at->format('Y-m-d H:i') : '',
                 ],
                 'code' => '',
-                'body' => $mission->body,
                 'can_tardy' => $mission->can_tardy,
+                'body' => $mission->body,
                 'is_participant' => ($user->missions()->where('mission_id', $id)->exists() && $mission->user_id != $user->id),
             ];
 

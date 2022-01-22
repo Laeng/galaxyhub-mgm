@@ -3,13 +3,16 @@
 */
 @import url("https://cdn.galaxyhub.kr/static/css/pretendard/pretendard-dynamic-subset.css");
 
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 *, ::before, ::after {
     --ck-border-radius: 0.375rem;
+}
+
+.prose :where(a):not(:where([class~="not-prose"] *)) {
+    @apply text-indigo-500 no-underline hover:underline;
 }
 
 [x-cloak] {
@@ -157,7 +160,7 @@ aspect-16\/10 {
 }
 
 .ck-editor__editable {
-    height: 20rem;
+    min-height: 20rem;
 }
 
 .mission-body.prose p, .mission-body.prose li{
@@ -168,6 +171,17 @@ aspect-16\/10 {
 .mission-body.prose h1, .mission-body.prose h2, .mission-body.prose h3 {
     margin-top: 0.4em;
     margin-bottom: 0.4em;
+}
+
+.mission-body.prose > figure.table {
+    @apply grid;
+}
+.mission-body.prose table {
+    @apply border-collapse border border-gray-300 table-auto;
+}
+
+.mission-body.prose table > tbody > tr > td {
+    @apply px-3 py-4 text-sm text-gray-500 tabular-nums border border-gray-300;
 }
 
 .link-red {
