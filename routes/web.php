@@ -3,8 +3,6 @@
 use App\Http\Controllers\Lounge\Account\ApiAccountController;
 use App\Http\Controllers\Lounge\Account\ViewAccountController;
 use App\Http\Controllers\Lounge\Account\ViewAuthController;
-use App\Http\Controllers\Lounge\File\ApiFileCKEditorController;
-use App\Http\Controllers\Lounge\File\ApiFilepondController;
 use App\Http\Controllers\Lounge\Join\ApiJoinController;
 use App\Http\Controllers\Lounge\Join\ViewJoinController;
 use App\Http\Controllers\Lounge\Mission\ApiMissionController;
@@ -50,7 +48,7 @@ Route::middleware(['auth:web'])->group(function () {
 
     Route::prefix('join')->name('join.')->group(function () {
         Route::get( '/agree', [ViewJoinController::class, 'agree'])->name('agree');
-        Route::post('/check/steam/status', [ApiJoinController::class, 'check_steam_status'])->name('check.steam.status');
+        Route::post('/validate/steam', [ApiJoinController::class, 'steam_validate'])->name('validate.steam.api');
         Route::match(['get', 'post'], '/apply', [ViewJoinController::class, 'apply'])->name('apply');
         Route::post('/submit', [ViewJoinController::class, 'submit'])->name('submit');
     });

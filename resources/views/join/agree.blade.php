@@ -1,8 +1,12 @@
 <x-sub-page website-name="MGM Lounge" title="가입">
-    <x-section.basic parent-class="py-4 sm:py-6 lg:py-16" class="flex justify-center">
+    <x-section.basic parent-class="py-4 sm:py-6 lg:py-16" class="flex justify-center lg:px-48">
         <div class="w-full" x-data="steam_status_check()">
             <div class="bg-white rounded-lg p-4 lg:p-16">
-                <h1 class="text-2xl lg:text-3xl font-bold text-center lg:text-left my-4 lg:mt-0 lg:mb-6">MGM Lounge 및 클랜 가입</h1>
+                <div class="text-center my-4 lg:mt-0 lg:mb-6">
+                    <h1 class="text-2xl lg:text-3xl font-bold">
+                        약관 동의
+                    </h1>
+                </div>
 
                 <div class="mb-4">
                     <h3 class="text-lg lg:text-xl font-bold py-2">개인정보처리방침 <span class="text-base font-normal">(필수 동의 항목)</span></h3>
@@ -65,7 +69,7 @@
                         }
                     },
                     check() {
-                        let url = '{{route('join.check.steam.status')}}';
+                        let url = '{{route('join.validate.steam.api')}}';
                         let body = {};
                         let success = (r) => {
                             this.data.check.status = r.data.data;
