@@ -33,7 +33,7 @@
                     </div>
                 @endforeach
             @else
-                <p class="text-sm -mt-2">첨부하지 않음</p>
+                <p class="text-sm -mt-2">첨부된 파일 없음</p>
             @endif
 
         </div>

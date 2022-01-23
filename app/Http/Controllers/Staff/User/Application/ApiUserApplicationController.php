@@ -30,7 +30,8 @@ class ApiUserApplicationController extends Controller
 
             if ($limit < 1 || $limit > 100) $limit = 20;
 
-            $surveyForms = Survey::where('name', 'like', 'join-application-%')->get(['id'])->pluck('id')->toArray();
+            $surveyForms = Survey::where('name', 'like', 'application-%')->get(['id'])->pluck('id')->toArray();
+
             $countApplicant = $group->countSpecificGroupUsers($group::ARMA_APPLY);
             $step = $this->getPaginationStep($step, $limit, $countApplicant);
             $applicants = $group->getSpecificGroupUsers($group::ARMA_APPLY, $step * $limit, $limit, true);

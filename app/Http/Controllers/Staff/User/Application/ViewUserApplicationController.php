@@ -35,7 +35,7 @@ class ViewUserApplicationController extends Controller
             //return redirect()->back()->withErrors(['danger' => '없는 회원입니다.']);
         }
 
-        $surveyForms = Survey::where('name', 'like', 'join-application-%')->get(['id'])->pluck('id')->toArray();
+        $surveyForms = Survey::where('name', 'like', 'application-%')->get(['id'])->pluck('id')->toArray();
         $userSurveys = $user->surveys()->whereIn('survey_id', $surveyForms)->latest()->get()->toArray();
 
         if (count($userSurveys) <= 0) {
