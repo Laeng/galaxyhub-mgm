@@ -39,13 +39,14 @@ class OnlyApplicant
         $groups = $user->groups()->get();
         $isNotApplicant = false;
 
-        if (!is_null($groups)) {
+        if (!is_null($groups) && is_null($user->agreed_at) && $groups->count() > 0) {
+            if ($groups->has([Group::STAFF], $user)) {
+                $isNotApplicant = true;
+            }
 
+        } else {
+            $isNotApplicant = true;
         }
-
-        $isNotApplicant = (!is_null($user->agreed_at) && count($groups) >= 0);
-
-
 
         if ($isNotApplicant && !config('app.debug')) {
             abort(404);

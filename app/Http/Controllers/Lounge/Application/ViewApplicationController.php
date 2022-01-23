@@ -26,7 +26,7 @@ class ViewApplicationController extends Controller
         $user = $request->user();
         $group = $user->groups()->get();
 
-        if (is_null($group)) {
+        if (is_null($group) || $group->count() <= 0) {
             return redirect()->route('application.agreements');
         }
 
@@ -51,7 +51,7 @@ class ViewApplicationController extends Controller
     {
         $user = $request->user();
 
-        if (!$this->groupValidate($user, $group, Group::ARMA_APPLY) || $user->isBanned()) {
+        if ($this->groupValidate($user, $group, Group::ARMA_APPLY) || $user->isBanned()) {
             return redirect()->route('application.index');
         }
 
@@ -62,7 +62,7 @@ class ViewApplicationController extends Controller
     {
         $user = $request->user();
 
-        if (!$this->groupValidate($user, $group, Group::ARMA_APPLY) || $user->isBanned()) {
+        if ($this->groupValidate($user, $group, Group::ARMA_APPLY) || $user->isBanned()) {
             return redirect()->route('application.index');
         }
 
@@ -79,7 +79,7 @@ class ViewApplicationController extends Controller
     {
         $user = $request->user();
 
-        if (!$this->groupValidate($user, $group, Group::ARMA_APPLY) || $user->isBanned()) {
+        if ($this->groupValidate($user, $group, Group::ARMA_APPLY) || $user->isBanned()) {
             return redirect()->route('application.index');
         }
 
@@ -116,7 +116,7 @@ class ViewApplicationController extends Controller
         $user = $request->user();
 
         if (!$this->groupValidate($user, $group, Group::ARMA_DEFER)) {
-            abort(404);
+            return redirect()->route('application.index');
         }
 
         $deferred = $this->getPlayerHistory($user, $history, PlayerHistory::TYPE_APPLICATION_DEFERRED)->first();
@@ -140,7 +140,7 @@ class ViewApplicationController extends Controller
         $user = $request->user();
 
         if (!$this->groupValidate($user, $group, Group::ARMA_REJECT)) {
-            abort(404);
+            return redirect()->route('application.index');
         }
 
         $rejected = $this->getPlayerHistory($user, $history, PlayerHistory::TYPE_APPLICATION_REJECTED)->get();
@@ -167,7 +167,7 @@ class ViewApplicationController extends Controller
         $user = $request->user();
 
         if (!$this->groupValidate($user, $group, Group::ARMA_APPLY)) {
-            abort(404);
+            return redirect()->route('application.index');
         }
 
         return view('application.applied', []);
@@ -175,7 +175,7 @@ class ViewApplicationController extends Controller
 
     private function groupValidate(User $user, Group $group, ...$condition): bool
     {
-        return $group->has($condition, $user) || config('app.debug');
+        return $group->has($condition, $user); // || config('app.debug');
     }
 
     private function getPlayerHistory(User $user, PlayerHistory $history, String $type): Builder
