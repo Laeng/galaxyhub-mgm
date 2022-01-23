@@ -80,7 +80,7 @@ class ViewApplicationController extends Controller
         $now = now();
         $survey = SurveyModel::where('name', $form->getQuizName($user))->whereBetween('created_at', [$now->copy()->subDays(7), $now])->latest()->first();
 
-        if(!is_null($survey)) {
+        if(!is_null($survey) && $user->surveys()->where('survey_id', $survey)->latest()->exists()) {
             return redirect()->route('application.score');
         }
 

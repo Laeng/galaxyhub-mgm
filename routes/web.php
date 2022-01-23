@@ -70,6 +70,10 @@ Route::middleware(['auth:web', OnlyApplicant::class])->group(function () {
         Route::get( '/applied', [ViewApplicationController::class, 'apply'])->name('apply');
         Route::get( '/deferred', [ViewApplicationController::class, 'defer'])->name('defer');
         Route::get( '/rejected', [ViewApplicationController::class, 'reject'])->name('reject');
+
+        // 퀴즈 불합격자에게 정보를 제공하기 위해 따로 빼둠.
+        Route::get( '/agreements', [ViewApplicationController::class, 'agreements'])->name('agreements');
+        Route::match(['get', 'post'], '/score', [ViewApplicationController::class, 'score'])->name('score');
     });
 
 });
@@ -77,10 +81,10 @@ Route::middleware(['auth:web', OnlyApplicant::class])->group(function () {
 Route::middleware(['auth:web', ForbidBannedUser::class, OnlyApplicant::class])->group(function () {
     // APPLICATION
     Route::prefix('application')->name('application.')->group(function () {
-        Route::get( '/agreements', [ViewApplicationController::class, 'agreements'])->name('agreements');
+        // Route::get( '/agreements', [ViewApplicationController::class, 'agreements'])->name('agreements');
         Route::post('/validate/steam', [ApiApplicationController::class, 'steam_validate'])->name('validate.steam.api');
         Route::match(['get', 'post'], '/quiz', [ViewApplicationController::class, 'quiz'])->name('quiz');
-        Route::match(['get', 'post'], '/score', [ViewApplicationController::class, 'score'])->name('score');
+        // Route::match(['get', 'post'], '/score', [ViewApplicationController::class, 'score'])->name('score');
         Route::match(['get', 'post'], '/form', [ViewApplicationController::class, 'form'])->name('form');
         Route::post('/submit', [ViewApplicationController::class, 'submit'])->name('submit');
     });
