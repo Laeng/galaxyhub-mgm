@@ -18,6 +18,8 @@ class PlayerHistory
     const TYPE_USER_CHANGED_GROUP = 'user_changed_group';
     const TYPE_APPLICATION_REJECTED = 'application_rejected';
     const TYPE_APPLICATION_DEFERRED = 'application_deferred';
+    const TYPE_APPLICATION_QUIZ_FAILED = 'application_quiz_failed';
+    const TYPE_APPLICATION_QUIZ_PASSED = 'application_quiz_passed';
     const TYPE_STEAM_DISPLAY_NAME_CHANGED = 'steam_display_name_changed';
 
     public array $names = [
@@ -30,7 +32,9 @@ class PlayerHistory
         'user_changed_group' => '등급 변경',
         'application_rejected' => '가입 거절',
         'application_deferred' => '가입 보류',
-        'steam_display_name_changed' => '닉네임 변경'
+        'application_quiz_failed' => '아르마3 퀴즈 불합격',
+        'application_quiz_passed' => '아르마3 퀴즈 합격',
+        'steam_display_name_changed' => '닉네임'
     ];
 
     public function getName(string $type): ?string

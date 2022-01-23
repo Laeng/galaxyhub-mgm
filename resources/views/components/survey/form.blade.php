@@ -9,6 +9,8 @@
             @foreach($survey->questions()->withoutSection()->get() as $question)
                 <x-survey.question.single :question="$question" :answer="$answer"/>
             @endforeach
+
+            <input type="hidden" name="id" value="{{ $survey->id }}">
         </div>
         @if(is_null($answer))
             <div class="flex justify-center mt-4 space-x-2">

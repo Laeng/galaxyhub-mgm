@@ -9,6 +9,7 @@ use App\Action\Group\Group;
 use App\Action\UserData\UserData;
 use App\Http\Controllers\Controller;
 use App\Jobs\ProcessSteamEnquiry;
+use App\Models\Survey as SurveyModel;
 use App\Models\SurveyEntry;
 use App\Models\User;
 use Illuminate\Contracts\Foundation\Application;
@@ -24,10 +25,16 @@ class ViewApplicationController extends Controller
     public function index(Request $request): Factory|View|Application|RedirectResponse
     {
         $user = $request->user();
+
         $group = $user->groups()->get();
 
         if (is_null($group) || $group->count() <= 0) {
-            return redirect()->route('application.agreements');
+            if ($user->isBanned()) {
+                return redirect()->route('account.suspended');
+
+            } else {
+                return redirect()->route('application.agreements');
+            }
         }
 
         $groupIds = $group->pluck('group_id')->toArray();
@@ -58,6 +65,108 @@ class ViewApplicationController extends Controller
         return view('application.agreements');
     }
 
+    public function quiz(Request $request, Group $group, SurveyForm $form, PlayerHistory $history): Factory|View|Application|RedirectResponse
+    {
+        $user = $request->user();
+
+        if ($this->groupValidate($user, $group, Group::ARMA_APPLY) || $user->isBanned()) {
+            return redirect()->route('application.index');
+        }
+
+        if ($request->isMethod('get') && (is_null($request->session()->get('_old_input')) || count($request->session()->get('_old_input')) <= 0 )) {
+            return redirect()->route('application.index');
+        }
+
+        $now = now();
+        $survey = SurveyModel::where('name', $form->getQuizName($user))->whereBetween('created_at', [$now->copy()->subDays(7), $now])->latest()->first();
+
+        if(!is_null($survey)) {
+            return redirect()->route('application.score');
+        }
+
+        $survey = $form->getQuiz($user);
+
+        return view('application.quiz', [
+            'survey' => $survey,
+            'action' => route('application.score')
+        ]);
+    }
+
+    public function score(Request $request, Group $group, SurveyForm $form, PlayerHistory $history): Factory|View|Application|RedirectResponse
+    {
+        $user = $request->user();
+
+        if ($user->isBanned()) {
+            return redirect()->route('application.index');
+        }
+
+        if ($request->isMethod('GET')) {
+            $now = now();
+            $survey = SurveyModel::where('name', $form->getQuizName($user))->whereBetween('created_at', [$now->copy()->subDays(7), $now])->latest()->first();
+
+            if (is_null($survey)) {
+                return redirect()->route('application.index');
+            }
+
+            $id = $survey->id;
+
+        } else {
+            if ($this->groupValidate($user, $group, Group::ARMA_APPLY)) {
+                return redirect()->route('application.index');
+            }
+
+            $id = $request->get('id');
+            $survey = $form->getQuiz($user, $id);
+        }
+
+        $userSurvey = $user->surveys()->where('survey_id', $id)->latest()->first();
+
+        if (is_null($userSurvey))
+        {
+            $answers = $this->validate($request, $survey->validateRules());
+            (new SurveyEntry())->for($survey)->by($user)->fromArray($answers)->push();
+
+            $userSurvey = $user->surveys()->where('survey_id', $id)->latest()->first();
+        }
+
+        $answers = $userSurvey->answers()->get();
+        $matches = 0;
+
+        foreach ($answers as $answer)
+        {
+            $options = $answer->question()->first()->options;
+
+            if (end($options) === $answer->value) {
+                $matches++;
+            }
+        }
+
+        if ($request->isMethod('POST')) {
+            $identifier = $history->getIdentifierFromUser($user);
+            $historyType = PlayerHistory::TYPE_APPLICATION_QUIZ_PASSED;
+
+            if ($matches < 3) {
+                if (!$user->isBanned()) {
+                    $user->ban([
+                        'comment' => '가입 퀴즈를 3개 이상 맞추지 못하셨습니다. 7일 후 다시 도전 하실 수 있습니다.',
+                        'expired_at' => '+7 days',
+                    ]);
+
+                    $historyType = PlayerHistory::TYPE_APPLICATION_QUIZ_FAILED;
+                }
+            }
+
+            $history->add($identifier, $historyType, null);
+        }
+
+        return view('application.score', [
+            'user' => $user,
+            'survey' => $survey,
+            'answer' => $userSurvey->id,
+            'matches' => $matches
+        ]);
+    }
+
     public function form(Request $request, Group $group, SurveyForm $form, PlayerHistory $history): Factory|View|Application|RedirectResponse
     {
         $user = $request->user();
@@ -70,9 +179,12 @@ class ViewApplicationController extends Controller
             return redirect()->route('application.agreements');
         }
 
-        $survey = $form->getJoinApplicationForm();
+        $survey = $form->getJoinApplication();
 
-        return view('application.form', ['survey' => $survey, 'action' => route('application.submit')]);
+        return view('application.form', [
+            'survey' => $survey,
+            'action' => route('application.submit')
+        ]);
     }
 
     public function submit(Request $request, Group $group, SurveyForm $form, Steam $steam, PlayerHistory $history): Factory|View|Application|RedirectResponse
@@ -83,7 +195,7 @@ class ViewApplicationController extends Controller
             return redirect()->route('application.index');
         }
 
-        $survey = $form->getJoinApplicationForm();
+        $survey = $form->getJoinApplication();
         $answers = $this->validate($request, $survey->validateRules());
 
         $userId = $user->id;
@@ -104,7 +216,7 @@ class ViewApplicationController extends Controller
             'agreed_at' => $now
         ]);
 
-        $group->add($group::ARMA_APPLY);
+        $group->add($group::ARMA_APPLY, $user);
 
         $history->add($history->getIdentifierFromUser($user), PlayerHistory::TYPE_USER_APPLY, '가입 신청');
 
@@ -175,7 +287,7 @@ class ViewApplicationController extends Controller
 
     private function groupValidate(User $user, Group $group, ...$condition): bool
     {
-        return $group->has($condition, $user); // || config('app.debug');
+        return $group->has($condition, $user) || !config('app.debug');
     }
 
     private function getPlayerHistory(User $user, PlayerHistory $history, String $type): Builder

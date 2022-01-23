@@ -11,10 +11,10 @@ class ForbidBannedUser extends ForbidBannedUserAlias
 {
     public function handle($request, Closure $next)
     {
-        if (!config('app.debug')) {
-            return parent::handle($request, $next);
+        if (config('app.debug')) {
+            return $next($request);
         }
 
-        return $next($request);
+        return parent::handle($request, $next);
     }
 }

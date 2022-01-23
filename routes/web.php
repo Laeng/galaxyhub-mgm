@@ -79,6 +79,8 @@ Route::middleware(['auth:web', ForbidBannedUser::class, OnlyApplicant::class])->
     Route::prefix('application')->name('application.')->group(function () {
         Route::get( '/agreements', [ViewApplicationController::class, 'agreements'])->name('agreements');
         Route::post('/validate/steam', [ApiApplicationController::class, 'steam_validate'])->name('validate.steam.api');
+        Route::match(['get', 'post'], '/quiz', [ViewApplicationController::class, 'quiz'])->name('quiz');
+        Route::match(['get', 'post'], '/score', [ViewApplicationController::class, 'score'])->name('score');
         Route::match(['get', 'post'], '/form', [ViewApplicationController::class, 'form'])->name('form');
         Route::post('/submit', [ViewApplicationController::class, 'submit'])->name('submit');
     });
@@ -124,8 +126,6 @@ Route::middleware(['auth:web', ForbidUser::class])->prefix('staff')->name('staff
         // APPLICATION
         Route::prefix('application')->name('application.')->group(function () {
             Route::redirect('/', '/staff/user/applications');
-
-
         });
         Route::prefix('applications')->name('application.')->group(function () {
             Route::get( '/', [ViewUserApplicationController::class, 'list'])->name('list');

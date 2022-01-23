@@ -2,9 +2,9 @@
     <x-section.basic parent-class="py-4 sm:py-6" class="flex justify-center">
         <div class="w-full">
             <div class="flex items-center space-x-2 md:space-x-4">
-                <img class="rounded-full h-14 w-14" src="https://cdn.cloudflare.steamstatic.com/steamcommunity/public/images/avatars/ef/ef79c1a01213dca96e2ce73d74a5ec17278a9ce7_full.jpg" alt="프로필 이미지" />
+                <img class="rounded-full h-14 w-14" src="{{ $user->avatar }}" alt="프로필 이미지" />
                 <div>
-                    <h1 class="font-bold text-lg">안녕하세요! Laeng님.</h1>
+                    <h1 class="font-bold text-lg">안녕하세요! {{ $user->nickname }}님.</h1>
                     <p class="text-sm text-gray-500">MGM Lounge 에 오신 것을 환영합니다.</p>
                 </div>
             </div>
@@ -29,7 +29,7 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 my-6 gap-4">
-                <div class="md:col-span-2 lg:row-span-2 bg-red-400 rounded-lg p-8 lg:p-16 shadow-lg hover:shadow-inner transform hover:translate-y-0.5">
+                <a class="md:col-span-2 lg:row-span-2 bg-red-500 rounded-lg p-8 lg:p-16 shadow-lg hover:shadow-inner transform hover:translate-y-0.5" href="{{route('lounge.mission.list')}}">
                     <div class="flex items-center justify-between h-full">
                         <div class="text-left text-white font-bold text-xl lg:text-5xl">
                             <p class="">아르마3 미션</p>
@@ -41,9 +41,9 @@
                             </svg>
                         </div>
                     </div>
-                </div>
+                </a>
 
-                <div class="rounded-lg p-8 bg-blue-400 shadow-lg hover:shadow-inner transform hover:translate-y-0.5">
+                <div class="rounded-lg p-8 bg-gradient-to-br from-sky-500/90 to-sky-500 shadow-lg hover:shadow-inner transform hover:translate-y-0.5">
                     <div class="flex items-center justify-between">
                         <svg class="h-10 w-10 text-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
                             <path fill="currentColor" d="M448 304h-53.5l-48 48H448c8.822 0 16 7.178 16 16V448c0 8.822-7.178 16-16 16H64c-8.822 0-16-7.178-16-16v-80C48 359.2 55.18 352 64 352h101.5l-48-48H64c-35.35 0-64 28.65-64 64V448c0 35.35 28.65 64 64 64h384c35.35 0 64-28.65 64-64v-80C512 332.7 483.3 304 448 304zM432 408c0-13.26-10.75-24-24-24S384 394.7 384 408c0 13.25 10.75 24 24 24S432 421.3 432 408zM239 368.1C243.7 373.7 249.8 376 256 376s12.28-2.344 16.97-7.031l136-136c9.375-9.375 9.375-24.56 0-33.94s-24.56-9.375-33.94 0L280 294.1V24C280 10.75 269.3 0 256 0S232 10.75 232 24v270.1L136.1 199c-9.375-9.375-24.56-9.375-33.94 0s-9.375 24.56 0 33.94L239 368.1z"></path>
@@ -55,7 +55,7 @@
                     </div>
                 </div>
 
-                <div class="rounded-lg p-8 bg-[#5865F2] shadow-lg hover:shadow-inner transform hover:translate-y-0.5">
+                <a class="rounded-lg p-8 bg-[#5865F2] shadow-lg hover:shadow-inner transform hover:translate-y-0.5" href="https://discord.gg/mgm" target="_blank">
                     <div class="flex items-center justify-between">
                         <svg class="h-10 w-auto text-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512">
                             <path fill="currentColor" d="M524.5 69.84a1.5 1.5 0 0 0 -.764-.7A485.1 485.1 0 0 0 404.1 32.03a1.816 1.816 0 0 0 -1.923 .91 337.5 337.5 0 0 0 -14.9 30.6 447.8 447.8 0 0 0 -134.4 0 309.5 309.5 0 0 0 -15.14-30.6 1.89 1.89 0 0 0 -1.924-.91A483.7 483.7 0 0 0 116.1 69.14a1.712 1.712 0 0 0 -.788 .676C39.07 183.7 18.19 294.7 28.43 404.4a2.016 2.016 0 0 0 .765 1.375A487.7 487.7 0 0 0 176 479.9a1.9 1.9 0 0 0 2.063-.676A348.2 348.2 0 0 0 208.1 430.4a1.86 1.86 0 0 0 -1.019-2.588 321.2 321.2 0 0 1 -45.87-21.85 1.885 1.885 0 0 1 -.185-3.126c3.082-2.309 6.166-4.711 9.109-7.137a1.819 1.819 0 0 1 1.9-.256c96.23 43.92 200.4 43.92 295.5 0a1.812 1.812 0 0 1 1.924 .233c2.944 2.426 6.027 4.851 9.132 7.16a1.884 1.884 0 0 1 -.162 3.126 301.4 301.4 0 0 1 -45.89 21.83 1.875 1.875 0 0 0 -1 2.611 391.1 391.1 0 0 0 30.01 48.81 1.864 1.864 0 0 0 2.063 .7A486 486 0 0 0 610.7 405.7a1.882 1.882 0 0 0 .765-1.352C623.7 277.6 590.9 167.5 524.5 69.84zM222.5 337.6c-28.97 0-52.84-26.59-52.84-59.24S193.1 219.1 222.5 219.1c29.67 0 53.31 26.82 52.84 59.24C275.3 310.1 251.9 337.6 222.5 337.6zm195.4 0c-28.97 0-52.84-26.59-52.84-59.24S388.4 219.1 417.9 219.1c29.67 0 53.31 26.82 52.84 59.24C470.7 310.1 447.5 337.6 417.9 337.6z"></path>
@@ -65,7 +65,7 @@
                             <p class="text-2xl font-bold">바로가기</p>
                         </div>
                     </div>
-                </div>
+                </a>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 mt-6 gap-4">

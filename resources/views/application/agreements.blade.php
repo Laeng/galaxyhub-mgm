@@ -9,6 +9,20 @@
                 </div>
 
                 <div class="mb-4">
+                    <h3 class="text-lg lg:text-xl font-bold py-2">가입 안내</h3>
+                    <div class="p-4 rounded-md bg-gray-50 border border-gray-200">
+                        <div class="text-gray-700">
+                            <ul>
+                                <li>MGM Lounge 및 MGM 아르마 클랜 가입을 진심으로 환영합니다.</li>
+                                <li>가입 절차는 <span class="text-sky-400 font-bold">약관 동의 ></span> <span class="text-sky-500 font-bold">아르마3 퀴즈 참여 ></span> <span class="text-sky-600 font-bold">가입 신청서 작성 ></span> <span class="text-sky-700 font-bold">가입 심사</span> 순으로 진행됩니다.</li>
+                                <li>가입 심사는 MGM 아르마 클랜 스탭이 직접 심사하고 있습니다.</li>
+                                <li>심사 완료까지 시간이 걸릴 수 있는 점 너른 마음으로 양해해주시면 감사드립니다.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-4">
                     <h3 class="text-lg lg:text-xl font-bold py-2">개인정보처리방침 <span class="text-base font-normal">(필수 동의 항목)</span></h3>
                     <div class="rounded-lg border border-gray-200 py-4 pl-4">
                         <div class="h-64 overflow-y-scroll pr-4">
@@ -44,7 +58,7 @@
                     <p class="py-2 text-center">
                         개인정보처리방침 및 이용약관을 읽으셨으며 모두 동의하십니까?
                     </p>
-                    <form action="{{ route('application.form') }}" method="post" onsubmit="return (data.check.load && data.check.status)">
+                    <form action="{{ route('application.quiz') }}" method="post" onsubmit="return (data.check.load && data.check.status)">
                         @csrf
                         <div class="flex justify-center pt-2 space-x-4">
                             <x-button.filled.md-blue x-html="(data.check.load && data.check.status) ? '예, 모두 동의합니다.' : $el.innerHTML">

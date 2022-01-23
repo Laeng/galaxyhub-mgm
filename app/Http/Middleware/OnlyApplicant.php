@@ -43,9 +43,6 @@ class OnlyApplicant
             if ($groups->has([Group::STAFF], $user)) {
                 $isNotApplicant = true;
             }
-
-        } else {
-            $isNotApplicant = true;
         }
 
         if ($isNotApplicant && !config('app.debug')) {

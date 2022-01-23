@@ -14,15 +14,15 @@ use Illuminate\Http\Request;
 
 class ViewLoungeController extends Controller
 {
-    public function index(Request $request, Group $group, PlayerHistory $history): Factory|View|Application|RedirectResponse
+    public function index(Request $request): Factory|View|Application|RedirectResponse
     {
         $user = $request->user();
-        $groups = $group->getUserGroups($user)->pluck(['group_id'])->toArray();
+        // 미션 시간 갱신은 실시간으로 갱신, JS 사용
 
+        return view('lounge.index', [
+            'user' => $user,
 
-
-
-        return view('lounge.main.index');
+        ]);
     }
 
     private function getPlayerHistory(User $user, PlayerHistory $history, String $type)

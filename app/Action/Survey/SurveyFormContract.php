@@ -6,6 +6,6 @@ use App\Models\Mission;
 
 interface SurveyFormContract
 {
-    public function getJoinApplicationForm(): \App\Models\Survey;
-    public function getMissionSurveyForm(Mission $mission): \App\Models\Survey;
+    public function getJoinApplication(): \App\Models\Survey;
+    public function getMissionSurvey(Mission $mission): \App\Models\Survey;
 }

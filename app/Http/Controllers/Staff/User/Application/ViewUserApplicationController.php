@@ -111,7 +111,7 @@ class ViewUserApplicationController extends Controller
             'assign' => $assign,
             'user' => $user,
             'applications' => $userSurveys,
-            'surveyForm' => $surveyForm->getJoinApplicationForm($userSurveys[0]['survey_id']),
+            'surveyForm' => $surveyForm->getJoinApplication($userSurveys[0]['survey_id']),
             'answer' => $userSurveys[0]['id']
         ]);
     }

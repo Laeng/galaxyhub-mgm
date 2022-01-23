@@ -192,7 +192,7 @@ class ApiMissionController extends Controller
             ]);
 
             if ($isSurvey) {
-                $survey = $form->getMissionSurveyForm($mission);
+                $survey = $form->getMissionSurvey($mission);
 
                 $mission->survey_id = $survey->id;
                 $mission->save();
