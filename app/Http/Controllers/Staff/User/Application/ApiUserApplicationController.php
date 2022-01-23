@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Staff\User\Application;
 use App\Action\Group\Group;
 use App\Action\PlayerHistory\PlayerHistory;
 use App\Action\UserData\UserData;
+use App\Models\PlayerHistory as PlayerHistoryModel;
 use App\Http\Controllers\Controller;
 use App\Models\Survey;
 use App\Models\User;
@@ -12,8 +13,7 @@ use App\Models\UserGroup;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Str;
-use function route;
+use Illuminate\Support\Str;
 
 class ApiUserApplicationController extends Controller
 {
@@ -121,30 +121,47 @@ class ApiUserApplicationController extends Controller
                 throw new Exception('TYPE NOT FOUND', 422);
             }
 
+            $type = $request->get('type');
             $reason = strip_tags($request->get('reason'));
             $executor = $request->user();
 
             foreach ($applicants as $i) {
                 $user = $i->user()->first();
+                $identifier = $history->getIdentifierFromUser($user);
                 $group->delete($group::ARMA_APPLY, $user, $reason);
                 $group->add($toGroup, $user, $reason);
 
                 if ($toGroup === $group::ARMA_MEMBER) {
                     foreach ([$group::ARMA_REJECT, $group::ARMA_DEFER] as $checkGroup) {
-                        if ($group->has($checkGroup, $user)) {
-                            $group->delete($checkGroup, $user, '가입 승인 됨.');
-                        }
+                        $group->delete($checkGroup, $user, '가입 승인 됨.'); // 삭제 하기 전에 값이 존재 하는지 확인하므로 검증 로직 X.
                     }
 
-                    $history->add($history->getIdentifierFromUser($user), $history::TYPE_USER_JOIN, $reason, $executor);
+                    $history->add($identifier, $history::TYPE_USER_JOIN, $reason, $executor);
 
                 } else {
-                    $historyType = match($request->get('type')) {
+                    $historyType = match($type) {
                         'reject' => $history::TYPE_APPLICATION_REJECTED,
                         'defer' => $history::TYPE_APPLICATION_DEFERRED
                     };
 
-                    $history->add($history->getIdentifierFromUser($user), $historyType, $reason, $executor);
+                    $history->add($identifier, $historyType, $reason, $executor);
+
+                    if ($type === 'reject') {
+                        $countDeffer = PlayerHistoryModel::where('identifier', $identifier)->where('type', $history::TYPE_APPLICATION_REJECTED)->count();
+
+                        if ($countDeffer == 1) {
+                            $user->ban([
+                                'comment' => "가입이 거절되어 계정이 일시 정지되었습니다. 30일 이후 가입 신청을 하실 수 있습니다.<br/><br/><span class='font-bold'>가입 거절 사유:</span><br/>{$reason}",
+                                'expired_at' => '+30 days',
+                            ]);
+                        }
+
+                        if ($countDeffer >= 2) {
+                            $user->ban([
+                                'comment' => "가입이 2번 거절되어 계정이 무기한 정지되었습니다. 더 이상 가입 신청을 하실 수 없습니다.<br/><br/><span class='font-bold'>가입 거절 사유:</span><br/>{$reason}"
+                            ]);
+                        }
+                    };
                 }
             }
 
