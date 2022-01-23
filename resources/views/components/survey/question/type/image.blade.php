@@ -15,22 +15,27 @@
             @php
                 $answer = json_decode($answer);
             @endphp
-            @foreach($answer as $v)
-                @php
-                    $path = "{$url}{$v->path}/{$v->uuid}.{$v->extension}"
-                @endphp
-                <div class="relative">
-                    <a class="absolute inset-0 z-10 bg-white text-center flex flex-col items-center justify-center opacity-0 hover:opacity-100 bg-opacity-90 duration-300" href="{{$path}}" target="_blank">
-                        <h1 class="tracking-wider">{{$v->filename}}</h1>
-                        <p class="mx-auto underline hover:no-underline">새 창으로 보기</p>
-                    </a>
-                    <a href="{{$path}}" target="_blank" class="relative">
-                        <div class="flex flex-wrap content-center">
-                            <img src="{{$path}}" class="mx-auto" alt="{{$v->filename}}">
-                        </div>
-                    </a>
-                </div>
-            @endforeach
+            @if(count($answer) > 0)
+                @foreach($answer as $v)
+                    @php
+                        $path = "{$url}{$v->path}/{$v->uuid}.{$v->extension}"
+                    @endphp
+                    <div class="relative">
+                        <a class="absolute inset-0 z-10 bg-white text-center flex flex-col items-center justify-center opacity-0 hover:opacity-100 bg-opacity-90 duration-300" href="{{$path}}" target="_blank">
+                            <h1 class="tracking-wider">{{$v->filename}}</h1>
+                            <p class="mx-auto underline hover:no-underline">새 창으로 보기</p>
+                        </a>
+                        <a href="{{$path}}" target="_blank" class="relative">
+                            <div class="flex flex-wrap content-center">
+                                <img src="{{$path}}" class="mx-auto" alt="{{$v->filename}}">
+                            </div>
+                        </a>
+                    </div>
+                @endforeach
+            @else
+                <p class="text-sm -mt-2">첨부하지 않음</p>
+            @endif
+
         </div>
     @endif
 </label>

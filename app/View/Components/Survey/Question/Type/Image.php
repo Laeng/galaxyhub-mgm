@@ -8,6 +8,7 @@ use App\Models\SurveyQuestion;
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Collection;
 use Illuminate\View\Component;
 
 class Image extends Component
@@ -26,7 +27,8 @@ class Image extends Component
 
         if (!is_null($answer)) {
             $value = $question->answers()->where('survey_entry_id', $answer)->first();
-            $this->answer = FileModel::whereIn('id', json_decode($value->value))->get();
+            $this->answer = (!is_null($value)) ? FileModel::whereIn('id', json_decode($value->value))->get() : new Collection();
+
         } else {
             $this->answer = null;
         }
