@@ -19,18 +19,36 @@ class ApiMissionController extends Controller
         try {
             $this->jsonValidator($request, [
                 'step' => 'int',
-                'limit' => 'int'
+                'limit' => 'int',
+                'query' => 'array'
             ]);
 
             $step = $request->get('step', 0);
-            $limit = $request->get('limit', 20);
+            $limit = $request->get('limit', 10);
+            $q = $request->get('query', []);
 
-            if ($limit < 1 || $limit > 100) $limit = 20;
+            if ($limit < 1 || $limit > 150) $limit = 10;
 
             $keys = [];
             $items = [];
 
-            $query = Mission::select(['id', 'type', 'expected_at', 'can_tardy', 'user_id', 'phase']);
+            $query = new Mission();
+
+            if (isset($q['type'])) {
+                $query = $query->where('type', $q['type']);
+            }
+
+            if (!empty($q['filter'])) {
+                switch ($q['filter']) {
+                    case '종료된 미션 제외':
+                        $query = $query->whereNull('ended_at');
+                        break;
+                }
+
+            }
+
+            $query = $query->select(['id', 'type', 'expected_at', 'can_tardy', 'user_id', 'phase']);
+
             $countMission = $query->count();
 
             if ($step >= 0) {

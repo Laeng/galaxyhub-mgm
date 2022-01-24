@@ -41,7 +41,9 @@ class ViewMissionController extends Controller
         return view('lounge.mission.list', [
             'title' => '미션 목록',
             'alerts' => $alerts,
-            'isMaker' => $this->isMaker($request->user(), $group)
+            'isMaker' => $this->isMaker($request->user(), $group),
+            'status' => Mission::$statusNames,
+            'types' => Mission::$typeNames,
         ]);
     }
 

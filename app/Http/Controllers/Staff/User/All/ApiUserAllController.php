@@ -34,7 +34,7 @@ class ApiUserAllController extends Controller
             $limit = $request->get('limit', 20);
             $q = $request->get('query', []);
 
-            if ($limit < 1 || $limit > 60) $limit = 20;
+            if ($limit < 1 || $limit > 150) $limit = 20;
 
             $keys = [];
             $items = [];

@@ -82,7 +82,7 @@
                         body: {
                             step: 0,
                             limit: {{$limit}},
-                            query: {}
+                            query: {!! $query !!}
                         },
                         data: {
                             fields: {},

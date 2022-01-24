@@ -18,6 +18,7 @@
                             </div>
                         </div>
                     @else
+                        {{--
                         <div class="absolute right-4 md:right-16 lg:right-0 xl:right-8 top-0 xl:-top-4 -rotate-12 rounded-xl border border-double border-8 border-red-500 mix-blend-multiply" style="-webkit-mask-image: url('{{ asset('image/rubber.png') }}'); -webkit-mask-repeat:repeat; -webkit-mask-position: {{mt_rand(0, 64)}}px {{mt_rand(0, 64)}}px;">
                             <div class="p-2 xl:p-4 text-red-500 flex flex-col">
                                 <p class="text-[2.6rem] leading-10 xl:text-[3.4rem] xl:leading-none font-bold lg:font-black">
@@ -28,6 +29,7 @@
                                 </p>
                             </div>
                         </div>
+                        --}}
                     @endif
                 </div>
 

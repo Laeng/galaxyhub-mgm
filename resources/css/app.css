@@ -178,10 +178,10 @@ aspect-16\/10 {
 }
 
 .mission-body.prose > figure.table {
-    @apply grid;
+    @apply flex;
 }
 .mission-body.prose table {
-    @apply border-collapse border border-gray-300 table-auto;
+    @apply border-collapse border border-gray-300 table-fixed;
 }
 
 .mission-body.prose table > tbody > tr > td {

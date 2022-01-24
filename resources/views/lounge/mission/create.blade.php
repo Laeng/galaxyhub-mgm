@@ -73,7 +73,7 @@
                             <label for="editor" class="block text-sm font-medium text-gray-700 pb-1">
                                 미션 소개
                             </label>
-                            <textarea id="editor" name="body" class="shadow-sm block w-full focus:ring-blue-500 focus:border-blue-500 sm:text-sm border border-gray-300 rounded-md" placeholder="미션 정보 입력" x-model="data.create.body.body"></textarea>
+                            <textarea id="editor" name="body" class="hidden shadow-sm block w-full focus:ring-blue-500 focus:border-blue-500 sm:text-sm border border-gray-300 rounded-md" placeholder="미션 정보 입력" x-model="data.create.body.body"></textarea>
                         </div>
 
                         <div class="flex justify-start">

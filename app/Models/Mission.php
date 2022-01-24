@@ -22,6 +22,14 @@ class Mission extends Model
         11 => '약장 시험',
     ];
 
+    public static array $statusNames = [
+        0 => '모집 중',
+        1 => '진행 중',
+        2 => '출석 중',
+        3 => '종료',
+        -1 => '취소',
+    ];
+
     public static int $attendTerm = 12; // 미션 종료 후 12시간 동안 출석 가능
     public static int $attendTry = 5; // 출석 시도 5회까지 허용
 
@@ -71,14 +79,11 @@ class Mission extends Model
 
     public function getPhaseName(): ?string
     {
-        return match($this->phase) {
-            -1 => '취소',
-            0 => '모집 중',
-            1 => '진행 중',
-            2 => '출석 중',
-            3 => '종료',
-            default => ''
-        };
+        if (array_key_exists($this->phase, self::$statusNames)) {
+            return self::$statusNames[$this->phase];
+        } else {
+            return null;
+        }
     }
 
     public function user(): BelongsTo
