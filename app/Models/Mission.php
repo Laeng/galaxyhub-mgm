@@ -22,7 +22,7 @@ class Mission extends Model
         11 => '약장 시험',
     ];
 
-    public static array $statusNames = [
+    public static array $phaseNames = [
         0 => '모집 중',
         1 => '진행 중',
         2 => '출석 중',
@@ -79,8 +79,8 @@ class Mission extends Model
 
     public function getPhaseName(): ?string
     {
-        if (array_key_exists($this->phase, self::$statusNames)) {
-            return self::$statusNames[$this->phase];
+        if (array_key_exists($this->phase, self::$phaseNames)) {
+            return self::$phaseNames[$this->phase];
         } else {
             return null;
         }

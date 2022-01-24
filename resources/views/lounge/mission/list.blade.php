@@ -27,9 +27,9 @@
                                 </x-input.select.primary>
                             </div>
                             <div class="w-full lg:w-auto mr-3">
-                                <x-input.select.primary id="group" name="group" x-model="data.list.body.query.status" required>
+                                <x-input.select.primary id="group" name="group" x-model="data.list.body.query.phase" required>
                                     <option value="">모든 상태</option>
-                                    @foreach($status as $key => $item)
+                                    @foreach($phase as $key => $item)
                                         <option value="{{ $key }}">{{ $item }}</option>
                                     @endforeach
                                 </x-input.select.primary>
@@ -75,7 +75,7 @@
                                         limit: 10,
                                         query: {
                                             type: '',
-                                            status: '',
+                                            phase: '',
                                             filter: '종료된 미션 제외'
                                         },
                                     },
@@ -94,8 +94,8 @@
                                     table.list();
                                 });
 
-                                this.$watch('data.list.body.query.status', (v) => {
-                                    table.data.list.body.query.status = v;
+                                this.$watch('data.list.body.query.phase', (v) => {
+                                    table.data.list.body.query.phase = v;
                                     table.list();
                                 });
 

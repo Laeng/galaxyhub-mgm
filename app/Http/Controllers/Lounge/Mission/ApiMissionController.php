@@ -38,6 +38,10 @@ class ApiMissionController extends Controller
                 $query = $query->where('type', $q['type']);
             }
 
+            if (isset($q['phase'])) {
+                $query = $query->where('phase', $q['phase']);
+            }
+
             if (!empty($q['filter'])) {
                 switch ($q['filter']) {
                     case '종료된 미션 제외':

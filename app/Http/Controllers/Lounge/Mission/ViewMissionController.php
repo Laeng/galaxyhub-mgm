@@ -42,7 +42,7 @@ class ViewMissionController extends Controller
             'title' => '미션 목록',
             'alerts' => $alerts,
             'isMaker' => $this->isMaker($request->user(), $group),
-            'status' => Mission::$statusNames,
+            'phase' => Mission::$phaseNames,
             'types' => Mission::$typeNames,
         ]);
     }
