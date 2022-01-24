@@ -15,7 +15,7 @@ class CreateUserDataTable extends Migration
     {
         Schema::create('user_data', function (Blueprint $table) {
             $table->id();
-            $table->unsignedInteger('user_id');
+            $table->unsignedInteger('user_id')->index();
             $table->string('name');
             $table->longText('data');
             $table->timestamps();
