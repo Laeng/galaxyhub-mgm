@@ -23,8 +23,6 @@ class Group implements GroupContract
     const ARMA_MAKER1 = 50;
     const ARMA_MAKER2 = 51;
 
-    const ARMA_SENIOR = 70;
-
     const STAFF = 90;
 
     public array $names = [

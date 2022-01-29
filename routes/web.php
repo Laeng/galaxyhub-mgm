@@ -5,10 +5,11 @@ use App\Http\Controllers\Lounge\Account\ViewAccountController;
 use App\Http\Controllers\Lounge\Account\ViewAuthController;
 use App\Http\Controllers\Lounge\Application\ApiApplicationController;
 use App\Http\Controllers\Lounge\Application\ViewApplicationController;
+use App\Http\Controllers\Lounge\File\ApiFileController;
 use App\Http\Controllers\Lounge\Mission\ApiMissionController;
 use App\Http\Controllers\Lounge\Mission\ViewMissionController;
-use App\Http\Controllers\Lounge\File\ApiFileController;
 use App\Http\Controllers\Lounge\ViewLoungeController;
+use App\Http\Controllers\Software\ViewSoftwareController;
 use App\Http\Controllers\Staff\User\All\ApiUserAllController;
 use App\Http\Controllers\Staff\User\All\ViewUserAllController;
 use App\Http\Controllers\Staff\User\Application\ApiUserApplicationController;
@@ -37,6 +38,7 @@ Route::get('/', function () {
 
 
 Route::middleware('web')->group(function() {
+    // Auth
     Route::get( '/login', [ViewAuthController::class, 'login'])->name('account.auth.login');
     Route::get( '/callback', [ViewAuthController::class, 'callback'])->name('account.auth.callback.steam');
     Route::get( '/logout', [ViewAuthController::class, 'logout'])->name('account.auth.logout');
@@ -91,31 +93,40 @@ Route::middleware(['auth:web', ForbidBannedUser::class, OnlyApplicant::class])->
 
 });
 
-Route::middleware(['auth:web', ForbidBannedUser::class, ForbidApplicant::class])->prefix('lounge')->name('lounge.')->group(function() {
-    Route::get('/', [ViewLoungeController::class, 'index'])->name('index');
+Route::middleware(['auth:web', ForbidBannedUser::class, ForbidApplicant::class])->group(function() {
 
-    // MISSION
-    Route::prefix('mission')->name('mission.')->group(function () {
-        Route::redirect('/', '/lounge/missions');
-        Route::get( '/new', [ViewMissionController::class, 'create'])->name('create');
-        Route::post( '/create', [ApiMissionController::class, 'create'])->name('create.api');
-        Route::get( '/{id}', [ViewMissionController::class, 'read'])->name('read')->whereNumber('id');
-        Route::get('/{id}/edit', [ViewMissionController::class, 'update'])->name('update')->whereNumber('id');
-        Route::post( '/{id}/update', [ApiMissionController::class, 'update'])->name('update.api')->whereNumber('id');
-        Route::post( '/{id}/delete', [ApiMissionController::class, 'delete'])->name('delete.api')->whereNumber('id');
-        Route::post( '/{id}/process', [ApiMissionController::class, 'read_process'])->name('read.process.api')->whereNumber('id');
-        Route::post( '/{id}/refresh', [ApiMissionController::class, 'read_refresh'])->name('read.refresh.api')->whereNumber('id');
-        Route::post( '/{id}/participants', [ApiMissionController::class, 'read_participants'])->name('read.participants.api')->whereNumber('id');
-        Route::get( '/{id}/survey', [ViewMissionController::class, 'survey'])->name('survey')->whereNumber('id');
-        Route::match(['get', 'post'], '/{id}/attend', [ViewMissionController::class, 'attend'])->name('attend')->whereNumber('id');
-        Route::post( '/{id}/attend/process', [ApiMissionController::class, 'attend'])->name('attend.process.api')->whereNumber('id');
-        Route::get( '/{id}/report', [ViewMissionController::class, 'report'])->name('report')->whereNumber('id');
+    // LOUNGE
+    Route::prefix('lounge')->name('lounge.')->group(function () {
+
+        Route::get('/', [ViewLoungeController::class, 'index'])->name('index');
+
+        // MISSION
+        Route::prefix('mission')->name('mission.')->group(function () {
+            Route::redirect('/', '/lounge/missions');
+            Route::get( '/new', [ViewMissionController::class, 'create'])->name('create');
+            Route::post( '/create', [ApiMissionController::class, 'create'])->name('create.api');
+            Route::get( '/{id}', [ViewMissionController::class, 'read'])->name('read')->whereNumber('id');
+            Route::get('/{id}/edit', [ViewMissionController::class, 'update'])->name('update')->whereNumber('id');
+            Route::post( '/{id}/update', [ApiMissionController::class, 'update'])->name('update.api')->whereNumber('id');
+            Route::post( '/{id}/delete', [ApiMissionController::class, 'delete'])->name('delete.api')->whereNumber('id');
+            Route::post( '/{id}/process', [ApiMissionController::class, 'read_process'])->name('read.process.api')->whereNumber('id');
+            Route::post( '/{id}/refresh', [ApiMissionController::class, 'read_refresh'])->name('read.refresh.api')->whereNumber('id');
+            Route::post( '/{id}/participants', [ApiMissionController::class, 'read_participants'])->name('read.participants.api')->whereNumber('id');
+            Route::get( '/{id}/survey', [ViewMissionController::class, 'survey'])->name('survey')->whereNumber('id');
+            Route::match(['get', 'post'], '/{id}/attend', [ViewMissionController::class, 'attend'])->name('attend')->whereNumber('id');
+            Route::post( '/{id}/attend/process', [ApiMissionController::class, 'attend'])->name('attend.process.api')->whereNumber('id');
+            Route::get( '/{id}/report', [ViewMissionController::class, 'report'])->name('report')->whereNumber('id');
+
+        });
+        Route::prefix('missions')->name('mission.')->group(function () {
+            Route::get( '/', [ViewMissionController::class, 'list'])->name('list');
+            Route::post( '/list', [ApiMissionController::class, 'list'])->name('list.api');
+        });
 
     });
-    Route::prefix('missions')->name('mission.')->group(function () {
-        Route::get( '/', [ViewMissionController::class, 'list'])->name('list');
-        Route::post( '/list', [ApiMissionController::class, 'list'])->name('list.api');
-    });
+
+
+    Route::get('/authorize/{code}', [ViewSoftwareController::class, 'authorize_code'])->name('authorize')->whereUuid('code');
 
 });
 

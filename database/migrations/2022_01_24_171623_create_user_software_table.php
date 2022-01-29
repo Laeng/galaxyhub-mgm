@@ -15,11 +15,13 @@ class CreateUserSoftwareTable extends Migration
     {
         Schema::create('user_software', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id')->index();
-            $table->unsignedBigInteger('software_id')->index();
+            $table->unsignedBigInteger('user_id')->index()->nullable();
+            $table->unsignedBigInteger('software_id')->index()->nullable();
+            $table->string('software_version')->index()->nullable();
             $table->string('ip')->nullable();
             $table->string('machine_name')->nullable();
             $table->string('machine_version')->nullable();
+            $table->uuid('code')->index();
             $table->text('data')->nullable();
             $table->timestamps();
             $table->softDeletes();

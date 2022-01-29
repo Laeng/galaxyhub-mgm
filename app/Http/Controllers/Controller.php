@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Software;
 use App\Models\UserGroup;
+use App\Models\UserSoftware;
 use Exception;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;

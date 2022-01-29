@@ -28,8 +28,8 @@ Artisan::command('mission:update', function () {
         $i->save();
     });
 
-    // 2일이상 방치된 미션들 정리 시키기
-    Mission::whereBetween('phase', [0, 1])->where('updated_at', '<=', $now->subDays(2))->oldest()->each(function ($i, $k) {
+    // 시작 예정 일로부터 2일이상 방치된 미션들 정리 시키기
+    Mission::whereBetween('phase', [0, 1])->where('expected_at', '<=', $now->subDays(2))->oldest()->each(function ($i, $k) {
         $i->phase = -1;
         $i->save();
     });

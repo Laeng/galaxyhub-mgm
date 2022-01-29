@@ -10,7 +10,7 @@ use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Str;
+use Illuminate\Support\Str;
 
 class ApiMissionController extends Controller
 {
