@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Software;
 use App\Models\UserSoftware;
 use Exception;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -42,6 +43,8 @@ class ApiSoftwareController extends Controller
             $userSoftware = $software->users()->where('ip', $ip)->where('machine_name', $machineName)->where('machine_version', $machineVersion)->latest()->first();
             $result = true;
 
+            $uuid = Str::uuid();
+
             if (is_null($userSoftware)) {
                 $userSoftware = UserSoftware::create([
                     'software_id' => $software->id,
@@ -49,14 +52,21 @@ class ApiSoftwareController extends Controller
                     'ip' => $ip,
                     'machine_name' => $machineName,
                     'machine_version' => $machineVersion,
-                    'code' => Str::uuid()
+                    'code' => $uuid
                 ]);
 
                 $result = false;
 
-            } elseif (is_null($userSoftware->user_id)) {
-                $result = false;
             }
+            else {
+                if (is_null($userSoftware->user_id)) {
+                    $result = false;
+                }
+
+                $userSoftware->setAttribute('code', $uuid);
+                $userSoftware->save();
+            }
+
 
             return $this->jsonResponse(200, 'SUCCESS', [
                 'result' => $result,
@@ -78,19 +88,21 @@ class ApiSoftwareController extends Controller
                 'code' => ['uuid', 'required']
             ]);
 
-            $userSoftware = UserSoftware::where('ip', $request->getClientIp())->where('code', $request->get('code'))->latest()->first();
+            $userSoftware = $this->query($request->getClientIp(), $request->get('code'));
 
             if (is_null($userSoftware)) {
                 throw new Exception('CAN NOT FOUND DATA', 200);
             }
 
-            if (is_null($userSoftware->data)) {
+            $data = $userSoftware->getAttributeValue('data');
+
+            if (is_null($data) || count($data) <= 0) {
                 throw new Exception('DATA IS NULL', 200);
             }
 
             return $this->jsonResponse(200, 'SUCCESS', [
                 'result' => true,
-                'data' => $userSoftware->data
+                'data' => $data
             ]);
 
         } catch (Exception $e) {
@@ -109,13 +121,13 @@ class ApiSoftwareController extends Controller
                 'data' => ['required']
             ]);
 
-            $userSoftware = UserSoftware::where('ip', $request->getClientIp())->where('code', $request->get('code'))->latest()->first();
+            $userSoftware = $this->query($request->getClientIp(), $request->get('code'));
 
             if (is_null($userSoftware)) {
                 throw new Exception('CAN NOT FOUND DATA', 200);
             }
 
-            $userSoftware->data = $request->get('data');
+            $userSoftware->setAttribute('data', $request->get('data'));
             $userSoftware->save();
 
             return $this->jsonResponse(200, 'SUCCESS', [
@@ -127,5 +139,46 @@ class ApiSoftwareController extends Controller
                 'result' => false,
             ]);
         }
+    }
+
+    public function ping(Request $request): JsonResponse
+    {
+        try {
+            $this->jsonValidator($request, [
+                'code' => ['uuid', 'required']
+            ]);
+
+            $userSoftware = $this->query($request->getClientIp(), $request->get('code'), false);
+
+            if (is_null($userSoftware)) {
+                throw new Exception('CAN NOT FOUND DATA', 200);
+            }
+
+            $userSoftware->setUpdatedAt(now());
+            $userSoftware->save();
+
+            return $this->jsonResponse(200, 'SUCCESS', [
+                'result' => true,
+                'data' => null
+            ]);
+
+        } catch (Exception $e) {
+            return $this->jsonResponse($e->getCode(), Str::upper($e->getMessage()), [
+                'result' => false,
+                'data' => null
+            ]);
+        }
+    }
+
+    private function query(string $ip, string $code, bool $checkDate = true): ?UserSoftware
+    {
+        $query = UserSoftware::where('ip', $ip)->where('code', $code);
+
+        if ($checkDate)
+        {
+            $query->where('updated_at', '>=', now()->subHours(2));
+        }
+
+        return $query->latest()->first();
     }
 }

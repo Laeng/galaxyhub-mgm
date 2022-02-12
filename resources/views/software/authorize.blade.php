@@ -22,7 +22,7 @@
                     </div>
                     <div  class="space-y-1">
                         <div class="flex space-x-2">
-                            <p class="font-bold">이름</p>
+                            <p class="font-bold">PC</p>
                             <p>{{ $machineName }}</p>
                         </div>
                         <div class="flex space-x-2">
