@@ -2,40 +2,31 @@
 
 namespace App\Models;
 
-use Cog\Contracts\Ban\Bannable as BannableContract;
-use Cog\Laravel\Ban\Traits\Bannable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
 
-class User extends Authenticatable implements BannableContract
+class User extends Authenticatable
 {
-    use HasFactory, Notifiable, Bannable;
+    use HasApiTokens, HasFactory, Notifiable;
 
     /**
      * The attributes that are mass assignable.
      *
-     * @var string[]
+     * @var array<int, string>
      */
     protected $fillable = [
-        'provider',
-        'username',
-        'nickname',
-        'password',
-        'avatar',
-        'remember_token',
+        'name',
         'email',
-        'visit',
-        'agreed_at',
-        'visited_at'
+        'password',
     ];
 
     /**
      * The attributes that should be hidden for serialization.
      *
-     * @var array
+     * @var array<int, string>
      */
     protected $hidden = [
         'password',
@@ -45,42 +36,9 @@ class User extends Authenticatable implements BannableContract
     /**
      * The attributes that should be cast.
      *
-     * @var array
+     * @var array<string, string>
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
-        'agreed_at' => 'datetime',
-        'visited_at' => 'datetime',
-        'created_at' => 'datetime'
     ];
-
-    public function socials(): HasMany
-    {
-        return $this->hasMany(UserSocial::class);
-    }
-
-    public function groups(): HasMany
-    {
-        return $this->hasMany(UserGroup::class);
-    }
-
-    public function data(): HasMany
-    {
-        return $this->hasMany(UserData::class);
-    }
-
-    public function surveys(): HasMany
-    {
-        return $this->hasMany(SurveyEntry::class, 'participant_id');
-    }
-
-    public function missions(): HasMany
-    {
-        return $this->hasMany(UserMission::class);
-    }
-
-    public function files(): HasMany
-    {
-        return $this->hasMany(File::class);
-    }
 }

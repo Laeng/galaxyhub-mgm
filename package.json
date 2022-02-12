@@ -10,20 +10,9 @@
         "production": "mix --production"
     },
     "devDependencies": {
-        "@tailwindcss/forms": "^0.4.0",
-        "@tailwindcss/line-clamp": "^0.3.0",
-        "@tailwindcss/typography": "^0.5.0",
-        "autoprefixer": "^10.4.2",
-        "axios": "^0.21",
-        "laravel-mix": "^6.0.39",
+        "axios": "^0.25",
+        "laravel-mix": "^6.0.6",
         "lodash": "^4.17.19",
-        "postcss": "^8.4.5",
-        "tailwindcss": "^3.0.12"
-    },
-    "dependencies": {
-        "@ckeditor/ckeditor5-build-classic": "^31.1.0",
-        "alpinejs": "^3.7.1",
-        "chart.js": "^3.7.0",
-        "sweetalert2": "^11.3.4"
+        "postcss": "^8.1.14"
     }
 }
