@@ -3,3 +3,95 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+*, ::before, ::after {
+    --ck-border-radius: 0.375rem;
+}
+
+.prose :where(a):not(:where([class~="not-prose"] *)) {
+    @apply text-indigo-500 no-underline hover:underline;
+}
+
+[x-cloak] {
+    display: none !important;
+}
+
+.navigation {
+    @apply absolute lg:relative top-14 lg:top-0 lg:left-0 lg:space-x-4 w-full lg:w-auto;
+}
+
+.navigation li {
+    @apply py-2 lg:py-0 text-xl lg:text-sm text-center lg:text-left lg:float-left;
+}
+
+.navigation li ul {
+    @apply lg:hidden;
+}
+
+@media (min-width: 1024px) {
+    .navigation li ul {
+        --tw-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        min-width: 9rem;
+        position: absolute;
+        left: 0.5rem;
+        padding-top: 1.35rem;
+        box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+        background: linear-gradient(to bottom, transparent 1.22rem, rgba(255, 255, 255, 1) 1.22rem);
+    }
+}
+
+.navigation li li {
+    @apply p-1.5 my-3 lg:my-2 lg:px-8 text-base lg:text-sm text-center lg:text-left text-white lg:text-black hover:text-gray-400 lg:hover:text-black lg:float-none lg:hover:bg-gray-100;
+}
+
+.navigation li:hover ul {
+    @apply lg:block;
+}
+
+@keyframes scroll {
+    0% {
+        transform: translateY(0);
+    }
+    30% {
+        transform: translateY(2.5rem);
+    }
+}
+
+svg #wheel {
+    animation: scroll ease 2s infinite;
+}
+
+aspect-16\/10 {
+    aspect-ratio: 16/10
+}
+
+.spinner {
+    animation: rotate 2s linear infinite;
+}
+
+.spinner .path {
+    stroke: currentColor;
+    stroke-linecap: round;
+    animation: dash 1.5s ease-in-out infinite;
+}
+
+@keyframes rotate {
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes dash {
+    0% {
+        stroke-dasharray: 1, 150;
+        stroke-dashoffset: 0;
+    }
+    50% {
+        stroke-dasharray: 90, 150;
+        stroke-dashoffset: -35;
+    }
+    100% {
+        stroke-dasharray: 90, 150;
+        stroke-dashoffset: -124;
+    }
+}
