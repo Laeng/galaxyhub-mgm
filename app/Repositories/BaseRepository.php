@@ -17,7 +17,7 @@ class BaseRepository implements EloquentRepositoryInterface
 
     public function findById(int $id, array $columns = ['*'], array $relations = []): ?Model
     {
-        return $this->model->select($columns)->find('id');
+        return $this->model->select($columns)->where('id', $id)->with($relations)->latest()->first();
     }
 
     public function all(array $columns = ['*'], array $relations = []): Collection

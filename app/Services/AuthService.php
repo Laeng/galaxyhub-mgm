@@ -90,11 +90,12 @@ class AuthService implements AuthServiceContract
 
     public function update(int $id, array $attributes): bool
     {
-        // TODO: Implement update() method.
+        return false;
     }
 
     public function delete(int $id): bool
     {
-        // TODO: Implement delete() method.
+
+        return false;
     }
 }

@@ -15,7 +15,7 @@
                                     <span class="font-bold">STEAM</span>&reg; 계정으로 로그인 하실 수 있습니다.
                                 </p>
                                 <div class="flex justify-center pt-4 pb-8 lg:pb-0">
-                                    <a href="#">
+                                    <a href="{{ route('auth.login.provider', 'steam') }}">
                                         <img src="{{asset('images/logo/steam.png')}}" alt="스팀 로그인 버튼"/>
                                     </a>
                                 </div>

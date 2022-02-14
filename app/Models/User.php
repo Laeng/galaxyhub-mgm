@@ -52,6 +52,7 @@ class User extends Authenticatable
         'agreed_at' => 'datetime',
         'banned_at' => 'datetime',
         'verified_at' => 'datetime',
+        'visited_at' => 'datetime',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];
