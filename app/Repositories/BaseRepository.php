@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Repositories\Eloquent;
+namespace App\Repositories;
 
-use App\Repositories\EloquentRepositoryInterface;
+use App\Repositories\Interfaces\EloquentRepositoryInterface;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
@@ -15,9 +15,9 @@ class BaseRepository implements EloquentRepositoryInterface
         $this->model = $model;
     }
 
-    public function findById(int $id, array $columns = ['*'], array $relations = []): Model
+    public function findById(int $id, array $columns = ['*'], array $relations = []): ?Model
     {
-        return $this->model->find($id, $columns);
+        return $this->model->select($columns)->find('id');
     }
 
     public function all(array $columns = ['*'], array $relations = []): Collection
@@ -25,7 +25,7 @@ class BaseRepository implements EloquentRepositoryInterface
         return $this->model->with($relations)->get($columns);
     }
 
-    public function create(array $attributes): Model
+    public function create(array $attributes): ?Model
     {
         return $this->model->create($attributes);
     }

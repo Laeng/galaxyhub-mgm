@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
-});
+})->name('welcome');
 
-require __DIR__."/web/auth.php";
+require_once __DIR__.'/web/auth.php';
+require_once __DIR__.'/web/lounge.php';

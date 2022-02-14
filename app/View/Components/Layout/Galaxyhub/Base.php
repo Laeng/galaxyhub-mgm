@@ -19,7 +19,7 @@ class Base extends Component
      */
     public function __construct($websiteName = '', $title = '', $description = '', $class = '')
     {
-        $this->websiteName = $description === '' ? 'MGM Lounge' : $description;
+        $this->websiteName = $websiteName === '' ? 'MGM Lounge' : $websiteName;
         $this->title = $title;
         $this->description = $description === '' ? '멀티플레이 게임 매니지먼트의 웹사이트 입니다. #아르마3 #스타시티즌 #MGM': $description;
         $this->class = $class;

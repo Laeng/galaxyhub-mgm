@@ -14,7 +14,7 @@
     <meta property="og:image" content="{{ asset('images/og_image.png') }}">
     <meta property="og:locale" content="ko_KR">
 
-    <title>{{ $title }}</title>
+    <title>{{ "{$title} - {$websiteName}" }}</title>
 
     <!-- Styles -->
     <link rel="preconnect" href="https://cdn.galaxyhub.kr">

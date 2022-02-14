@@ -9,12 +9,16 @@
         "cybercog/laravel-ban": "^4.7",
         "diglactic/laravel-breadcrumbs": "^7.1",
         "fruitcake/laravel-cors": "^2.0.5",
+        "getsolaris/laravel-make-service": "^1.0",
         "guzzlehttp/guzzle": "^7.2",
         "laravel/framework": "^9.0",
         "laravel/sanctum": "^2.14",
+        "laravel/socialite": "^5.5",
         "laravel/tinker": "^2.7",
         "lavary/laravel-menu": "^1.8",
         "qcod/laravel-gamify": "^1.0",
+        "socialiteproviders/manager": "^4.1",
+        "socialiteproviders/steam": "^4.1",
         "spatie/laravel-permission": "^5.5"
     },
     "require-dev": {
