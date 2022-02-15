@@ -1,18 +1,18 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\Auth;
 
 use App\Models\User as UserModel;
-use App\Repositories\Interfaces\UserAccountRepositoryInterface;
-use App\Repositories\Interfaces\UserRepositoryInterface;
-use App\Services\Contracts\AuthServiceContract;
-use Illuminate\Database\Eloquent\Model;
+use App\Repositories\User\Interfaces\UserAccountRepositoryInterface;
+use App\Repositories\User\Interfaces\UserRepositoryInterface;
+use App\Services\Auth\Contracts\AuthBaseServiceContract;
+use function now;
 
 /**
  * Class AuthService
  * @package App\Services
  */
-class AuthService implements AuthServiceContract
+class AuthService implements AuthBaseServiceContract
 {
     private UserRepositoryInterface $userRepository;
     private UserAccountRepositoryInterface $accountRepository;
@@ -28,7 +28,7 @@ class AuthService implements AuthServiceContract
         if($attributes['provider'] !== 'default')
         {
             //OAuth 로그인 절차
-            $account = $this->accountRepository->findByAccountId($attributes['id']);
+            $account = $this->accountRepository->findByAccountId($attributes['provider'], $attributes['id']);
 
             $userAttributes = [
                 'name' => $attributes['nickname'],
@@ -37,7 +37,7 @@ class AuthService implements AuthServiceContract
                 'visited_at' => now()
             ];
 
-            if(!is_null($account) && $account->provider === $attributes['provider'])
+            if(!is_null($account))
             {
                 $user = $this->userRepository->findById($account->user_id);
                 $diff = array_diff($account->toArray(), $attributes);

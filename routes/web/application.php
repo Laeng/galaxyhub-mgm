@@ -6,13 +6,12 @@ use Illuminate\Support\Facades\Route;
 
 Route::prefix('application')->name('application.')->middleware('web')->group(function() {
     //VIEW
-    Route::get('/agreements', [AgreementController::class, 'index'])
-        ->name('agreement');
-    Route::get('/quiz', [QuizController::class, 'index'])
-        ->name('quiz');
+    Route::get('/agreements', [AgreementController::class, 'index'])->name('agreement.index');
+    Route::get('/quiz', [QuizController::class, 'index'])->name('quiz.index');
+    Route::get('/score', [QuizController::class, 'score'])->name('quiz.score');
+
 
     //AJAX
-    Route::post('/agreements/check/account', [AgreementController::class, 'checkAccount'])
-        ->name('agreement.check.account');
+    Route::post('/agreements/check/account', [AgreementController::class, 'checkAccount'])->name('agreement.check.account');
 
 });

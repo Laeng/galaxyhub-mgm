@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Contracts;
+namespace App\Services\Auth\Contracts;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
  * Interface AuthServiceContract
  * @package App\Services\Contracts
  */
-interface AuthServiceContract extends ServiceContract
+interface AuthBaseServiceContract
 {
-
+    public function create(array $attributes): ?Model;
 }

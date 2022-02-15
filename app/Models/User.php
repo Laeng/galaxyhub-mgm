@@ -61,4 +61,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(UserAccount::class);
     }
+
+    public function surveys(): HasMany
+    {
+        return $this->hasMany(SurveyEntry::class, 'participant_id');
+    }
 }

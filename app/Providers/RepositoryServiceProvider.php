@@ -2,16 +2,18 @@
 
 namespace App\Providers;
 
-use App\Repositories\BaseRepository;
-use App\Repositories\Interfaces\EloquentRepositoryInterface;
-use App\Repositories\Interfaces\MissionRepositoryInterface;
-use App\Repositories\Interfaces\RoleRepositoryInterface;
-use App\Repositories\Interfaces\UserAccountRepositoryInterface;
-use App\Repositories\Interfaces\UserRepositoryInterface;
-use App\Repositories\MissionRepository;
-use App\Repositories\RoleRepository;
-use App\Repositories\UserAccountRepository;
-use App\Repositories\UserRepository;
+use App\Repositories\Base\BaseRepository;
+use App\Repositories\Base\Interfaces\EloquentRepositoryInterface;
+use App\Repositories\Mission\Interfaces\MissionRepositoryInterface;
+use App\Repositories\Mission\MissionRepository;
+use App\Repositories\Permission\Interfaces\RoleRepositoryInterface;
+use App\Repositories\Permission\RoleRepository;
+use App\Repositories\Survey\Interfaces\SurveyRepositoryInterface;
+use App\Repositories\Survey\SurveyRepository;
+use App\Repositories\User\Interfaces\UserAccountRepositoryInterface;
+use App\Repositories\User\Interfaces\UserRepositoryInterface;
+use App\Repositories\User\UserAccountRepository;
+use App\Repositories\User\UserRepository;
 use Illuminate\Support\ServiceProvider;
 
 class RepositoryServiceProvider extends ServiceProvider
@@ -32,8 +34,11 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(UserRepositoryInterface::class, UserRepository::class);
         $this->app->bind(UserAccountRepositoryInterface::class, UserAccountRepository::class);
 
-        //-- ROLE
+        //-- PERMISSION
         $this->app->bind(RoleRepositoryInterface::class, RoleRepository::class);
+
+        //-- SURVEY
+        $this->app->bind(SurveyRepositoryInterface::class, SurveyRepository::class);
     }
 
     /**
