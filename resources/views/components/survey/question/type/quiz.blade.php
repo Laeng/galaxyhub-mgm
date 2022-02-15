@@ -48,7 +48,7 @@
 
         @if(!is_null($question->content) && $question->content !== '')
             <div class="p-4 rounded-md bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-800 my-2">
-                <div class="text-sm text-gray-700">
+                <div class="text-sm text-gray-700 dark:text-gray-200">
                     {!! $question->content !!}
                 </div>
             </div>

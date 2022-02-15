@@ -95,3 +95,23 @@ aspect-16\/10 {
         stroke-dashoffset: -124;
     }
 }
+
+.link-red {
+    @apply text-red-500 hover:underline;
+}
+
+.link-green {
+    @apply text-green-500 hover:underline;
+}
+
+.link-yellow {
+    @apply text-yellow-500 hover:underline;
+}
+
+.link-indigo {
+    @apply text-indigo-500 hover:underline;
+}
+
+.link-fuchsia {
+    @apply text-fuchsia-500 hover:underline;
+}

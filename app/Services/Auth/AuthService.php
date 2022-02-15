@@ -5,14 +5,14 @@ namespace App\Services\Auth;
 use App\Models\User as UserModel;
 use App\Repositories\User\Interfaces\UserAccountRepositoryInterface;
 use App\Repositories\User\Interfaces\UserRepositoryInterface;
-use App\Services\Auth\Contracts\AuthBaseServiceContract;
+use App\Services\Auth\Contracts\AuthServiceContract;
 use function now;
 
 /**
  * Class AuthService
  * @package App\Services
  */
-class AuthService implements AuthBaseServiceContract
+class AuthService implements AuthServiceContract
 {
     private UserRepositoryInterface $userRepository;
     private UserAccountRepositoryInterface $accountRepository;

@@ -5,6 +5,7 @@ namespace App\Services\Survey;
 use App\Models\Mission;
 use App\Models\Survey;
 use App\Models\User;
+use App\Repositories\Survey\Interfaces\SurveyEntryRepositoryInterface;
 use App\Repositories\Survey\Interfaces\SurveyRepositoryInterface;
 use App\Services\Survey\Contracts\SurveyServiceContract;
 use App\Services\Survey\Questions\QuizQuestion;
@@ -17,6 +18,7 @@ use Illuminate\Database\Eloquent\Collection;use Illuminate\Database\Eloquent\Mod
 class SurveyService implements SurveyServiceContract
 {
     public SurveyRepositoryInterface $surveyRepository;
+    public SurveyEntryRepositoryInterface $surveyEntryRepository;
 
     public function __construct(SurveyRepositoryInterface $surveyRepository)
     {
@@ -30,7 +32,6 @@ class SurveyService implements SurveyServiceContract
 
     public function createApplicationQuiz(User $user, int $surveyId = null): Survey
     {
-        $now = now();
         $name = $this->getApplicationQuizName($user);
 
         if(is_null($surveyId))
@@ -41,7 +42,7 @@ class SurveyService implements SurveyServiceContract
         else
         {
             $quizModel = $this->surveyRepository->findById($surveyId);
-            $quizModel = $quizModel->created_at->isToday() ? null : $quizModel;
+            $quizModel = $quizModel->created_at->isToday() ? $quizModel : null;
         }
 
         if(is_null($quizModel))

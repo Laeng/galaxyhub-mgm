@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Services\Auth\Contracts\AuthBaseServiceContract;
+use App\Services\Auth\Contracts\AuthServiceContract;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -15,9 +15,9 @@ use SocialiteProviders\Steam\OpenIDValidationException;
 
 class AuthenticateController extends Controller
 {
-    private AuthBaseServiceContract $authService;
+    private AuthServiceContract $authService;
 
-    public function __construct(AuthBaseServiceContract $authService)
+    public function __construct(AuthServiceContract $authService)
     {
         $this->authService = $authService;
     }

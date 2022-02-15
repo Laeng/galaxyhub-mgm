@@ -17,5 +17,6 @@ Route::get('/', function () {
     return view('welcome');
 })->name('welcome');
 
+require_once __DIR__.'/web/application.php';
 require_once __DIR__.'/web/auth.php';
 require_once __DIR__.'/web/lounge.php';
