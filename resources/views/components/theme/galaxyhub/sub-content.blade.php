@@ -1,5 +1,5 @@
 <x-theme.galaxyhub.sub :website-name="$websiteName" :title="$title" :description="$description" class="bg-gray-100 dark:bg-gray-900">
-    <x-container.galaxyhub.basics parent-class="py-4 sm:py-6 lg:mb-4 xl:mb-8" class="">
+    <x-container.galaxyhub.basics class="py-4 sm:py-6 lg:mb-4 xl:mb-8">
         <div class="my-2 lg:my-6 text-sm font-bold text-gray-400">
             {!! $breadcrumbs !!}
         </div>
