@@ -1,4 +1,4 @@
-<div class="rounded-md bg-yellow-50 p-4">
+<div class="rounded-md bg-yellow-50 dark:bg-gray-900 dark:border dark:border-yellow-500  p-4">
     <div class="flex">
         <div class="flex-shrink-0">
             <svg class="h-5 w-5 text-yellow-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
@@ -6,8 +6,8 @@
             </svg>
         </div>
         <div class="ml-3">
-            <h3 class="text-sm font-bold text-yellow-800">{{ $title }}</h3>
-            <div class="mt-2 text-sm text-yellow-700">
+            <h3 class="text-sm font-bold text-yellow-800 dark:text-yellow-200">{{ $title }}</h3>
+            <div class="mt-2 text-sm text-yellow-700 dark:text-yellow-300">
                 {!! $slot !!}
             </div>
         </div>
