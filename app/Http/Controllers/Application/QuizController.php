@@ -27,7 +27,7 @@ class QuizController extends Controller
     {
         if($request->isMethod('get') && (is_null($request->session()->get('_old_input')) || count($request->session()->get('_old_input')) <= 0 ))
         {
-            //return redirect()->route('application.index');
+            return redirect()->route('application.index');
         }
 
         $user = $request->user();

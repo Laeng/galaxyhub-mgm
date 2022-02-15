@@ -1303,6 +1303,10 @@ select{
   right: 1rem;
 }
 
+.top-4{
+  top: 1rem;
+}
+
 .z-0{
   z-index: 0;
 }
@@ -2700,6 +2704,11 @@ aspect-16\/10 {
   background-color: rgb(30 64 175 / var(--tw-bg-opacity));
 }
 
+.group:hover .group-hover\:bg-red-800{
+  --tw-bg-opacity: 1;
+  background-color: rgb(153 27 27 / var(--tw-bg-opacity));
+}
+
 .group:hover .group-hover\:text-gray-900{
   --tw-text-opacity: 1;
   color: rgb(17 24 39 / var(--tw-text-opacity));
@@ -2944,6 +2953,10 @@ aspect-16\/10 {
     right: 4rem;
   }
 
+  .md\:right-4{
+    right: 1rem;
+  }
+
   .md\:block{
     display: block;
   }
@@ -3141,6 +3154,14 @@ aspect-16\/10 {
 
   .xl\:-top-4{
     top: -1rem;
+  }
+
+  .xl\:top-2{
+    top: 0.5rem;
+  }
+
+  .xl\:top-4{
+    top: 1rem;
   }
 
   .xl\:mb-8{

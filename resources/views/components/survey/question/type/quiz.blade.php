@@ -35,11 +35,11 @@
 
             <div class="text-red-500">
                 @if($realAnswer === $answer)
-                    <svg class="absolute -top-[0.55rem] -left-[0.95rem] h-10 w-10 mix-blend-multiply" style="-webkit-mask-image: url('{{ asset('image/rubber.png') }}'); -webkit-mask-repeat:repeat; -webkit-mask-position: {{mt_rand(0, 64)}}px {{mt_rand(0, 64)}}px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                    <svg class="absolute -top-[0.55rem] -left-[0.95rem] h-10 w-10 mix-blend-multiply" style="-webkit-mask-image: url('{{ asset('images/rubber.png') }}'); -webkit-mask-repeat:repeat; -webkit-mask-position: {{mt_rand(0, 64)}}px {{mt_rand(0, 64)}}px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
                         <path fill="currentColor" d="M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256s256-114.6 256-256S397.4 0 256 0zM256 464c-114.7 0-208-93.31-208-208S141.3 48 256 48s208 93.31 208 208S370.7 464 256 464z"></path>
                     </svg>
                 @else
-                    <svg class="absolute -top-[0.55rem] -left-[0.95rem] h-10 w-10 mix-blend-multiply" style="-webkit-mask-image: url('{{ asset('image/rubber.png') }}'); -webkit-mask-repeat:repeat; -webkit-mask-position: {{mt_rand(0, 64)}}px {{mt_rand(0, 64)}}px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">
+                    <svg class="absolute -top-[0.55rem] -left-[0.95rem] h-10 w-10 mix-blend-multiply" style="-webkit-mask-image: url('{{ asset('images/rubber.png') }}'); -webkit-mask-repeat:repeat; -webkit-mask-position: {{mt_rand(0, 64)}}px {{mt_rand(0, 64)}}px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">
                         <path fill="currentColor" d="M312.1 375c9.369 9.369 9.369 24.57 0 33.94s-24.57 9.369-33.94 0L160 289.9l-119 119c-9.369 9.369-24.57 9.369-33.94 0s-9.369-24.57 0-33.94L126.1 256L7.027 136.1c-9.369-9.369-9.369-24.57 0-33.94s24.57-9.369 33.94 0L160 222.1l119-119c9.369-9.369 24.57-9.369 33.94 0s9.369 24.57 0 33.94L193.9 256L312.1 375z"></path>
                     </svg>
                 @endif

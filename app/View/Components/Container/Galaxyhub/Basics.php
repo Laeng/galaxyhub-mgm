@@ -7,8 +7,6 @@ use Illuminate\View\Component;
 
 class Basics extends Component
 {
-    public string $parentClass;
-    public string $parentStyle;
     public string $class;
     public string $style;
 
@@ -17,10 +15,8 @@ class Basics extends Component
      *
      * @return void
      */
-    public function __construct(string $parentClass = '', string $parentStyle = '', string $class = '', string $style = '')
+    public function __construct(string $class = '', string $style = '')
     {
-        $this->parentClass = $parentClass;
-        $this->parentStyle = $parentStyle;
         $this->class = $class;
         $this->style = $style;
     }
