@@ -2,10 +2,12 @@
 
 namespace App\Providers;
 
-use App\Services\AuthService;
-use App\Services\Contracts\AuthServiceContract;
-use App\Services\Contracts\RoleServiceContract;
-use App\Services\RoleService;
+use App\Services\Auth\AuthService;
+use App\Services\Auth\Contracts\AuthBaseServiceContract;
+use App\Services\Steam\Contracts\SteamServiceContract;
+use App\Services\Steam\SteamService;
+use App\Services\Survey\Contracts\SurveyServiceContract;
+use App\Services\Survey\SurveyService;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -18,7 +20,9 @@ class AppServiceProvider extends ServiceProvider
     public function register()
     {
         //Services ------------------
-        $this->app->bind(AuthServiceContract::class, AuthService::class);
+        $this->app->bind(AuthBaseServiceContract::class, AuthService::class);
+        $this->app->bind(SteamServiceContract::class, SteamService::class);
+        $this->app->bind(SurveyServiceContract::class, SurveyService::class);
 
         //---------------------------
     }

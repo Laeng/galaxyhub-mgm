@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Repositories;
+namespace App\Repositories\User;
 
 use App\Models\User;
-use App\Repositories\Interfaces\UserRepositoryInterface;
-use Illuminate\Database\Eloquent\Model;
+use App\Repositories\Base\BaseRepository;
+use App\Repositories\User\Interfaces\UserRepositoryInterface;
 use JetBrains\PhpStorm\Pure;
 
 class UserRepository extends BaseRepository implements UserRepositoryInterface
