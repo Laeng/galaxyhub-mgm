@@ -1,4 +1,4 @@
-<x-theme.galaxyhub.sub-content title="가입" description="MGM Lounge 가입">
+<x-theme.galaxyhub.sub-content title="" description="MGM Lounge 가입">
     <nav class="mb-4" aria-label="Progress">
         <ol role="list" class="border border-gray-300 dark:border-gray-800 rounded-md divide-y divide-gray-300 dark:divide-gray-800 md:flex md:divide-y-0 shadow-sm bg-white dark:bg-[#080C15]/50">
             <li class="relative md:flex-1 md:flex">
@@ -72,13 +72,14 @@
                             <ul>
                                 <li>{{ $user->name }}님께서는 5개의 문제 중 {{ $matches }}개를 맞추셨습니다!</li>
                                 <li>MGM 아르마 클랜을 희망하신다면, 아래의 '가입 신청서 작성하기' 버튼을 눌러주세요.</li>
+                                <li>본 퀴즈 결과는 {{ $survey->created_at->copy()->addDays(7)->format('Y년 m월 d일 H시 i분') }}까지 유효합니다. </li>
                             </ul>
                         </x-alert.galaxyhub.success>
                     @else
                         <x-alert.galaxyhub.info title="앗... 이런...">
                             <ul>
                                 <li>{{ $user->name }}님께서는 5개의 문제 중 {{ $matches }}개를 맞추셨습니다. 원활한 아르마 플레이를 위해서는 3문제 이상 맞추셔야 합니다.</li>
-                                <li>모든 문제는 <a href="https://cafe.naver.com/gamemmakers/book5076085" target="_blank" class="underline hover:no-underline font-bold">아르마 길잡이</a>에서 출제 됩니다. 아직 읽어보지 못하셨다면 한번 읽어보세요!</li>
+                                <li>모든 문제는 <a href="https://cafe.naver.com/gamemmakers/book5076085" target="_blank" class="underline hover:no-underline font-bold">아르마 길잡이</a>에서 출제 됩니다.</li>
                                 <li>{{ $user->name }}님께서는 운영 정책에 따라 7일 뒤인 {{ $survey->created_at->copy()->addDays(7)->format('Y년 m월 d일 H시 i분') }}에 재도전 하실 수 있습니다.</li>
                             </ul>
                         </x-alert.galaxyhub.info>
@@ -86,7 +87,7 @@
                 </div>
 
                 @if($matches >= 3)
-                    <div class="absolute right-4 md:right-4 xl:right-8 top-4 xl:top-4 -rotate-12 rounded-xl border border-double border-8 border-red-500 mix-blend-multiply" style="-webkit-mask-image: url('{{ asset('images/rubber.png') }}'); -webkit-mask-repeat:repeat; -webkit-mask-position: {{mt_rand(0, 64)}}px {{mt_rand(0, 64)}}px;">
+                    <div class="absolute right-4 md:right-4 xl:right-8 top-4 xl:top-4 -rotate-12 rounded-xl border border-double border-8 border-red-500 mix-blend-multiply dark:mix-blend-normal" style="-webkit-mask-image: url('{{ asset('images/rubber.png') }}'); -webkit-mask-repeat:repeat; -webkit-mask-position: {{mt_rand(0, 64)}}px {{mt_rand(0, 64)}}px;">
                         <div class="p-2 xl:p-4 text-red-500 flex flex-col">
                             <p class="text-4xl xl:text-5xl font-bold lg:font-black">
                                 PASSED

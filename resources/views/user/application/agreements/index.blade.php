@@ -1,4 +1,4 @@
-<x-theme.galaxyhub.sub-content title="가입" description="MGM Lounge 가입">
+<x-theme.galaxyhub.sub-content title="" description="MGM Lounge 가입">
     <nav class="mb-4" aria-label="Progress">
         <ol role="list" class="border border-gray-300 dark:border-gray-800 rounded-md divide-y divide-gray-300 dark:divide-gray-800 md:flex md:divide-y-0 shadow-sm bg-white dark:bg-[#080C15]/50">
             <li class="relative md:flex-1 md:flex">

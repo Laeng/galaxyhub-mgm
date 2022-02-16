@@ -4,6 +4,8 @@ namespace App\Providers;
 
 use App\Repositories\Base\BaseRepository;
 use App\Repositories\Base\Interfaces\EloquentRepositoryInterface;
+use App\Repositories\File\FileRepository;
+use App\Repositories\File\Interfaces\FileRepositoryInterface;
 use App\Repositories\Mission\Interfaces\MissionRepositoryInterface;
 use App\Repositories\Mission\MissionRepository;
 use App\Repositories\Permission\Interfaces\RoleRepositoryInterface;
@@ -28,6 +30,9 @@ class RepositoryServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->bind(EloquentRepositoryInterface::class, BaseRepository::class);
+
+        //-- FILE
+        $this->app->bind(FileRepositoryInterface::class, FileRepository::class);
 
         //-- MISSION
         $this->app->bind(MissionRepositoryInterface::class, MissionRepository::class);

@@ -9,9 +9,9 @@ class ApplicationQuestion extends Question
     public function create(...$vars): SurveyModel
     {
         $one = $this->survey->sections()->create([
-            'name' => '가입 시 주의사항',
+            'name' => '가입 신청서',
             'description' =>
-                '<p>MGM 라운지 가입 및 MGM 아르마 클랜 가입을 진심으로 환영합니다.</p>'.
+                '<p>MGM 라운지 및 MGM 아르마 클랜 가입을 진심으로 환영합니다.</p>'.
                 '<p>저희 MGM 클랜은 오직 본 클랜의 아르마 유저들이 다른 어느 곳에서도 느낄 수 없는 전장 체험과 색다른 게이밍 경험을 할 수 있도록 MGM 스탭, 미션 메이커, 테크 매니저들이 소통하고 협업하며 MGM 아르마 애드온을 제작 및 제공하고 있습니다. '.
                 '회원님들께 제공되는 MGM 아르마 애드온에는 MGM 아르마 클랜 또는 개인이 제작한 비공개 애드온도 포함되어 있으며 운영진 및 애드온 개발자의 동의 없이 재배포 또는 유출 시 법적으로 대응할 수 있음을 알려드립니다!</p>'.
                 '<p>본 클랜은 \'이중 클랜 가입 금지 조항\'이 있으며 이를 반드시 준수하셔야 합니다. 이와 관련된 자세한 규정은 <a class=link-indigo" href="https://bit.ly/3hjb6wa">여기</a>를 참고해주시기 바랍니다.</p>'.
@@ -64,6 +64,7 @@ class ApplicationQuestion extends Question
 
         $two->questions()->create([
             'title' => '타 커뮤니티 이름',
+            'type' => 'long-text',
             'content' => '활동하셨거나 활동 중인 아르마 관련 커뮤니티(클랜, 카페, 디스코드) 이름을 모두 기재하여 주십시오.',
         ]);
 
@@ -74,6 +75,7 @@ class ApplicationQuestion extends Question
 
         $two->questions()->create([
             'title' => '(탈퇴 하였다면) 탈퇴 이유',
+            'type' => 'long-text',
             'content' => '해당 커뮤니티(클랜, 카페, 디스코드)를 탈퇴하셨다면 탈퇴 이유를 기재하여 주십시오. 탈퇴 이유를 피드백 받아 본 카페 운영에 참조하도록 하겠습니다.',
         ]);
 

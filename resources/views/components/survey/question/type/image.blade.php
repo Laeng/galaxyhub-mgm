@@ -1,7 +1,7 @@
 <label class="block">
-    <p class="leading-6 font-medium text-gray-900 mb-0.5">{!! $question->title !!} {!! in_array('required', $question->rules) ? '<span class="text-red-600 text-base">*</span>' : '' !!}</p>
+    <p class="leading-6 font-medium text-gray-900 dark:text-gray-100 mb-0.5">{!! $question->title !!} {!! in_array('required', $question->rules) ? '<span class="text-red-600 text-base">*</span>' : '' !!}</p>
     @if (is_null($answer))
-        <p class="text-sm text-gray-500 mb-2">{!! $question->content !!}</p>
+        <p class="text-sm text-gray-500 dark:text-gray-300 mb-2">{!! $question->content !!}</p>
         <div id="{{ $question->key }}_files"></div>
         <input type="file" name="filepond" id="{{ $question->key }}" multiple data-max-file-size="10MB" data-max-files="10" {{ in_array('required', $question->rules) ? 'required' : '' }} />
         @error($question->key)
@@ -125,7 +125,7 @@
                     let axios_body = new FormData();
                     axios_body.append(fieldName, file, file.name);
 
-                    window.axios.post('{{ route('file.upload.filepond.api') }}', axios_body, axios_config).then(axios_success).catch(axios_error).then(axios_complete);
+                    window.axios.post('{{ route('file.upload.filepond', 'survey') }}', axios_body, axios_config).then(axios_success).catch(axios_error).then(axios_complete);
 
                     return {
                         abort: () => {
@@ -170,7 +170,7 @@
                         id: id
                     };
 
-                    window.axios.post('{{ route('file.delete.filepond.api') }}', axios_body).then(axios_success).catch(axios_error).then(axios_complete);
+                    window.axios.post('{{ route('file.delete.filepond', 'survey') }}', axios_body).then(axios_success).catch(axios_error).then(axios_complete);
                 }
             },
             required: {{ in_array('required', $question->rules) ? 'true' : 'false' }},

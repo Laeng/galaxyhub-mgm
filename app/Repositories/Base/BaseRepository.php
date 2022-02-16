@@ -13,6 +13,7 @@ class BaseRepository implements EloquentRepositoryInterface
     public function __construct(Model $model)
     {
         $this->model = $model;
+
     }
 
     public function findById(int $id, array $columns = ['*'], array $relations = []): ?Model

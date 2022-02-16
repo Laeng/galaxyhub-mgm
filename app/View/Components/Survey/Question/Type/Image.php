@@ -3,7 +3,7 @@
 namespace App\View\Components\Survey\Question\Type;
 
 
-use App\Models\File as FileModel;
+use App\Models\File22 as FileModel;
 use App\Models\SurveyQuestion;
 use Closure;
 use Illuminate\Contracts\View\View;

@@ -10,6 +10,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Redirector;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class QuizController extends Controller
@@ -25,12 +26,12 @@ class QuizController extends Controller
 
     public function index(Request $request): View|Application|RedirectResponse|Redirector
     {
-        if($request->isMethod('get') && (is_null($request->session()->get('_old_input')) || count($request->session()->get('_old_input')) <= 0 ))
+        if($request->isMethod('get') && (is_null($request->session()->get('_old_input')) || count($request->session()->get('_old_input')) <= 0))
         {
             return redirect()->route('application.index');
         }
 
-        $user = $request->user();
+        $user = Auth::user();
         $quizzes = $this->surveyService->getLatestApplicationQuiz($user);
 
         if($quizzes?->count() > 0 && $this->surveyEntryRepository->findByUserIdAndSurveyId($user->id, $quizzes->first()->id)?->count() > 0)
@@ -48,7 +49,7 @@ class QuizController extends Controller
 
     public function score(Request $request): View|Application|RedirectResponse|Redirector
     {
-        $user = $request->user();
+        $user = Auth::user();
 
         if($request->isMethod('GET'))
         {

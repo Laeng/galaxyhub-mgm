@@ -19,4 +19,5 @@ Route::get('/', function () {
 
 require_once __DIR__.'/web/application.php';
 require_once __DIR__.'/web/auth.php';
+require_once __DIR__.'/web/file.php';
 require_once __DIR__.'/web/lounge.php';

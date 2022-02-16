@@ -64,9 +64,10 @@ class AuthenticateController extends Controller
             $user = $this->authService->create($accountArray);
 
             Auth::login($user);
+
             $request->session()->regenerate();
 
-            return redirect()->route('lounge.welcome');
+            return redirect()->intended('lounge.index');
         }
         catch (OpenIDValidationException $e)
         {
@@ -76,7 +77,11 @@ class AuthenticateController extends Controller
 
     public function logout(Request $request): Application|RedirectResponse|Redirector
     {
-        Auth::logout();
+        Auth::guard('web')->logout();
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
         return redirect()->route('welcome');
     }
 }

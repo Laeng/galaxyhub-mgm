@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Repositories\Survey\Interfaces\SurveyEntryRepositoryInterface;
 use App\Repositories\Survey\Interfaces\SurveyRepositoryInterface;
 use App\Services\Survey\Contracts\SurveyServiceContract;
+use App\Services\Survey\Questions\ApplicationQuestion;
 use App\Services\Survey\Questions\QuizQuestion;
 use Illuminate\Database\Eloquent\Collection;use Illuminate\Database\Eloquent\Model;
 
@@ -17,6 +18,8 @@ use Illuminate\Database\Eloquent\Collection;use Illuminate\Database\Eloquent\Mod
  */
 class SurveyService implements SurveyServiceContract
 {
+    const APPLICATION_FORM_NAME = 'application-2022-02-16-2';
+
     public SurveyRepositoryInterface $surveyRepository;
     public SurveyEntryRepositoryInterface $surveyEntryRepository;
 
@@ -27,7 +30,29 @@ class SurveyService implements SurveyServiceContract
 
     public function createApplicationForm(int $surveyId = null): Survey
     {
+        $formModel = null;
 
+        if(!is_null($surveyId))
+        {
+            $formModel = $this->surveyRepository->findById($surveyId);
+        }
+
+        if(is_null($formModel))
+        {
+            $formModel = $this->surveyRepository->findByName(self::APPLICATION_FORM_NAME)?->first();
+        }
+
+        if(is_null($formModel))
+        {
+            $formModel = $this->surveyRepository->create([
+                'name' => self::APPLICATION_FORM_NAME
+            ]);
+
+            $questions = new ApplicationQuestion($formModel);
+            $formModel = $questions->create();
+        }
+
+        return $formModel;
     }
 
     public function createApplicationQuiz(User $user, int $surveyId = null): Survey

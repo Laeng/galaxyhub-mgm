@@ -7,14 +7,14 @@
     <meta name="developer" content="Laeng">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta property="og:type" content="website">
-    <meta property="og:title" content="{{ $title }}" />
+    <meta property="og:title" content="{{ $title === '' ? $websiteName : $title }}" />
     <meta property="og:description" content="{{ $description }}" />
     <meta property="og:url" content="{{ url()->current() }}">
     <meta property="og:site_name" content="{{ $websiteName }}">
     <meta property="og:image" content="{{ asset('images/og_image.png') }}">
     <meta property="og:locale" content="ko_KR">
 
-    <title>{{ "{$title} - {$websiteName}" }}</title>
+    <title>{{ $title == '' ? $websiteName : "{$title} - {$websiteName}" }}</title>
 
     <!-- Styles -->
     <link rel="preconnect" href="https://cdn.galaxyhub.kr">

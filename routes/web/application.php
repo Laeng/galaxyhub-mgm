@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Application\AgreementController;
+use App\Http\Controllers\Application\FormController;
 use App\Http\Controllers\Application\QuizController;
 use Illuminate\Support\Facades\Route;
 
@@ -10,7 +11,8 @@ Route::prefix('application')->name('application.')->middleware('web')->group(fun
     Route::get('/agreements', [AgreementController::class, 'index'])->name('agreement.agreements');
     Route::match(['post', 'get'], '/quiz', [QuizController::class, 'index'])->name('quiz.index');
     Route::match(['post', 'get'], '/score', [QuizController::class, 'score'])->name('quiz.score');
-    Route::match(['post', 'get'], '/form', [QuizController::class, 'score'])->name('form');
+    Route::match(['post', 'get'], '/form', [FormController::class, 'index'])->name('form');
+    Route::match(['post'], '/store', [FormController::class, 'store'])->name('store');
 
 
     //AJAX
