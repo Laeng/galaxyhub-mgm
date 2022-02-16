@@ -12,25 +12,26 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Redirector;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
 
 class AgreementController extends Controller
 {
     public function index(Request $request): View|Application|RedirectResponse|Redirector
     {
-        return view('user.application.agreements.index');
+        return view('user.application.agreements');
     }
 
     public function checkAccount(Request $request, UserAccountRepositoryInterface $accountRepository, SteamServiceContract $steamService): JsonResponse
     {
         try
         {
-            $user = $request->user();
+            $user = Auth::user();
             $accounts = $accountRepository->findByUserId($user->id);
             $steamAccount = $accounts->filter(fn ($v, $k) => $v->provider === 'steam')->first();
 
             $steamPlayerSummaries = $steamService->getPlayerSummaries($steamAccount->account_id);
 
-            if($steamPlayerSummaries['response']['players'][0]['communityvisibilitystate'] != 3)
+            if ($steamPlayerSummaries['response']['players'][0]['communityvisibilitystate'] != 3)
             {
                 return $this->jsonResponse(200, '스팀 프로필이 친구 공개 또는 비공개 상태입니다. 프로필을 공개로 변경해 주십시오.', false);
             }
@@ -38,7 +39,7 @@ class AgreementController extends Controller
             $steamOwnedGames = $steamService->getOwnedGames($steamAccount->account_id);
             $steamOwnedGamesCollection = new Collection($steamOwnedGames['response']['games']);
 
-            if($steamOwnedGamesCollection->filter(fn ($v, $k) => $v['appid'] == 107410)->count() == 0)
+            if ($steamOwnedGamesCollection->filter(fn ($v, $k) => $v['appid'] == 107410)->count() == 0)
             {
                 return $this->jsonResponse(200, '\'아르마 3\'를 구매하셔야만  MGM 라운지 및 MGM 아르마 클랜 가입 신청이 가능합니다.', false);
             }

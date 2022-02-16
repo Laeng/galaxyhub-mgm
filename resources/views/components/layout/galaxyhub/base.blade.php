@@ -18,7 +18,7 @@
 
     <!-- Styles -->
     <link rel="preconnect" href="https://cdn.galaxyhub.kr">
-    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
     <link rel="stylesheet" href="{{ mix('css/app.css') }}">
     @stack('css')
 
@@ -35,11 +35,12 @@
     $hasErrors = !empty($errors);
     $errorMessages = ($hasErrors) ? $errors->getMessages() : [];
 @endphp
-@if($hasErrors && (array_key_exists('error', $errorMessages) || array_key_exists('sucess', $errorMessages)))
+@if($hasErrors && (array_key_exists('error', $errorMessages) || array_key_exists('success', $errorMessages)))
     <script type="text/javascript">
         window.addEventListener('load', function(){
             @foreach($errorMessages as $k => $v)
             @foreach($v as $vv)
+            window.modal.alert('', {{ $vv }}, c => {}, {{ $k }});
             //window.toast.show('{{ $k }}', '{{ $vv }}', {{ $k == 'error' ? -1 : 3000 }});
             @endforeach
             @endforeach

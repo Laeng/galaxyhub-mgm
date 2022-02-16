@@ -46,6 +46,22 @@
                         <span class="ml-4 text-sm font-medium text-gray-900 dark:text-gray-100">가입신청서 작성</span>
                     </p>
                 </div>
+                <div class="hidden md:block absolute top-0 right-0 h-full w-5" aria-hidden="true">
+                    <svg class="h-full w-full text-gray-300 dark:text-gray-800" viewBox="0 0 22 80" fill="none" preserveAspectRatio="none">
+                        <path d="M0 -2L20 40L0 82" vector-effect="non-scaling-stroke" stroke="currentcolor" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+            </li>
+
+            <li class="relative md:flex-1 md:flex">
+                <div class="group flex items-center w-full">
+                    <p class="px-6 py-4 flex items-center text-sm font-medium">
+                        <span class="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-full border-2 border-gray-300 dark:border-gray-500 group-hover:border-gray-400">
+                            <span class="text-gray-500 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-gray-100">04</span>
+                        </span>
+                        <span class="ml-4 text-sm font-medium text-gray-500 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-gray-100">가입 심사</span>
+                    </p>
+                </div>
             </li>
         </ol>
     </nav>

@@ -2,26 +2,26 @@
 
 namespace App\View\Components\Panel\Galaxyhub;
 
+use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
 class Basics extends Component
 {
+    public string $class;
+    public string $style;
+
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(string $class = '', string $style = '')
     {
-        //
+        $this->class = $class;
+        $this->style = $style;
     }
 
-    /**
-     * Get the view / contents that represent the component.
-     *
-     * @return \Illuminate\Contracts\View\View|\Closure|string
-     */
-    public function render()
+    public function render():View
     {
         return view('components.panel.galaxyhub.basics');
     }

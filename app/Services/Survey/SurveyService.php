@@ -32,17 +32,17 @@ class SurveyService implements SurveyServiceContract
     {
         $formModel = null;
 
-        if(!is_null($surveyId))
+        if (!is_null($surveyId))
         {
             $formModel = $this->surveyRepository->findById($surveyId);
         }
 
-        if(is_null($formModel))
+        if (is_null($formModel))
         {
             $formModel = $this->surveyRepository->findByName(self::APPLICATION_FORM_NAME)?->first();
         }
 
-        if(is_null($formModel))
+        if (is_null($formModel))
         {
             $formModel = $this->surveyRepository->create([
                 'name' => self::APPLICATION_FORM_NAME
@@ -59,7 +59,7 @@ class SurveyService implements SurveyServiceContract
     {
         $name = $this->getApplicationQuizName($user);
 
-        if(is_null($surveyId))
+        if (is_null($surveyId))
         {
             $quizzes = $this->surveyRepository->findByName($name);
             $quizModel = $quizzes->filter(fn ($v, $k) => $v->created_at->isToday())->first();
@@ -70,7 +70,7 @@ class SurveyService implements SurveyServiceContract
             $quizModel = $quizModel->created_at->isToday() ? $quizModel : null;
         }
 
-        if(is_null($quizModel))
+        if (is_null($quizModel))
         {
             $quizModel = $this->surveyRepository->create([
                 'name' => $name,

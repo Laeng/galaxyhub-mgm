@@ -26,7 +26,7 @@ class QuizController extends Controller
 
     public function index(Request $request): View|Application|RedirectResponse|Redirector
     {
-        if($request->isMethod('get') && (is_null($request->session()->get('_old_input')) || count($request->session()->get('_old_input')) <= 0))
+        if ($request->isMethod('get') && (is_null($request->session()->get('_old_input')) || count($request->session()->get('_old_input')) <= 0))
         {
             return redirect()->route('application.index');
         }
@@ -34,16 +34,16 @@ class QuizController extends Controller
         $user = Auth::user();
         $quizzes = $this->surveyService->getLatestApplicationQuiz($user);
 
-        if($quizzes?->count() > 0 && $this->surveyEntryRepository->findByUserIdAndSurveyId($user->id, $quizzes->first()->id)?->count() > 0)
+        if ($quizzes?->count() > 0 && $this->surveyEntryRepository->findByUserIdAndSurveyId($user->id, $quizzes->first()->id)?->count() > 0)
         {
-            return redirect()->route('application.quiz.score');
+            return redirect()->route('application.score');
         }
 
         $quiz = $this->surveyService->createApplicationQuiz($user);
 
-        return view('user.application.quiz.index', [
+        return view('user.application.quiz', [
             'survey' => $quiz,
-            'action' => route('application.quiz.score')
+            'action' => route('application.score')
         ]);
     }
 
@@ -51,7 +51,7 @@ class QuizController extends Controller
     {
         $user = Auth::user();
 
-        if($request->isMethod('GET'))
+        if ($request->isMethod('GET'))
         {
             $quizzes = $this->surveyService->getLatestApplicationQuiz($user);
 
@@ -71,7 +71,7 @@ class QuizController extends Controller
 
         $quizEntry = $this->surveyEntryRepository->findByUserIdAndSurveyId($user->id, $quizId)?->first();
 
-        if(is_null($quizEntry))
+        if (is_null($quizEntry))
         {
             $answers = $this->validate($request, $quiz->validateRules());
             $this->surveyEntryRepository->new()->for($quiz)->by($user)->fromArray($answers)->push();
@@ -102,7 +102,7 @@ class QuizController extends Controller
             }
         }
 
-        return view('user.application.quiz.score', [
+        return view('user.application.score', [
             'user' => $user,
             'survey' => $quiz,
             'answer' => $quizEntry->id,

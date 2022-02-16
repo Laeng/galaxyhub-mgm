@@ -46,9 +46,9 @@ class FileService implements FileServiceContract
     {
         $fileModel = $this->fileRepository->findById($id);
 
-        if(!is_null($fileModel))
+        if (!is_null($fileModel))
         {
-            if($fileModel->user_id === $userId)
+            if ($fileModel->user_id === $userId)
             {
                 Storage::disk($fileModel->storage)->delete("{$fileModel->path}/{$fileModel->uuid}.{$fileModel->extension}");
                 $fileModel->delete();

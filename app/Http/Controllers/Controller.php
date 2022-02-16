@@ -21,14 +21,16 @@ class Controller extends BaseController
     {
         $validator = Validator::make($request->all(), $rules);
 
-        if ($validator->fails()) {
+        if ($validator->fails())
+        {
             throw new \Exception('Validation failed', 422);
         }
     }
 
     public function jsonResponse(int|string $status, string $description, mixed $value): JsonResponse
     {
-        if (!array_key_exists($status, Response::$statusTexts)) {
+        if (!array_key_exists($status, Response::$statusTexts))
+        {
             $status = 500;
         }
 
