@@ -1,5 +1,5 @@
 <x-theme.galaxyhub.sub website-name="MGM Lounge" title="로그인" description="MGM Lounge 로그인">
-    <x-container.galaxyhub.single grand-parent-class="" parent-class="">
+    <x-container.galaxyhub.single align-content="center">
         <div class="w-full flex flex-col lg:flex-row">
             <div class="w-full h-44 lg:h-auto bg-gray-400 block lg:w-1/2 bg-cover bg-center rounded-t-lg lg:rounded-l-lg lg:rounded-tr-none"
                  style="background-image: url('https://cdn.discordapp.com/attachments/229099609140494336/834692945776869376/20210422134727_1.jpg')">

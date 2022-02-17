@@ -94,7 +94,7 @@
             </div>
 
             <div style="display: none" class="text-center" x-show="(data.check.load && !data.check.status)">
-                <x-button.filled.md-blue type="button" onclick="location.href='{{ route('application.agreement') }}'">
+                <x-button.filled.md-blue type="button" onclick="location.href='{{ route('application.agreements') }}'">
                     새로고침
                 </x-button.filled.md-blue>
             </div>

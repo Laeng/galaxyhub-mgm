@@ -7,7 +7,7 @@ use App\Http\Controllers\File\CkeditorController;
 use App\Http\Controllers\File\FilepondController;
 use Illuminate\Support\Facades\Route;
 
-Route::prefix('file')->name('file.')->middleware('web')->group(function() {
+Route::prefix('file')->name('file.')->middleware('auth:web')->group(function() {
     //VIEW
 
     //AJAX

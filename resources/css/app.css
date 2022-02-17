@@ -9,7 +9,7 @@
 }
 
 .prose :where(a):not(:where([class~="not-prose"] *)) {
-    @apply text-indigo-500 no-underline hover:underline;
+    @apply text-blue-500 no-underline hover:underline;
 }
 
 [x-cloak] {
@@ -117,9 +117,9 @@ aspect-16\/10 {
 }
 
 .filepond--drop-label {
-    @apply text-gray-500 dark:text-gray-300 rounded-md shadow-sm !important
+    @apply text-gray-500 dark:text-gray-300 rounded-md shadow-sm !important;
 }
 
 .filepond--panel-root {
-    @apply rounded-md bg-transparent dark:bg-gray-900 border border-gray-300 dark:border-gray-800 !important
+    @apply rounded-md bg-transparent dark:bg-gray-900 border border-gray-300 dark:border-gray-800 !important;
 }

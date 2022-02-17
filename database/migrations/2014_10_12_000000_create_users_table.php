@@ -44,6 +44,27 @@ return new class extends Migration
             $table->string('refresh_token', 500)->nullable();
             $table->timestamps();
         });
+
+        Schema::create('user_missions', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('user_id')->index();
+            $table->unsignedBigInteger('mission_id')->index();
+            $table->mediumText('role')->nullable(); // 아르마의 밤 과 같은 역할들 중 하나를 선택한 값 // 추후 릴리즈
+            $table->boolean('is_maker')->default(false); // 진행자인지 아닌지
+            $table->tinyInteger('try_attends')->default(0);
+            $table->timestamp('attended_at')->nullable(); // 출석체크 시간
+            $table->timestamps();
+        });
+
+        Schema::create('user_records', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('user_id')->index();
+            $table->unsignedBigInteger('staff_id')->index()->nullable();
+            $table->string('type');
+            $table->longText('data')->nullable();
+            $table->uuid()->index()->nullable();
+            $table->timestamps();
+        });
     }
 
     /**
@@ -54,5 +75,9 @@ return new class extends Migration
     public function down()
     {
         Schema::dropIfExists('users');
+        Schema::dropIfExists('user_accounts');
+        Schema::dropIfExists('user_missions');
+        Schema::dropIfExists('user_record');
+
     }
 };

@@ -18,6 +18,13 @@ class AgreementController extends Controller
 {
     public function index(Request $request): View|Application|RedirectResponse|Redirector
     {
+        $user = Auth::user();
+
+        if ($user->hasRole($user::ROLE_APPLY))
+        {
+            return redirect()->route('application.index');
+        }
+
         return view('user.application.agreements');
     }
 
@@ -25,7 +32,7 @@ class AgreementController extends Controller
     {
         try
         {
-            $user = Auth::user();
+            $user = Auth()->user();
             $accounts = $accountRepository->findByUserId($user->id);
             $steamAccount = $accounts->filter(fn ($v, $k) => $v->provider === 'steam')->first();
 

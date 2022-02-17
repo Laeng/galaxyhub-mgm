@@ -40,7 +40,7 @@
         window.addEventListener('load', function(){
             @foreach($errorMessages as $k => $v)
             @foreach($v as $vv)
-            window.modal.alert('', {{ $vv }}, c => {}, {{ $k }});
+            window.modal.alert('', '{{ $vv }}', c => {}, '{{ $k }}');
             //window.toast.show('{{ $k }}', '{{ $vv }}', {{ $k == 'error' ? -1 : 3000 }});
             @endforeach
             @endforeach

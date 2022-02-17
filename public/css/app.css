@@ -1398,6 +1398,10 @@ select{
   margin-bottom: 1.5rem;
 }
 
+.mt-96{
+  margin-top: 24rem;
+}
+
 .ml-1{
   margin-left: 0.25rem;
 }
@@ -1924,6 +1928,10 @@ select{
   padding-top: 0.5rem;
 }
 
+.pt-1{
+  padding-top: 0.25rem;
+}
+
 .pt-4{
   padding-top: 1rem;
 }
@@ -1934,22 +1942,6 @@ select{
 
 .pt-8{
   padding-top: 2rem;
-}
-
-.pt-6{
-  padding-top: 1.5rem;
-}
-
-.pb-4{
-  padding-bottom: 1rem;
-}
-
-.pt-3{
-  padding-top: 0.75rem;
-}
-
-.pt-1{
-  padding-top: 0.25rem;
 }
 
 .text-center{
@@ -2156,6 +2148,11 @@ select{
   color: rgb(153 27 27 / var(--tw-text-opacity));
 }
 
+.text-black{
+  --tw-text-opacity: 1;
+  color: rgb(0 0 0 / var(--tw-text-opacity));
+}
+
 .text-blue-400{
   --tw-text-opacity: 1;
   color: rgb(96 165 250 / var(--tw-text-opacity));
@@ -2194,11 +2191,6 @@ select{
 .text-gray-600{
   --tw-text-opacity: 1;
   color: rgb(75 85 99 / var(--tw-text-opacity));
-}
-
-.text-black{
-  --tw-text-opacity: 1;
-  color: rgb(0 0 0 / var(--tw-text-opacity));
 }
 
 .underline{
@@ -2277,7 +2269,7 @@ select{
 
 .prose :where(a):not(:where([class~="not-prose"] *)){
   --tw-text-opacity: 1;
-  color: rgb(99 102 241 / var(--tw-text-opacity));
+  color: rgb(59 130 246 / var(--tw-text-opacity));
   -webkit-text-decoration-line: none;
           text-decoration-line: none;
 }
@@ -2599,14 +2591,14 @@ aspect-16\/10 {
   background-color: rgb(29 78 216 / var(--tw-bg-opacity));
 }
 
-.hover\:bg-red-700:hover{
-  --tw-bg-opacity: 1;
-  background-color: rgb(185 28 28 / var(--tw-bg-opacity));
-}
-
 .hover\:bg-gray-200:hover{
   --tw-bg-opacity: 1;
   background-color: rgb(229 231 235 / var(--tw-bg-opacity));
+}
+
+.hover\:bg-red-700:hover{
+  --tw-bg-opacity: 1;
+  background-color: rgb(185 28 28 / var(--tw-bg-opacity));
 }
 
 .hover\:text-gray-500:hover{
@@ -3005,10 +2997,6 @@ aspect-16\/10 {
     height: 1.25rem;
   }
 
-  .md\:w-2\/3{
-    width: 66.666667%;
-  }
-
   .md\:flex-1{
     flex: 1 1 0%;
   }
@@ -3057,14 +3045,6 @@ aspect-16\/10 {
 
   .lg\:ml-5{
     margin-left: 1.25rem;
-  }
-
-  .lg\:mt-0{
-    margin-top: 0px;
-  }
-
-  .lg\:mb-6{
-    margin-bottom: 1.5rem;
   }
 
   .lg\:block{
@@ -3140,21 +3120,17 @@ aspect-16\/10 {
     padding: 2rem;
   }
 
-  .lg\:p-16{
-    padding: 4rem;
-  }
-
   .lg\:px-8{
     padding-left: 2rem;
     padding-right: 2rem;
   }
 
-  .lg\:pb-0{
-    padding-bottom: 0px;
-  }
-
   .lg\:pt-4{
     padding-top: 1rem;
+  }
+
+  .lg\:pb-0{
+    padding-bottom: 0px;
   }
 
   .lg\:text-4xl{
@@ -3174,11 +3150,6 @@ aspect-16\/10 {
 
   .lg\:text-\[0\.66rem\]{
     font-size: 0.66rem;
-  }
-
-  .lg\:text-3xl{
-    font-size: 1.875rem;
-    line-height: 2.25rem;
   }
 
   .lg\:font-black{

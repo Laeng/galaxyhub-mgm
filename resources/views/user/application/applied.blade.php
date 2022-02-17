@@ -27,7 +27,7 @@
                                 <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
                             </svg>
                         </span>
-                        <span class="ml-4 text-sm font-medium text-gray-900 dark:text-gray-100">아르마 퀴즈 성공!</span>
+                        <span class="ml-4 text-sm font-medium text-gray-900 dark:text-gray-100">ARMA3 퀴즈 합격!</span>
                     </p>
                 </div>
                 <div class="hidden md:block absolute top-0 right-0 h-full w-5" aria-hidden="true">

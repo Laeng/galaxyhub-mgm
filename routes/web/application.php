@@ -6,9 +6,9 @@ use App\Http\Controllers\Application\FormController;
 use App\Http\Controllers\Application\QuizController;
 use Illuminate\Support\Facades\Route;
 
-Route::prefix('application')->name('application.')->middleware('web')->group(function() {
+Route::prefix('application')->name('application.')->middleware(['auth.applicant:web'])->group(function() {
     //VIEW
-    Route::get('/', [AgreementController::class, 'index'])->name('agreement.index');
+    Route::get('/', [ApplicationController::class, 'index'])->name('index');
     Route::get('/agreements', [AgreementController::class, 'index'])->name('agreements');
     Route::match(['post', 'get'], '/quiz', [QuizController::class, 'index'])->name('quiz');
     Route::match(['post', 'get'], '/score', [QuizController::class, 'score'])->name('score');

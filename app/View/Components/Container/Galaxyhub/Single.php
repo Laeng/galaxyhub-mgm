@@ -9,16 +9,18 @@ class Single extends Component
 {
     public string $class;
     public string $style;
+    public string $alignContent;
 
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct(string $class = '', string $style = '')
+    public function __construct(string $class = '', string $style = '', string $alignContent = '')
     {
         $this->class = $class;
         $this->style = $style;
+        $this->alignContent = $alignContent;
     }
 
     public function render():View

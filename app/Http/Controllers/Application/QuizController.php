@@ -26,12 +26,18 @@ class QuizController extends Controller
 
     public function index(Request $request): View|Application|RedirectResponse|Redirector
     {
+        $user = Auth::user();
+
+        if ($user->hasRole($user::ROLE_APPLY) || $user->isBanned())
+        {
+            return redirect()->route('application.index');
+        }
+
         if ($request->isMethod('get') && (is_null($request->session()->get('_old_input')) || count($request->session()->get('_old_input')) <= 0))
         {
             return redirect()->route('application.index');
         }
 
-        $user = Auth::user();
         $quizzes = $this->surveyService->getLatestApplicationQuiz($user);
 
         if ($quizzes?->count() > 0 && $this->surveyEntryRepository->findByUserIdAndSurveyId($user->id, $quizzes->first()->id)?->count() > 0)
@@ -50,6 +56,11 @@ class QuizController extends Controller
     public function score(Request $request): View|Application|RedirectResponse|Redirector
     {
         $user = Auth::user();
+
+        if ($user->hasRole($user::ROLE_APPLY) || $user->isBanned())
+        {
+            return redirect()->route('application.index');
+        }
 
         if ($request->isMethod('GET'))
         {
