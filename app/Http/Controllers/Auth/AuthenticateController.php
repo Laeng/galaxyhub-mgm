@@ -25,7 +25,7 @@ class AuthenticateController extends Controller
     public function login(): View|Application|RedirectResponse|Redirector
     {
         if (Auth::check()) {
-            return redirect()->route('lounge.index');
+            return redirect()->route('app.index');
         }
 
         return view('user.auth.login');
@@ -34,7 +34,7 @@ class AuthenticateController extends Controller
     public function provider(Request $request, string $provider): Application|RedirectResponse|Redirector
     {
         if (Auth::check()) {
-            return redirect()->route('lounge.index');
+            return redirect()->route('app.index');
         }
 
         switch($provider)
@@ -67,7 +67,7 @@ class AuthenticateController extends Controller
 
             $request->session()->regenerate();
 
-            return redirect()->intended('lounge.index');
+            return redirect()->intended('app.index');
         }
         catch (OpenIDValidationException $e)
         {

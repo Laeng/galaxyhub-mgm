@@ -40,6 +40,7 @@
     }
 }
 
+
 .navigation li li {
     @apply p-1.5 my-3 lg:my-2 lg:px-8 text-base lg:text-sm text-center lg:text-left text-white lg:text-black hover:text-gray-400 lg:hover:text-black lg:float-none lg:hover:bg-gray-100;
 }

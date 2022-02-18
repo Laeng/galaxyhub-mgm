@@ -10,4 +10,6 @@ interface SurveyRepositoryInterface extends EloquentRepositoryInterface
     public function findByName(string $name, array $columns = ['*'], array $relations = []): ?Collection;
 
     public function findByNameWithIn7Days(string $name, array $columns = ['*'], array $relations = []): ?Collection;
+
+    public function findApplicationForms(array $columns = ['*'], array $relations = []): ?Collection;
 }

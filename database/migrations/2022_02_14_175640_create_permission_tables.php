@@ -126,7 +126,7 @@ return new class extends Migration
 
     private function createRoles()
     {
-        $roleNames = ['APPLY', 'DEFER', 'REJECT', 'MEMBER', 'MAKER1', 'MAKER2', 'STAFF'];
+        $roleNames = ['APPLY', 'DEFER', 'REJECT', 'MEMBER', 'MAKER1', 'MAKER2', 'ADMIN'];
 
         foreach($roleNames as $name)
         {
@@ -137,7 +137,7 @@ return new class extends Migration
             'MEMBER' => ['MEMBER'],
             'MAKER1' => ['MEMBER', 'MAKER1'],
             'MAKER2' => ['MEMBER', 'MAKER1', 'MAKER2'],
-            'STAFF' => ['MEMBER', 'MAKER1', 'MAKER2', 'STAFF']
+            'STAFF' => ['MEMBER', 'MAKER1', 'MAKER2', 'ADMIN']
         ];
 
         foreach ($permissionAndRole as $k => $v) {

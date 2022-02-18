@@ -29,3 +29,5 @@ Breadcrumbs::for('Lounge', function(BreadcrumbTrail $trail) {
     $trail->push('미션', route('auth.login'));
     $trail->push('5월 14일 미션', route('auth.login'));
 });
+
+require_once __DIR__ . '/breadcrumbs/admin.php';

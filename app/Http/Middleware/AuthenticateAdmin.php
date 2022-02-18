@@ -5,7 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Auth\Middleware\Authenticate as Middleware;
 
-class ApplicantAuthenticate extends Middleware
+class AuthenticateAdmin extends Middleware
 {
     public function handle($request, Closure $next, ...$guards)
     {
@@ -13,14 +13,9 @@ class ApplicantAuthenticate extends Middleware
 
         $user = app('auth')->user();
 
-        if ($user->hasAnyPermission([
-            $user::PERMISSION_MEMBER,
-            $user::PERMISSION_MAKER1,
-            $user::PERMISSION_MAKER2,
-            $user::PERMISSION_STAFF
-        ]))
+        if (!$user->hasPermissionTo($user::PERMISSION_MEMBER))
         {
-            return app('redirect')->route('lounge.index');
+            //return redirect()->route('application.index');
         }
 
         return $next($request);

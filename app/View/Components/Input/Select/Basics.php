@@ -2,10 +2,9 @@
 
 namespace App\View\Components\Input\Select;
 
-use App\View\Components\Input\InputSelectComponent;
 use Illuminate\Contracts\View\View;
 
-class Basics extends InputSelectComponent
+class Basics extends Skeleton
 {
     public function render(): View
     {

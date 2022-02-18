@@ -1,10 +1,11 @@
 <?php
 
-namespace App\View\Components\Input;
+namespace App\View\Components\Input\Text;
 
+use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
-abstract class InputTextComponent extends Component
+abstract class Skeleton extends Component
 {
     public string $type;
     public string $class;
@@ -20,4 +21,6 @@ abstract class InputTextComponent extends Component
         $this->type = $type;
         $this->class = $class;
     }
+
+    public abstract function render(): View;
 }

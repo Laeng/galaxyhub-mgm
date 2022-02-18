@@ -27,6 +27,11 @@ class SurveyRepository extends BaseRepository implements SurveyRepositoryInterfa
 
     public function findByNameWithIn7Days(string $name, array $columns = ['*'], array $relations = []): ?Collection
     {
-        return $this->model->select($columns)->where('name', $name)->with($relations)->where('created_at', '>=', today()->subDays(7))->latest()->get();
+        return $this->model->select($columns)->where('name', $name)->where('created_at', '>=', today()->subDays(7))->with($relations)->latest()->get();
+    }
+
+    public function findApplicationForms(array $columns = ['*'], array $relations = []): ?Collection
+    {
+        return $this->model->select($columns)->where('name', 'like', 'application-%')->with($relations)->latest()->get();
     }
 }

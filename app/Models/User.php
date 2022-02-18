@@ -71,12 +71,12 @@ class User extends Authenticatable
     const ROLE_MEMBER = 'MEMBER';
     const ROLE_MAKER1 = 'MAKER1';
     const ROLE_MAKER2 = 'MAKER2';
-    const ROLE_STAFF = 'STAFF';
+    const ROLE_ADMIN = 'ADMIN';
 
     const PERMISSION_MEMBER = 'MEMBER';
     const PERMISSION_MAKER1 = 'MAKER1';
     const PERMISSION_MAKER2 = 'MAKER2';
-    const PERMISSION_STAFF = 'STAFF';
+    const PERMISSION_ADMIN = 'ADMIN';
 
     private array $roleNames = [
         '가입 신청' => self::ROLE_APPLY,
@@ -85,14 +85,14 @@ class User extends Authenticatable
         '멤버' => self::ROLE_MEMBER,
         '임시 메이커' => self::ROLE_MAKER1,
         '정식 메이커' => self::ROLE_MAKER2,
-        '관리자' => self::ROLE_STAFF
+        '관리자' => self::ROLE_ADMIN
     ];
 
     private array $permissionNames = [
         '멤버' => self::PERMISSION_MEMBER,
         '임시 메이커' => self::PERMISSION_MAKER1,
         '정식 메이커' => self::PERMISSION_MAKER2,
-        '관리자' => self::PERMISSION_STAFF
+        '관리자' => self::PERMISSION_ADMIN
     ];
 
     public function accounts(): HasMany

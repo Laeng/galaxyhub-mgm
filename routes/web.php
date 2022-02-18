@@ -17,7 +17,10 @@ Route::get('/', function () {
     return view('welcome');
 })->name('welcome');
 
-require_once __DIR__.'/web/application.php';
-require_once __DIR__.'/web/auth.php';
-require_once __DIR__.'/web/file.php';
-require_once __DIR__.'/web/lounge.php';
+require_once __DIR__ . '/web/admin/application.php';
+
+
+require_once __DIR__ . '/web/user/app.php';
+require_once __DIR__ . '/web/user/application.php';
+require_once __DIR__ . '/web/user/auth.php';
+require_once __DIR__ . '/web/user/file.php';

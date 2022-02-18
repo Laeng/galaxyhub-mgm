@@ -5,7 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Auth\Middleware\Authenticate as Middleware;
 
-class MemberAuthenticate extends Middleware
+class AuthenticateApplicant extends Middleware
 {
     public function handle($request, Closure $next, ...$guards)
     {
@@ -13,9 +13,9 @@ class MemberAuthenticate extends Middleware
 
         $user = app('auth')->user();
 
-        if (!$user->hasPermissionTo($user::PERMISSION_MEMBER))
+        if ($user->hasPermissionTo($user::PERMISSION_MEMBER))
         {
-            abort(403);
+            return redirect()->route('app.index');
         }
 
         return $next($request);
