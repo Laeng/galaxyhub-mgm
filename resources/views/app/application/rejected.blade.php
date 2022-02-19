@@ -63,7 +63,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                             </svg>
                         </span>
-                        <span class="ml-4 text-sm font-medium text-gray-900 dark:text-gray-100">가입 거절 됨</span>
+                        <span class="ml-4 text-sm font-medium text-gray-900 dark:text-gray-100">가입 거절</span>
                     </p>
                 </div>
             </li>
@@ -73,9 +73,33 @@
     <x-panel.galaxyhub.basics class="mb-4">
         <div class="grid grid-cols-1 items-center gap-3">
             <h1 class="text-xl lg:text-2xl font-bold">
-                접수 완료
+                가입 심사 결과
             </h1>
-            //-------------------------
+            <div>
+                <p>
+                    가입 신청이 거절되었습니다. <br/>
+                    {{ $count }}회 가입 거절 되셨으므로
+                    @if($count >= 2)
+                        규정에 따라 가입을 하실 수 없습니다.
+                    @else
+                        {{ $date->format('Y년 m월 d일') }}로부터 30일이 지난 후에 다시 가입을 신청할 수 있습니다.
+                    @endif
+                    @if(!is_null($reason) && $reason !== '')
+                        가입 거절 사유는 다음과 같습니다.
+                    @endif
+                <p class="font-medium my-4">{{ $reason }}</p>
+                <p class="text-sm">"데이터 삭제" 버튼을 통해 가입을 위해 제출한 정보를 삭제할 수 있습니다.<br/> 가입 거절 내역의 경우 개인정보취급방침에 따라 일정 기간 저장 됨을 알려드립니다.</p>
+            </div>
+            <div class="flex justify-center pt-6 pb-4 lg:pb-0 space-x-2" x-data="">
+                @if($count < 2 &&  $date->diffInDays(\Carbon\Carbon::now(), false) >= 30)
+                    <x-button.filled.md-white type="button" onclick="location.href='{{ route('application.agreements') }}'">
+                        다시 신청하기
+                    </x-button.filled.md-white>
+                @endif
+                <x-button.filled.md-white type="button" @click="leave()" type="button">
+                    데이터 삭제
+                </x-button.filled.md-white>
+            </div>
         </div>
     </x-panel.galaxyhub.basics>
 </x-theme.galaxyhub.sub-content>

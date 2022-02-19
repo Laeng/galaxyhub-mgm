@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Auth;
+namespace App\Http\Controllers\App\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Services\Auth\Contracts\AuthServiceContract;
@@ -12,6 +12,9 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 use Laravel\Socialite\Facades\Socialite;
 use SocialiteProviders\Steam\OpenIDValidationException;
+use function config;
+use function redirect;
+use function view;
 
 class AuthenticateController extends Controller
 {
@@ -28,7 +31,7 @@ class AuthenticateController extends Controller
             return redirect()->route('app.index');
         }
 
-        return view('user.auth.login');
+        return view('app.auth.login');
     }
 
     public function provider(Request $request, string $provider): Application|RedirectResponse|Redirector
@@ -67,11 +70,11 @@ class AuthenticateController extends Controller
 
             $request->session()->regenerate();
 
-            return redirect()->intended('app.index');
+            return redirect()->intended(route('app.index'));
         }
         catch (OpenIDValidationException $e)
         {
-            return redirect()->route('auth.login.provider', $provider);
+            return redirect()->route('auth.login', $provider)->withErrors('error', '소셜 로그인 중 오류가 발생하였습니다. 다시 시도하여 주십시오.');
         }
     }
 
@@ -82,6 +85,6 @@ class AuthenticateController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect()->route('welcome');
+        return redirect()->route('app.index');
     }
 }

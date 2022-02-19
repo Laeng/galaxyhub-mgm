@@ -20,6 +20,7 @@ Route::get('/', function () {
 require_once __DIR__ . '/web/admin/application.php';
 
 
+require_once __DIR__ . '/web/user/account.php';
 require_once __DIR__ . '/web/user/app.php';
 require_once __DIR__ . '/web/user/application.php';
 require_once __DIR__ . '/web/user/auth.php';

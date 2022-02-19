@@ -21,9 +21,19 @@ class SurveyEntryRepository extends BaseRepository implements SurveyEntryReposit
         parent::__construct($model);
     }
 
-    public function findByUserIdAndSurveyId(int $userId, int $surveyId, array $columns = ['*'], array $relations = []): ?Collection
+    public function findByUserIdAndSurveyId(int $userId, int|array $surveyId, array $columns = ['*'], array $relations = []): ?Collection
     {
-        return $this->model->select($columns)->where('participant_id', $userId)->where('survey_id', $surveyId)->with($relations)->latest()->get();
+        $query =  $this->model->select($columns)->where('participant_id', $userId);
+
+        if (is_int($surveyId))
+        {
+            $query = $query->where('survey_id', $surveyId);
+        }
+        else {
+            $query = $query->whereIn('survey_id', $surveyId);
+        }
+
+        return $query->with($relations)->latest()->get();
     }
 
     public function new(): SurveyEntry

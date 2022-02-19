@@ -33,11 +33,7 @@ class FileService implements FileServiceContract
             'visible' => $visible
         ]);
 
-        \Barryvdh\Debugbar\Facades\Debugbar::info('create 1');
-
-        Storage::disk($storage)->putFileAs($path, $file, "{$fileModel->uuid}.{$fileModel->extension}", $visible ? ['visibility' => 'public'] : []);
-
-        \Barryvdh\Debugbar\Facades\Debugbar::info('create 2');
+        Storage::disk($storage)->putFileAs($path, $file, "{$fileModel->name}.{$fileModel->extension}", $visible ? ['visibility' => 'public'] : []);
 
         return $fileModel;
     }

@@ -4,13 +4,14 @@ namespace App\Services\Survey;
 
 use App\Models\Mission;
 use App\Models\Survey;
+use App\Models\SurveyEntry;
 use App\Models\User;
 use App\Repositories\Survey\Interfaces\SurveyEntryRepositoryInterface;
 use App\Repositories\Survey\Interfaces\SurveyRepositoryInterface;
 use App\Services\Survey\Contracts\SurveyServiceContract;
 use App\Services\Survey\Questions\ApplicationQuestion;
 use App\Services\Survey\Questions\QuizQuestion;
-use Illuminate\Database\Eloquent\Collection;use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Collection;
 
 /**
  * Class SurveyService
@@ -23,9 +24,10 @@ class SurveyService implements SurveyServiceContract
     public SurveyRepositoryInterface $surveyRepository;
     public SurveyEntryRepositoryInterface $surveyEntryRepository;
 
-    public function __construct(SurveyRepositoryInterface $surveyRepository)
+    public function __construct(SurveyRepositoryInterface $surveyRepository, SurveyEntryRepositoryInterface $surveyEntryRepository)
     {
         $this->surveyRepository = $surveyRepository;
+        $this->surveyEntryRepository = $surveyEntryRepository;
     }
 
     public function createApplicationForm(int $surveyId = null): Survey
@@ -55,9 +57,9 @@ class SurveyService implements SurveyServiceContract
         return $formModel;
     }
 
-    public function createApplicationQuiz(User $user, int $surveyId = null): Survey
+    public function createApplicationQuiz(int $userId, string $userName, int $surveyId = null): Survey
     {
-        $name = $this->getApplicationQuizName($user);
+        $name = $this->getApplicationQuizName($userId);
 
         if (is_null($surveyId))
         {
@@ -74,30 +76,38 @@ class SurveyService implements SurveyServiceContract
         {
             $quizModel = $this->surveyRepository->create([
                 'name' => $name,
-                'user_id' => $user->id
+                'user_id' => $userId
             ]);
 
             $questions = new QuizQuestion($quizModel);
-            $quizModel = $questions->create($user->name);
+            $quizModel = $questions->create($userName);
         }
 
         return $quizModel;
     }
 
-    public function createMissionSurvey(Mission $mission): Survey
+    public function createMissionSurvey(int $missionId): Survey
     {
         // TODO: Implement createMissionSurvey() method.
     }
 
-    public function getLatestApplicationQuiz(User $user): ?Collection
+    public function getLatestApplicationForm(int $userId): ?SurveyEntry
     {
-        $name = $this->getApplicationQuizName($user);
+        $ids = $this->surveyRepository->findApplicationForms(['id'])->pluck('id')->values()->toArray();
+        $surveys = $this->surveyEntryRepository->findByUserIdAndSurveyId($userId, $ids);
+
+        return $surveys->first();
+    }
+
+    public function getApplicationQuizWithIn7Days(int $userId): ?Collection
+    {
+        $name = $this->getApplicationQuizName($userId);
 
         return $this->surveyRepository->findByNameWithIn7Days($name);
     }
 
-    private function getApplicationQuizName(User $user): string
+    private function getApplicationQuizName(int $userId): string
     {
-        return "quiz-{$user->id}";
+        return "quiz-{$userId}";
     }
 }

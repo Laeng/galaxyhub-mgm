@@ -12,7 +12,7 @@ class AppController extends Controller
 {
     public function index(): View|Application|RedirectResponse|Redirector
     {
-        return view('user.app.index');
+        return view('app.index');
     }
 
     public function privacy()

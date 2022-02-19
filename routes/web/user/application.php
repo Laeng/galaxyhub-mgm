@@ -1,9 +1,9 @@
 <?php
 
-use App\Http\Controllers\Application\AgreementController;
-use App\Http\Controllers\Application\ApplicationController;
-use App\Http\Controllers\Application\FormController;
-use App\Http\Controllers\Application\QuizController;
+use App\Http\Controllers\App\Application\AgreementController;
+use App\Http\Controllers\App\Application\ApplicationController;
+use App\Http\Controllers\App\Application\FormController;
+use App\Http\Controllers\App\Application\QuizController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('app')->group(function () {
@@ -16,6 +16,8 @@ Route::prefix('app')->group(function () {
         Route::match(['post', 'get'], '/form', [FormController::class, 'index'])->name('form');
         Route::match(['post'], '/store', [FormController::class, 'store'])->name('store');
         Route::get('/applied', [ApplicationController::class, 'applied'])->name('applied');
+        Route::get('/rejected', [ApplicationController::class, 'rejected'])->name('rejected');
+        Route::get('/deferred', [ApplicationController::class, 'deferred'])->name('deferred');
 
 
         //AJAX

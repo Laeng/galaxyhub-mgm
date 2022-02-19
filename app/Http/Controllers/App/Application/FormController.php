@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Application;
+namespace App\Http\Controllers\App\Application;
 
 use App\Http\Controllers\Controller;
 use App\Jobs\ProcessSteamUserAccount;
@@ -15,6 +15,9 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Auth;
+use function now;
+use function redirect;
+use function view;
 
 class FormController extends Controller
 {
@@ -29,7 +32,12 @@ class FormController extends Controller
     {
         $user = Auth::user();
 
-        if ($user->hasRole($user::ROLE_APPLY) || $user->isBanned())
+        if ($user->isBanned())
+        {
+            return redirect()->route('account.suspended');
+        }
+
+        if ($user->hasRole($user::ROLE_APPLY))
         {
             return redirect()->route('application.index');
         }
@@ -41,7 +49,7 @@ class FormController extends Controller
 
         $form = $this->surveyService->createApplicationForm();
 
-        return view('user.application.form', [
+        return view('app.application.form', [
             'survey' => $form,
             'action' => route('application.store')
         ]);
@@ -55,7 +63,12 @@ class FormController extends Controller
         {
             $user = Auth::user();
 
-            if ($user->hasRole($user::ROLE_APPLY) || $user->isBanned())
+            if ($user->isBanned())
+            {
+                return redirect()->route('account.suspended');
+            }
+
+            if ($user->hasRole($user::ROLE_APPLY))
             {
                 return redirect()->route('application.index');
             }

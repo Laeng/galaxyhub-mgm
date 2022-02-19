@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Admin\Application;
+namespace App\Http\Controllers\App\Admin\Application;
 
 use App\Http\Controllers\Controller;
 use App\Repositories\Survey\Interfaces\SurveyRepositoryInterface;
@@ -11,6 +11,9 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use function config;
+use function route;
+use function view;
 
 class ListController extends Controller
 {
@@ -23,7 +26,7 @@ class ListController extends Controller
 
     public function index(Request $request): View
     {
-        return view('admin.Application.index');
+        return view('app.admin.application.index');
     }
 
     public function data(Request $request, SurveyRepositoryInterface $surveyRepository, UserAccountRepositoryInterface $accountRepository): JsonResponse

@@ -57,28 +57,37 @@
 
             <li class="relative md:flex-1 md:flex">
                 <div class="group flex items-center w-full">
-                    <p class="px-6 py-4 flex items-center text-sm font-medium">
-                        <span class="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-full border-2 border-blue-600">
-                            <span class="text-blue-600">03</span>
+                    <span class="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-full bg-red-600 group-hover:bg-red-800">
+                            <svg class="w-6 h-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
                         </span>
-                        <span class="ml-4 text-sm font-medium text-gray-900 dark:text-gray-100">가입 심사 중</span>
-                    </p>
+                    <span class="ml-4 text-sm font-medium text-gray-900 dark:text-gray-100">가입 보류</span>
                 </div>
             </li>
         </ol>
     </nav>
 
-    <x-panel.galaxyhub.basics>
-        <div class="grid grid-cols-1 items-center gap-3">
-            <h1 class="text-xl lg:text-2xl font-bold">
-                접수 완료
-            </h1>
-            <x-alert.galaxyhub.info title="가입 신청이 접수되었습니다.">
-                <ol>
-                    <li>가입 심사는 멀티플레이 게임 매니지먼트 스탭이 직접 처리하고 있습니다.</li>
-                    <li>가입 완료까지 다소 시간이 걸릴 수 있는 점 양해 부탁드립니다.</li>
-                </ol>
-            </x-alert.galaxyhub.info>
-        </div>
+    <x-panel.galaxyhub.basics class="mb-4">
+        <x-panel.galaxyhub.basics>
+            <div class="grid grid-cols-1 items-center gap-3">
+                <h1 class="text-xl lg:text-2xl font-bold">
+                    가입 심사 결과
+                </h1>
+                <div>
+                    <p>
+                        가입 신청이 보류되었습니다.
+                        @if(!is_null($reason) && $reason !== '')
+                            아래 보류 사유를 확인 하신 후 다시 신청해 주시기 바랍니다.
+                        @endif
+                    <p class="font-medium my-4">{{ $reason }}</p>
+                </div>
+                <div class="flex justify-center pt-6 pb-4 lg:pb-0 space-x-2">
+                    <x-button.filled.md-white type="button" onclick="location.href='{{ route('application.agreements') }}'">
+                        다시 신청하기
+                    </x-button.filled.md-white>
+                </div>
+            </div>
+        </x-panel.galaxyhub.basics>
     </x-panel.galaxyhub.basics>
 </x-theme.galaxyhub.sub-content>

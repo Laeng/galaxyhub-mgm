@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Application;
+namespace App\Http\Controllers\App\Application;
 
 use App\Http\Controllers\Controller;
 use App\Repositories\Survey\Interfaces\SurveyEntryRepositoryInterface;
@@ -11,7 +11,8 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Validator;
+use function redirect;
+use function view;
 
 class QuizController extends Controller
 {
@@ -28,7 +29,7 @@ class QuizController extends Controller
     {
         $user = Auth::user();
 
-        if ($user->hasRole($user::ROLE_APPLY) || $user->isBanned())
+        if ($user->hasRole($user::ROLE_APPLY))
         {
             return redirect()->route('application.index');
         }
@@ -38,16 +39,21 @@ class QuizController extends Controller
             return redirect()->route('application.index');
         }
 
-        $quizzes = $this->surveyService->getLatestApplicationQuiz($user);
+        $quizzes = $this->surveyService->getApplicationQuizWithIn7Days($user->id);
 
         if ($quizzes?->count() > 0 && $this->surveyEntryRepository->findByUserIdAndSurveyId($user->id, $quizzes->first()->id)?->count() > 0)
         {
             return redirect()->route('application.score');
         }
 
-        $quiz = $this->surveyService->createApplicationQuiz($user);
+        if ($user->isBanned())
+        {
+            return redirect()->route('account.suspended');
+        }
 
-        return view('user.application.quiz', [
+        $quiz = $this->surveyService->createApplicationQuiz($user->id, $user->name);
+
+        return view('app.application.quiz', [
             'survey' => $quiz,
             'action' => route('application.score')
         ]);
@@ -57,14 +63,14 @@ class QuizController extends Controller
     {
         $user = Auth::user();
 
-        if ($user->hasRole($user::ROLE_APPLY) || $user->isBanned())
+        if ($user->hasRole($user::ROLE_APPLY))
         {
             return redirect()->route('application.index');
         }
 
         if ($request->isMethod('GET'))
         {
-            $quizzes = $this->surveyService->getLatestApplicationQuiz($user);
+            $quizzes = $this->surveyService->getApplicationQuizWithIn7Days($user->id);
 
             if($quizzes->count() == 0)
             {
@@ -77,7 +83,7 @@ class QuizController extends Controller
         else
         {
             $quizId = $request->get('id');
-            $quiz = $this->surveyService->createApplicationQuiz($user, $quizId);
+            $quiz = $this->surveyService->createApplicationQuiz($user->id, $user->name, $quizId);
         }
 
         $quizEntry = $this->surveyEntryRepository->findByUserIdAndSurveyId($user->id, $quizId)?->first();
@@ -106,14 +112,14 @@ class QuizController extends Controller
             if ($matches < 3) {
                 if (!$user->isBanned()) {
                     $user->ban([
-                        'comment' => '가입 퀴즈를 3개 이상 맞추지 못하셨습니다. 7일 후 다시 도전 하실 수 있습니다.',
+                        'comment' => 'ARMA3 퀴즈를 3개 이상 맞추지 못하셨습니다. 7일 후 다시 도전 하실 수 있습니다.',
                         'expired_at' => '+7 days',
                     ]);
                 }
             }
         }
 
-        return view('user.application.score', [
+        return view('app.application.score', [
             'user' => $user,
             'survey' => $quiz,
             'answer' => $quizEntry->id,

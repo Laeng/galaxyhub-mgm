@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Application;
+namespace App\Http\Controllers\App\Application;
 
 use App\Http\Controllers\Controller;
 use App\Repositories\User\Interfaces\UserAccountRepositoryInterface;
@@ -13,6 +13,10 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Redirector;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
+use function auth;
+use function config;
+use function redirect;
+use function view;
 
 class AgreementController extends Controller
 {
@@ -25,7 +29,7 @@ class AgreementController extends Controller
             return redirect()->route('application.index');
         }
 
-        return view('user.application.agreements');
+        return view('app.application.agreements');
     }
 
     public function checkAccount(Request $request, UserAccountRepositoryInterface $accountRepository, SteamServiceContract $steamService): JsonResponse

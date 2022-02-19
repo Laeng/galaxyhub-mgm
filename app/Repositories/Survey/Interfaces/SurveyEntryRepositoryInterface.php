@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Collection;
 
 interface SurveyEntryRepositoryInterface extends EloquentRepositoryInterface
 {
-    public function findByUserIdAndSurveyId(int $userId, int $surveyId, array $columns = ['*'], array $relations = []): ?Collection;
+    public function findByUserIdAndSurveyId(int $userId, int|array $surveyId, array $columns = ['*'], array $relations = []): ?Collection;
 
     public function new(): SurveyEntry;
 }

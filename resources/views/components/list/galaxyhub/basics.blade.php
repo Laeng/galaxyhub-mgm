@@ -2,7 +2,7 @@
     <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
         <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
             <div class="relative overflow-hidden border border-gray-300 dark:border-gray-800 rounded-md">
-                <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-800">
+                <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-800" x-cloak>
                     <thead class="bg-gray-50 dark:bg-gray-900">
                     <tr>
                         <template x-if="data.list.data.checkbox">
@@ -14,7 +14,7 @@
                             </th>
                         </template>
                         <template x-for="i in data.list.data.th">
-                            <th scope="col" class="px-6 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider" x-html="i"></th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider" x-html="i"></th>
                         </template>
                     </tr>
                     </thead>
@@ -36,9 +36,12 @@
                     </template>
                     </tbody>
                 </table>
-                <nav class="px-3 py-3 flex items-center justify-between bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 sm:px-3">
-                    <div class="hidden sm:block">
-                        <p class="text-sm text-gray-500 dark:text-gray-300 tracking-wider tabular-nums">
+                <nav class="px-3 py-3 flex items-center justify-between bg-white dark:bg-gray-900 sm:px-3" :class="data.list.data.th.length > 0 ? 'border-t border-gray-200 dark:border-gray-800' : ''">
+                    <div x-show="data.list.data.th.length <= 0">
+                        <p class="text-sm text-gray-500 dark:text-gray-300 tracking-wider">불러오는 중...</p>
+                    </div>
+                    <div class="hidden sm:block" x-cloak x-show="data.list.data.th.length > 0">
+                        <p class="text-xs text-gray-500 dark:text-gray-300 tracking-wider tabular-nums">
                             <span class="font-medium" x-text="(data.list.data.tr.length > 0) ? (data.list.data.count.step * data.list.data.count.limit) + 1 : 0"></span>
                             -
                             <span class="font-medium" x-text="((data.list.data.count.step + 1) * data.list.data.count.limit <= data.list.data.count.total) ? (data.list.data.count.step + 1) * data.list.data.count.limit : data.list.data.count.total"></span>
@@ -46,7 +49,7 @@
                             <span class="font-medium" x-text="data.list.data.count.total"></span>
                         </p>
                     </div>
-                    <div class="sticky left-0 flex flex-1 justify-start sm:justify-end space-x-3">
+                    <div class="sticky left-0 flex flex-1 justify-start sm:justify-end space-x-3" x-cloak x-show="data.list.data.th.length > 0">
                         <x-button.filled.md-white type="button" @click="list(data.list.body.step -= 1)">
                             이전
                         </x-button.filled.md-white>

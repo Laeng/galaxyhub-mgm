@@ -22,6 +22,7 @@ class QuizQuestion extends Question
                 "<p>본 퀴즈는 가입자분들이 더 재밌게 아르마를 즐기실 수 있도록 돕고자 제작되었습니다.<br/>".
                 '모든 문제는 <a class="link-indigo" href="https://cafe.naver.com/gamemmakers/book5076085" target="_blank">아르마 길잡이</a>에서 출제되며 5문제 중 3문제 이상을 맞추어 주셔야 합니다.</p>'.
                 '<p>제한 시간은 없으며, 맞은 갯수가 3개 미만일 경우 7일간 재 가입 신청을 하실 수 없사오니 주의해 주시기 바랍니다.</p>'.
+                '<p class="text-sm">퀴즈에 대한 모든 권리는 Multiplay Game Management 에게 있습니다.</p>'.
                 '<p class="text-red-600 text-base">* 필수 입력</p>'
         ]);
 

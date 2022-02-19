@@ -4,6 +4,7 @@ namespace App\Services\Survey\Contracts;
 
 use App\Models\Mission;
 use App\Models\Survey;
+use App\Models\SurveyEntry;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
 
@@ -15,9 +16,11 @@ interface SurveyServiceContract
 {
     public function createApplicationForm(int $surveyId = null): Survey;
 
-    public function createApplicationQuiz(User $user, int $surveyId = null): Survey;
+    public function createApplicationQuiz(int $userId, string $userName, int $surveyId = null): Survey;
 
-    public function createMissionSurvey(Mission $mission): Survey;
+    public function createMissionSurvey(int $missionId): Survey;
 
-    public function getLatestApplicationQuiz(User $user): ?Collection;
+    public function getLatestApplicationForm(int $userId): ?SurveyEntry;
+
+    public function getApplicationQuizWithIn7Days(int $userId): ?Collection;
 }

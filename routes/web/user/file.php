@@ -1,10 +1,7 @@
 <?php
 
-use App\Http\Controllers\Application\AgreementController;
-use App\Http\Controllers\Application\FormController;
-use App\Http\Controllers\Application\QuizController;
-use App\Http\Controllers\File\CkeditorController;
-use App\Http\Controllers\File\FilepondController;
+use App\Http\Controllers\App\File\CkeditorController;
+use App\Http\Controllers\App\File\FilepondController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('app')->group(function () {
@@ -19,6 +16,10 @@ Route::prefix('app')->group(function () {
 
         Route::prefix('delete')->name('delete.')->group(function () {
             Route::post('/filepond/{directory}', [FilepondController::class, 'delete'])->name('filepond')->whereAlphaNumeric('directory');
+        });
+
+        Route::prefix('get')->name('get.')->group(function () {
+            Route::post('/filepond', [FilepondController::class, 'read'])->name('filepond')->whereAlphaNumeric('directory');
         });
     });
 });

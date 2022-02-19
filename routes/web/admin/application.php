@@ -1,6 +1,7 @@
 <?php
 
-use App\Http\Controllers\Admin\Application\ListController;
+use App\Http\Controllers\App\Admin\Application\ListController;
+use App\Http\Controllers\App\Admin\Application\ReadController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('app')->group(function () {
@@ -8,7 +9,7 @@ Route::prefix('app')->group(function () {
         Route::prefix('application')->name('application.')->middleware(['auth.admin:web'])->group(function() {
             //VIEW
             Route::redirect('/', '/app/admin/application');
-            Route::get('/{userId}', ['', 'read'])->name('read')->whereNumber('userId');
+            Route::get('/{userId}', [ReadController::class, 'read'])->name('read')->whereNumber('userId');
 
             //AJAX
         });
