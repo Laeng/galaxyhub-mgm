@@ -31,57 +31,6 @@ class Image extends Component
         $this->answer = json_decode($question->answers()->where('survey_entry_id', $answer)->first()?->value);
 
         $this->componentId = "QUESTION_IMAGE_".Str::upper(Str::random(6));
-
-        /*
-        if (!is_null($answer)) {
-            $value = $question->answers()->where('survey_entry_id', $answer)->first();
-            $files = (!is_null($value)) ? File::whereIn('id', json_decode($value->value))->get() : new Collection();
-
-            foreach ($files as $file)
-            {
-                $baseUrl = config("filesystems.disks.{$file->storage}.endpoint");
-                $path = sprintf("%s/%s.%s", $file->path, $file->name, $file->extension);
-
-                if ($file->visible)
-                {
-
-                    if ($file->storage === 'do')
-                    {
-                        $baseUrl = config("filesystems.disks.{$file->storage}.url");
-                    }
-
-                    $path = sprintf("%s%s", $baseUrl, $file->path);
-                }
-                else
-                {
-                    $s3 = new S3Client([
-                        'version' => 'latest',
-                        'region' => config("filesystems.disks.{$file->storage}.region"),
-                        'endpoint' => rtrim($baseUrl, '/'),
-                        'credentials' => [
-                            'key'    => config("filesystems.disks.{$file->storage}.key"),
-                            'secret' => config("filesystems.disks.{$file->storage}.secret"),
-                        ],
-                    ]);
-
-                    $command = $s3->getCommand('GetObject', [
-                        'Bucket' => config("filesystems.disks.{$file->storage}.bucket"),
-                        'Key'    => trim($path, '/')
-                    ]);
-
-                    $path = $s3->createPresignedRequest($command, '+30 minutes')->getUri();
-                }
-
-                $this->answer[] = [
-                    'name' => $file->filename,
-                    'path' => $path
-                ];
-            }
-
-        } else {
-            $this->answer = null;
-        }
-        */
     }
 
     /**

@@ -1,4 +1,4 @@
-<label class="block">
+<label class="block" @if(!is_null($answer)) x-data="{{ $componentId }}" @endif>
     <p class="leading-6 font-medium text-gray-900 dark:text-gray-100 mb-0.5">{!! $question->title !!} {!! in_array('required', $question->rules) ? '<span class="text-red-600 text-base">*</span>' : '' !!}</p>
     @if (is_null($answer))
         <p class="text-sm text-gray-500 dark:text-gray-300 mb-2">{!! $question->content !!}</p>
@@ -11,7 +11,7 @@
             <p class="text-sm text-red-700 mt-1">만약 첨부한 파일이 있다면 다시 업로드하여 주십시오.</p>
         @endif
     @else
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-2" x-data="{{ $componentId }}">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-2" x-cloak x-show="data.images.data.files.length > 0">
             <template x-for="file in data.images.data.files">
                 <div class="relative p-1 rounded border border-gray-300 dark:border-gray-800">
                     <a class="absolute rounded inset-0 z-10 bg-white dark:bg-gray-900 text-center text-xs flex flex-col items-center justify-center opacity-0 hover:opacity-100 bg-opacity-90 duration-300" :href="file.path" target="_blank" rel="noopener">
@@ -25,27 +25,10 @@
                     </a>
                 </div>
             </template>
-
-            {{--
-            @if(count($answer) > 0)
-                @foreach($answer as $v)
-                    <div class="relative">
-                        <a class="absolute inset-0 z-10 bg-white text-center flex flex-col items-center justify-center opacity-0 hover:opacity-100 bg-opacity-90 duration-300" href="{{ $v['path'] }}" target="_blank">
-                            <p class="tracking-wider">{{ $v['name'] }}</p>
-                            <p class="mx-auto underline hover:no-underline">새 창으로 보기</p>
-                        </a>
-                        <a href="{{ $v['path'] }}" target="_blank" class="relative">
-                            <div class="flex flex-wrap content-center">
-                                <img src="{{ $v['path'] }}" class="mx-auto" alt="{{ $v['name'] }}">
-                            </div>
-                        </a>
-                    </div>
-                @endforeach
-            @else
-                <p class="text-sm -mt-2">첨부된 파일 없음</p>
-            @endif
-            --}}
         </div>
+        <p class="text-sm text-gray-500 dark:text-gray-300 mb-2" x-cloak x-show="data.images.data.files.length <= 0">
+            이미지 불러오는 중...
+        </p>
     @endif
 </label>
 
