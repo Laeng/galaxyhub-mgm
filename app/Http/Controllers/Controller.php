@@ -36,4 +36,21 @@ class Controller extends BaseController
 
         return response()->json(['status' => $status, 'description' => $description, 'data' => $value], ($status == 0) ? 500 : $status);
     }
+
+    public function getPaginationStep(int $step, int $limit, int $total): int
+    {
+        $maxPage = ceil($total / $limit);
+
+        if ($maxPage <= $step)
+        {
+            $step = $maxPage - 1;
+        }
+
+        if ($step < 0)
+        {
+            $step = 0;
+        }
+
+        return $step;
+    }
 }

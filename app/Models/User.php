@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Cog\Contracts\Ban\Bannable as BannableContract;
 use Cog\Laravel\Ban\Traits\Bannable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -13,7 +14,7 @@ use Laravel\Sanctum\HasApiTokens;
 use QCod\Gamify\Gamify;
 use Spatie\Permission\Traits\HasRoles;
 
-class User extends Authenticatable
+class User extends Authenticatable implements BannableContract
 {
     use HasApiTokens, HasFactory, Notifiable, Gamify, Bannable, HasRoles;
 
@@ -63,6 +64,7 @@ class User extends Authenticatable
     const RECORD_STEAM_DATA_ARMA3 = 'STEAM_DATA_ARMA3';
     const RECORD_STEAM_DATA_BANS = 'STEAM_DATA_BANS';
     const RECORD_STEAM_DATA_GROUPS = 'STEAM_DATA_GROUPS';
+    const RECORD_ROLE_DATA = 'ROLE_DATA';
 
 
     const ROLE_APPLY = 'APPLY';

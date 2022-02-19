@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 
 interface UserRepositoryInterface extends EloquentRepositoryInterface
 {
+    public function findByIdsWithRole(array $ids, string $role, array $columns = ['*'], array $relations = []): ?Collection;
+
     public function findByUsername(string $username, array $columns = ['*'], array $relations = []): ?Model;
 
     public function findByRole(string $role, array $columns = ['*'], array $relations = []): ?Collection;

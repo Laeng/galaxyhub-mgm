@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Application;
 use App\Http\Controllers\Controller;
 use App\Jobs\ProcessSteamUserAccount;
 use App\Repositories\Survey\SurveyEntryRepository;
+use App\Repositories\User\Interfaces\UserRecordRepositoryInterface;
 use App\Repositories\User\UserAccountRepository;
 use App\Services\Steam\Contracts\SteamServiceContract;
 use App\Services\Survey\Contracts\SurveyServiceContract;
@@ -46,7 +47,9 @@ class FormController extends Controller
         ]);
     }
 
-    public function store(Request $request, SurveyEntryRepository $surveyEntryRepository, UserAccountRepository $accountRepository, SteamServiceContract $steamService): View|Application|RedirectResponse|Redirector
+    public function store(
+        Request $request, SurveyEntryRepository $surveyEntryRepository, UserAccountRepository $accountRepository,
+        UserRecordRepositoryInterface $recordRepository, SteamServiceContract $steamService): View|Application|RedirectResponse|Redirector
     {
         try
         {
@@ -85,6 +88,16 @@ class FormController extends Controller
             ]);
 
             $user->assignRole($user::ROLE_APPLY);
+
+            $recordRepository->create([
+                'user_id' => $user->id,
+                'type' => $user::RECORD_ROLE_DATA,
+                'data' => [
+                    'role' => $user::ROLE_APPLY,
+                    'reason' => ''
+                ],
+                'uuid' => $recordRepository->getUUIDv5($steamAccount->account_id)
+            ]);
 
             return redirect()->route('application.applied')->withErrors(['success' => '가입 신청이 접수되었습니다.']);
         }

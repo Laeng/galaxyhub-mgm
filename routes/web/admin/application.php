@@ -19,6 +19,7 @@ Route::prefix('app')->group(function () {
 
             //AJAX
             Route::post('/data', [ListController::class, 'data'])->name('index.data');
+            Route::post('/process', [ListController::class, 'process'])->name('index.process');
         });
     });
 });

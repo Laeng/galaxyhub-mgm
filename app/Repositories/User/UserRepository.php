@@ -20,6 +20,11 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
         $this->model = $model;
     }
 
+    public function findByIdsWithRole(array $ids, string $role, array $columns = ['*'], array $relations = []): ?Collection
+    {
+        return $this->model->role($role)->select($columns)->whereIn('id', $ids)->with($relations)->latest()->get();
+    }
+
     public function findByUsername(string $username, array $columns = ['*'], array $relations = []): ?User
     {
         return $this->model->select($columns)->where('username', $username)->with($relations)->latest()->first();

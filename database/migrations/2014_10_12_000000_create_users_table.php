@@ -59,7 +59,7 @@ return new class extends Migration
         Schema::create('user_records', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id')->index();
-            $table->unsignedBigInteger('staff_id')->index()->nullable();
+            $table->unsignedBigInteger('recorder_id')->index()->nullable();
             $table->string('type');
             $table->longText('data')->nullable();
             $table->uuid()->index()->nullable();

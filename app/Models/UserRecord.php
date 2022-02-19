@@ -12,7 +12,7 @@ class UserRecord extends Model
 
     protected $fillable = [
         'user_id',
-        'staff_id',
+        'recorder_id',
         'type',
         'data',
         'uuid'

@@ -36,9 +36,9 @@ class ProcessSteamUserAccount implements ShouldQueue
      *
      * @return void
      */
-    public function handle(UserAccountRepositoryInterface $userAccountRepository, UserRecordRepositoryInterface $userRecordRepository, SteamServiceContract $steamService)
+    public function handle(UserAccountRepositoryInterface $accountRepository, UserRecordRepositoryInterface $recordRepository, SteamServiceContract $steamService)
     {
-        $steamAccount = $userAccountRepository->findByUserId($this->user->id)?->filter(fn ($v, $k) => $v->provider === 'steam')?->first();
+        $steamAccount = $accountRepository->findByUserId($this->user->id)?->filter(fn ($v, $k) => $v->provider === 'steam')?->first();
 
         if (!is_null($steamAccount))
         {
@@ -48,7 +48,7 @@ class ProcessSteamUserAccount implements ShouldQueue
             {
                 $userId = $this->user->id;
                 $accountId = $steamAccount->account_id;
-                $uuid = $userRecordRepository->getUUIDv5($accountId);
+                $uuid = $recordRepository->getUUIDv5($accountId);
                 $data = [
                     $this->user::RECORD_STEAM_DATA_SUMMARIES => $playerSummaries,
                     $this->user::RECORD_STEAM_DATA_GAMES => $steamService->getOwnedGames($accountId, true)['response'],
@@ -59,7 +59,7 @@ class ProcessSteamUserAccount implements ShouldQueue
 
                 foreach ($data as $k => $v)
                 {
-                    $userRecordRepository->create([
+                    $recordRepository->create([
                         'user_id' => $userId,
                         'type' => $k,
                         'data' => $v,

@@ -39,7 +39,7 @@
                 <nav class="px-3 py-3 flex items-center justify-between bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 sm:px-3">
                     <div class="hidden sm:block">
                         <p class="text-sm text-gray-500 dark:text-gray-300 tracking-wider tabular-nums">
-                            <span class="font-medium" x-text="(data.list.data.count.limit > 0) ? (data.list.data.count.step * data.list.data.count.limit) + 1 : 0"></span>
+                            <span class="font-medium" x-text="(data.list.data.tr.length > 0) ? (data.list.data.count.step * data.list.data.count.limit) + 1 : 0"></span>
                             -
                             <span class="font-medium" x-text="((data.list.data.count.step + 1) * data.list.data.count.limit <= data.list.data.count.total) ? (data.list.data.count.step + 1) * data.list.data.count.limit : data.list.data.count.total"></span>
                             Total:
@@ -70,7 +70,7 @@
 
 <script type="text/javascript">
     window.document.addEventListener('alpine:init', () => {
-       window.alpine.store('{{ $componentId }}', () => ({
+       window.alpine.store('{{ $componentId }}', {
            component_id: '{{ $componentId }}',
            interval: {
                list: -1
@@ -112,8 +112,8 @@
                        if (!(typeof r.data.data === 'undefined' || r.data.data.length <= 0)) {
                            this.data.list.data = r.data.data;
 
-                           this.data.list.body.step = this.data.list.data.count.step;
-                           this.data.list.body.limit = this.data.list.data.count.limit;
+                           this.data.list.body.step = r.data.data.count.step;
+                           this.data.list.body.limit = r.data.data.count.limit;
 
                            @if(!$refresh)
                            if (this.interval.list >= 0) {
@@ -146,7 +146,9 @@
                    this.data.list.lock = true;
 
                    this.post(this.data.list.url, this.data.list.body, success, error, complete);
-                   this.interval.list = setInterval(() => {this.post(this.data.list.url, this.data.list.body, success, error, complete)}, 5000);
+                   this.interval.list = setInterval(() => {
+                       this.post(this.data.list.url, this.data.list.body, success, error, complete)
+                   }, 5000);
                }
            },
            checkbox(componentId, checked = null) {
@@ -164,6 +166,6 @@
            post(url, body, success, error, complete) {
                window.axios.post(url, body).then(success).catch(error).then(complete);
            }
-       }));
+       });
     });
 </script>
