@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Enums\PermissionType;
 use Closure;
 use Illuminate\Auth\Middleware\Authenticate as Middleware;
 
@@ -13,7 +14,7 @@ class AuthenticateMember extends Middleware
 
         $user = app('auth')->user();
 
-        if (!$user->hasPermissionTo($user::PERMISSION_MEMBER))
+        if (!$user->hasPermissionTo(PermissionType::MEMBER->name))
         {
             return redirect()->route('application.index');
         }

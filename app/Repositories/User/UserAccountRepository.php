@@ -29,4 +29,9 @@ class UserAccountRepository extends BaseRepository implements UserAccountReposit
     {
         return $this->model->select($columns)->where('user_id', $userId)->with($relations)->latest()->get();
     }
+
+    public function findSteamAccountByUserId(string $userId, array $columns = ['*'], array $relations = []): ?UserAccount
+    {
+        return $this->model->select($columns)->where('user_id', $userId)->where('provider', 'steam')->with($relations)->latest()->first();
+    }
 }

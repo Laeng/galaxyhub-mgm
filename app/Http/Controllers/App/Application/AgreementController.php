@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\App\Application;
 
+use App\Enums\RoleType;
 use App\Http\Controllers\Controller;
 use App\Repositories\User\Interfaces\UserAccountRepositoryInterface;
 use App\Services\Steam\Contracts\SteamServiceContract;
@@ -24,7 +25,7 @@ class AgreementController extends Controller
     {
         $user = Auth::user();
 
-        if ($user->hasRole($user::ROLE_APPLY))
+        if ($user->hasRole(RoleType::APPLY->name))
         {
             return redirect()->route('application.index');
         }

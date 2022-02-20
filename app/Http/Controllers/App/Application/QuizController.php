@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\App\Application;
 
+use App\Enums\RoleType;
 use App\Http\Controllers\Controller;
 use App\Repositories\Survey\Interfaces\SurveyEntryRepositoryInterface;
 use App\Services\Survey\Contracts\SurveyServiceContract;
@@ -29,7 +30,7 @@ class QuizController extends Controller
     {
         $user = Auth::user();
 
-        if ($user->hasRole($user::ROLE_APPLY))
+        if ($user->hasRole(RoleType::APPLY->name))
         {
             return redirect()->route('application.index');
         }
@@ -63,7 +64,7 @@ class QuizController extends Controller
     {
         $user = Auth::user();
 
-        if ($user->hasRole($user::ROLE_APPLY))
+        if ($user->hasRole(RoleType::APPLY->name))
         {
             return redirect()->route('application.index');
         }
@@ -113,7 +114,7 @@ class QuizController extends Controller
                 if (!$user->isBanned()) {
                     $user->ban([
                         'comment' => 'ARMA3 퀴즈를 3개 이상 맞추지 못하셨습니다. 7일 후 다시 도전 하실 수 있습니다.',
-                        'expired_at' => '+7 days',
+                        'expired_at' => now()->addDays(7),
                     ]);
                 }
             }

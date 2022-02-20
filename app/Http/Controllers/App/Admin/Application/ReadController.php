@@ -2,40 +2,147 @@
 
 namespace App\Http\Controllers\App\Admin\Application;
 
+use App\Enums\PermissionType;
+use App\Enums\RoleType;
+use App\Enums\UserRecordType;
 use App\Http\Controllers\Controller;
 use App\Repositories\Survey\Interfaces\SurveyRepositoryInterface;
+use App\Repositories\User\Interfaces\UserRecordRepositoryInterface;
 use App\Repositories\User\Interfaces\UserRepositoryInterface;
+use App\Repositories\User\UserAccountRepository;
+use App\Services\Steam\Contracts\SteamServiceContract;
 use App\Services\Survey\Contracts\SurveyServiceContract;
+use App\Services\User\Contracts\UserServiceContract;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class ReadController extends Controller
 {
-    public function read(Request $request, int $userId, UserRepositoryInterface $userRepository, SurveyServiceContract $surveyService)
-    {
-        $applicant = $userRepository->findById($userId);
+    private UserServiceContract $userService;
+    private UserRepositoryInterface $userRepository;
+    private SurveyServiceContract $surveyService;
 
-        if (is_null($applicant))
+    public function __construct(UserServiceContract $userService, UserRepositoryInterface $userRepository, SurveyServiceContract $surveyService)
+    {
+        $this->userService = $userService;
+        $this->userRepository = $userRepository;
+        $this->surveyService = $surveyService;
+    }
+
+    public function read(Request $request, int $userId)
+    {
+        $user = $this->userRepository->findById($userId);
+
+        if (is_null($user))
         {
             abort('404');
         }
 
-        $application = $surveyService->getLatestApplicationForm($applicant->id);
-        $survey = $application->survey()->first();
+        $application = $this->surveyService->getLatestApplicationForm($user->id);
+        $survey = $application?->survey()->first();
 
         if (is_null($application))
         {
             abort(404);
         }
 
+        if ($user->hasPermissionTo(PermissionType::MEMBER->name))
+        {
+            $role = RoleType::MEMBER;
+            $status = '승인';
+        }
+        else
+        {
+            $role = null;
+            $status = null;
 
+            $hasRole = false;
 
+            if ($user->hasRole(RoleType::APPLY->name))
+            {
+                $role = RoleType::APPLY;
+                $status = '접수';
+                $hasRole = true;
+            }
+            if ($hasRole == false && $user->hasRole(RoleType::DEFER->name))
+            {
+                $role = RoleType::DEFER;
+                $status = '보류';
+                $hasRole = true;
+            }
+            if ($hasRole == false && $user->hasRole(RoleType::REJECT->name))
+            {
+                $role = RoleType::DEFER;
+                $status = '거절';
+            }
+        }
 
+        $record = $this->userService->findRoleRecordeByUserId($user->id, $role->name)->first();
+        $admin = !is_null($record?->recorder_id) ? $this->userRepository->findById($record->recorder_id) : null;
 
         return view('app.admin.application.read', [
-            'applicant' => $applicant,
-            'title' => "{$applicant->name}님의 신청서",
+            'user' => $user,
+            'admin' => $admin,
+            'application' => $application,
+            'record' => $record,
+            'role' => $role,
+            'title' => "{$user->name}님의 신청서",
             'survey' => $survey,
-            'answer' => $application->id
+            'answer' => $application->id,
+            'status' => $status,
         ]);
+    }
+
+    public function data(Request $request, int $userId, UserRecordRepositoryInterface $recordRepository): JsonResponse
+    {
+        try
+        {
+            $user = $this->userRepository->findById($userId);
+
+            if (is_null($user))
+            {
+                throw new \Exception('NOT FOUND USER', 422);
+            }
+
+            $application = $this->surveyService->getLatestApplicationForm($user->id);
+            $response = $application?->answers()->get();
+
+            if (is_null($application))
+            {
+                throw new \Exception('NOT FOUND APPLICATION', 422);
+            }
+
+            $summaries = $recordRepository->findByUserIdAndType($userId, UserRecordType::STEAM_DATA_SUMMARIES->name)->first();
+            $group = $recordRepository->findByUserIdAndType($userId, UserRecordType::STEAM_DATA_GROUPS->name)->first();
+            $arma3 = $recordRepository->findByUserIdAndType($userId, UserRecordType::STEAM_DATA_ARMA3->name)->first();
+            $ban = $recordRepository->findByUserIdAndType($userId, UserRecordType::STEAM_DATA_BANS->name)->first();
+
+            $naverId = null;
+
+            foreach ($response as $item)
+            {
+                $question = $item->question()->first();
+                $value = $item->value;
+
+                if (is_null($question)) continue;
+
+                if ($question->title == '네이버 아이디') {
+                    $naverId = explode('@', $value)[0];
+                }
+            }
+
+            return $this->jsonResponse(200, 'OK', [
+                'summaries' => $summaries?->data,
+                'group' => $group?->data,
+                'arma' => $arma3?->data,
+                'ban' => $ban?->data,
+                'naver_id' => $naverId,
+                'created_at' => "{$summaries->created_at->format('Y-m-d')} 기준"
+            ]);
+        }
+        catch (\Exception $e)
+        {
+            return $this->jsonResponse($e->getCode(), $e->getMessage(), config('app.debug') ? $e->getTrace() : []);
+        }
     }
 }

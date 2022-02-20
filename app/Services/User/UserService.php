@@ -1,29 +1,36 @@
 <?php
 
-namespace App\Services\Auth;
+namespace App\Services\User;
 
+use App\Enums\UserRecordType;
 use App\Models\User as UserModel;
+use App\Models\UserAccount;
+use App\Models\UserRecord;
 use App\Repositories\User\Interfaces\UserAccountRepositoryInterface;
+use App\Repositories\User\Interfaces\UserRecordRepositoryInterface;
 use App\Repositories\User\Interfaces\UserRepositoryInterface;
-use App\Services\Auth\Contracts\AuthServiceContract;
+use App\Services\User\Contracts\UserServiceContract;
+use Illuminate\Support\Collection;
 use function now;
 
 /**
  * Class AuthService
  * @package App\Services
  */
-class AuthService implements AuthServiceContract
+class UserService implements UserServiceContract
 {
     private UserRepositoryInterface $userRepository;
     private UserAccountRepositoryInterface $accountRepository;
+    private UserRecordRepositoryInterface $recordRepository;
 
-    public function __construct(UserRepositoryInterface $user, UserAccountRepositoryInterface $account)
+    public function __construct(UserRepositoryInterface $user, UserAccountRepositoryInterface $account, UserRecordRepositoryInterface $record)
     {
         $this->userRepository = $user;
         $this->accountRepository = $account;
+        $this->recordRepository = $record;
     }
 
-    public function create(array $attributes): ?UserModel
+    public function createUser(array $attributes): ?UserModel
     {
         if($attributes['provider'] !== 'default')
         {
@@ -76,26 +83,47 @@ class AuthService implements AuthServiceContract
 
                 unset($accountAttributes['id']);
 
-                $this->accountRepository->create($accountAttributes);
+                $account = $this->accountRepository->create($accountAttributes);
             }
+
+            //$bans = $this->findBanRecordByUuid($this->recordRepository->getUuidV5($account->account_id))->filter(function ($v, $k) {
+                //return $v->data['expired_at']
+            //});
+
 
             return $user;
         }
         else
         {
             //일반 로그인 절차
-            return null;
+            return new UserModel();
         }
     }
 
-    public function update(int $id, array $attributes): bool
+    public function createRecord(int $userId, string $type, array $data, ?int $recorderId = null): ?UserRecord
     {
-        return false;
+        $steamAccount = $this->accountRepository->findSteamAccountByUserId($userId);
+        $uuid = !is_null($steamAccount) ? $this->recordRepository->getUuidV5($userId) : null;
+
+        return $this->recordRepository->create([
+            'user_id' => $userId,
+            'recorder_id' => $recorderId,
+            'type' => $type,
+            'data' => $data,
+            'uuid' => $uuid
+        ]);
     }
 
-    public function delete(int $id): bool
+    public function findBanRecordByUuid(int $uuid): ?Collection
     {
-
-        return false;
+        return $this->recordRepository->findByUuidAndType($uuid, UserRecordType::BAN_DATA->name);
     }
+
+    public function findRoleRecordeByUserId(int $userId, string $role): ?Collection
+    {
+        return $this->recordRepository->findByUserIdAndType($userId, UserRecordType::ROLE_DATA->name)?->filter(
+            fn ($v, $k) => $v->data['role'] === $role
+        );
+    }
+
 }

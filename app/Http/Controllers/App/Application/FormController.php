@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\App\Application;
 
+use App\Enums\RoleType;
+use App\Enums\UserRecordType;
 use App\Http\Controllers\Controller;
 use App\Jobs\ProcessSteamUserAccount;
 use App\Repositories\Survey\SurveyEntryRepository;
@@ -9,6 +11,7 @@ use App\Repositories\User\Interfaces\UserRecordRepositoryInterface;
 use App\Repositories\User\UserAccountRepository;
 use App\Services\Steam\Contracts\SteamServiceContract;
 use App\Services\Survey\Contracts\SurveyServiceContract;
+use App\Services\User\Contracts\UserServiceContract;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
@@ -37,7 +40,7 @@ class FormController extends Controller
             return redirect()->route('account.suspended');
         }
 
-        if ($user->hasRole($user::ROLE_APPLY))
+        if ($user->hasRole(RoleType::APPLY->name))
         {
             return redirect()->route('application.index');
         }
@@ -57,7 +60,7 @@ class FormController extends Controller
 
     public function store(
         Request $request, SurveyEntryRepository $surveyEntryRepository, UserAccountRepository $accountRepository,
-        UserRecordRepositoryInterface $recordRepository, SteamServiceContract $steamService): View|Application|RedirectResponse|Redirector
+        UserServiceContract $userService, SteamServiceContract $steamService): View|Application|RedirectResponse|Redirector
     {
         try
         {
@@ -68,7 +71,7 @@ class FormController extends Controller
                 return redirect()->route('account.suspended');
             }
 
-            if ($user->hasRole($user::ROLE_APPLY))
+            if ($user->hasRole(RoleType::APPLY->name))
             {
                 return redirect()->route('application.index');
             }
@@ -76,7 +79,7 @@ class FormController extends Controller
             $form = $this->surveyService->createApplicationForm();
             $answers = $this->validate($request, $form->validateRules());
 
-            $steamAccount = $accountRepository->findByUserId($user->id)?->filter(fn ($v, $k) => $v->provider === 'steam')?->first();
+            $steamAccount = $accountRepository->findSteamAccountByUserId($user->id);
 
             if (is_null($steamAccount))
             {
@@ -100,17 +103,13 @@ class FormController extends Controller
                 'agreed_at' => $now
             ]);
 
-            $user->assignRole($user::ROLE_APPLY);
+            $user->assignRole(RoleType::APPLY->name);
+            $data = [
+                'role' => RoleType::APPLY->name,
+                'reason' => ''
+            ];
 
-            $recordRepository->create([
-                'user_id' => $user->id,
-                'type' => $user::RECORD_ROLE_DATA,
-                'data' => [
-                    'role' => $user::ROLE_APPLY,
-                    'reason' => ''
-                ],
-                'uuid' => $recordRepository->getUUIDv5($steamAccount->account_id)
-            ]);
+            $userService->createRecord($user->id, UserRecordType::ROLE_DATA->name, $data);
 
             return redirect()->route('application.applied')->withErrors(['success' => '가입 신청이 접수되었습니다.']);
         }

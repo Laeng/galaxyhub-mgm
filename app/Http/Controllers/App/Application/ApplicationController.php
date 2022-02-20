@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\App\Application;
 
+use App\Enums\RoleType;
 use App\Http\Controllers\Controller;
 use App\Repositories\User\Interfaces\UserAccountRepositoryInterface;
 use App\Repositories\User\Interfaces\UserRecordRepositoryInterface;
+use App\Services\User\Contracts\UserServiceContract;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
@@ -20,15 +22,17 @@ class ApplicationController extends Controller
     {
         $user = Auth::user();
 
-        if ($user->hasRole($user::ROLE_APPLY)) {
+        // 나중에 고치기....
+
+        if ($user->hasRole(RoleType::APPLY->name)) {
             return redirect()->route('application.applied');
         }
 
-        if ($user->hasRole($user::ROLE_DEFER)) {
+        if ($user->hasRole(RoleType::DEFER->name)) {
             return redirect()->route('application.deferred');
         }
 
-        if ($user->hasRole($user::ROLE_REJECT)) {
+        if ($user->hasRole(RoleType::REJECT->name)) {
             return redirect()->route('application.rejected');
         }
 
@@ -39,7 +43,7 @@ class ApplicationController extends Controller
     {
         $user = Auth::user();
 
-        if (!$user->hasRole($user::ROLE_APPLY))
+        if (!$user->hasRole(RoleType::APPLY->name))
         {
             abort('404');
         }
@@ -47,7 +51,7 @@ class ApplicationController extends Controller
         return view('app.application.applied');
     }
 
-    public function rejected(UserAccountRepositoryInterface $accountRepository, UserRecordRepositoryInterface $recordRepository): View|Application|RedirectResponse|Redirector
+    public function rejected(UserServiceContract $userService): View|Application|RedirectResponse|Redirector
     {
         $user = Auth::user();
 
@@ -56,29 +60,23 @@ class ApplicationController extends Controller
             abort(404);
         }
 
-        $steamAccount = $accountRepository->findByUserId($user->id)?->filter(fn ($v, $k) => $v->provider === 'steam')?->first();
-        $uuid = $recordRepository->getUUIDv5($steamAccount->account_id);
-        $recode = $recordRepository->findByUuid($uuid)?->filter(fn ($v, $k) => $v->type === $user::RECORD_ROLE_DATA && $v->data['role'] === $user::ROLE_REJECT);
-
-        $reject = $recode->first();
+        $recode = $userService->findRoleRecordeByUserId($user->id, RoleType::REJECT->name)->first();
 
         return view('app.application.rejected', [
-            'reason' => $reject->data['reason'],
-            'date' => $reject->created_at,
+            'reason' => $recode->data['reason'],
+            'date' => $recode->created_at,
             'count' => $recode->count()
         ]);
     }
 
-    public function deferred(Request $request): View|Application|RedirectResponse|Redirector
+    public function deferred(): View|Application|RedirectResponse|Redirector
     {
         $user = Auth::user();
 
-        if (!$user->hasRole($user::ROLE_DEFER))
+        if (!$user->hasRole(RoleType::DEFER->name))
         {
             abort(404);
         }
-
-
 
         return view('app.application.deferred', [
 

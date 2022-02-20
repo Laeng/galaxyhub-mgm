@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Listeners\RecordBannedUser;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -16,11 +17,14 @@ class EventServiceProvider extends ServiceProvider
      */
     protected $listen = [
         Registered::class => [
-            SendEmailVerificationNotification::class,
+            //SendEmailVerificationNotification::class,
         ],
         \SocialiteProviders\Manager\SocialiteWasCalled::class => [
-            \SocialiteProviders\Steam\SteamExtendSocialite::class.'@handle',
+            \SocialiteProviders\Steam\SteamExtendSocialite::class,
         ],
+        \Cog\Laravel\Ban\Events\ModelWasBanned::class => [
+            RecordBannedUser::class,
+        ]
     ];
 
     /**

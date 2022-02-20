@@ -2,10 +2,12 @@
 
 namespace App\Jobs;
 
+use App\Enums\UserRecordType;
 use App\Models\User;
 use App\Repositories\User\Interfaces\UserAccountRepositoryInterface;
 use App\Repositories\User\Interfaces\UserRecordRepositoryInterface;
 use App\Services\Steam\Contracts\SteamServiceContract;
+use App\Services\User\UserService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -36,35 +38,30 @@ class ProcessSteamUserAccount implements ShouldQueue
      *
      * @return void
      */
-    public function handle(UserAccountRepositoryInterface $accountRepository, UserRecordRepositoryInterface $recordRepository, SteamServiceContract $steamService)
+    public function handle(UserService $userService, SteamServiceContract $steamService, UserAccountRepositoryInterface $accountRepository)
     {
-        $steamAccount = $accountRepository->findByUserId($this->user->id)?->filter(fn ($v, $k) => $v->provider === 'steam')?->first();
+        $steamAccount = $accountRepository->findSteamAccountByUserId($this->user->id);
 
         if (!is_null($steamAccount))
         {
-            $playerSummaries = $steamService->getPlayerSummaries($steamAccount->account_id);
+            $accountId = $steamAccount->account_id;
+            $playerSummaries = $steamService->getPlayerSummaries($accountId);
 
             if ($playerSummaries['response']['players'][0]['communityvisibilitystate'] == 3)
             {
                 $userId = $this->user->id;
-                $accountId = $steamAccount->account_id;
-                $uuid = $recordRepository->getUUIDv5($accountId);
+
                 $data = [
-                    $this->user::RECORD_STEAM_DATA_SUMMARIES => $playerSummaries,
-                    $this->user::RECORD_STEAM_DATA_GAMES => $steamService->getOwnedGames($accountId, true)['response'],
-                    $this->user::RECORD_STEAM_DATA_ARMA3 => $steamService->getOwnedGames($accountId, true, true, [107410])['response']['games']['0'],
-                    $this->user::RECORD_STEAM_DATA_BANS => $steamService->getPlayerBans($accountId)['players']['0'],
-                    $this->user::RECORD_STEAM_DATA_GROUPS => $steamService->getGroupSummary($playerSummaries['response']['players'][0]['primaryclanid'])
+                    UserRecordType::STEAM_DATA_SUMMARIES->name => $playerSummaries['response']['players'][0],
+                    UserRecordType::STEAM_DATA_GAMES->name => $steamService->getOwnedGames($accountId, true)['response'],
+                    UserRecordType::STEAM_DATA_ARMA3->name => $steamService->getOwnedGames($accountId, true, true, [107410])['response']['games']['0'],
+                    UserRecordType::STEAM_DATA_BANS->name => $steamService->getPlayerBans($accountId)['players']['0'],
+                    UserRecordType::STEAM_DATA_GROUPS->name => $steamService->getGroupSummary($playerSummaries['response']['players'][0]['primaryclanid'])
                 ];
 
                 foreach ($data as $k => $v)
                 {
-                    $recordRepository->create([
-                        'user_id' => $userId,
-                        'type' => $k,
-                        'data' => $v,
-                        'uuid' => $uuid
-                    ]);
+                    $userService->createRecord($userId, $k, $v);
                 }
             }
         }

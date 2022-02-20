@@ -1,33 +1,32 @@
-<x-theme.galaxyhub.sub-content :title="$title" :description="$title" :breadcrumbs="Diglactic\Breadcrumbs\Breadcrumbs::render('app.admin.application', $applicant->name)">
-    <div class="grid md:grid-cols-5 lg:grid-cols-3 gap-4">
+<x-theme.galaxyhub.sub-content :title="$title" :description="$title" :breadcrumbs="Diglactic\Breadcrumbs\Breadcrumbs::render('app.admin.application', $user->name)">
+    <div class="grid md:grid-cols-5 lg:grid-cols-3 gap-4" x-data="application_read">
         <x-panel.galaxyhub.basics class="md:col-span-3 lg:col-span-2">
             <h2 class="text-xl lg:text-2xl font-bold">가입 신청서</h2>
             <x-survey.form :survey="$survey" :answer="$answer"/>
         </x-panel.galaxyhub.basics>
 
-        <div class="md:col-span-3 lg:col-span-2">
-            <h2 class="text-xl lg:text-2xl font-bold">부가 정보</h2>
-            <ul class="divide-y divide-gray-200">
-
+        <div class="p-4 lg:p-8 md:col-span-2 lg:col-span-1">
+            <h2 class="text-xl lg:text-2xl font-bold">부가 정보 <span class="text-xs font-normal" x-text="data.load.data.created_at"></span></h2>
+            <ul class="divide-y divide-gray-200 dark:divide-gray-800">
                 <li class="py-4">
                     <div class="flex justify-between">
-                        <p class="text-sm font-medium text-gray-800">
+                        <p class="text-sm font-medium text-gray-800 dark:text-gray-200">
                             상태
                         </p>
-                        <p class="text-sm text-gray-600">
-                            {{ $status }}
+                        <p class="text-sm text-gray-600 dark:text-gray-300">
+                            {!! $status !!}
                         </p>
                     </div>
                 </li>
 
-                @if ($status !== '접수')
+                @if ($role !== \App\Enums\RoleType::APPLY)
                     <li class="py-4">
                         <div class="flex justify-between">
-                            <p class="text-sm font-medium text-gray-800">
+                            <p class="text-sm font-medium text-gray-800 dark:text-gray-200">
                                 담당자
                             </p>
-                            <p class="text-sm text-gray-600">
-                                {{ $assign['nickname'] }}
+                            <p class="text-sm text-gray-600 dark:text-gray-300">
+                                {{ !is_null($admin) ? $admin->name : ''  }}
                             </p>
                         </div>
                     </li>
@@ -35,81 +34,81 @@
 
                 <li class="py-4">
                     <div class="flex justify-between">
-                        <p class="text-sm font-medium text-gray-800">
+                        <p class="text-sm font-medium text-gray-800 dark:text-gray-200">
                             접수 날짜
                         </p>
-                        <p class="text-sm text-gray-600">
+                        <p class="text-sm text-gray-600 dark:text-gray-300">
                             {{ $application->created_at->format('Y-m-d h:i') }}
                         </p>
                     </div>
                 </li>
 
-                @if ($status !== '가입 신청')
+                @if ($role !== \App\Enums\RoleType::APPLY && !is_null($record))
                     <li class="py-4">
                         <div class="flex justify-between">
-                            <p class="text-sm font-medium text-gray-800">
+                            <p class="text-sm font-medium text-gray-800 dark:text-gray-200">
                                 처리 날짜
                             </p>
-                            <p class="text-sm text-gray-600">
-                                {{ \Carbon\Carbon::instance(new DateTime($assign['created_at']))->format('Y-m-d h:i') }}
+                            <p class="text-sm text-gray-600 dark:text-gray-300">
+                                {{ $record->created_at->format('Y-m-d h:i') }}
                             </p>
                         </div>
                     </li>
 
                     <li class="py-4">
-                        <p class="text-sm font-medium text-gray-800 pb-2">
+                        <p class="text-sm font-medium text-gray-800 dark:text-gray-200 pb-2">
                             사유
                         </p>
-                        <p class="text-sm text-gray-600">
-                            {{ $assign['reason'] }}
+                        <p class="text-sm text-gray-600 dark:text-gray-300">
+                            {{ $record->data['reason'] }}
                         </p>
                     </li>
                 @endif
 
                 <li class="py-4">
                     <div class="flex justify-between">
-                        <p class="text-sm font-medium text-gray-800">
+                        <p class="text-sm font-medium text-gray-800 dark:text-gray-200">
                             아르마3 플레이
                         </p>
-                        <p class="text-sm text-gray-600" x-text="data.load.data.arma.playtimeForeverReadable"></p>
+                        <p class="text-sm text-gray-600 dark:text-gray-300" x-text="data.load.data.arma.playtime_forever"></p>
                     </div>
                 </li>
 
                 <li class="py-4">
                     <div class="flex justify-between">
-                        <p class="text-sm font-medium text-gray-800">
+                        <p class="text-sm font-medium text-gray-800 dark:text-gray-200">
                             차단 기록
                         </p>
-                        <p class="text-sm text-gray-600" x-text="'VAC ' + data.load.data.ban.NumberOfVACBans + '회 / 게임 ' + data.load.data.ban.NumberOfGameBans + '회'"></p>
+                        <p class="text-sm text-gray-600 dark:text-gray-300" x-text="'VAC ' + data.load.data.ban.NumberOfVACBans + '회 / 게임 ' + data.load.data.ban.NumberOfGameBans + '회'"></p>
                     </div>
                 </li>
 
                 <li class="py-4">
                     <div class="flex justify-between">
-                        <p class="text-sm font-medium text-gray-800">
+                        <p class="text-sm font-medium text-gray-800 dark:text-gray-200">
                             구입한 게임
                         </p>
-                        <p class="text-sm text-gray-600">
-                            <a href="{{ route('staff.user.application.read.games', [$user->id]) }}" target="_blank">확인하기</a>
+                        <p class="text-sm text-gray-600 dark:text-gray-300">
+                            <a href="{{ route('admin.application.read', [$user->id]) }}" target="_blank" rel="noopener">확인하기</a>
                         </p>
                     </div>
                 </li>
 
                 <li class="py-4">
-                    <template x-if="data.load.data.group.groupID64 === ''">
+                    <template x-if="data.load.data.length > 0 && data.load.data.group.groupID64 === ''">
                         <div class="flex justify-between">
-                            <p class="text-sm font-medium text-gray-800">
+                            <p class="text-sm font-medium text-gray-800 dark:text-gray-200">
                                 가입한 클랜
                             </p>
-                            <p class="text-sm text-gray-600">
+                            <p class="text-sm text-gray-600 dark:text-gray-300">
                                 없음
                             </p>
                         </div>
                     </template>
-                    <template x-if="data.load.data.group.groupID64 !== ''">
+                    <template x-if="data.load.data.length > 0 && data.load.data.group.groupID64 !== ''">
                         <div>
-                            <p class="text-sm font-medium text-gray-800 pb-2">
-                                가입한 클랜 - <a class="text-blue-500 hover:text-blue-800" :href="'https://steamcommunity.com/profiles/' +  data.load.data.summaries.steamId + '/groups/'" target="_blank">더보기</a>
+                            <p class="text-sm font-medium text-gray-800 dark:text-gray-200 pb-2">
+                                가입한 클랜 - <a class="text-blue-500 hover:text-blue-800" :href="'https://steamcommunity.com/profiles/' +  data.load.data.summaries.steamid + '/groups/'" target="_blank">더보기</a>
                             </p>
                             <a :href="'https://steamcommunity.com/gid/' + data.load.data.group.groupID64" target="_blank">
                                 <div class="flex">
@@ -117,8 +116,8 @@
                                         <div class="h-16 w-16" x-html="data.load.data.group.groupDetails.avatarFull"></div>
                                     </div>
                                     <div>
-                                        <p class="-mt-1 text-sm font-medium" x-text="data.load.data.group.groupDetails.name"></p>
-                                        <p class="text-sm text-gray-600" x-text="data.load.data.group.groupDetails.summary.replace(/(<([^>]+)>)/ig,'')"></p>
+                                        <p class="-mt-1 text-sm font-medium" x-text="data.load.data.group.groupDetails.groupName"></p>
+                                        <p class="text-sm text-gray-600 dark:text-gray-300" x-text="data.load.data.group.groupDetails.summary.replace(/(<([^>]+)>)/ig,'')"></p>
                                     </div>
                                 </div>
                             </a>
@@ -129,13 +128,13 @@
             </ul>
 
             <div class="grid gap-2 py-4">
-                <template x-if="data.load.data.summaries.steamId !== ''">
-                    <x-button.filled.md-white @click="window.open('https://steamcommunity.com/profiles/' + data.load.data.summaries.steamId)" type="button">
+                <template x-if="data.load.data.summaries.steamid !== ''">
+                    <x-button.filled.md-white @click="window.open('https://steamcommunity.com/profiles/' + data.load.data.summaries.steamid)" type="button">
                         STEAM 프로필 보기
                     </x-button.filled.md-white>
                 </template>
-                <template x-if="data.load.data.summaries.steamId !== ''">
-                    <x-button.filled.md-white @click="window.open('https://steamcommunity.com/profiles/' + data.load.data.summaries.steamId + '/friends')" type="button">
+                <template x-if="data.load.data.summaries.steamid !== ''">
+                    <x-button.filled.md-white @click="window.open('https://steamcommunity.com/profiles/' + data.load.data.summaries.steamid + '/friends')" type="button">
                         STEAM 친구 목록 보기
                     </x-button.filled.md-white>
                 </template>
@@ -148,11 +147,12 @@
 
             <div class="py-4">
                 <p class="text-lg font-bold pb-4">유저 기록</p>
-                <x-memo.simple user-id="{{$user->id}}"/>
+
+                {{-- <x-memo.simple user-id="{{$user->id}}"/> --}}
             </div>
 
             <div class="grid grid-cols-3 gap-2 py-4">
-                @if ($status === '가입 신청')
+                @if ($role === \App\Enums\RoleType::APPLY)
                     <x-button.filled.md-white @click="process('accept', '가입 승인', '가입을 승인 하시겠습니까?', false)" type="button">
                         승인
                     </x-button.filled.md-white>
@@ -170,4 +170,147 @@
         </div>
     </div>
 
+    <script type="text/javascript">
+        window.document.addEventListener('alpine:init', () => {
+            window.alpine.data('application_read', () => ({
+                interval: {
+                    load: -1
+                },
+                data: {
+                    process: {
+                        url: '{{ route('admin.application.index.process') }}',
+                        body: {},
+                        lock: false
+                    },
+                    load: {
+                        url: '{{ route('admin.application.read.data', [$user->id]) }}',
+                        body: {},
+                        data: {
+                            arma: {
+                                playtime_forever: '불러오는 중...',
+                            },
+                            ban: {
+                                NumberOfVACBans: '',
+                                NumberOfGameBans: ''
+                            },
+                            group: {
+                                groupID64: '',
+                                groupDetails: {
+                                    groupName: '',
+                                    avatarFull: '',
+                                    summary: ''
+                                }
+                            },
+                            summaries: {
+                                steamid: '',
+
+                            },
+                            naver_id: '',
+                            created_at: ''
+                        }
+                    }
+                },
+                @if($role === \App\Enums\RoleType::APPLY)
+                process(type, title, message, prompt = true) {
+                    let callback = (r) => {
+                        if (r.isConfirmed) {
+                            this.data.process.body = {
+                                type: type,
+                                user_id: ["{{ $user->id }}"],
+                                reason: (prompt) ? r.value : null
+                            };
+
+                            let success = (r) => {
+                                window.modal.alert('처리 완료', '정상적으로 처리되었습니다.', (c) => {
+                                    location.href = '{{ route('admin.application.index') }}';
+                                });
+                            };
+
+                            let error = (e) => {
+                                if (typeof e.response !== 'undefined') {
+                                    if (e.response.status === 415) {
+                                        //CSRF 토큰 오류 발생
+                                        window.modal.alert('처리 실패', '로그인 정보를 확인할 수 없습니다.', (c) => {
+                                            Location.reload();
+                                        }, 'error');
+                                        return;
+                                    }
+
+                                    if (e.response.status === 422) {
+                                        let msg = '';
+                                        switch (e.response.data.description) {
+                                            default:
+                                                msg = e.response.data.description;
+                                                break;
+                                        }
+
+                                        window.modal.alert('처리 실패', msg, (c) => {}, 'error');
+                                        return;
+                                    }
+                                }
+
+                                window.modal.alert('처리 실패', '데이터 처리 중 문제가 발생하였습니다.', (c) => {}, 'error');
+                                console.log(e);
+                            };
+
+                            let complete = () => {
+                                this.data.process.lock = false;
+                            };
+
+                            if (!this.data.process.lock) {
+                                this.data.process.lock = true;
+                                this.post(this.data.process.url, this.data.process.body, success, error, complete);
+                            }
+                        }
+                    };
+
+                    if (prompt) {
+                        window.modal.prompt(title, message, (v) => {}, callback);
+                    } else {
+                        window.modal.confirm(title, message, callback, 'question', '예', '아니요');
+                    }
+                },
+                @endif
+                load() {
+                    let success = (r) => {
+                        if (r.data.data !== null) {
+                            if (!(typeof r.data.data === 'undefined' || r.data.data.length <= 0)) {
+                                this.data.load.data = r.data.data;
+                                this.data.load.data.arma.playtime_forever = this.minutesToHm(r.data.data.arma.playtime_forever);
+
+                                if (this.interval.load >= 0) {
+                                    clearInterval(this.interval.load);
+                                }
+
+                            }
+                        }
+                    }
+                    let error = (e) => {
+                        console.log(e);
+                    }
+                    let complete = () => {}
+
+                    if (!this.data.load.lock) {
+                        this.post(this.data.load.url, this.data.load.body, success, error, complete);
+                        this.interval.load = setInterval(() => {this.post(this.data.load.url, this.data.load.body, success, error, complete)}, 5000);
+                    }
+                },
+                init() {
+                    this.load();
+                },
+                post(url, body, success, error, complete) {
+                    window.axios.post(url, body).then(success).catch(error).then(complete);
+                },
+                minutesToHm(minutes) {
+                    let h = Math.floor(minutes / 60);
+                    let m = Math.floor(minutes % 60);
+
+                    let hd = h > 0 ? h + '시간' : '';
+                    let md = m > 0 ? m + '분' : '';
+
+                    return hd + ' ' + md;
+                }
+            }));
+        });
+    </script>
 </x-theme.galaxyhub.sub-content>

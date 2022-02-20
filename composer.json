@@ -5,7 +5,7 @@
     "keywords": ["framework", "laravel"],
     "license": "MIT",
     "require": {
-        "php": "^8.0",
+        "php": "^8.1",
         "auauauauauauau/steam-web-api": "^0.0.6",
         "cybercog/laravel-ban": "^4.7",
         "diglactic/laravel-breadcrumbs": "^7.1",

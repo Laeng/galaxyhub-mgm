@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers\App\Admin\Application;
 
+use App\Enums\RoleType;
+use App\Enums\UserRecordType;
 use App\Http\Controllers\Controller;
 use App\Repositories\Survey\Interfaces\SurveyRepositoryInterface;
 use App\Repositories\User\Interfaces\UserAccountRepositoryInterface;
-use App\Repositories\User\Interfaces\UserRecordRepositoryInterface;
 use App\Repositories\User\Interfaces\UserRepositoryInterface;
+use App\Services\Survey\Contracts\SurveyServiceContract;
+use App\Services\User\Contracts\UserServiceContract;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -19,9 +22,9 @@ class ListController extends Controller
 {
     private UserRepositoryInterface $userRepository;
 
-    public function __construct(UserRepositoryInterface $userRepository)
+    public function __construct(UserRepositoryInterface $user)
     {
-        $this->userRepository = $userRepository;
+        $this->userRepository = $user;
     }
 
     public function index(Request $request): View
@@ -29,7 +32,7 @@ class ListController extends Controller
         return view('app.admin.application.index');
     }
 
-    public function data(Request $request, SurveyRepositoryInterface $surveyRepository, UserAccountRepositoryInterface $accountRepository): JsonResponse
+    public function list(Request $request, SurveyServiceContract $surveyService, UserAccountRepositoryInterface $accountRepository): JsonResponse
     {
         try
         {
@@ -38,24 +41,22 @@ class ListController extends Controller
                 'limit' => 'int'
             ]);
 
-            $applicationFormIds = $surveyRepository->findApplicationForms(['id'])->pluck('id')->values();
-            $count = $this->userRepository->findByRole(\App\Models\User::ROLE_APPLY)->count();
+            $count = $this->userRepository->findByRole(RoleType::APPLY->name)->count();
 
             $limit = $request->get('limit', 20);
             $step = $this->getPaginationStep($request->get('step', 0), $limit, $count);
 
             if ($limit < 1 || $limit > 100) $limit = 20;
 
-            $users = $this->userRepository->findByRoleWithPagination(\App\Models\User::ROLE_APPLY, $step * $limit, $limit);
+            $users = $this->userRepository->findByRoleWithPagination(RoleType::APPLY->name, $step * $limit, $limit);
 
             $th = ['스팀 닉네임', '네이버 아이디', '디스코드 사용자명', '생년월일', '타 클랜 활동', '신청일', '상세 정보'];
             $tr = array();
 
             foreach ($users as $user)
             {
-                $steamAccount = $accountRepository->findByUserId($user->id)?->filter(fn ($v, $k) => $v->provider === 'steam')?->first();
-
-                $application = $user->surveys()->whereIn('survey_id', $applicationFormIds)->latest()->first();
+                $steamAccount = $accountRepository->findSteamAccountByUserId($user->id);
+                $application = $surveyService->getLatestApplicationForm($user->id);
                 $response = $application->answers()->latest()->get();
 
                 $row = [
@@ -109,7 +110,7 @@ class ListController extends Controller
         }
     }
 
-    public function process(Request $request, UserAccountRepositoryInterface $accountRepository, UserRecordRepositoryInterface $recordRepository)
+    public function process(Request $request, UserServiceContract $userService)
     {
         try
         {
@@ -127,52 +128,48 @@ class ListController extends Controller
             $reason = strip_tags($request->get('reason'));
             $executor = Auth::user();
 
-            $roles = [$executor::ROLE_DEFER, $executor::ROLE_REJECT, $executor::ROLE_MEMBER];
+            $roles = [RoleType::DEFER->name, RoleType::REJECT->name, RoleType::MEMBER->name];
 
             if (!in_array($type, $roles))
             {
                 throw new \Exception('INVALID TYPE', 422);
             }
 
-            $users = $this->userRepository->findByIdsWithRole($request->get('user_id'), \app\Models\User::ROLE_APPLY);
+            $users = $this->userRepository->findByIdsWithRole($request->get('user_id'), RoleType::APPLY->name);
 
             foreach ($users as $user)
             {
-                $steamAccount = $accountRepository->findByUserId($user->id)?->filter(fn ($v, $k) => $v->provider === 'steam')?->first();
-                $uuid = $recordRepository->getUUIDv5($steamAccount->account_id);
-
-                $user->removeRole($user::ROLE_APPLY);
+                $user->removeRole(RoleType::APPLY->name);
                 $user->assignRole($type);
 
-                $recordRepository->create([
-                    'user_id' => $user->id,
-                    'recorder_id' => $executor->id,
-                    'type' => $user::RECORD_ROLE_DATA,
-                    'data' => [
-                        'role' => $type,
-                        'reason' => $reason
-                    ],
-                    'uuid' => $uuid
-                ]);
+                $data = [
+                    'role' => $type,
+                    'reason' => $reason
+                ];
 
-                if ($type === $user::ROLE_REJECT)
+                $userService->createRecord($user->id, UserRecordType::ROLE_DATA->name, $data, $executor->id);
+
+                if ($type === RoleType::REJECT->name)
                 {
-                    $count = $recordRepository->findByUuid($uuid)?->filter(fn ($v, $k) => $v->type === $user::RECORD_ROLE_DATA && $v->data['role'] === $user::ROLE_REJECT)->count();
+                    $count = $userService->findRoleRecordeByUserId($user->id, $user::ROLE_REJECT)->count();
+                    $ban = array();
 
                     if ($count == 1)
                     {
-                        $user->ban([
+                        $ban = [
                             'comment' => "가입이 거절되어 계정이 일시 정지되었습니다. 30일 이후 가입 신청을 하실 수 있습니다.<br/><br/><span class='font-bold'>가입 거절 사유:</span><br/>{$reason}",
-                            'expired_at' => '+30 days',
-                        ]);
+                            'expired_at' => now()->addDays(30),
+                        ];
                     }
 
                     if ($count >= 2)
                     {
-                        $user->ban([
+                        $ban = [
                             'comment' => "가입이 2번 거절되어 계정이 무기한 정지되었습니다. 더 이상 가입 신청을 하실 수 없습니다.<br/><br/><span class='font-bold'>가입 거절 사유:</span><br/>{$reason}"
-                        ]);
+                        ];
                     }
+
+                    $user->ban($ban);
                 }
             }
 

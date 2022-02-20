@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\App\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Services\Auth\Contracts\AuthServiceContract;
+use App\Services\User\Contracts\UserServiceContract;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -18,9 +18,9 @@ use function view;
 
 class AuthenticateController extends Controller
 {
-    private AuthServiceContract $authService;
+    private UserServiceContract $authService;
 
-    public function __construct(AuthServiceContract $authService)
+    public function __construct(UserServiceContract $authService)
     {
         $this->authService = $authService;
     }
@@ -64,7 +64,7 @@ class AuthenticateController extends Controller
                 'email' => $account->getEmail()
             ];
 
-            $user = $this->authService->create($accountArray);
+            $user = $this->authService->createUser($accountArray);
 
             Auth::login($user);
 

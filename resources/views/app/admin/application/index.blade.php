@@ -13,16 +13,16 @@
             </x-alert.galaxyhub.warning>
         </div>
         <div>
-            <x-list.galaxyhub.basics :component-id="$componentId" name="user_id" :action="route('admin.application.index.data')" refresh="false"/>
+            <x-list.galaxyhub.basics :component-id="$componentId" name="user_id" :action="route('admin.application.index.list')" refresh="false"/>
         </div>
         <div class="flex justify-start space-x-3 mt-3" x-data="application_list" >
-            <x-button.filled.md-white @click="process('{{ \App\Models\User::ROLE_MEMBER }}', '가입 승인', '가입을 승인 하시겠습니까?', false)" type="button">
+            <x-button.filled.md-white @click="process('{{ \App\Enums\RoleType::MEMBER->name  }}', '가입 승인', '가입을 승인 하시겠습니까?', false)" type="button">
                 승인
             </x-button.filled.md-white>
-            <x-button.filled.md-white @click="process('{{ \App\Models\User::ROLE_REJECT }}', '가입 거절', '거절 사유를 입력해 주십시오.')" type="button">
+            <x-button.filled.md-white @click="process('{{ \App\Enums\RoleType::REJECT->name }}', '가입 거절', '거절 사유를 입력해 주십시오.')" type="button">
                 거절
             </x-button.filled.md-white>
-            <x-button.filled.md-white @click="process('{{ \App\Models\User::ROLE_DEFER }}', '가입 보류', '보류 사유를 입력해 주십시오.')" type="button">
+            <x-button.filled.md-white @click="process('{{ \App\Enums\RoleType::DEFER->name }}', '가입 보류', '보류 사유를 입력해 주십시오.')" type="button">
                 보류
             </x-button.filled.md-white>
         </div>
