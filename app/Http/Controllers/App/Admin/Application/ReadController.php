@@ -113,9 +113,47 @@ class ReadController extends Controller
             }
 
             $summaries = $recordRepository->findByUserIdAndType($userId, UserRecordType::STEAM_DATA_SUMMARIES->name)->first();
+
+            if (is_null($summaries) || count($summaries->data) <= 0)
+            {
+                $summaries->data = [
+                    'steamid' => ''
+                ];
+            }
+
             $group = $recordRepository->findByUserIdAndType($userId, UserRecordType::STEAM_DATA_GROUPS->name)->first();
+
+            if (is_null($group) || count($group->data) <= 0)
+            {
+                $group->data = [
+                    'groupID64' => '',
+                    'groupDetails' => [
+                        'groupName' => '',
+                        'avatarFull' => '',
+                        'summary' => ''
+                    ]
+                ];
+            }
+
             $arma3 = $recordRepository->findByUserIdAndType($userId, UserRecordType::STEAM_DATA_ARMA3->name)->first();
+
+            if (is_null($arma3) || count($arma3->data) <= 0)
+            {
+                $arma3->data = [
+                    'playtime_forever' => 0
+                ];
+            }
+
             $ban = $recordRepository->findByUserIdAndType($userId, UserRecordType::STEAM_DATA_BANS->name)->first();
+
+            if (is_null($ban) || count($ban->data) <= 0)
+            {
+                $ban->data = [
+                    'NumberOfVACBans' => 0,
+                    'NumberOfGameBans' => 0
+                ];
+            }
+
 
             $naverId = null;
 

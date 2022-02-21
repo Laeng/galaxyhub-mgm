@@ -8,7 +8,7 @@ Route::prefix('app')->group(function () {
     Route::prefix('admin')->name('admin.')->group(function() {
         Route::prefix('application')->name('application.')->middleware(['auth.admin:web'])->group(function() {
             //VIEW
-            Route::redirect('/', '/app/admin/application');
+            Route::redirect('/', '/app/admin/applications');
             Route::get('/{userId}', [ReadController::class, 'read'])->name('read')->whereNumber('userId');
 
             //AJAX

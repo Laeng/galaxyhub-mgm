@@ -67,18 +67,16 @@
             <div>
                 <h2 class="text-xl lg:text-2xl font-bold">개인정보처리방침 <span class="text-base font-normal">(필수 동의 항목)</span>
                 </h2>
-                <div
-                    class="pl-4 mt-2 rounded-md bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-800 text-gray-800 dark:text-gray-300">
-                    <div class="h-64 overflow-y-scroll pr-4 prose dark:prose-invert prose-sm max-w-none">
+                <div class="pl-4 mt-2 rounded-md bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-800 text-gray-800 dark:text-gray-300">
+                    <div class="h-64 py-4 prose dark:prose-invert prose-sm max-w-none" data-simplebar>
                         @include('components.agreements.privacy')
                     </div>
                 </div>
             </div>
             <div>
                 <h2 class="text-xl lg:text-2xl font-bold">이용약관 <span class="text-base font-normal">(필수 동의 항목)</span></h2>
-                <div
-                    class="pl-4 mt-2 rounded-md bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-800 text-gray-800 dark:text-gray-300">
-                    <div class="h-64 overflow-y-scroll pr-4 prose dark:prose-invert prose-sm max-w-none">
+                <div class="pl-4 mt-2 rounded-md bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-800 text-gray-800 dark:text-gray-300">
+                    <div class="h-64 py-4 prose dark:prose-invert prose-sm max-w-none" data-simplebar>
                         @include('components.agreements.rules')
                     </div>
                 </div>

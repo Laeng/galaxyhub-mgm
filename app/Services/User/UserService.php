@@ -103,7 +103,10 @@ class UserService implements UserServiceContract
     public function createRecord(int $userId, string $type, array $data, ?int $recorderId = null): ?UserRecord
     {
         $steamAccount = $this->accountRepository->findSteamAccountByUserId($userId);
-        $uuid = !is_null($steamAccount) ? $this->recordRepository->getUuidV5($userId) : null;
+
+        if (is_null($steamAccount)) return null;
+
+        $uuid = $this->recordRepository->getUuidV5($userId);
 
         return $this->recordRepository->create([
             'user_id' => $userId,

@@ -144,7 +144,7 @@ class ListController extends Controller
 
                 $data = [
                     'role' => $type,
-                    'reason' => $reason
+                    'comment' => $reason
                 ];
 
                 $userService->createRecord($user->id, UserRecordType::ROLE_DATA->name, $data, $executor->id);

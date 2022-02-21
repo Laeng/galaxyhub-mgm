@@ -1,5 +1,7 @@
 require('./bootstrap');
 
+import 'simplebar';
+
 import Alpine from 'alpinejs';
 window.alpine = Alpine;
 window.alpine.start();

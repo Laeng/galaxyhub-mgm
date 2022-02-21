@@ -1,1 +1,3 @@
-<input {{ $attributes->except(['class', 'type']) }} class="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full text-sm border border-gray-200 rounded-md {{ $class }}" type="{{ $type }}">
+<label>
+    <input {{ $attributes->except(['class', 'type']) }} class="w-full rounded-md dark:bg-gray-900 border-gray-300 dark:border-gray-800 focus:ring-blue-500 shadow-sm {{ $class }}" type="{{ $type }}">
+</label>

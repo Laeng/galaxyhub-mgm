@@ -23,6 +23,7 @@
         "tailwindcss": "^3.0.22"
     },
     "dependencies": {
+        "simplebar": "^5.3.6",
         "sweetalert2": "^11.4.0"
     }
 }

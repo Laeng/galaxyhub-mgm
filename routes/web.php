@@ -18,6 +18,7 @@ Route::get('/', function () {
 })->name('welcome');
 
 require_once __DIR__ . '/web/admin/application.php';
+require_once __DIR__ . '/web/admin/memo.php';
 
 
 require_once __DIR__ . '/web/user/account.php';
