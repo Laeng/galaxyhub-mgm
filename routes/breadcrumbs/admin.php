@@ -13,3 +13,4 @@ Breadcrumbs::for('app.admin.application', function(BreadcrumbTrail $trail, strin
     $trail->push('가입 신청자', route('admin.application.index'));
     $trail->push($title);
 });
+

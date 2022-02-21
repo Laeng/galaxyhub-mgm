@@ -10,6 +10,7 @@ Route::prefix('app')->group(function () {
             //VIEW
             Route::redirect('/', '/app/admin/applications');
             Route::get('/{userId}', [ReadController::class, 'read'])->name('read')->whereNumber('userId');
+            Route::get('/{userId}/games', [ReadController::class, 'games'])->name('read.games')->whereNumber('userId');
 
             //AJAX
             Route::post('/{userId}/data', [ReadController::class, 'data'])->name('read.data')->whereNumber('userId');

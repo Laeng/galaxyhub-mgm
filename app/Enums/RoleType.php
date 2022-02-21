@@ -26,26 +26,13 @@ enum RoleType {
     public static function getKoreanNames(): array
     {
         return [
-            '가입 신청' => self::APPLY,
-            '가입 보류' => self::DEFER,
-            '가입 거절' => self::REJECT,
-            '멤버' => self::MEMBER,
-            '임시 메이커' => self::MAKER1,
-            '정식 메이커' => self::MAKER2,
-            '관리자' => self::ADMIN
+            '가입 신청' => self::APPLY->name,
+            '가입 보류' => self::DEFER->name,
+            '가입 거절' => self::REJECT->name,
+            '멤버' => self::MEMBER->name,
+            '임시 메이커' => self::MAKER1->name,
+            '정식 메이커' => self::MAKER2->name,
+            '관리자' => self::ADMIN->name
         ];
-    }
-
-    #[Pure]
-    public static function getByKorean(string $korean): ?RoleType
-    {
-        try
-        {
-            return self::getKoreanNames()[$korean];
-        }
-        catch (\Exception $e)
-        {
-            return null;
-        }
     }
 }

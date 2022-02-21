@@ -13,6 +13,7 @@ use App\Repositories\User\UserAccountRepository;
 use App\Services\Steam\Contracts\SteamServiceContract;
 use App\Services\Survey\Contracts\SurveyServiceContract;
 use App\Services\User\Contracts\UserServiceContract;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -20,16 +21,22 @@ class ReadController extends Controller
 {
     private UserServiceContract $userService;
     private UserRepositoryInterface $userRepository;
+    private UserRecordRepositoryInterface $recordRepository;
     private SurveyServiceContract $surveyService;
 
-    public function __construct(UserServiceContract $userService, UserRepositoryInterface $userRepository, SurveyServiceContract $surveyService)
+    public function __construct
+    (
+        UserServiceContract $userService, UserRepositoryInterface $userRepository,
+        UserRecordRepositoryInterface $recordRepository, SurveyServiceContract $surveyService
+    )
     {
         $this->userService = $userService;
         $this->userRepository = $userRepository;
+        $this->recordRepository = $recordRepository;
         $this->surveyService = $surveyService;
     }
 
-    public function read(Request $request, int $userId)
+    public function read(Request $request, int $userId): View
     {
         $user = $this->userRepository->findById($userId);
 
@@ -93,7 +100,26 @@ class ReadController extends Controller
         ]);
     }
 
-    public function data(Request $request, int $userId, UserRecordRepositoryInterface $recordRepository): JsonResponse
+    public function games(Request $request, int $userId): View
+    {
+        $user = $this->userRepository->findById($userId);
+
+        if (is_null($user))
+        {
+            abort('404');
+        }
+
+        $games = $this->recordRepository->findByUserIdAndType($user->id, UserRecordType::STEAM_DATA_GAMES->name)->first();
+
+        return view('app.admin.application.read-games', [
+            'user' => $user,
+            'games' => json_encode($games->data),
+            'title' => "{$user->name}님의 게임",
+            'date' => $games->created_at->format('Y-m-d')
+        ]);
+    }
+
+    public function data(Request $request, int $userId): JsonResponse
     {
         try
         {
@@ -112,7 +138,7 @@ class ReadController extends Controller
                 throw new \Exception('NOT FOUND APPLICATION', 422);
             }
 
-            $summaries = $recordRepository->findByUserIdAndType($userId, UserRecordType::STEAM_DATA_SUMMARIES->name)->first();
+            $summaries = $this->recordRepository->findByUserIdAndType($userId, UserRecordType::STEAM_DATA_SUMMARIES->name)->first();
 
             if (is_null($summaries) || count($summaries->data) <= 0)
             {
@@ -121,7 +147,7 @@ class ReadController extends Controller
                 ];
             }
 
-            $group = $recordRepository->findByUserIdAndType($userId, UserRecordType::STEAM_DATA_GROUPS->name)->first();
+            $group = $this->recordRepository->findByUserIdAndType($userId, UserRecordType::STEAM_DATA_GROUPS->name)->first();
 
             if (is_null($group) || count($group->data) <= 0)
             {
@@ -135,7 +161,7 @@ class ReadController extends Controller
                 ];
             }
 
-            $arma3 = $recordRepository->findByUserIdAndType($userId, UserRecordType::STEAM_DATA_ARMA3->name)->first();
+            $arma3 = $this->recordRepository->findByUserIdAndType($userId, UserRecordType::STEAM_DATA_ARMA3->name)->first();
 
             if (is_null($arma3) || count($arma3->data) <= 0)
             {
@@ -144,7 +170,7 @@ class ReadController extends Controller
                 ];
             }
 
-            $ban = $recordRepository->findByUserIdAndType($userId, UserRecordType::STEAM_DATA_BANS->name)->first();
+            $ban = $this->recordRepository->findByUserIdAndType($userId, UserRecordType::STEAM_DATA_BANS->name)->first();
 
             if (is_null($ban) || count($ban->data) <= 0)
             {

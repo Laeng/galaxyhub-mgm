@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\App\Memo;
 
+use App\Enums\RoleType;
 use App\Enums\UserRecordType;
 use App\Http\Controllers\Controller;
 use App\Repositories\User\Interfaces\UserRecordRepositoryInterface;
@@ -89,6 +90,12 @@ class MemoController extends Controller
                 {
                     $datum['recorder']['avatar'] = asset('images/avatar.png');
                     $datum['recorder']['name'] = 'SYSTEM';
+                }
+
+                if ($record->type === UserRecordType::ROLE_DATA->name)
+                {
+                    $role = array_flip(RoleType::getKoreanNames())[$record->data['role']];
+                    $datum['comment'] = "[{$role}] {$datum['comment']}";
                 }
 
                 $data[] = $datum;

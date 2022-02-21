@@ -125,7 +125,7 @@ class ListController extends Controller
             }
 
             $type = $request->get('type');
-            $reason = strip_tags($request->get('reason'));
+            $reason = strip_tags($request->get('reason', '변경 사유를 입력하지 않음.'));
             $executor = Auth::user();
 
             $roles = [RoleType::DEFER->name, RoleType::REJECT->name, RoleType::MEMBER->name];

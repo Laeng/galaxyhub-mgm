@@ -308,7 +308,7 @@
                     let hd = h > 0 ? h + '시간' : '';
                     let md = m > 0 ? m + '분' : '';
 
-                    return hd + ' ' + md;
+                    return (hd === '' && md === '') ? '0분' : hd + ' ' + md;
                 }
             }));
         });
