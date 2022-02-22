@@ -126,21 +126,36 @@ return new class extends Migration
 
     private function createRoles()
     {
-        $roleNames = ['APPLY', 'DEFER', 'REJECT', 'MEMBER', 'MAKER1', 'MAKER2', 'ADMIN'];
+        $roles = array_keys(\App\Enums\RoleType::getKoreanNames());
 
-        foreach($roleNames as $name)
+        foreach ($roles as $role)
         {
-            Role::create(['name' => $name]);
+            Role::create(['name' => $role]);
         }
 
-        $permissionAndRole = [
-            'MEMBER' => ['MEMBER'],
-            'MAKER1' => ['MEMBER', 'MAKER1'],
-            'MAKER2' => ['MEMBER', 'MAKER1', 'MAKER2'],
-            'STAFF' => ['MEMBER', 'MAKER1', 'MAKER2', 'ADMIN']
+        $permissionsAndRoles = [
+            \App\Enums\PermissionType::MEMBER->name => [
+                \App\Enums\RoleType::MEMBER->name
+            ],
+            \App\Enums\PermissionType::MAKER1->name => [
+                \App\Enums\RoleType::MEMBER->name,
+                \App\Enums\RoleType::MAKER1->name,
+            ],
+            \App\Enums\PermissionType::MAKER2->name => [
+                \App\Enums\RoleType::MEMBER->name,
+                \App\Enums\RoleType::MAKER1->name,
+                \App\Enums\RoleType::MAKER2->name
+            ],
+            \App\Enums\PermissionType::ADMIN->name => [
+                \App\Enums\RoleType::MEMBER->name,
+                \App\Enums\RoleType::MAKER1->name,
+                \App\Enums\RoleType::MAKER2->name,
+                \App\Enums\RoleType::ADMIN->name
+            ]
         ];
 
-        foreach ($permissionAndRole as $k => $v) {
+        foreach ($permissionsAndRoles as $k => $v)
+        {
             $permission = Permission::create(['name' => $k]);
             $permission->syncRoles($v);
         }

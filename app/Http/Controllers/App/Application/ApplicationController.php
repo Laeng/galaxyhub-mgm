@@ -18,6 +18,13 @@ use function view;
 
 class ApplicationController extends Controller
 {
+    private UserServiceContract $userService;
+
+    public function __construct(UserServiceContract $userService)
+    {
+        $this->userService = $userService;
+    }
+
     public function index(Request $request): View|Application|RedirectResponse|Redirector
     {
         $user = Auth::user();
@@ -45,25 +52,25 @@ class ApplicationController extends Controller
 
         if (!$user->hasRole(RoleType::APPLY->name))
         {
-            abort('404');
+            return redirect()->route('application.index');
         }
 
         return view('app.application.applied');
     }
 
-    public function rejected(UserServiceContract $userService): View|Application|RedirectResponse|Redirector
+    public function rejected(): View|Application|RedirectResponse|Redirector
     {
         $user = Auth::user();
 
-        if (!$user->hasRole($user::ROLE_REJECT))
+        if (!$user->hasRole(RoleType::REJECT->name))
         {
-            abort(404);
+            return redirect()->route('application.index');
         }
 
-        $recode = $userService->findRoleRecordeByUserId($user->id, RoleType::REJECT->name)->first();
+        $recode = $this->userService->findRoleRecordeByUserId($user->id, RoleType::REJECT->name)->first();
 
         return view('app.application.rejected', [
-            'reason' => $recode->data['reason'],
+            'reason' => $recode->data['comment'],
             'date' => $recode->created_at,
             'count' => $recode->count()
         ]);
@@ -75,11 +82,13 @@ class ApplicationController extends Controller
 
         if (!$user->hasRole(RoleType::DEFER->name))
         {
-            abort(404);
+            return redirect()->route('application.index');
         }
 
-        return view('app.application.deferred', [
+        $recode = $this->userService->findRoleRecordeByUserId($user->id, RoleType::DEFER->name)->first();
 
+        return view('app.application.deferred', [
+            'reason' => $recode->data['comment'],
         ]);
     }
 

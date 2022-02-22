@@ -28,9 +28,14 @@ class Image extends Component
     public function __construct(SurveyQuestion $question, int|null $answer = null)
     {
         $this->question = $question;
-        $this->answer = json_decode($question->answers()->where('survey_entry_id', $answer)->first()?->value);
-
         $this->componentId = "QUESTION_IMAGE_".Str::upper(Str::random(6));
+
+        if (!is_null($answer)) {
+            $value = $question->answers()->where('survey_entry_id', $answer)->first();
+            $this->answer = is_null($value) ? [] : json_decode($value->value);
+        } else {
+            $this->answer = null;
+        }
     }
 
     /**

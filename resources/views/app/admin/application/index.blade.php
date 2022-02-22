@@ -3,19 +3,19 @@
 @endphp
 <x-theme.galaxyhub.sub-content title="가입 신청자" description="가입 신청자 목록" :breadcrumbs="Diglactic\Breadcrumbs\Breadcrumbs::render('app.admin', '가입 신청자')">
     <x-panel.galaxyhub.basics>
-        <div class="grid grid-cols-1 gap-3 mb-3">
-            <x-alert.galaxyhub.warning title="알려드립니다.">
+        <div class="flex flex-col space-y-2 mb-3">
+            <x-alert.galaxyhub.warning title="유의사항">
                 <ul>
                     <li>{{ now()->subYears(18)->year . '년생 이상만 가입을 허용해 주십시오. (' . now()->year . '년 기준)' }}</li>
                     <li>미비 사항이 있다면 무조건 거절하시지 마시고 보류 처리 후 해당 부분을 보충할 기회를 주십시오.</li>
-                    <li>거절, 보류 사유는 해당 신청자에게 표시됩니다. 민감한 사항은 '유저 기록' 에 별도 기록해 주십시오.</li>
+                    <li>거절, 보류 사유는 해당 신청자에게 표시됩니다. 민감한 사항은 '유저 활동 기록' 에 별도 기록해 주십시오.</li>
                 </ul>
             </x-alert.galaxyhub.warning>
         </div>
         <div>
             <x-list.galaxyhub.basics :component-id="$componentId" name="user_id" :action="route('admin.application.index.list')" refresh="false"/>
         </div>
-        <div class="flex justify-start space-x-3 mt-3" x-data="application_list" >
+        <div class="flex justify-start space-x-2 mt-3" x-data="application_list" >
             <x-button.filled.md-white @click="process('{{ \App\Enums\RoleType::MEMBER->name  }}', '가입 승인', '가입을 승인 하시겠습니까?', false)" type="button">
                 승인
             </x-button.filled.md-white>

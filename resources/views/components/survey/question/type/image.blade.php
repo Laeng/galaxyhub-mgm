@@ -26,7 +26,7 @@
                 </div>
             </template>
         </div>
-        <p class="text-sm text-gray-500 dark:text-gray-300 mb-2" x-cloak x-show="data.images.data.files.length <= 0">
+        <p class="text-sm text-gray-500 dark:text-gray-300 mb-2" x-cloak x-show="data.images.data.files.length <= 0" x-ref="loading">
             이미지 불러오는 중...
         </p>
     @endif
@@ -193,7 +193,7 @@ window.addEventListener('load', () => {
 window.addEventListener('alpine:init', () => {
     window.alpine.data('{{ $componentId }}', () => ({
         component_id: '{{ $componentId }}',
-        load: {
+        finish: {
             images: false,
         },
         data: {
@@ -211,6 +211,11 @@ window.addEventListener('alpine:init', () => {
             this.images();
         },
         images() {
+            if (this.data.images.body.id.length <= 0) {
+                this.$refs.loading.innerText = '응답하지 않음';
+                return;
+            }
+
             let success = (r) => {
                 if (r.data.data !== null) {
                     if (!(typeof r.data.data === 'undefined' || r.data.data.length <= 0)) {
@@ -233,7 +238,7 @@ window.addEventListener('alpine:init', () => {
             };
 
             let complete = () => {
-                this.load.images = false;
+                this.finish.images = true;
             };
 
             this.post(this.data.images.url, this.data.images.body, success, error, complete);

@@ -1,5 +1,5 @@
 <div class="flex flex-col space-y-2" x-data="memo_list">
-    <div class="flex flex-col space-y-2" x-cloak x-show="data.list.data.records.length > 0">
+    <div class="flex flex-col space-y-2" x-cloak x-show="finish.list">
         <div class="max-h-96" data-simplebar>
             <ul role="list" class="divide-y divide-gray-200 dark:divide-gray-800">
                 <template x-for="record in data.list.data.records">
@@ -27,12 +27,12 @@
             </ul>
         </div>
     </div>
-    <div x-cloak x-show="data.list.data.records.length <= 0">
+    <div x-cloak x-show="!finish.list">
         <p class="text-sm text-gray-500 dark:text-gray-300">
             불러오는 중...
         </p>
     </div>
-    <div x-cloak x-show="data.list.data.records.length > 0">
+    <div x-cloak x-show="finish.list">
         <x-input.text.long-text class="h-24" placeholder="작성된 내용은 해당 유저가 볼 수 없습니다. 저장된 내용은 해당 유저 탈퇴 후 5년까지 보관됩니다." x-model="data.create.body.comment"></x-input.text.long-text>
         <x-button.filled.md-blue class="w-full" type="button" @click="create()">등록</x-button.filled.md-blue>
     </div>
@@ -41,6 +41,9 @@
 <script type="text/javascript">
     window.document.addEventListener('alpine:init', () => {
         window.alpine.data('memo_list', () => ({
+            finish: {
+              list: false
+            },
             data: {
                 list: {
                     url: '{{ route('admin.memo.list') }}',
@@ -108,7 +111,9 @@
                     console.log(e);
                 };
 
-                let complete = () => {};
+                let complete = () => {
+                    this.finish.list = true;
+                };
 
                 this.post(this.data.list.url, this.data.list.body, success, error, complete);
             },

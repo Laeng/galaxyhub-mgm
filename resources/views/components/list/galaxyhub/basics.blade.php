@@ -1,12 +1,12 @@
 <div class="flex flex-col" x-data="$store.{{ $componentId }}">
-    <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+    <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8" data-simplebar>
         <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
             <div class="relative overflow-hidden border border-gray-300 dark:border-gray-800 rounded-md">
                 <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-800" x-cloak>
                     <thead class="bg-gray-50 dark:bg-gray-900">
                     <tr>
                         <template x-if="data.list.data.checkbox">
-                            <th scope="col" class="w-4 pl-4 py-2.5 text-left">
+                            <th scope="col" class="w-4 pl-4 py-2.5 text-left whitespace-nowrap">
                                 <label>
                                     <input class="focus:ring-0 focus:ring-offset-0 h-4 w-4 dark:bg-gray-900 border-gray-300 dark:border-gray-800 text-blue-600 shadow-sm focus:ring-blue-500 focus:ring focus:ring-offset-0 rounded checkbox" :class="component_id" type="checkbox" @click="checkbox(component_id)" />
                                     <span class="sr-only">전체 선택</span>
@@ -14,7 +14,7 @@
                             </th>
                         </template>
                         <template x-for="i in data.list.data.th">
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider" x-html="i"></th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider whitespace-nowrap" x-html="i"></th>
                         </template>
                     </tr>
                     </thead>
@@ -49,7 +49,7 @@
                             <span class="font-medium" x-text="data.list.data.count.total"></span>
                         </p>
                     </div>
-                    <div class="sticky left-0 flex flex-1 justify-start sm:justify-end space-x-3" x-cloak x-show="data.list.data.th.length > 0">
+                    <div class="sticky left-0 flex flex-1 justify-start sm:justify-end space-x-2" x-cloak x-show="data.list.data.th.length > 0">
                         <x-button.filled.md-white type="button" @click="list(data.list.body.step -= 1)">
                             이전
                         </x-button.filled.md-white>
@@ -118,11 +118,9 @@
                            this.data.list.body.step = r.data.data.count.step;
                            this.data.list.body.limit = r.data.data.count.limit;
 
-                           @if(!$refresh)
                            if (this.interval.list >= 0) {
                                clearInterval(this.interval.list);
                            }
-                           @endif
                        }
                    }
                };

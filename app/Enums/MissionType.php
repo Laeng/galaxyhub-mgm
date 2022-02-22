@@ -19,4 +19,34 @@ enum MissionType:int  {
             self::SERVICE_RIBBON_TEST->value => '약장 시험',
         ];
     }
+
+    public static function getTypeByRole(string $role): array
+    {
+        $types = [];
+
+        if (in_array($role, [RoleType::MAKER2->name, RoleType::ADMIN->name]))
+        {
+            $types = array_merge($types, [
+                self::NIGHT_OF_ARMA
+            ]);
+        }
+
+        if (in_array($role, [RoleType::MAKER1->name, RoleType::MAKER2->name, RoleType::ADMIN->name]))
+        {
+            $types = array_merge($types, [
+                self::MISSION,
+                self::NON_MISSION_MAKER
+            ]);
+        }
+
+        if ($role === RoleType::ADMIN->name)
+        {
+            $types = array_merge($types, [
+                self::BOOTCAMP,
+                self::SERVICE_RIBBON_TEST
+            ]);
+        }
+
+        return $types;
+    }
 }
