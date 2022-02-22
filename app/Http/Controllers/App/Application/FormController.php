@@ -59,7 +59,7 @@ class FormController extends Controller
     }
 
     public function store(
-        Request $request, SurveyEntryRepository $surveyEntryRepository, UserAccountRepository $accountRepository,
+        Request $request, SurveyEntryRepository $surveyEntryRepository, UserAccountRepository $userAccountRepository,
         UserServiceContract $userService, SteamServiceContract $steamService): View|Application|RedirectResponse|Redirector
     {
         try
@@ -79,7 +79,7 @@ class FormController extends Controller
             $form = $this->surveyService->createApplicationForm();
             $answers = $this->validate($request, $form->validateRules());
 
-            $steamAccount = $accountRepository->findSteamAccountByUserId($user->id);
+            $steamAccount = $userAccountRepository->findSteamAccountByUserId($user->id);
 
             if (is_null($steamAccount))
             {

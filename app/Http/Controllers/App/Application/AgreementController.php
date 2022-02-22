@@ -33,12 +33,12 @@ class AgreementController extends Controller
         return view('app.application.agreements');
     }
 
-    public function checkAccount(Request $request, UserAccountRepositoryInterface $accountRepository, SteamServiceContract $steamService): JsonResponse
+    public function checkAccount(Request $request, UserAccountRepositoryInterface $userAccountRepository, SteamServiceContract $steamService): JsonResponse
     {
         try
         {
             $user = Auth()->user();
-            $accounts = $accountRepository->findByUserId($user->id);
+            $accounts = $userAccountRepository->findByUserId($user->id);
             $steamAccount = $accounts->filter(fn ($v, $k) => $v->provider === 'steam')->first();
 
             $steamPlayerSummaries = $steamService->getPlayerSummaries($steamAccount->account_id);

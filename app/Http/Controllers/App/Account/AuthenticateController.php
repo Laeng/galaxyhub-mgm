@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\App\Auth;
+namespace App\Http\Controllers\App\Account;
 
 use App\Http\Controllers\Controller;
 use App\Services\User\Contracts\UserServiceContract;
@@ -14,6 +14,7 @@ use Laravel\Socialite\Facades\Socialite;
 use SocialiteProviders\Steam\OpenIDValidationException;
 use function config;
 use function redirect;
+use function route;
 use function view;
 
 class AuthenticateController extends Controller
@@ -31,7 +32,7 @@ class AuthenticateController extends Controller
             return redirect()->route('app.index');
         }
 
-        return view('app.auth.login');
+        return view('app.account.login');
     }
 
     public function provider(Request $request, string $provider): Application|RedirectResponse|Redirector
@@ -86,5 +87,27 @@ class AuthenticateController extends Controller
         $request->session()->regenerateToken();
 
         return redirect()->route('app.index');
+    }
+
+    public function suspended(Request $request)
+    {
+        $user = Auth::user();
+        $ban = $user->bans()->latest()->first();
+
+        if (is_null($ban))
+        {
+            abort(404);
+        }
+
+        $ban->comment = match ($ban->comment) {
+            '장기미접속' => '회원님의 장기 미접속 신청이 접수되어 계정이 정지되었습니다.<br/> 만약 활동을 재개하시기로 결정하셨다면, <a href="https://cafe.naver.com/ArticleList.nhn?search.clubid=17091584&search.menuid=223&search.boardtype=L" class="link-indigo" target="_blank">커뮤니티</a>에서 권한 복구 신청해주시기 바랍니다.',
+            default => $ban->comment
+        };
+
+        return view('app.account.suspended', [
+            'comment' => $ban->comment,
+            'isPermanent' => is_null($ban->expired_at),
+            'ban' => $ban
+        ]);
     }
 }

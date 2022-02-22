@@ -22,7 +22,8 @@ class UserMission extends Model
     protected $casts = [
         'is_maker' => 'bool',
         'role' => 'array',
-        'attended_at' => 'datetime'
+        'attended_at' => 'datetime',
+        'updated_at' => 'datetime'
     ];
 
     public function user():BelongsTo

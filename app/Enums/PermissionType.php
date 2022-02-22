@@ -20,23 +20,10 @@ enum PermissionType {
     public static function getKoreanNames(): array
     {
         return [
-            '멤버' => self::MEMBER,
-            '임시 메이커' => self::MAKER1,
-            '정식 메이커' => self::MAKER2,
-            '관리자' => self::ADMIN
+            self::MEMBER->name => '멤버',
+            self::MAKER1->name => '임시 메이커',
+            self::MAKER2->name => '정식 메이커',
+            self::ADMIN->name => '관리자'
         ];
-    }
-
-    #[Pure]
-    public static function getByKorean(string $korean): ?PermissionType
-    {
-        try
-        {
-            return self::getKoreanNames()[$korean];
-        }
-        catch (\Exception $e)
-        {
-            return null;
-        }
     }
 }

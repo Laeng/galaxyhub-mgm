@@ -106,7 +106,17 @@ class ListController extends Controller
         }
         catch (\Exception $e)
         {
-            return $this->jsonResponse($e->getCode(), $e->getMessage(), config('app.debug') ? $e->getTrace() : []);
+            return $this->jsonResponse($e->getCode(), $e->getMessage(), config('app.debug') ? $e->getTrace() : [
+                'checkbox' => true,
+                'name' => 'user_id',
+                'th' => [],
+                'tr' => [],
+                'count' => [
+                    'step' => 0,
+                    'limit' => 0,
+                    'total' => 0
+                ]
+            ]);
         }
     }
 
@@ -133,6 +143,11 @@ class ListController extends Controller
             if (!in_array($type, $roles))
             {
                 throw new \Exception('INVALID TYPE', 422);
+            }
+
+            if ($type === RoleType::MEMBER->name)
+            {
+                $reason = '회원 가입 승인';
             }
 
             $users = $this->userRepository->findByIdsWithRole($request->get('user_id'), RoleType::APPLY->name);

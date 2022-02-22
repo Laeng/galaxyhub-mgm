@@ -1,8 +1,6 @@
 <?php
 
-use App\Http\Controllers\App\Admin\Application\ListController;
-use App\Http\Controllers\App\Admin\Application\ReadController;
-use App\Http\Controllers\App\Memo\MemoController;
+use App\Http\Controllers\App\Admin\Memo\MemoController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('app')->group(function () {

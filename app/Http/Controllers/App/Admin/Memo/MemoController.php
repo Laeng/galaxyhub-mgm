@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\App\Memo;
+namespace App\Http\Controllers\App\Admin\Memo;
 
 use App\Enums\RoleType;
 use App\Enums\UserRecordType;
@@ -11,6 +11,8 @@ use App\Services\User\Contracts\UserServiceContract;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use function asset;
+use function config;
 
 class MemoController extends Controller
 {
@@ -94,7 +96,7 @@ class MemoController extends Controller
 
                 if ($record->type === UserRecordType::ROLE_DATA->name)
                 {
-                    $role = array_flip(RoleType::getKoreanNames())[$record->data['role']];
+                    $role = RoleType::getKoreanNames()[$record->data['role']];
                     $datum['comment'] = "[{$role}] {$datum['comment']}";
                 }
 
