@@ -1,5 +1,7 @@
 <?php
 
+use App\Enums\PermissionType;
+use App\Enums\RoleType;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
@@ -126,38 +128,41 @@ return new class extends Migration
 
     private function createRoles()
     {
-        $roles = array_keys(\App\Enums\RoleType::getKoreanNames());
+        $permissions = array_keys(PermissionType::getKoreanNames());
 
-        foreach ($roles as $role)
+        foreach ($permissions as $permission)
         {
-            Role::create(['name' => $role]);
+            Permission::create(['name' => $permission]);
         }
 
-        $permissionsAndRoles = [
-            \App\Enums\PermissionType::MEMBER->name => [
-                \App\Enums\RoleType::MEMBER->name
+        $rolesAndPermissions = [
+            RoleType::REJECT->name => [],
+            RoleType::DEFER->name => [],
+            RoleType::APPLY->name => [],
+            RoleType::MEMBER->name => [
+                PermissionType::MEMBER->name
             ],
-            \App\Enums\PermissionType::MAKER1->name => [
-                \App\Enums\RoleType::MEMBER->name,
-                \App\Enums\RoleType::MAKER1->name,
+            RoleType::MAKER1->name => [
+                PermissionType::MAKER1->name,
+                PermissionType::MEMBER->name,
             ],
-            \App\Enums\PermissionType::MAKER2->name => [
-                \App\Enums\RoleType::MEMBER->name,
-                \App\Enums\RoleType::MAKER1->name,
-                \App\Enums\RoleType::MAKER2->name
+            RoleType::MAKER2->name => [
+                PermissionType::MAKER2->name,
+                PermissionType::MAKER1->name,
+                PermissionType::MEMBER->name
             ],
-            \App\Enums\PermissionType::ADMIN->name => [
-                \App\Enums\RoleType::MEMBER->name,
-                \App\Enums\RoleType::MAKER1->name,
-                \App\Enums\RoleType::MAKER2->name,
-                \App\Enums\RoleType::ADMIN->name
-            ]
+            RoleType::ADMIN->name => [
+                PermissionType::ADMIN->name,
+                PermissionType::MAKER2->name,
+                PermissionType::MAKER1->name,
+                PermissionType::MEMBER->name
+            ],
         ];
 
-        foreach ($permissionsAndRoles as $k => $v)
+        foreach ($rolesAndPermissions as $k => $v)
         {
-            $permission = Permission::create(['name' => $k]);
-            $permission->syncRoles($v);
+            $role = Role::create(['name' => $k]);
+            $role->syncPermissions($v);
         }
     }
 
