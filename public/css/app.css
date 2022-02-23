@@ -2847,11 +2847,17 @@ aspect-16\/10 {
   .md\:ml-auto{
     margin-left: auto;
   }
+  .md\:mr-3{
+    margin-right: 0.75rem;
+  }
   .md\:block{
     display: block;
   }
   .md\:flex{
     display: flex;
+  }
+  .md\:table-cell{
+    display: table-cell;
   }
   .md\:hidden{
     display: none;
@@ -2878,6 +2884,11 @@ aspect-16\/10 {
     --tw-space-x-reverse: 0;
     margin-right: calc(1rem * var(--tw-space-x-reverse));
     margin-left: calc(1rem * calc(1 - var(--tw-space-x-reverse)));
+  }
+  .md\:space-y-2 > :not([hidden]) ~ :not([hidden]){
+    --tw-space-y-reverse: 0;
+    margin-top: calc(0.5rem * calc(1 - var(--tw-space-y-reverse)));
+    margin-bottom: calc(0.5rem * var(--tw-space-y-reverse));
   }
   .md\:divide-y-0 > :not([hidden]) ~ :not([hidden]){
     --tw-divide-y-reverse: 0;
@@ -2924,6 +2935,18 @@ aspect-16\/10 {
   }
   .lg\:block{
     display: block;
+  }
+  .lg\:flex{
+    display: flex;
+  }
+  .lg\:table{
+    display: table;
+  }
+  .lg\:table-cell{
+    display: table-cell;
+  }
+  .lg\:table-column{
+    display: table-column;
   }
   .lg\:hidden{
     display: none;

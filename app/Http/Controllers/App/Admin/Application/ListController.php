@@ -103,6 +103,7 @@ class ListController extends Controller
 
             return $this->jsonResponse(200, 'OK', [
                 'checkbox' => true,
+                'mobile' => false,
                 'name' => 'user_id',
                 'th' => $th,
                 'tr' => $tr,
@@ -118,6 +119,7 @@ class ListController extends Controller
         {
             return $this->jsonResponse($e->getCode(), $e->getMessage(), config('app.debug') ? $e->getTrace() : [
                 'checkbox' => true,
+                'mobile' => false,
                 'name' => 'user_id',
                 'th' => [],
                 'tr' => [],

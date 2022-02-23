@@ -13,24 +13,34 @@
                                 </label>
                             </th>
                         </template>
-                        <template x-for="i in data.list.data.th">
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider whitespace-nowrap" x-html="i"></th>
+                        <template x-for="(v, i) in data.list.data.th">
+                            <template x-if="!data.list.data.mobile || (data.list.data.mobile && data.list.data.th.length -1 !== i)">
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider whitespace-nowrap" :class="data.list.data.mobile ? 'hidden md:table-cell' : ''" x-html="v"></th>
+                            </template>
+                        </template>
+                        <template x-if="data.list.data.mobile">
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider whitespace-nowrap md:hidden" x-html="window._.last(data.list.data.th)"></th>
                         </template>
                     </tr>
                     </thead>
                     <tbody class="bg-white dark:bg-gray-900 divide-y divide-gray-200 dark:divide-gray-800">
-                    <template x-for="i in data.list.data.tr">
+                    <template x-for="(v, i) in data.list.data.tr">
                         <tr>
                             <template x-if="data.list.data.checkbox">
                                 <td scope="col" class="w-4 px-4 py-2.5 text-left">
                                     <label>
-                                        <input class="focus:ring-0 focus:ring-offset-0 h-4 w-4 dark:bg-gray-900 border-gray-300 dark:border-gray-800 text-blue-600 shadow-sm focus:ring-blue-500 focus:ring focus:ring-offset-0 rounded" :class="component_id" type="checkbox" :name="data.list.data.name + '[]'" :value="i.shift()" />
+                                        <input class="focus:ring-0 focus:ring-offset-0 h-4 w-4 dark:bg-gray-900 border-gray-300 dark:border-gray-800 text-blue-600 shadow-sm focus:ring-blue-500 focus:ring focus:ring-offset-0 rounded" :class="component_id" type="checkbox" :name="data.list.data.name + '[]'" :value="v.shift()" />
                                         <span class="sr-only">선택</span>
                                     </label>
                                 </td>
                             </template>
-                            <template x-for="ii in i">
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300" x-html="ii"></td>
+                            <template x-for="(vv, ii) in v">
+                                <template x-if="!data.list.data.mobile || (data.list.data.mobile && v.length -1 !== ii)">
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300" :class="data.list.data.mobile ? 'hidden md:table-cell' : ''" x-html="vv"></td>
+                                </template>
+                            </template>
+                            <template x-if="data.list.data.mobile">
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300 md:hidden" x-html="window._.last(v)"></td>
                             </template>
                         </tr>
                     </template>
@@ -100,7 +110,8 @@
                            total: 0
                        }
                    },
-                   checkbox: false
+                   checkbox: false,
+                   mobile: false
                }
            },
            init() {

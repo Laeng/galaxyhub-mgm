@@ -66,7 +66,7 @@ class ListController extends Controller
             if ($limit < 1 || $limit > 150) $limit = 10;
 
             $order = ['expected_at', 'desc'];
-            $columns = ['id', 'type', 'expected_at', 'can_tardy', 'user_id', 'phase'];
+            $columns = ['id', 'type', 'expected_at', 'can_tardy', 'user_id', 'phase', 'title'];
             $conditions = array();
 
             $query = $missionRepository->new()->newQuery()->select($columns);
@@ -103,7 +103,7 @@ class ListController extends Controller
 
             if ($count > 0)
             {
-                $th = ['분류', '시작 시간', '중도 참여', '미션 메이커', '상태', '&nbsp;'];
+                $th = ['분류', '시작 시간', '중도 참여', '미션 메이커', '상태', '&nbsp;', '제목'];
                 $tr = array();
 
                 foreach ($missions as $v)
@@ -157,7 +157,8 @@ class ListController extends Controller
                         $v->can_tardy ? '가능' : '불가능',
                         $v->user()->first()->name,
                         $missionPhaseType[$v->phase],
-                        "<a href='{$url}' class='{$text[0]}' title='{$text[1]}'>{$text[1]}</a>"
+                        "<a href='{$url}' class='{$text[0]}' title='{$text[1]}'>{$text[1]}</a>",
+                        "<a href='{$url}' title='{$v->title}'>$v->title</a>"
                     ];
 
                     $tr[] = $row;
@@ -172,6 +173,7 @@ class ListController extends Controller
 
             return $this->jsonResponse(200, 'OK', [
                 'checkbox' => false,
+                'mobile' => true,
                 'name' => '',
                 'th' => $th,
                 'tr' => $tr,
@@ -185,6 +187,7 @@ class ListController extends Controller
         } catch (\Exception $e) {
             return $this->jsonResponse($e->getCode(), Str::upper($e->getMessage()), config('app.debug') ? $e->getTrace() : [
                 'checkbox' => false,
+                'mobile' => true,
                 'name' => '',
                 'th' => [],
                 'tr' => [],
