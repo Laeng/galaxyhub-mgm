@@ -42,25 +42,11 @@ class FilepondController extends Controller
             {
                 $file = $fileRepository->findById($id);
 
-                $baseUrl = rtrim(config("filesystems.disks.{$file->storage}.endpoint"), '/');
-                $path = sprintf("%s/%s.%s", $file->path, $file->name, $file->extension);
-
-                if ($file->visible)
-                {
-                    if ($file->storage === 'do')
-                    {
-                        $baseUrl = rtrim(config("filesystems.disks.{$file->storage}.url"), '/');
-                    }
-
-                    $path = sprintf("%s/%s", $baseUrl, $file->path);
-                }
-                else {
-                    $path = Storage::disk($file->storage)->temporaryUrl($path, now()->addHours(1));
-                }
+                if (is_null($file)) continue;
 
                 $files[] = [
                     'name' => $file->filename,
-                    'path' => $path
+                    'path' => $this->fileService->getUrl($id)
                 ];
             }
 

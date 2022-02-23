@@ -55,4 +55,27 @@ class FileService implements FileServiceContract
 
         return false;
     }
+
+    public function getUrl(int $fileId): string
+    {
+        $file = $this->fileRepository->findById($fileId);
+
+        $baseUrl = rtrim(config("filesystems.disks.{$file->storage}.endpoint"), '/');
+        $path = sprintf("%s/%s.%s", $file->path, $file->name, $file->extension);
+
+        if ($file->visible)
+        {
+            if ($file->storage === 'do')
+            {
+                $baseUrl = rtrim(config("filesystems.disks.{$file->storage}.url"), '/');
+            }
+
+            $path = sprintf("%s/%s", $baseUrl, $file->path);
+        }
+        else {
+            $path = Storage::disk($file->storage)->temporaryUrl($path, now()->addHours(1));
+        }
+
+        return $path;
+    }
 }

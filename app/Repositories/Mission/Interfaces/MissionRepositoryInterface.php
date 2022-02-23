@@ -10,6 +10,8 @@ interface MissionRepositoryInterface extends EloquentRepositoryInterface
 {
     const PERIOD_OF_ATTENDANCE = 12;
 
+    public function findBetweenDates(string $column, array $dates, array $columns = ['*'], array $relations = []): ?Collection;
+
     public function findByUserId(int $userId, array $columns = ['*'], array $relations = []): ?Collection;
 
     public function findByConditions(array $conditions, array $order = ['created_at', 'desc'], array $columns = ['*'], array $relations = []): ?Collection;

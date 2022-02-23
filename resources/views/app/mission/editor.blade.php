@@ -64,7 +64,7 @@
                 </div>
             </div>
 
-            <div class="mission-body prose dark:prose-invert max-w-full">
+            <div class="">
                 <label for="editor" class="block text-sm font-medium text-gray-700 pb-1">
                     미션 소개
                 </label>

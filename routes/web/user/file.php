@@ -11,11 +11,12 @@ Route::prefix('app')->group(function () {
         //AJAX
         Route::prefix('upload')->name('upload.')->group(function () {
             Route::post('/filepond/{directory}', [FilepondController::class, 'create'])->name('filepond')->whereAlphaNumeric('directory');
-            Route::post('/ckeditor/{directory}', [CkeditorController::class, 'ckeditor_upload'])->name('ckeditor')->whereAlphaNumeric('directory');
+            Route::post('/ckeditor/{directory}', [CkeditorController::class, 'create'])->name('ckeditor')->whereAlphaNumeric('directory');
         });
 
         Route::prefix('delete')->name('delete.')->group(function () {
             Route::post('/filepond/{directory}', [FilepondController::class, 'delete'])->name('filepond')->whereAlphaNumeric('directory');
+            Route::post('/ckeditor/{directory}', [CkeditorController::class, 'delete'])->name('ckeditor')->whereAlphaNumeric('directory');
         });
 
         Route::prefix('get')->name('get.')->group(function () {

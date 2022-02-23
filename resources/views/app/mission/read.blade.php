@@ -1,6 +1,9 @@
 @push('js')
     <script defer src="//cdn.embedly.com/widgets/platform.js"></script>
 @endpush
+@push('css')
+    <link rel="stylesheet" href="{{ asset('/css/ckeditor.css') }}">
+@endpush
 <x-theme.galaxyhub.sub-content :title="$type" :description="$mission->title" :breadcrumbs="Diglactic\Breadcrumbs\Breadcrumbs::render('app.mission', $type)">
     <div class="md:flex md:space-x-4" x-data="mission_read">
         <x-panel.galaxyhub.basics class="self-start md:basis-3/5 lg:basis-2/3 flex flex-col space-y-8">
@@ -41,12 +44,12 @@
                 </template>
 
                 <div class="h-fit w-full rounded-md bg-gray-50 dark:border dark:bg-gray-900 dark:border-gray-800 p-4">
-                    <div class="prose dark:prose-invert" x-html="data.load.data.body"></div>
+                    <div class="ck-content" x-html="data.load.data.body"></div>
                 </div>
             </div>
 
             <div class="flex flex-col space-y-2">
-                <h2 class="text-xl lg:text-2xl font-bold">{{ $type }} 참가자</h2>
+                <h2 class="text-xl lg:text-2xl font-bold">참가자</h2>
                 <div class="">
                     <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
                         <template x-for="i in data.participants.data.participants">
@@ -70,7 +73,7 @@
             <div class="flex flex-col space-y-2">
                 <h2 class="text-xl lg:text-2xl font-bold" x-text="(data.load.data.phase === 2) ? '{{ $type }} 출석 마감' : '{{ $type }} 시간'"></h2>
                 <div class="mb-3 tabular-nums">
-                    <div class="p-4 bg-gray-50 dark:border dark:bg-gray-900 dark:border-gray-800 rounded-lg overflow-hidden">
+                    <div class="p-4 bg-white border border-gray-300 dark:bg-gray-900 dark:border-gray-800 rounded-lg overflow-hidden shadow-sm tabular-nums">
                         <dt class="text-sm font-medium text-gray-500 dark:text-gray-300 truncate" x-text="data.load.data.timestamp.display_date"></dt>
                         <dd class="mt-1 text-3xl font-semibold text-gray-900 dark:text-gray-100" x-text="data.load.data.timestamp.display_time"></dd>
                     </div>
@@ -79,9 +82,9 @@
 
             @if ($isMaker || $isAdmin)
                 <div class="flex flex-col space-y-2">
-                    <h2 class="text-xl lg:text-2xl font-bold">{{ $type }} 출석 코드</h2>
+                    <h2 class="text-xl lg:text-2xl font-bold">출석 코드</h2>
                     <div class="mb-3" >
-                        <div class="p-4 bg-gray-50 dark:border dark:bg-gray-900 dark:border-gray-800 rounded-lg overflow-hidden tabular-nums">
+                        <div class="p-4 bg-white border border-gray-300 dark:bg-gray-900 dark:border-gray-800 rounded-lg overflow-hidden shadow-sm  tabular-nums">
                             <dt class="text-sm font-medium text-gray-500 dark:text-gray-300 truncate" x-text="(data.load.data.phase < 2) ? '{{ $type }} 종료 후 발급됩니다.' : '4자리 숫자'">&nbsp;&nbsp;</dt>
                             <dd class="mt-1 text-3xl font-semibold text-gray-900 dark:text-gray-100 select-all" :class="{ 'blur': data.load.data.phase < 2 }" x-text="(data.load.data.phase < 2) ? 'XXXX' : data.load.data.code">&nbsp;&nbsp;</dd>
                         </div>
@@ -136,7 +139,7 @@
             </div>
 
             <div class="flex flex-col space-y-2">
-                <h2 class="text-xl lg:text-2xl font-bold">{{ $type }} 정보</h2>
+                <h2 class="text-xl lg:text-2xl font-bold">정보</h2>
                 <ul class="divide-y divide-gray-200 dark:divide-gray-800">
                     <li class="py-4">
                         <div class="flex justify-between">

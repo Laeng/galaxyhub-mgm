@@ -78,7 +78,7 @@ class EditorController extends Controller
             'title' => '미션 수정',
             'edit' => true,
             'types' => [
-                $mission->type => MissionMapType::getKoreanNames()[$mission->type] // 미션 수정은 미션 타입을 바꿀 수 없다.
+                $mission->type => MissionType::getKoreanNames()[$mission->type] // 미션 수정은 미션 타입을 바꿀 수 없다.
             ],
             'maps' => MissionMapType::getKoreanNames(),
             'addons' => MissionAddonType::getKoreanNames(),
@@ -126,7 +126,7 @@ class EditorController extends Controller
                 throw new \Exception('DATE OLD', 422);
             }
 
-            if ($this->missionRepository->new()->newQuery()->whereBetween('expected_at', [now()->subHours(2), now()->addHours(2)])->count() > 0)
+            if ($this->missionRepository->findBetweenDates('expected_at', [now()->subHours(2), now()->addHours(2)])->count() > 0)
             {
                 throw new \Exception('DATE UNAVAILABLE', 422);
             }
@@ -136,7 +136,7 @@ class EditorController extends Controller
                 'user_id' => $user->id,
                 'type' => $type,
                 'code' => mt_rand(1000, 9999),
-                'title' => "{$date->format('m월 d일 H시 i분')} {$typeKorean}",
+                'title' => "{$date->format('m/d H:m')} {$typeKorean}",
                 'body' => strip_tags($request->get('body'), '<h2><h3><h4><p><a><i><br><u><strong><sub><sup><ol><ul><li><blockquote><span><figure><table><tbody><tr><td><oembed><img>'),
                 'can_tardy' => !boolval($request->get('tardy')),
                 'expected_at' => $date,
@@ -168,6 +168,73 @@ class EditorController extends Controller
 
     public function update(Request $request): JsonResponse
     {
+        try {
+            $this->jsonValidator($request, [
+                'id' => 'int|required',
+                'type' => 'int|required',
+                'date' => 'string|required',
+                'time' => 'string|required',
+                'map' => 'string|required',
+                'addons' => 'array|required',
+                'body' => 'string',
+                'tardy' => 'boolean|required'
+            ]);
 
+            $mission = $this->missionRepository->findById($request->get('id'));
+
+            if (is_null($mission))
+            {
+                throw new \Exception('CAN NOT FOUND MISSION', 422);
+            }
+
+            $user = Auth::user();
+
+            if (($user->id !== $mission->user_id) && !$user->hasRole(RoleType::ADMIN->name))
+            {
+                throw new \Exception('NO PERMISSION', 422);
+            }
+
+            $types = array_keys(MissionType::getByRole($user->roles()->latest()->first()->name));
+            $type = (int) $request->get('type');
+
+            if (!in_array($type, $types))
+            {
+                throw new \Exception('PERMISSION ERROR', 422);
+            }
+
+            $typeKorean = MissionType::getKoreanNames()[$type];
+            $date = \Carbon\Carbon::createFromFormat('Y-m-d H:i', "{$request->get('date')} {$request->get('time')}");
+
+            if ($date->isPast())
+            {
+                throw new \Exception('DATE OLD', 422);
+            }
+
+            if ($this->missionRepository->findBetweenDates('expected_at', [now()->subHours(2), now()->addHours(2)])->count() > 0)
+            {
+                throw new \Exception('DATE UNAVAILABLE', 422);
+            }
+
+            $mission->update([
+                'user_id' => $user->id,
+                'type' => $mission->type, //'type' => $request->get('type'), // 미션 수정시 미션 타입을 변경할 수 없다.
+                'code' => mt_rand(1000, 9999),
+                'title' => "{$date->format('m/d H:m')} {$typeKorean}",
+                'body' => strip_tags($request->get('body'), '<h2><h3><h4><p><a><i><br><u><strong><sub><sup><ol><ul><li><blockquote><span><figure><table><tbody><tr><td><oembed><img>'),
+                'can_tardy' => !boolval($request->get('tardy')),
+                'expected_at' => $date,
+                'data' => [
+                    'addons' => $request->get('addons'),
+                    'map' => $request->get('map')
+                ]
+            ]);
+
+            return $this->jsonResponse(200, 'OK', [
+                'url' => route('mission.read', $mission->id)
+            ]);
+
+        } catch (\Exception $e) {
+            return $this->jsonResponse($e->getCode(), Str::upper($e->getMessage()), []);
+        }
     }
 }

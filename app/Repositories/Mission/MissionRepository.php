@@ -20,6 +20,11 @@ class MissionRepository extends BaseRepository implements MissionRepositoryInter
         $this->model = $model;
     }
 
+    public function findBetweenDates(string $column, array $dates, array $columns = ['*'], array $relations = []): ?Collection
+    {
+        return $this->model->select($columns)->whereBetween($column, $dates)->with($relations)->latest()->get();
+    }
+
     public function findByUserId(int $userId, array $columns = ['*'], array $relations = []): ?Collection
     {
         return $this->model->select($columns)->where('user_id', $userId)->with($relations)->latest()->get();
