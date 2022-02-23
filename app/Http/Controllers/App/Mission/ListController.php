@@ -42,8 +42,10 @@ class ListController extends Controller
 
         return view('app.mission.index', [
             'user' => $user,
-            'isMaker' => $user->hasAnyPermission([PermissionType::MAKER1->name, PermissionType::MAKER2->name]),
-            'messages' => $messages
+            'isMaker' => $user->hasAnyPermission([PermissionType::MAKER1->name, PermissionType::MAKER2->name, PermissionType::ADMIN->name]),
+            'messages' => $messages,
+            'phase' => MissionPhaseType::getKoreanNames(),
+            'types' => MissionType::getKoreanNames(),
         ]);
     }
 
@@ -80,7 +82,7 @@ class ListController extends Controller
             if (!empty($q['filter'])) {
                 switch ($q['filter']) {
                     case '종료된 미션 제외':
-                        $query = $query->whereNull('ended_at');
+                        $query = $query->whereNotIn('phase', [MissionPhaseType::END->value, MissionPhaseType::CANCEL]);
                         break;
                 }
 

@@ -4,7 +4,7 @@
 @push('css')
     <link rel="stylesheet" href="{{ asset('/css/ckeditor.css') }}">
 @endpush
-<x-theme.galaxyhub.sub-content :title="$type" :description="$mission->title" :breadcrumbs="Diglactic\Breadcrumbs\Breadcrumbs::render('app.mission', $type)">
+<x-theme.galaxyhub.sub-content :title="$type" :description="$mission->title" :breadcrumbs="Diglactic\Breadcrumbs\Breadcrumbs::render('app.mission', $mission->title)">
     <div class="md:flex md:space-x-4" x-data="mission_read">
         <x-panel.galaxyhub.basics class="self-start md:basis-3/5 lg:basis-2/3 flex flex-col space-y-8">
             <div class="flex flex-col space-y-2">
@@ -43,12 +43,12 @@
                     </x-alert.galaxyhub.warning>
                 </template>
 
-                <div class="h-fit w-full rounded-md bg-gray-50 dark:border dark:bg-gray-900 dark:border-gray-800 p-4">
+                <div class="h-fit w-full rounded-md bg-gray-50 dark:border dark:bg-gray-900 dark:border-gray-800 p-4" x-cloak>
                     <div class="ck-content" x-html="data.load.data.body"></div>
                 </div>
             </div>
 
-            <div class="flex flex-col space-y-2">
+            <div class="flex flex-col space-y-2" x-cloak>
                 <h2 class="text-xl lg:text-2xl font-bold">참가자</h2>
                 <div class="">
                     <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -69,7 +69,7 @@
             </div>
         </x-panel.galaxyhub.basics>
 
-        <div class="self-start p-4 lg:p-8 md:basis-2/5 lg:basis-1/3 flex flex-col space-y-8">
+        <div class="self-start p-4 lg:p-8 md:basis-2/5 lg:basis-1/3 flex flex-col space-y-8" x-cloak>
             <div class="flex flex-col space-y-2">
                 <h2 class="text-xl lg:text-2xl font-bold" x-text="(data.load.data.phase === 2) ? '{{ $type }} 출석 마감' : '{{ $type }} 시간'"></h2>
                 <div class="mb-3 tabular-nums">
@@ -229,7 +229,7 @@
                         body: {},
                         data: {
                             phase: '{{ $mission->phase }}',
-                            status: '{{ $phase }}',
+                            status: '{{ $status }}',
                             timestamp: {
                                 display_date: '{{ $timestamp->format('Y년 m월 d일') }}',
                                 display_time: '{{ $timestamp->format('H시 i분') }}',

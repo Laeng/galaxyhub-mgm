@@ -59,7 +59,7 @@ class ReadController extends Controller
             'maker' => $maker,
             'mission' => $mission,
             'type' => MissionType::getKoreanNames()[$mission->type],
-            'phase' => MissionPhaseType::getKoreanNames()[$mission->phase],
+            'status' => MissionPhaseType::getKoreanNames()[$mission->phase],
             'code' => ($mission->phase >= MissionPhaseType::IN_ATTENDANCE) ? $code : '',
             'timestamp' => $visibleDate,
             'isAdmin' => $isAdmin,
@@ -111,7 +111,7 @@ class ReadController extends Controller
                             throw new \Exception('MISSION STATUS DOES\'T MATCH THE CONDITIONS', 422);
                         }
 
-                        $mission->phase = MissionPhaseType::IN_ATTENDANCE;
+                        $mission->phase = MissionPhaseType::IN_ATTENDANCE->value;
                         $mission->ended_at = $now;
                         $mission->closed_at = $now->copy()->addHours($this->missionRepository::PERIOD_OF_ATTENDANCE);
                         $mission->started_at = $now;
@@ -194,7 +194,7 @@ class ReadController extends Controller
             ];
 
             if ($user->id == $mission->user_id || $user->hasPermissionTo(PermissionType::ADMIN->name)) {
-                $data['code'] = ($mission->phase >= MissionPhaseType::IN_ATTENDANCE) ? $mission->code : '';
+                $data['code'] = ($mission->phase >= MissionPhaseType::IN_ATTENDANCE->value) ? $mission->code : '';
             }
 
             return $this->jsonResponse(200, 'SUCCESS', $data);

@@ -21,17 +21,11 @@ use Illuminate\Support\Str;
 class EditorController extends Controller
 {
     private MissionRepositoryInterface $missionRepository;
-    private UserMissionRepositoryInterface $userMissionRepository;
     private MissionServiceContract $missionService;
 
-    public function __construct
-    (
-        MissionRepositoryInterface $missionRepository, UserMissionRepositoryInterface $userMissionRepository,
-        MissionServiceContract $missionService
-    )
+    public function __construct(MissionRepositoryInterface $missionRepository, MissionServiceContract $missionService)
     {
         $this->missionRepository = $missionRepository;
-        $this->userMissionRepository = $userMissionRepository;
         $this->missionService = $missionService;
     }
 
@@ -136,7 +130,7 @@ class EditorController extends Controller
                 'user_id' => $user->id,
                 'type' => $type,
                 'code' => mt_rand(1000, 9999),
-                'title' => "{$date->format('m/d H:m')} {$typeKorean}",
+                'title' => "{$typeKorean} {$date->format('m/d H:m')}",
                 'body' => strip_tags($request->get('body'), '<h2><h3><h4><p><a><i><br><u><strong><sub><sup><ol><ul><li><blockquote><span><figure><table><tbody><tr><td><oembed><img>'),
                 'can_tardy' => !boolval($request->get('tardy')),
                 'expected_at' => $date,
@@ -219,7 +213,7 @@ class EditorController extends Controller
                 'user_id' => $user->id,
                 'type' => $mission->type, //'type' => $request->get('type'), // 미션 수정시 미션 타입을 변경할 수 없다.
                 'code' => mt_rand(1000, 9999),
-                'title' => "{$date->format('m/d H:m')} {$typeKorean}",
+                'title' => "{$typeKorean} {$date->format('m/d H:m')}",
                 'body' => strip_tags($request->get('body'), '<h2><h3><h4><p><a><i><br><u><strong><sub><sup><ol><ul><li><blockquote><span><figure><table><tbody><tr><td><oembed><img>'),
                 'can_tardy' => !boolval($request->get('tardy')),
                 'expected_at' => $date,

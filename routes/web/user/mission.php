@@ -26,7 +26,7 @@ Route::prefix('app')->group(function () {
         //AJAX
         Route::post('/{missionId}/refresh', [ReadController::class, 'refresh'])->name('read.refresh');
         Route::post('/{missionId}/participants', [ReadController::class, 'participants'])->name('read.participants');
-        Route::post('/{missionId}/process', [ReadController::class, 'participants'])->name('read.process');
+        Route::post('/{missionId}/process', [ReadController::class, 'process'])->name('read.process');
 
     });
 
