@@ -92,7 +92,7 @@
                 </div>
             @endif
 
-            <div class="flex flex-col space-y-2">
+            <div class="flex flex-col space-y-2" x-show="data.load.data.phase === 0 || data.load.data.phase === 1">
                 <div class="flex flex-col space-y-2">
                     @if($isMaker || $isAdmin)
                         <template x-if="data.load.data.phase === 0">

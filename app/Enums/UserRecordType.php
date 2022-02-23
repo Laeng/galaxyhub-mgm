@@ -8,6 +8,8 @@ use JetBrains\PhpStorm\Pure;
 enum UserRecordType {
     case BAN_DATA;
     case USER_MEMO_FOR_ADMIN;
+    case USER_PAUSE_ENABLE;
+    case USER_PAUSE_DISABLE;
     case ROLE_DATA;
     case STEAM_DATA_SUMMARIES;
     case STEAM_DATA_GAMES;
