@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Services\Mission\Contracts\MissionServiceContract;
+use App\Services\Mission\MissionService;
 use App\Services\User\UserService;
 use App\Services\User\Contracts\UserServiceContract;
 use App\Services\File\Contracts\FileServiceContract;
@@ -23,6 +25,7 @@ class AppServiceProvider extends ServiceProvider
     {
         //Services ------------------
         $this->app->bind(FileServiceContract::class, FileService::class);
+        $this->app->bind(MissionServiceContract::class, MissionService::class);
         $this->app->bind(SteamServiceContract::class, SteamService::class);
         $this->app->bind(SurveyServiceContract::class, SurveyService::class);
         $this->app->bind(UserServiceContract::class, UserService::class);

@@ -48,48 +48,58 @@ class ListController extends Controller
 
             if ($limit < 1 || $limit > 100) $limit = 20;
 
-            $users = $this->userRepository->findByRoleWithPagination(RoleType::APPLY->name, $step * $limit, $limit);
-
-            $th = ['스팀 닉네임', '네이버 아이디', '디스코드 사용자명', '생년월일', '타 클랜 활동', '신청일', '상세 정보'];
-            $tr = array();
-
-            foreach ($users as $user)
+            if ($count > 0)
             {
-                $steamAccount = $accountRepository->findSteamAccountByUserId($user->id);
-                $application = $surveyService->getLatestApplicationForm($user->id);
-                $response = $application->answers()->latest()->get();
 
-                $row = [
-                    $user->id,
-                    "<a class='link-indigo' href='https://steamcommunity.com/profiles/{$steamAccount->account_id}' target='_blank'>{$steamAccount->nickname}</a>",
-                    '', '', '', '',
-                    $application->created_at->toDateString(),
-                    '<a class="link-indigo" href="'. route('admin.application.read', $user->id) .'">확인하기</a>'
-                ];
+                $users = $this->userRepository->findByRoleWithPagination(RoleType::APPLY->name, $step * $limit, $limit);
 
-                foreach ($response as $item)
+                $th = ['스팀 닉네임', '네이버 아이디', '디스코드 사용자명', '생년월일', '타 클랜 활동', '신청일', '상세 정보'];
+                $tr = array();
+
+                foreach ($users as $user)
                 {
-                    $question = $item->question()->first();
-                    $value = $item->value;
+                    $steamAccount = $accountRepository->findSteamAccountByUserId($user->id);
+                    $application = $surveyService->getLatestApplicationForm($user->id);
+                    $response = $application->answers()->latest()->get();
 
-                    if (is_null($question)) continue;
+                    $row = [
+                        $user->id,
+                        "<a class='link-indigo' href='https://steamcommunity.com/profiles/{$steamAccount->account_id}' target='_blank'>{$steamAccount->nickname}</a>",
+                        '', '', '', '',
+                        $application->created_at->toDateString(),
+                        '<a class="link-indigo" href="'. route('admin.application.read', $user->id) .'">확인하기</a>'
+                    ];
 
-                    switch ($question->title) {
-                        case '네이버 아이디':
-                            $value = explode ('@', $value)[0];
-                            $row[2] = "<a class='link-indigo' href='https://cafe.naver.com/ca-fe/cafes/17091584/members?memberId={$value}' target='_blank'>{$value}</a>";
-                            break;
+                    foreach ($response as $item)
+                    {
+                        $question = $item->question()->first();
+                        $value = $item->value;
 
-                        case '디스코드 사용자명': $row[3] = $value; break;
+                        if (is_null($question)) continue;
 
-                        case '본인의 생년월일': $row[4] = $value; break;
+                        switch ($question->title) {
+                            case '네이버 아이디':
+                                $value = explode ('@', $value)[0];
+                                $row[2] = "<a class='link-indigo' href='https://cafe.naver.com/ca-fe/cafes/17091584/members?memberId={$value}' target='_blank'>{$value}</a>";
+                                break;
 
-                        case '아르마 커뮤니티(클랜) 활동 여부': $row[5] = $value; break;
+                            case '디스코드 사용자명': $row[3] = $value; break;
+
+                            case '본인의 생년월일': $row[4] = $value; break;
+
+                            case '아르마 커뮤니티(클랜) 활동 여부': $row[5] = $value; break;
+                        }
                     }
-                }
 
-                $tr[] = $row;
+                    $tr[] = $row;
+                }
             }
+            else
+            {
+                $th = ['가입 신청자가 없습니다.'];
+                $tr = array();
+            }
+
 
             return $this->jsonResponse(200, 'OK', [
                 'checkbox' => true,
@@ -154,6 +164,8 @@ class ListController extends Controller
 
             foreach ($users as $user)
             {
+                $user->removeRole(RoleType::REJECT->name);
+                $user->removeRole(RoleType::DEFER->name);
                 $user->removeRole(RoleType::APPLY->name);
                 $user->assignRole($type);
 

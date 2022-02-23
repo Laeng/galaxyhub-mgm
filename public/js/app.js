@@ -6715,6 +6715,10 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 //     forceTLS: true
 // });
 
+window.global = {
+  editor: {}
+};
+
 /***/ }),
 
 /***/ "./node_modules/can-use-dom/index.js":

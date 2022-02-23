@@ -118,9 +118,11 @@
                            this.data.list.body.step = r.data.data.count.step;
                            this.data.list.body.limit = r.data.data.count.limit;
 
+                           @if(!$refresh)
                            if (this.interval.list >= 0) {
                                clearInterval(this.interval.list);
                            }
+                           @endif
                        }
                    }
                };
@@ -149,7 +151,7 @@
                    this.post(this.data.list.url, this.data.list.body, success, error, complete);
                    this.interval.list = setInterval(() => {
                        this.post(this.data.list.url, this.data.list.body, success, error, complete)
-                   }, 5000);
+                   }, 10000);
                }
            },
            checkbox(componentId, checked = null) {

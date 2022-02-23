@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('missions', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('maker_id');
+            $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('survey_id')->nullable(); //미션 설문을 가져온다.
             $table->tinyInteger('type'); // 0: 아르마의 밤 1: 일반 미션
             $table->tinyInteger('phase')->default(0); //-1: 미션 취소, 0: 참가자 모집, 1: 게임 시작, 2: 게임 종료, 3: 출석 마감

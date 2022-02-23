@@ -25,6 +25,16 @@ class UserMissionRepository extends BaseRepository implements UserMissionReposit
         return $this->model->select($columns)->where('user_id', $userId)->with($relations)->latest()->get();
     }
 
+    public function findByMissionId(int $missionId, array $columns = ['*'], array $relations = []): ?Collection
+    {
+        return $this->model->select($columns)->where('mission_id', $missionId)->with($relations)->latest()->get();
+    }
+
+    public function findByUserIdAndMissionId(int $userId, int $missionId, array $columns = ['*'], array $relations = []): ?UserMission
+    {
+        return $this->model->select($columns)->where('user_id', $userId)->where('mission_id', $missionId)->with($relations)->first();
+    }
+
     public function findAttendedMissionByUserId(int $userId, array $columns = ['*'], array $relations = []): ?Collection
     {
         return $this->model->select($columns)->where('user_id', $userId)->whereNotNull('attended_at')->with($relations)->latest()->get();

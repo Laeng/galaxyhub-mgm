@@ -13,7 +13,7 @@
             </x-alert.galaxyhub.warning>
         </div>
         <div>
-            <x-list.galaxyhub.basics :component-id="$componentId" name="user_id" :action="route('admin.application.index.list')" refresh="false"/>
+            <x-list.galaxyhub.basics :component-id="$componentId" name="user_id" :action="route('admin.application.index.list')" :refresh="true"/>
         </div>
         <div class="flex justify-start space-x-2 mt-3" x-data="application_list" >
             <x-button.filled.md-white @click="process('{{ \App\Enums\RoleType::MEMBER->name  }}', '가입 승인', '가입을 승인 하시겠습니까?', false)" type="button">

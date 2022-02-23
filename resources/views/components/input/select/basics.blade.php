@@ -1,3 +1,3 @@
-<select {{ $attributes->except('class') }} class="shadow-sm focus:ring-0 focus:border-1 focus:border-gray-200 block w-full text-sm border-gray-200 rounded-md {{ $class }}">
+<select {{ $attributes->except('class') }} class="w-full text-sm rounded-md dark:bg-gray-900 border-gray-300 dark:border-gray-800 focus:ring-blue-500 shadow-sm  {{ $class }}">
     {{ $slot }}
 </select>

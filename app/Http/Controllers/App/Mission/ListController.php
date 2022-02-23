@@ -99,65 +99,74 @@ class ListController extends Controller
             $userMissions = $userMissionRepository->findByUserId($user->id, ['id', 'try_attends', 'attended_at']);
             $userMissionIds = $userMissions->pluck('id');
 
-            $th = ['분류', '시작 시간', '중도 참여', '미션 메이커', '상태', '&nbsp;'];
-            $tr = array();
-
-            foreach ($missions as $v)
+            if ($count > 0)
             {
-                $missionType = MissionType::getKoreanNames();
-                $missionPhaseType = MissionPhaseType::getKoreanNames();
+                $th = ['분류', '시작 시간', '중도 참여', '미션 메이커', '상태', '&nbsp;'];
+                $tr = array();
 
-                $url = route('mission.read', $v->id);
-                $text = ['link-indigo', '미션 정보'];
-
-                if ($userMissionIds->contains($v->id))
+                foreach ($missions as $v)
                 {
-                    if ($v->user_id != $user->id)
-                    {
-                        $userMission = $userMissions->first(fn ($i) => $i->mission_id == $v->id);
-                        $hasFailAttendance = $userMission->try_attends >= $userMissionRepository::MAX_ATTENDANCE_ATTEMPTS;
-                        $hasAttend = !is_null($userMission->attended_at);
-                        $canAttend = !$hasFailAttendance && $v->phase === MissionPhaseType::IN_ATTENDANCE->value;
+                    $missionType = MissionType::getKoreanNames();
+                    $missionPhaseType = MissionPhaseType::getKoreanNames();
 
-                        if ($v->phase >= MissionPhaseType::IN_ATTENDANCE->value)
+                    $url = route('mission.read', $v->id);
+                    $text = ['link-indigo', '미션 정보'];
+
+                    if ($userMissionIds->contains($v->id))
+                    {
+                        if ($v->user_id != $user->id)
                         {
-                            if (!$hasAttend)
+                            $userMission = $userMissions->first(fn ($i) => $i->mission_id == $v->id);
+                            $hasFailAttendance = $userMission->try_attends >= $userMissionRepository::MAX_ATTENDANCE_ATTEMPTS;
+                            $hasAttend = !is_null($userMission->attended_at);
+                            $canAttend = !$hasFailAttendance && $v->phase === MissionPhaseType::IN_ATTENDANCE->value;
+
+                            if ($v->phase >= MissionPhaseType::IN_ATTENDANCE->value)
                             {
-                                if ($canAttend)
+                                if (!$hasAttend)
                                 {
-                                    $text = ['link-yellow', '출석 체크'];
-                                }
-                                else
-                                {
-                                    $text = ['link-red', '출석 실패'];
+                                    if ($canAttend)
+                                    {
+                                        $text = ['link-yellow', '출석 체크'];
+                                    }
+                                    else
+                                    {
+                                        $text = ['link-red', '출석 실패'];
+                                    }
                                 }
                             }
-                        }
-                        else
-                        {
-                            $text = ['link-green', '출석 성공'];
+                            else
+                            {
+                                $text = ['link-green', '출석 성공'];
+                            }
                         }
                     }
-                }
-                else
-                {
-                    if ($v->phase === MissionPhaseType::RECRUITING->value || ($v->can_tardy && $v->phase === MissionPhaseType::IN_PROGRESS))
+                    else
                     {
-                        $text = ['link-fuchsia', '참가 신청'];
+                        if ($v->phase === MissionPhaseType::RECRUITING->value || ($v->can_tardy && $v->phase === MissionPhaseType::IN_PROGRESS))
+                        {
+                            $text = ['link-fuchsia', '참가 신청'];
+                        }
                     }
+
+                    $row = [
+                        $missionType[$v->type],
+                        $v->expected_at->format('m월 d일 H시 i분'),
+                        $v->can_tardy ? '가능' : '불가능',
+                        $v->user()->first()->name,
+                        $missionPhaseType[$v->phase],
+                        "<a href='{$url}' class='{$text[0]}' title='{$text[1]}'>{$text[1]}</a>"
+                    ];
+
+                    $tr[] = $row;
                 }
-
-                $row = [
-                    $missionType[$v->type],
-                    $v->expected_at->format('m월 d일 H시 i분'),
-                    $v->can_tardy ? '가능' : '불가능',
-                    $v->user()->first()->name,
-                    $missionPhaseType[$v->phase],
-                    "<a href='{$url}' class='{$text[0]}' title='{$text[1]}'>{$text[1]}</a>"
-                ];
-
-                $tr[] = $row;
             }
+            else
+            {
+                $th = ['등록된 미션이 없습니다.'];
+                $tr = array();
+            }
+
 
             return $this->jsonResponse(200, 'OK', [
                 'checkbox' => false,
@@ -172,7 +181,7 @@ class ListController extends Controller
             ]);
 
         } catch (\Exception $e) {
-            return $this->jsonResponse($e->getCode(), Str::upper($e->getMessage()), [
+            return $this->jsonResponse($e->getCode(), Str::upper($e->getMessage()), config('app.debug') ? $e->getTrace() : [
                 'checkbox' => false,
                 'name' => '',
                 'th' => [],
