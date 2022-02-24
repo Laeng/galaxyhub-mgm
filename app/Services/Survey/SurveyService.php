@@ -10,6 +10,7 @@ use App\Repositories\Survey\Interfaces\SurveyEntryRepositoryInterface;
 use App\Repositories\Survey\Interfaces\SurveyRepositoryInterface;
 use App\Services\Survey\Contracts\SurveyServiceContract;
 use App\Services\Survey\Questions\ApplicationQuestion;
+use App\Services\Survey\Questions\MissionQuestion;
 use App\Services\Survey\Questions\QuizQuestion;
 use Illuminate\Database\Eloquent\Collection;
 
@@ -86,9 +87,16 @@ class SurveyService implements SurveyServiceContract
         return $quizModel;
     }
 
-    public function createMissionSurvey(int $missionId): Survey
+    public function createMissionSurvey(int $userId, int $missionId): Survey
     {
-        // TODO: Implement createMissionSurvey() method.
+        $missionSurveyModel = $this->surveyRepository->create([
+            'name' => "mission-survey-{$missionId}",
+            'user_id' => $userId
+        ]);
+
+        $questions = new MissionQuestion($missionSurveyModel);
+
+        return $questions->create();
     }
 
     public function getLatestApplicationForm(int $userId): ?SurveyEntry

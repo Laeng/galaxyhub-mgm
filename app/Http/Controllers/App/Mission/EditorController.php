@@ -12,6 +12,7 @@ use App\Http\Controllers\Controller;
 use App\Repositories\Mission\Interfaces\MissionRepositoryInterface;
 use App\Repositories\User\Interfaces\UserMissionRepositoryInterface;
 use App\Services\Mission\Contracts\MissionServiceContract;
+use App\Services\Survey\Contracts\SurveyServiceContract;
 use Auth;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
@@ -89,7 +90,7 @@ class EditorController extends Controller
         ]);
     }
 
-    public function create(Request $request): JsonResponse
+    public function create(Request $request, SurveyServiceContract $surveyService): JsonResponse
     {
         try {
             $this->jsonValidator($request, [
@@ -104,7 +105,7 @@ class EditorController extends Controller
             ]);
 
             $user = Auth::user();
-            $types = array_keys(MissionType::getByRole($user->roles()->latest()->first()->name));
+            $types = array_keys(MissionType::getByRole($user->roles()->latest()->first()->name)); //TODO - USING REPOSITORY PATTERN.
             $type = (int) $request->get('type');
 
             if (!in_array($type, $types))
@@ -140,14 +141,13 @@ class EditorController extends Controller
                 ]
             ]);
 
-            /*
-            if ($isSurvey) {
-                $survey = $form->getMissionSurvey($mission);
+            if (in_array($mission->type, MissionType::needSurvey()))
+            {
+                $survey = $surveyService->createMissionSurvey($user->id, $mission->id);
 
                 $mission->survey_id = $survey->id;
                 $mission->save();
             }
-            */
 
             $this->missionService->addParticipant($mission->id, $user->id, true);
 
@@ -188,7 +188,7 @@ class EditorController extends Controller
                 throw new \Exception('NO PERMISSION', 422);
             }
 
-            $types = array_keys(MissionType::getByRole($user->roles()->latest()->first()->name));
+            $types = array_keys(MissionType::getByRole($user->roles()->latest()->first()->name)); //TODO - USING REPOSITORY PATTERN.
             $type = (int) $request->get('type');
 
             if (!in_array($type, $types))

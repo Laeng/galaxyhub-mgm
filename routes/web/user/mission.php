@@ -1,8 +1,10 @@
 <?php
 
+use App\Http\Controllers\App\Mission\AttendController;
 use App\Http\Controllers\App\Mission\EditorController;
 use App\Http\Controllers\App\Mission\ListController;
 use App\Http\Controllers\App\Mission\ReadController;
+use App\Http\Controllers\App\Mission\SurveyController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('app')->group(function () {
@@ -13,15 +15,17 @@ Route::prefix('app')->group(function () {
 
         //AJAX
         Route::post('/create', [EditorController::class, 'create'])->name('create');
+        Route::post('/delete', [ReadController::class, 'delete'])->name('delete');
         Route::post('/update', [EditorController::class, 'update'])->name('update');
-        Route::post('/delete', [EditorController::class, 'delete'])->name('delete');
 
         //----
 
         //VIEW
         Route::get('/{missionId}', [ReadController::class, 'read'])->name('read')->whereNumber('missionId');
+        Route::match(['get', 'post'],'/{missionId}/attend', [AttendController::class, 'attend'])->name('read.attend')->whereNumber('missionId');
         Route::get('/{missionId}/edit', [EditorController::class, 'edit'])->name('read.edit')->whereNumber('missionId');
-        Route::get('/{missionId}/report', ['', 'report'])->name('read.report')->whereNumber('missionId');
+        Route::get('/{missionId}/report', [SurveyController::class, 'report'])->name('read.report')->whereNumber('missionId');
+        Route::get('/{missionId}/survey', [SurveyController::class, 'survey'])->name('read.survey')->whereNumber('missionId');
 
         //AJAX
         Route::post('/{missionId}/refresh', [ReadController::class, 'refresh'])->name('read.refresh');

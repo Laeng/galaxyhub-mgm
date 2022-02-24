@@ -72,9 +72,7 @@
 
     <x-panel.galaxyhub.basics class="mb-4">
         <div class="grid grid-cols-1 items-center gap-3">
-            <h1 class="text-xl lg:text-2xl font-bold">
-                가입 심사 결과
-            </h1>
+            <h2 class="text-xl lg:text-2xl font-bold">가입 심사 결과</h2>
             <div>
                 <p>
                     가입 신청이 거절되었습니다. <br/>

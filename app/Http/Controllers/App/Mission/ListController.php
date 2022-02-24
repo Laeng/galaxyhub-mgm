@@ -145,7 +145,7 @@ class ListController extends Controller
                     }
                     else
                     {
-                        if ($v->phase === MissionPhaseType::RECRUITING->value || ($v->can_tardy && $v->phase === MissionPhaseType::IN_PROGRESS))
+                        if ($v->phase === MissionPhaseType::RECRUITING->value || ($v->can_tardy && $v->phase === MissionPhaseType::IN_PROGRESS->value))
                         {
                             $text = ['link-fuchsia', '참가 신청'];
                         }

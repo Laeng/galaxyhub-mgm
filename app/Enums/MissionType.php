@@ -49,4 +49,11 @@ enum MissionType:int  {
 
         return $types;
     }
+
+    public static function needSurvey(): array
+    {
+        return [
+            self::MISSION->value, self::NIGHT_OF_ARMA->value
+        ];
+    }
 }

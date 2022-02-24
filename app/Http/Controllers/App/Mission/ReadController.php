@@ -5,8 +5,10 @@ namespace App\Http\Controllers\App\Mission;
 use App\Enums\MissionPhaseType;
 use App\Enums\MissionType;
 use App\Enums\PermissionType;
+use App\Enums\RoleType;
 use App\Http\Controllers\Controller;
 use App\Repositories\Mission\Interfaces\MissionRepositoryInterface;
+use App\Repositories\Survey\Interfaces\SurveyRepositoryInterface;
 use App\Repositories\User\Interfaces\UserMissionRepositoryInterface;
 use App\Repositories\User\Interfaces\UserRepositoryInterface;
 use App\Services\Mission\Contracts\MissionServiceContract;
@@ -32,6 +34,52 @@ class ReadController extends Controller
         $this->missionRepository = $missionRepository;
         $this->userMissionRepository = $userMissionRepository;
         $this->missionService = $missionService;
+    }
+
+    public function delete(Request $request, SurveyRepositoryInterface $surveyRepository): JsonResponse
+    {
+        try
+        {
+            $this->jsonValidator($request, [
+                'id' => ['required', 'int'],
+            ]);
+
+            $mission = $this->missionRepository->findById($request->get('id'));
+
+            if (is_null($mission))
+            {
+                throw new \Exception('CAN NOT FOUND MISSION', 422);
+            }
+
+            $user = Auth::user();
+
+            if ($user->id === $mission->user_id || $user->hasRole(RoleType::ADMIN->name))
+            {
+                if ($mission->phase > 0) {
+                    throw new \Exception('MISSION STATUS DOES\'T MATCH THE CONDITIONS', 422);
+                }
+
+                if (!is_null($mission->survey_id))
+                {
+                    $survey = $surveyRepository->findById($mission->survey_id);
+
+                    if (!is_null($survey))
+                    {
+                        $survey->delete();
+                    }
+                }
+
+                $mission->participants()->delete();
+                $mission->delete();
+            }
+
+            return $this->jsonResponse(200, 'SUCCESS', []);
+
+        }
+        catch (\Exception $e)
+        {
+            return $this->jsonResponse($e->getCode(), Str::upper($e->getMessage()), []);
+        }
     }
 
     public function read(Request $request, int $missionId, UserRepositoryInterface $userRepository): View
@@ -147,6 +195,7 @@ class ReadController extends Controller
                     }
 
                     $this->missionService->addParticipant($mission->id, $user->id);
+                    break;
 
                 case 'LEAVE':
                     if ($mission->phase >= MissionPhaseType::IN_PROGRESS->value) {
@@ -154,6 +203,7 @@ class ReadController extends Controller
                     }
 
                     $this->missionService->removeParticipant($mission->id, $user->id);
+                    break;
             }
 
             return $this->jsonResponse(200, 'SUCCESS', []);
@@ -176,6 +226,8 @@ class ReadController extends Controller
             $user = Auth::user();
             $visibleDate = $this->visibleDate($mission);
 
+            $userMissions = $this->userMissionRepository->findByUserIdAndMissionId($user->id, $mission->id);
+
             $data = [
                 'phase' => $mission->phase,
                 'status' => MissionPhaseType::getKoreanNames()[$mission->phase],
@@ -190,7 +242,7 @@ class ReadController extends Controller
                 'code' => '',
                 'can_tardy' => $mission->can_tardy,
                 'body' => $mission->body,
-                'is_participant' => (!is_null($this->userMissionRepository->findByMissionId($mission->id)) && $mission->user_id != $user->id),
+                'is_participant' => (!is_null($userMissions) && $mission->user_id != $user->id),
             ];
 
             if ($user->id == $mission->user_id || $user->hasPermissionTo(PermissionType::ADMIN->name)) {

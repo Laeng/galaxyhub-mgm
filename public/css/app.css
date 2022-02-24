@@ -2928,6 +2928,15 @@ aspect-16\/10 {
   .md\:right-16{
     right: 4rem;
   }
+  .md\:top-0{
+    top: 0px;
+  }
+  .md\:top-\[3\.75rem\]{
+    top: 3.75rem;
+  }
+  .md\:top-\[2\.75rem\]{
+    top: 2.75rem;
+  }
   .md\:col-span-2{
     grid-column: span 2 / span 2;
   }

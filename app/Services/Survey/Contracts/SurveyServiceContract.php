@@ -18,7 +18,7 @@ interface SurveyServiceContract
 
     public function createApplicationQuiz(int $userId, string $userName, int $surveyId = null): Survey;
 
-    public function createMissionSurvey(int $missionId): Survey;
+    public function createMissionSurvey(int $userId, int $missionId): Survey;
 
     public function getLatestApplicationForm(int $userId): ?SurveyEntry;
 

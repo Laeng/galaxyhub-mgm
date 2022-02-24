@@ -70,13 +70,9 @@
 
     <x-panel.galaxyhub.basics>
         <div class="grid grid-cols-1 items-center gap-3">
-            <h1 class="text-xl lg:text-2xl font-bold">
-                접수 완료
-            </h1>
-            <div class="mb-4">
-                <p>
-                    가입 신청서가 성공적으로 접수되었습니다.
-                </p>
+            <div>
+                <h2 class="text-xl lg:text-2xl font-bold">접수 완료</h2>
+                <p class="mt-1 max-w-2xl text-sm text-gray-500 dark:text-gray-300">가입 신청서가 성공적으로 접수되었습니다.</p>
             </div>
             <x-alert.galaxyhub.warning title="가입 심사 안내">
                 <ol>

@@ -5,8 +5,8 @@
     <link rel="stylesheet" href="{{ asset('/css/ckeditor.css') }}">
 @endpush
 <x-theme.galaxyhub.sub-content :title="$type" :description="$mission->title" :breadcrumbs="Diglactic\Breadcrumbs\Breadcrumbs::render('app.mission', $mission->title)">
-    <div class="md:flex md:space-x-4" x-data="mission_read">
-        <x-panel.galaxyhub.basics class="self-start md:basis-3/5 lg:basis-2/3 flex flex-col space-y-8">
+    <div class="md:flex md:space-x-4 items-start" x-data="mission_read">
+        <x-panel.galaxyhub.basics class="md:basis-3/5 lg:basis-2/3 flex flex-col space-y-8">
             <div class="flex flex-col space-y-2">
                 <h2 class="text-xl lg:text-2xl font-bold">{{ $type }} 소개</h2>
 
@@ -69,7 +69,7 @@
             </div>
         </x-panel.galaxyhub.basics>
 
-        <div class="self-start p-4 lg:p-8 md:basis-2/5 lg:basis-1/3 flex flex-col space-y-8" x-cloak>
+        <aside class="md:sticky md:top-[3.75rem] p-4 lg:p-8 md:basis-2/5 lg:basis-1/3 flex flex-col space-y-8" x-cloak>
             <div class="flex flex-col space-y-2">
                 <h2 class="text-xl lg:text-2xl font-bold" x-text="(data.load.data.phase === 2) ? '{{ $type }} 출석 마감' : '{{ $type }} 시간'"></h2>
                 <div class="mb-3 tabular-nums">
@@ -92,32 +92,32 @@
                 </div>
             @endif
 
+            @if($isMaker || $isAdmin)
             <div class="flex flex-col space-y-2" x-show="data.load.data.phase === 0 || data.load.data.phase === 1">
                 <div class="flex flex-col space-y-2">
-                    @if($isMaker || $isAdmin)
-                        <template x-if="data.load.data.phase === 0">
-                            <x-button.filled.md-white class="w-full" type="button" onclick="location.href='{{ route('mission.read.edit', $mission->id) }}'" x-cloak>
-                                {{ $type }} 수정
-                            </x-button.filled.md-white>
-                        </template>
-                        <template x-if="data.load.data.phase === 0">
-                            <x-button.filled.md-white class="w-full" type="button" @click="process('START')" x-cloak>
-                                {{ $type }} 시작
-                            </x-button.filled.md-white>
-                        </template>
-                        <template x-if="data.load.data.phase === 1">
-                            <x-button.filled.md-white class="w-full" type="button" @click="process('END')" x-cloak>
-                                {{ $type }} 종료
-                            </x-button.filled.md-white>
-                        </template>
-                    @endif
+                    <template x-if="data.load.data.phase === 0">
+                        <x-button.filled.md-white class="w-full" type="button" onclick="location.href='{{ route('mission.read.edit', $mission->id) }}'" x-cloak>
+                            {{ $type }} 수정
+                        </x-button.filled.md-white>
+                    </template>
+                    <template x-if="data.load.data.phase === 0">
+                        <x-button.filled.md-white class="w-full" type="button" @click="process('START')" x-cloak>
+                            {{ $type }} 시작
+                        </x-button.filled.md-white>
+                    </template>
+                    <template x-if="data.load.data.phase === 1">
+                        <x-button.filled.md-white class="w-full" type="button" @click="process('END')" x-cloak>
+                            {{ $type }} 종료
+                        </x-button.filled.md-white>
+                    </template>
                 </div>
             </div>
+            @endif
 
             <div class="flex flex-col space-y-2">
                 @if(!$isMaker)
                     <template x-if="data.load.data.is_participant && data.load.data.phase === 2" x-cloak>
-                        <x-button.filled.md-blue class="w-full" type="button">
+                        <x-button.filled.md-blue class="w-full" type="button" onclick="location.href='{{ route('mission.read.survey', $mission->id) }}'">
                             출석 체크
                         </x-button.filled.md-blue>
                     </template>
@@ -133,7 +133,7 @@
                     </template>
                 @endif
 
-                <x-button.filled.md-white class="w-full" onclick="location.href='{{ route('mission.list') }}'" type="button" >
+                <x-button.filled.md-white class="w-full" onclick="location.href='{{ route('mission.index') }}'" type="button" >
                     목록
                 </x-button.filled.md-white>
             </div>
@@ -213,7 +213,7 @@
                     </template>
                 </div>
             @endif
-        </div>
+        </aside>
     </div>
 
     <script type="text/javascript">
@@ -255,7 +255,7 @@
                     remove: {
                         url: '{{ route('mission.delete') }}',
                         body: {
-                            mission_id: {{ $mission->id }}
+                            id: {{ $mission->id }}
                         },
                         lock: false
                     },
@@ -271,11 +271,7 @@
                     window.modal.confirm('미션 삭제', '정말 삭제하시겠습니까?', (r) => {
                         if (r.isConfirmed) {
                             let success = (r) => {
-                                if (r.data.data !== null) {
-                                    if (!(typeof r.data.data === 'undefined' || r.data.data.length <= 0)) {
-                                        location.href = '{{route('mission.list')}}';
-                                    }
-                                }
+                                location.href = '{{route('mission.index')}}';
                             }
                             let error = (e) => {
                                 if (typeof e.response !== 'undefined') {
