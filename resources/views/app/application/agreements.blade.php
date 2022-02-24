@@ -1,6 +1,6 @@
 <x-theme.galaxyhub.sub-content title="" description="MGM Lounge 가입">
     <nav class="mb-4" aria-label="Progress">
-        <ol role="list" class="border border-gray-300 dark:border-gray-800 rounded-md divide-y divide-gray-300 dark:divide-gray-800 md:flex md:divide-y-0 shadow-sm bg-white dark:bg-[#080C15]/50">
+        <ol role="list" class="border border-gray-300 dark:border-gray-800 rounded-md md:flex shadow-sm bg-white dark:bg-[#080C15]/50">
             <li class="relative md:flex-1 md:flex">
                 <div class="group flex items-center w-full">
                     <p class="px-6 py-4 flex items-center text-sm font-medium">
@@ -17,7 +17,7 @@
                 </div>
             </li>
 
-            <li class="relative md:flex-1 md:flex">
+            <li class="hidden relative md:flex-1 md:flex">
                 <div class="group flex items-center w-full">
                     <p class="px-6 py-4 flex items-center text-sm font-medium">
                         <span class="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-full border-2 border-gray-300 dark:border-gray-500 group-hover:border-gray-400">
@@ -33,7 +33,7 @@
                 </div>
             </li>
 
-            <li class="relative md:flex-1 md:flex">
+            <li class="hidden relative md:flex-1 md:flex">
                 <div class="group flex items-center w-full">
                     <p class="px-6 py-4 flex items-center text-sm font-medium">
                         <span class="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-full border-2 border-gray-300 dark:border-gray-500 group-hover:border-gray-400">
@@ -49,7 +49,7 @@
                 </div>
             </li>
 
-            <li class="relative md:flex-1 md:flex">
+            <li class="hidden relative md:flex-1 md:flex">
                 <div class="group flex items-center w-full">
                     <p class="px-6 py-4 flex items-center text-sm font-medium">
                         <span class="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-full border-2 border-gray-300 dark:border-gray-500 group-hover:border-gray-400">

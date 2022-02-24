@@ -1,7 +1,7 @@
 <x-theme.galaxyhub.sub-content title="" description="MGM Lounge 가입">
     <nav class="mb-4" aria-label="Progress">
-        <ol role="list" class="border border-gray-300 dark:border-gray-800 rounded-md divide-y divide-gray-300 dark:divide-gray-800 md:flex md:divide-y-0 shadow-sm bg-white dark:bg-[#080C15]/50">
-            <li class="relative md:flex-1 md:flex">
+        <ol role="list" class="border border-gray-300 dark:border-gray-800 rounded-md md:flex shadow-sm bg-white dark:bg-[#080C15]/50">
+            <li class="hidden relative md:flex-1 md:flex">
                 <div class="group flex items-center w-full">
                     <p class="px-6 py-4 flex items-center text-sm font-medium">
                         <span class="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-full bg-blue-600 group-hover:bg-blue-800">
@@ -19,7 +19,7 @@
                 </div>
             </li>
 
-            <li class="relative md:flex-1 md:flex">
+            <li class="hidden relative md:flex-1 md:flex">
                 <div class="group flex items-center w-full">
                     <p class="px-6 py-4 flex items-center text-sm font-medium">
                         <span class="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-full bg-blue-600 group-hover:bg-blue-800">
@@ -37,7 +37,7 @@
                 </div>
             </li>
 
-            <li class="relative md:flex-1 md:flex">
+            <li class="hidden relative md:flex-1 md:flex">
                 <div class="group flex items-center w-full">
                     <p class="px-6 py-4 flex items-center text-sm font-medium">
                         <span class="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-full bg-blue-600 group-hover:bg-blue-800">
@@ -55,7 +55,7 @@
                 </div>
             </li>
 
-            <li class="relative md:flex-1 md:flex">
+            <li class="hidden relative md:flex-1 md:flex">
                 <div class="group flex items-center w-full">
                     <p class="px-6 py-4 flex items-center text-sm font-medium">
                         <span class="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-full bg-red-600 group-hover:bg-red-800">
@@ -90,13 +90,13 @@
                 <p class="font-medium my-4">{{ $reason }}</p>
                 <p class="text-sm">"데이터 삭제" 버튼을 통해 가입을 위해 제출한 정보를 삭제할 수 있습니다.<br/> 가입 거절 내역의 경우 개인정보취급방침에 따라 일정 기간 저장 됨을 알려드립니다.</p>
             </div>
-            <div class="flex justify-center pt-6 pb-4 lg:pb-0 space-x-2" x-data="">
+            <div class="flex justify-center pt-6 pb-4 lg:pb-0 space-x-2" x-data="account_leave">
                 @if($count < 2 &&  $date->diffInDays(\Carbon\Carbon::now(), false) >= 30)
                     <x-button.filled.md-white type="button" onclick="location.href='{{ route('application.agreements') }}'">
                         다시 신청하기
                     </x-button.filled.md-white>
                 @endif
-                <x-button.filled.md-white type="button" @click="leave()" type="button">
+                <x-button.filled.md-white onclick="location.href='{{ route('account.leave') }}'">
                     데이터 삭제
                 </x-button.filled.md-white>
             </div>
