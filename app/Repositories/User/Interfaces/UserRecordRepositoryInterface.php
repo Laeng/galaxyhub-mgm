@@ -13,6 +13,8 @@ interface UserRecordRepositoryInterface extends EloquentRepositoryInterface
 
     public function findByUserIdAndType(int $userId, string $type, array $columns = ['*'], array $relations = []): ?Collection;
 
+    public function findByUserIdAndTypes(int $userId, array $types, array $columns = ['*'], array $relations = []): ?Collection;
+
     public function findByUuidAndType(string $uuid, string $type, array $columns = ['*'], array $relations = []): ?Collection;
 
     public function getUuidV5(string $value): string;

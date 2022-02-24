@@ -36,6 +36,11 @@ class UserRecordRepository extends BaseRepository implements UserRecordRepositor
         return $this->model->select($columns)->where('user_id', $userId)->where('type', $type)->with($relations)->latest()->get();
     }
 
+    public function findByUserIdAndTypes(int $userId, array $types, array $columns = ['*'], array $relations = []): ?Collection
+    {
+        return $this->model->select($columns)->where('user_id', $userId)->whereIn('type', $types)->with($relations)->latest()->get();
+    }
+
     public function findByUuidAndType(string $uuid, string $type, array $columns = ['*'], array $relations = []): ?Collection
     {
         return $this->model->select($columns)->where('uuid', $uuid)->where('type', $type)->with($relations)->latest()->get();

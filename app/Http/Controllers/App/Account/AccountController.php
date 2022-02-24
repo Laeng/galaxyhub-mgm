@@ -82,39 +82,6 @@ class AccountController extends Controller
         ]);
     }
 
-    public function pause(Request $request, UserRecordRepositoryInterface $userRecordRepository): View
-    {
-        $user = Auth::user();
-        $userMission = $this->userMissionRepository->findAttendedMissionByUserId($user->id);
-
-        $enable = $userRecordRepository->findByUserIdAndType($user->id, UserRecordType::USER_PAUSE_ENABLE->name)->first();
-        $disable = $userRecordRepository->findByUserIdAndType($user->id, UserRecordType::USER_PAUSE_DISABLE->name)->first();
-
-        $isPause = true;
-
-        if (!is_null($enable) && !is_null($disable))
-        {
-            if ($enable->craeted_at->isPast() && $disable->created_at->isPast())
-            {
-                $isPause = false;
-            }
-        }
-
-        if (is_null($enable) && is_null($disable))
-        {
-            $isPause = False;
-        }
-
-        $canPause = $userMission->count() > 0;
-
-        return view('app.account.pause', [
-            'title' => '장기 미접속 신청',
-            'user' => Auth::user(),
-            'canPause' => $canPause,
-            'isPause' => $isPause
-        ]);
-    }
-
     public function suspended(Request $request): View
     {
         $user = Auth::user();

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\App\Account\AccountController;
 use App\Http\Controllers\App\Account\AuthenticateController;
+use App\Http\Controllers\App\Account\PauseController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('app')->group(function () {
@@ -9,10 +10,12 @@ Route::prefix('app')->group(function () {
         //VIEW
         Route::redirect('/', '/app/account/me');
         Route::get('/me', [AccountController::class, 'me'])->name('me');
-        Route::get('/pause', [AccountController::class, 'pause'])->name('pause');
         Route::get('/suspended', [AccountController::class, 'suspended'])->name('suspended');
+        Route::get('/pause', [PauseController::class, 'pause'])->name('pause');
 
         //AJAX
+        Route::post('/pause/enable', [PauseController::class, 'enable'])->name('pause.enable');
+        Route::post('/pause/disable', [PauseController::class, 'disable'])->name('pause.disable');
 
     });
 

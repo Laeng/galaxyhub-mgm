@@ -22,9 +22,6 @@ class EventServiceProvider extends ServiceProvider
         \SocialiteProviders\Manager\SocialiteWasCalled::class => [
             \SocialiteProviders\Steam\SteamExtendSocialite::class,
         ],
-        \Cog\Laravel\Ban\Events\ModelWasBanned::class => [
-            RecordBannedUser::class,
-        ]
     ];
 
     /**
