@@ -79,8 +79,8 @@
                                         if (e.response.status === 422) {
                                             let msg = '';
                                             switch (e.response.data.description) {
-                                                case "MISSION STATUS DOES'T MATCH THE CONDITIONS":
-                                                    msg = '현재 미션 상태에서 실행할 수 없는 요청입니다.';
+                                                case "CONTACT TO MANAGER":
+                                                    msg = '장기 미접속 처리 중 문제가 발생하였습니다. 관리자에게 문의하여 주십시오.';
                                                     break;
                                                 default:
                                                     msg = e.response.data.description;

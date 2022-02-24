@@ -19,6 +19,7 @@ Route::prefix('app')->group(function () {
 
 
         //AJAX
+        Route::post('/delete', [AccountController::class, 'delete'])->name('delete');
         Route::post('/pause/enable', [PauseController::class, 'enable'])->middleware(AuthenticateMember::class)->name('pause.enable');
         Route::post('/pause/disable', [PauseController::class, 'disable'])->middleware(AuthenticateMember::class)->name('pause.disable');
 

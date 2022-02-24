@@ -9,6 +9,7 @@ use App\Repositories\User\Interfaces\UserAccountRepositoryInterface;
 use App\Repositories\User\Interfaces\UserRecordRepositoryInterface;
 use App\Repositories\User\UserMissionRepository;
 use App\Services\Survey\Contracts\SurveyServiceContract;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
@@ -20,6 +21,39 @@ class AccountController extends Controller
     public function __construct(UserMissionRepository $userMissionRepository)
     {
         $this->userMissionRepository = $userMissionRepository;
+    }
+
+    public function delete(Request $request): JsonResponse
+    {
+        try
+        {
+            $user = Auth::user();
+
+            $user->accounts()->delete();
+            $user->bans()->delete();
+            $user->roles()->delete();
+            $user->surveys()->delete();
+            $user->delete();
+
+            Auth::logout();
+
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+
+            return $this->jsonResponse(200, 'SUCCESS', []);
+        }
+        catch (\Exception $e)
+        {
+            return $this->jsonResponse($e->getCode(), $e->getMessage(), config('app.debug') ? $e->getTrace() : []);
+        }
+    }
+
+    public function leave(Request $request): View
+    {
+        return view('app.account.leave', [
+            'title' => '데이터 삭제',
+            'user' => Auth::user(),
+        ]);
     }
 
     public function me
@@ -70,7 +104,7 @@ class AccountController extends Controller
 
         return view('app.account.me', [
             'title' => '개인 정보',
-            'user' => Auth::user(),
+            'user' => $user,
             'steamAccount' => $steamAccount,
             'userMission' => $userMission,
             'role' => RoleType::getKoreanNames()[$role->name],
