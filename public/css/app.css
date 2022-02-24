@@ -2946,6 +2946,9 @@ aspect-16\/10 {
   .md\:table-cell{
     display: table-cell;
   }
+  .md\:grid{
+    display: grid;
+  }
   .md\:hidden{
     display: none;
   }
@@ -3000,6 +3003,13 @@ aspect-16\/10 {
   .md\:py-0{
     padding-top: 0px;
     padding-bottom: 0px;
+  }
+  .md\:py-4{
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+  }
+  .md\:pt-4{
+    padding-top: 1rem;
   }
 }
 @media (min-width: 1024px){
