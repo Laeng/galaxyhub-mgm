@@ -70,7 +70,7 @@ class FileService implements FileServiceContract
                 $baseUrl = rtrim(config("filesystems.disks.{$file->storage}.url"), '/');
             }
 
-            $path = sprintf("%s/%s", $baseUrl, $file->path);
+            $path = sprintf("%s%s", $baseUrl, $path);
         }
         else {
             $path = Storage::disk($file->storage)->temporaryUrl($path, now()->addHours(1));

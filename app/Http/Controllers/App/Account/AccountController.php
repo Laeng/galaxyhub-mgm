@@ -29,10 +29,9 @@ class AccountController extends Controller
         {
             $user = Auth::user();
 
-            $user->accounts()->delete();
-            $user->bans()->delete();
-            $user->roles()->delete();
-            $user->surveys()->delete();
+            $user->accounts()->where('user_id', $user->id)->delete();
+            $user->bans()->where('bannable_id', $user->id)->delete();
+            $user->surveys()->where('user_id', $user->id)->delete();
             $user->delete();
 
             Auth::logout();
@@ -65,7 +64,7 @@ class AccountController extends Controller
         $steamAccount = $userAccountRepository->findSteamAccountByUserId($user->id, ['account_id']);
         $userMission = $this->userMissionRepository->findAttendedMissionByUserId($user->id);
 
-        if (!is_null($userMission))
+        if (!is_null($userMission) && $userMission->count() > 0)
         {
             $missionCount = $userMission->count();
             $missionLatest = $userMission->first()->attended_at->format('Y-m-d');

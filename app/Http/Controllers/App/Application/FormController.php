@@ -7,7 +7,6 @@ use App\Enums\UserRecordType;
 use App\Http\Controllers\Controller;
 use App\Jobs\ProcessSteamUserAccount;
 use App\Repositories\Survey\SurveyEntryRepository;
-use App\Repositories\User\Interfaces\UserRecordRepositoryInterface;
 use App\Repositories\User\UserAccountRepository;
 use App\Services\Steam\Contracts\SteamServiceContract;
 use App\Services\Survey\Contracts\SurveyServiceContract;
@@ -105,11 +104,10 @@ class FormController extends Controller
 
             $user->assignRole(RoleType::APPLY->name);
             $data = [
-                'role' => RoleType::APPLY->name,
-                'reason' => ''
+                'comment' => "{$user->name}, 가입 신청서 제출"
             ];
 
-            $userService->createRecord($user->id, UserRecordType::ROLE_DATA->name, $data);
+            $userService->createRecord($user->id, UserRecordType::USER_APPLICATION->name, $data);
 
             return redirect()->route('application.applied')->withErrors(['success' => '가입 신청이 접수되었습니다.']);
         }

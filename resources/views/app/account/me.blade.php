@@ -29,7 +29,7 @@
                     </div>
                     <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4">
                         <dt class="text-sm font-medium text-gray-500 dark:text-gray-300">미션 참가 날짜</dt>
-                        <dd class="mt-1 text-sm text-gray-900 dark:text-gray-100 sm:mt-0 sm:col-span-2">{{ $userMission->first()->created_at->format('Y-m-d') }}</dd>
+                        <dd class="mt-1 text-sm text-gray-900 dark:text-gray-100 sm:mt-0 sm:col-span-2">{{ $missionLatest }}</dd>
                     </div>
                     <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4">
                         <dt class="text-sm font-medium text-gray-500 dark:text-gray-300">획득한 약장</dt>

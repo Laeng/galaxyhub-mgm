@@ -166,7 +166,7 @@ class ListController extends Controller
             }
             else
             {
-                $th = ['등록된 미션이 없습니다.'];
+                $th = ['등록된 미션이 없습니다.', '등록된 미션이 없습니다.'];
                 $tr = array();
             }
 
