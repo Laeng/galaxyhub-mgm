@@ -24,7 +24,7 @@ class Form extends Component
      *
      * @return void
      */
-    public function __construct(Survey $survey, string $action, string $class = '', string $submitText = '제출', ?int $answer = null, string $backText = '돌아가기', ?string $backLink = null)
+    public function __construct(Survey $survey, string $action = '', string $class = '', string $submitText = '제출', ?int $answer = null, string $backText = '돌아가기', ?string $backLink = null)
     {
         $this->survey = $survey;
         $this->action = $action;

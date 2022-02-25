@@ -18,6 +18,11 @@ class SurveyEntry extends Model
      */
     protected $fillable = ['survey_id', 'participant_id'];
 
+    protected $casts = [
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime'
+    ];
+
     /**
      * The answers within the entry.
      *
@@ -113,7 +118,7 @@ class SurveyEntry extends Model
     {
         $answer = $this->answers()->where('question_id', $question->id)->first();
 
-        return isset($answer) ? $answer->value : null;
+        return $answer?->value;
     }
 
     /**

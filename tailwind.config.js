@@ -1,11 +1,12 @@
 const defaultTheme = require('tailwindcss/defaultTheme');
-const colors = require('tailwindcss/colors')
 
 module.exports = {
     mode: 'jit',
-    purge: [
+    content: [
+        './vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php',
         './storage/framework/views/*.php',
-        './resources/**/*.blade.php'
+        './resources/views/**/*.blade.php',
+        //'./resources/js/**/*.vue',
     ],
     darkMode: 'media', // or 'media' or 'class'
     theme: {
@@ -15,7 +16,6 @@ module.exports = {
             },
         },
     },
-    colors: {},
     variants: {
         extend: {},
     },
@@ -24,4 +24,4 @@ module.exports = {
         require('@tailwindcss/forms'),
         require('@tailwindcss/line-clamp')
     ]
-}
+};

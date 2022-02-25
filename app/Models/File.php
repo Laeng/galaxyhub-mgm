@@ -10,18 +10,19 @@ class File extends Model
 {
     use HasFactory;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var string[]
-     */
     protected $fillable = [
         'user_id',
         'storage',
         'path',
         'filename',
         'extension',
-        'uuid'
+        'name',
+        'visible'
+    ];
+
+    protected $casts = [
+        'visible' => 'boolean',
+        'created_at' => 'datetime',
     ];
 
     public function user():BelongsTo

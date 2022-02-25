@@ -2,9 +2,17 @@
 
 namespace App\Providers;
 
-use Illuminate\Filesystem\Filesystem;
+use App\Services\Mission\Contracts\MissionServiceContract;
+use App\Services\Mission\MissionService;
+use App\Services\User\UserService;
+use App\Services\User\Contracts\UserServiceContract;
+use App\Services\File\Contracts\FileServiceContract;
+use App\Services\File\FileService;
+use App\Services\Steam\Contracts\SteamServiceContract;
+use App\Services\Steam\SteamService;
+use App\Services\Survey\Contracts\SurveyServiceContract;
+use App\Services\Survey\SurveyService;
 use Illuminate\Support\ServiceProvider;
-use Symfony\Component\HttpFoundation\Request;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -15,7 +23,14 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        //Services ------------------
+        $this->app->bind(FileServiceContract::class, FileService::class);
+        $this->app->bind(MissionServiceContract::class, MissionService::class);
+        $this->app->bind(SteamServiceContract::class, SteamService::class);
+        $this->app->bind(SurveyServiceContract::class, SurveyService::class);
+        $this->app->bind(UserServiceContract::class, UserService::class);
 
+        //---------------------------
     }
 
     /**
@@ -25,9 +40,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        Request::setTrustedProxies(
-            ['REMOTE_ADDR'],
-            Request::HEADER_X_FORWARDED_FOR
-        );
+        //
     }
 }

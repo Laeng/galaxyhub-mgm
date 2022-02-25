@@ -2,30 +2,14 @@
 
 namespace App\View\Components\Button\Filled;
 
+use App\View\Components\Button\Skeleton;
 use Closure;
 use Illuminate\View\Component;
 use Illuminate\View\View;
 
-class MdWhite extends Component
+class MdWhite extends Skeleton
 {
-    public string $class;
-
-    /**
-     * Create a new component instance.
-     *
-     * @return void
-     */
-    public function __construct($class = '')
-    {
-        $this->class = $class;
-    }
-
-    /**
-     * Get the view / contents that represent the component.
-     *
-     * @return View|Closure|string
-     */
-    public function render(): View|Closure|string
+    public function render(): View
     {
         return view('components.button.filled.md-white');
     }

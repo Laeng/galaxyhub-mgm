@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'default' => env('FILESYSTEM_DRIVER', 'local'),
+    'default' => env('FILESYSTEM_DISK', 'local'),
 
     /*
     |--------------------------------------------------------------------------
@@ -51,7 +51,6 @@ return [
             'url' => env('AWS_URL'),
             'endpoint' => env('AWS_ENDPOINT'),
             'use_path_style_endpoint' => env('AWS_USE_PATH_STYLE_ENDPOINT', false),
-            'visibility' => 'public',
         ],
 
         'do' => [
@@ -65,42 +64,8 @@ return [
             'url' => env('DO_URL'),
             'endpoint' => env('DO_ENDPOINT'),
             'use_path_style_endpoint' => env('DO_USE_PATH_STYLE_ENDPOINT', false),
-            'visibility' => 'public',
+            //'visibility' => 'public', // 퍼블릭 금지
         ],
-
-        // TODO
-        's3_async' => [
-            'driver' => 'async-aws-s3',
-            'key' => env('AWS_ACCESS_KEY_ID'),
-            'secret' => env('AWS_SECRET_ACCESS_KEY'),
-            'region' => env('AWS_DEFAULT_REGION'),
-            'bucket' => env('AWS_BUCKET'),
-            'url' => env('AWS_URL'),
-            'endpoint' => env('AWS_ENDPOINT'),
-            'use_path_style_endpoint' => env('AWS_USE_PATH_STYLE_ENDPOINT', false),
-            'visibility' => 'public',
-        ],
-
-        'updater' => [
-            'driver' => 's3',
-            'keys' => [
-                'readwrite' => env('UPDATER_ACCESS_KEY_ID_1'),
-                'readonly' => env('UPDATER_ACCESS_KEY_ID_2'),
-            ],
-            'secrets' => [
-                'readwrite' => env('UPDATER_SECRET_ACCESS_KEY_1'),
-                'readonly' => env('UPDATER_SECRET_ACCESS_KEY_2'),
-            ],
-            'region' => env('UPDATER_DEFAULT_REGION'),
-            'bucket' => env('UPDATER_BUCKET'),
-            'folder' => env('UPDATER_FOLDER'),
-            'url' => env('UPDATER_URL'),
-            'endpoint' => env('UPDATER_ENDPOINT'),
-            'use_path_style_endpoint' => env('UPDATER_USE_PATH_STYLE_ENDPOINT', false),
-            'visibility' => 'public',
-        ]
-
-
 
     ],
 

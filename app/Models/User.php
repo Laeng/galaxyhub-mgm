@@ -9,25 +9,28 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use JetBrains\PhpStorm\ArrayShape;
+use Laravel\Sanctum\HasApiTokens;
+use QCod\Gamify\Gamify;
+use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable implements BannableContract
 {
-    use HasFactory, Notifiable, Bannable;
+    use HasApiTokens, HasFactory, Notifiable, Gamify, Bannable, HasRoles;
 
     /**
      * The attributes that are mass assignable.
      *
-     * @var string[]
+     * @var array<int, string>
      */
     protected $fillable = [
-        'provider',
-        'username',
-        'nickname',
-        'password',
-        'avatar',
-        'remember_token',
+        'name',
         'email',
         'visit',
+        'avatar',
+        'provider',
+        'username',
+        'password',
         'agreed_at',
         'visited_at'
     ];
@@ -35,7 +38,7 @@ class User extends Authenticatable implements BannableContract
     /**
      * The attributes that should be hidden for serialization.
      *
-     * @var array
+     * @var array<int, string>
      */
     protected $hidden = [
         'password',
@@ -45,42 +48,24 @@ class User extends Authenticatable implements BannableContract
     /**
      * The attributes that should be cast.
      *
-     * @var array
+     * @var array<string, string>
      */
     protected $casts = [
-        'email_verified_at' => 'datetime',
         'agreed_at' => 'datetime',
+        'banned_at' => 'datetime',
+        'verified_at' => 'datetime',
         'visited_at' => 'datetime',
-        'created_at' => 'datetime'
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
     ];
 
-    public function socials(): HasMany
+    public function accounts(): HasMany
     {
-        return $this->hasMany(UserSocial::class);
-    }
-
-    public function groups(): HasMany
-    {
-        return $this->hasMany(UserGroup::class);
-    }
-
-    public function data(): HasMany
-    {
-        return $this->hasMany(UserData::class);
+        return $this->hasMany(UserAccount::class);
     }
 
     public function surveys(): HasMany
     {
         return $this->hasMany(SurveyEntry::class, 'participant_id');
-    }
-
-    public function missions(): HasMany
-    {
-        return $this->hasMany(UserMission::class);
-    }
-
-    public function files(): HasMany
-    {
-        return $this->hasMany(File::class);
     }
 }
