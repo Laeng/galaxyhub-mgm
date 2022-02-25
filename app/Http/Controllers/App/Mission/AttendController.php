@@ -8,9 +8,11 @@ use App\Repositories\Mission\Interfaces\MissionRepositoryInterface;
 use App\Repositories\Survey\Interfaces\SurveyEntryRepositoryInterface;
 use App\Repositories\Survey\Interfaces\SurveyRepositoryInterface;
 use App\Repositories\User\UserMissionRepository;
+use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -87,7 +89,7 @@ class AttendController extends Controller
                 $survey = $this->surveyRepository->findById($mission->survey_id);
                 $userSurvey = $this->surveyEntryRepository->findByUserIdAndSurveyId($user->id, $survey->id);
 
-                if (!$userSurvey->count() <= 0)
+                if ($userSurvey->count() <= 0)
                 {
                     abort(404);
                 }
@@ -111,6 +113,77 @@ class AttendController extends Controller
 
         }
 
-        return view('app.mission.attend');
+        return view('app.mission.attend', [
+            'mission' => $mission
+        ]);
+    }
+
+    public function try(Request $request, int $missionId): JsonResponse
+    {
+        try
+        {
+            $this->jsonValidator($request, [
+                'code' => 'string|required',
+            ]);
+
+            $mission = $this->missionRepository->findById($missionId);
+
+            if (is_null($mission)) {
+                throw new Exception('CAN NOT FOUND MISSION', 422);
+            }
+
+            if ($mission->phase !== MissionPhaseType::IN_ATTENDANCE->value) {
+                throw new Exception('ATTEND TIME EXPIRES', 422);
+            }
+
+            $user = Auth::user();
+            $code = trim($request->get('code'));
+
+            $userMission = $this->userMissionRepository->findByUserIdAndMissionId($user->id, $mission->id);
+
+            if (is_null($userMission))
+            {
+                throw new Exception('NOT PARTICIPATE MISSION', 422);
+            }
+
+            if (!is_null($mission->survey_id))
+            {
+                $survey = $this->surveyRepository->findById($mission->survey_id);
+                $userSurvey = $this->surveyEntryRepository->findByUserIdAndSurveyId($user->id, $survey->id);
+
+                if ($userSurvey->count() <= 0)
+                {
+                    throw new Exception('NOT PARTICIPATE SURVEY', 422);
+                }
+            }
+
+            if (!is_null($userMission->attended_at)) {
+                throw new Exception('ALREADY IN ATTENDANCE', 422);
+            }
+
+            if ($userMission->try_attends >= $this->userMissionRepository::MAX_ATTENDANCE_ATTEMPTS) {
+                throw new Exception('ATTEMPTS EXCEEDED', 422);
+            }
+
+            $result = false;
+
+            if ($mission->code === $code) {
+                $result = true;
+                $userMission->attended_at = now();
+            }
+
+            $userMission->try_attends += 1;
+            $userMission->save();
+
+            return $this->jsonResponse(200, 'SUCCESS', [
+                'result' => $result,
+                'count' => $userMission->try_attends,
+                'limit' => $this->userMissionRepository::MAX_ATTENDANCE_ATTEMPTS
+            ]);
+        }
+        catch (\Exception $e)
+        {
+            return $this->jsonResponse($e->getCode(), \Str::upper($e->getMessage()), config('app.debug')? $e->getTrace() : []);
+        }
     }
 }

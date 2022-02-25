@@ -98,27 +98,29 @@ class ListController extends Controller
 
             $step = $this->getPaginationStep($step, $limit, $count);
             $missions = $query->offset($step * $limit)->limit($limit)->get();
-            $userMissions = $userMissionRepository->findByUserId($user->id, ['id', 'try_attends', 'attended_at']);
+            $userMissions = $userMissionRepository->findByUserId($user->id, ['id', 'mission_id', 'try_attends', 'attended_at']);
             $userMissionIds = $userMissions->pluck('id');
 
             if ($count > 0)
             {
-                $th = ['분류', '시작 시간', '중도 참여', '미션 메이커', '상태', '&nbsp;', '제목'];
+                $th = ['분류', '시작 시간', '중도 참여', '미션 메이커', '상태', '&nbsp;', '미션'];
                 $tr = array();
 
                 foreach ($missions as $v)
                 {
+                    $userMission = $userMissions->first(fn ($i) => $i->mission_id == $v->id);
+
                     $missionType = MissionType::getKoreanNames();
                     $missionPhaseType = MissionPhaseType::getKoreanNames();
 
                     $url = route('mission.read', $v->id);
                     $text = ['link-indigo', '미션 정보'];
 
-                    if ($userMissionIds->contains($v->id))
+
+                    if (!is_null($userMission))
                     {
-                        if ($v->user_id != $user->id)
+                        if ($v->user_id !== $user->id)
                         {
-                            $userMission = $userMissions->first(fn ($i) => $i->mission_id == $v->id);
                             $hasFailAttendance = $userMission->try_attends >= $userMissionRepository::MAX_ATTENDANCE_ATTEMPTS;
                             $hasAttend = !is_null($userMission->attended_at);
                             $canAttend = !$hasFailAttendance && $v->phase === MissionPhaseType::IN_ATTENDANCE->value;
@@ -129,17 +131,17 @@ class ListController extends Controller
                                 {
                                     if ($canAttend)
                                     {
-                                        $text = ['link-yellow', '출석 체크'];
+                                        $text = ['link-yellow', '출석 하기'];
                                     }
                                     else
                                     {
                                         $text = ['link-red', '출석 실패'];
                                     }
                                 }
-                            }
-                            else
-                            {
-                                $text = ['link-green', '출석 성공'];
+                                else
+                                {
+                                    $text = ['link-green', '출석 성공'];
+                                }
                             }
                         }
                     }
@@ -158,7 +160,7 @@ class ListController extends Controller
                         $v->user()->first()->name,
                         $missionPhaseType[$v->phase],
                         "<a href='{$url}' class='{$text[0]}' title='{$text[1]}'>{$text[1]}</a>",
-                        "<a href='{$url}' title='{$v->title}'>$v->title</a>"
+                        "<a href='{$url}' title='{$v->title}'><div class='flex justify-between'><p>{$v->title}</p><p class='{$text[0]}'>{$text[1]}</p></div>"
                     ];
 
                     $tr[] = $row;

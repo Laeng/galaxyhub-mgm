@@ -92,9 +92,8 @@
                 </div>
             @endif
 
-            @if($isMaker || $isAdmin)
-            <div class="flex flex-col space-y-2" x-show="data.load.data.phase === 0 || data.load.data.phase === 1">
-                <div class="flex flex-col space-y-2">
+            <div class="flex flex-col space-y-2">
+                @if($isMaker || $isAdmin)
                     <template x-if="data.load.data.phase === 0">
                         <x-button.filled.md-white class="w-full" type="button" onclick="location.href='{{ route('mission.read.edit', $mission->id) }}'" x-cloak>
                             {{ $type }} 수정
@@ -110,26 +109,21 @@
                             {{ $type }} 종료
                         </x-button.filled.md-white>
                     </template>
-                </div>
-            </div>
-            @endif
-
-            <div class="flex flex-col space-y-2">
+                @endif
                 @if(!$isMaker)
                     <template x-if="data.load.data.is_participant && data.load.data.phase === 2" x-cloak>
-                        <x-button.filled.md-blue class="w-full" type="button" onclick="location.href='{{ route('mission.read.survey', $mission->id) }}'">
-                            출석 체크
-                        </x-button.filled.md-blue>
+                        <x-button.filled.md-white class="w-full" type="button" onclick="location.href='{{ route('mission.read.survey', $mission->id) }}'" x-text="data.load.data.button_text">
+                        </x-button.filled.md-white>
                     </template>
                     <template x-if="!data.load.data.is_participant && ((data.load.data.can_tardy && data.load.data.phase === 1) || data.load.data.phase === 0)">
-                        <x-button.filled.md-blue class="w-full" type="button" @click="process('JOIN')" x-cloak>
+                        <x-button.filled.md-white class="w-full" type="button" @click="process('JOIN')" x-cloak>
                             참가 신청
-                        </x-button.filled.md-blue>
+                        </x-button.filled.md-white>
                     </template>
                     <template x-if="data.load.data.is_participant && data.load.data.phase <= 0">
-                        <x-button.filled.md-blue class="w-full" type="button" @click="process('LEAVE')" x-cloak>
+                        <x-button.filled.md-white class="w-full" type="button" @click="process('LEAVE')" x-cloak>
                             참가 취소
-                        </x-button.filled.md-blue>
+                        </x-button.filled.md-white>
                     </template>
                 @endif
 
@@ -207,8 +201,8 @@
                         </x-button.filled.md-red>
                     </template>
                     <template x-if="data.load.data.phase === 3">
-                        <x-button.filled.md-blue class="w-full" type="button" onclick="location.href='{{ route('mission.read.report', $mission->id) }}'">
-                            설문 결과
+                        <x-button.filled.md-blue class="w-full" type="button" onclick="location.href='{{ route('mission.read.report', $mission->id) }}'" x-show="data.load.data.is_survey">
+                            만족도 조사 결과
                         </x-button.filled.md-blue>
                     </template>
                 </div>
@@ -242,7 +236,9 @@
                             body: '{!! $mission->body !!}',
                             can_tardy: {{ var_export($mission->can_tardy) }},
                             is_participant: {{ var_export($isParticipant) }},
-                            is_edit: false
+                            is_edit: false,
+                            is_survey: false,
+                            button_text: '',
                         },
                     },
                     participants: {

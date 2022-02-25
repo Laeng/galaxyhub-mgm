@@ -4,6 +4,7 @@ namespace App\Http\Controllers\App\Mission;
 
 use App\Enums\MissionPhaseType;
 use App\Enums\MissionType;
+use App\Enums\RoleType;
 use App\Http\Controllers\Controller;
 use App\Repositories\Mission\Interfaces\MissionRepositoryInterface;
 use App\Repositories\Survey\Interfaces\SurveyEntryRepositoryInterface;
@@ -39,11 +40,92 @@ class SurveyController extends Controller
         $this->surveyService = $surveyService;
     }
 
-    public function report()
+    public function report(Request $request, int $missionId): View|RedirectResponse
     {
+        $user = Auth::user();
+        $mission = $this->missionRepository->findById($missionId);
 
+        if (is_null($mission) || is_null($mission->survey_id))
+        {
+            abort(404);
+        }
 
-        return '';
+        $isMaker = $mission->user_id === $user->id;
+        $isAdmin = $user->hasRole(RoleType::ADMIN->name);
+
+        if (!$isAdmin && !$isMaker)
+        {
+            abort(404);
+        }
+
+        $survey = $this->surveyRepository->findById($mission->survey_id);
+        $sections = $survey->sections()->get(); //TODO - repositroy 패턴 사용하기...
+        $countParticipant = $survey->entries()->count();
+
+        $data = [];
+
+        foreach ($sections as $section) // FIXME - 섹션이 있는 가정하에 만들어짐!!!!!
+        {
+            $sectionQuestions = $section->questions;
+
+            foreach($sectionQuestions as $question)
+            {
+                $type = $question->type;
+
+                $answers = $question->answers()->get();
+                $options = $question->options;
+
+                $countAnswers = count($answers);
+                $countOptions = [];
+                $userAnswers = [];
+
+                if ($type === 'radio')
+                {
+                    $countOptions = array_fill_keys($options, 0);
+
+                    foreach ($answers as $answer)
+                    {
+                        $countOptions[$answer->value] += 1;
+                    }
+                }
+                else
+                {
+                    foreach ($answers as $answer)
+                    {
+                        $userAnswer = [
+                            'answer' => $answer->value
+                        ];
+
+                        if ($isAdmin) {
+                            $userAnswer['user'] = $answer->entry()->first()->participant()->first();
+                        }
+
+                        $userAnswers[] = $userAnswer;
+                    }
+
+                    shuffle($userAnswers); // 출석 시간을 기반으로 한 참가자 유추가 어렵게 하기 위함
+                }
+
+                $data[] = [
+                    'title' => $question->title,
+                    'type' => $type,
+                    'options' => $options,
+                    'countAnswers' => $countAnswers,
+                    'countOptions' => $countOptions,
+                    'userAnswer' => $userAnswers,
+                ];
+            }
+        }
+
+        // TODO 만약 섹션 없이 질문들로만 구성된 설문을 만든다면, 추가하기.
+
+        return view('app.mission.report', [
+            'mission' => $mission,
+            'missionType' => MissionType::getKoreanNames()[$mission->type],
+            'isAdmin' => $isAdmin,
+            'count' => $countParticipant,
+            'data' => $data
+        ]);
     }
 
     public function survey(Request $request, int $missionId): Factory|View|Application|RedirectResponse

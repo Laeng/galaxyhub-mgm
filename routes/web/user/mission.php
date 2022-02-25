@@ -28,6 +28,7 @@ Route::prefix('app')->group(function () {
         Route::get('/{missionId}/survey', [SurveyController::class, 'survey'])->name('read.survey')->whereNumber('missionId');
 
         //AJAX
+        Route::post('/{missionId}/attend/try', [AttendController::class, 'try'])->name('read.attend.try');
         Route::post('/{missionId}/refresh', [ReadController::class, 'refresh'])->name('read.refresh');
         Route::post('/{missionId}/participants', [ReadController::class, 'participants'])->name('read.participants');
         Route::post('/{missionId}/process', [ReadController::class, 'process'])->name('read.process');

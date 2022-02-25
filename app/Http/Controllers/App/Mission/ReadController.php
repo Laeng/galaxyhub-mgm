@@ -102,6 +102,36 @@ class ReadController extends Controller
 
         $code = ($isMaker || $isAdmin) ? $mission->code : '';
 
+        $buttonText = '';
+        if (!is_null($userMission))
+        {
+            if ($mission->user_id !== $user->id)
+            {
+                $hasFailAttendance = $userMission->try_attends >= $this->userMissionRepository::MAX_ATTENDANCE_ATTEMPTS;
+                $hasAttend = !is_null($userMission->attended_at);
+                $canAttend = !$hasFailAttendance && $mission->phase === MissionPhaseType::IN_ATTENDANCE->value;
+
+                if ($mission->phase >= MissionPhaseType::IN_ATTENDANCE->value)
+                {
+                    if (!$hasAttend)
+                    {
+                        if ($canAttend)
+                        {
+                            $buttonText = '출석 하기';
+                        }
+                        else
+                        {
+                            $buttonText = '출석 실패';
+                        }
+                    }
+                    else
+                    {
+                        $buttonText = '출석 성공';
+                    }
+                }
+            }
+        }
+
         return view('app.mission.read', [
             'user' => $user,
             'maker' => $maker,
@@ -112,7 +142,9 @@ class ReadController extends Controller
             'timestamp' => $visibleDate,
             'isAdmin' => $isAdmin,
             'isMaker' => $isMaker,
-            'isParticipant' => $isParticipant
+            'isParticipant' => $isParticipant,
+            'is_survey' => !is_null($mission->survey_id),
+            'button_text' => $buttonText
         ]);
     }
 
@@ -226,7 +258,38 @@ class ReadController extends Controller
             $user = Auth::user();
             $visibleDate = $this->visibleDate($mission);
 
-            $userMissions = $this->userMissionRepository->findByUserIdAndMissionId($user->id, $mission->id);
+            $userMission = $this->userMissionRepository->findByUserIdAndMissionId($user->id, $mission->id);
+
+            $buttonText = '';
+            if (!is_null($userMission))
+            {
+                if ($mission->user_id !== $user->id)
+                {
+                    $hasFailAttendance = $userMission->try_attends >= $this->userMissionRepository::MAX_ATTENDANCE_ATTEMPTS;
+                    $hasAttend = !is_null($userMission->attended_at);
+                    $canAttend = !$hasFailAttendance && $mission->phase === MissionPhaseType::IN_ATTENDANCE->value;
+
+                    if ($mission->phase >= MissionPhaseType::IN_ATTENDANCE->value)
+                    {
+                        if (!$hasAttend)
+                        {
+                            if ($canAttend)
+                            {
+                                $buttonText = '출석 하기';
+                            }
+                            else
+                            {
+                                $buttonText = '출석 실패';
+                            }
+                        }
+                        else
+                        {
+                            $buttonText = '출석 성공';
+                        }
+                    }
+                }
+            }
+
 
             $data = [
                 'phase' => $mission->phase,
@@ -242,7 +305,9 @@ class ReadController extends Controller
                 'code' => '',
                 'can_tardy' => $mission->can_tardy,
                 'body' => $mission->body,
-                'is_participant' => (!is_null($userMissions) && $mission->user_id != $user->id),
+                'is_participant' => (!is_null($userMission) && $mission->user_id != $user->id),
+                'is_survey' => !is_null($mission->survey_id),
+                'button_text' => $buttonText
             ];
 
             if ($user->id == $mission->user_id || $user->hasPermissionTo(PermissionType::ADMIN->name)) {

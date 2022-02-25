@@ -2,8 +2,8 @@
     <x-panel.galaxyhub.basics>
         @if($isParticipate)
             <div>
-                <h2 class="text-xl lg:text-2xl font-bold">감사합니다.</h2>
-                <p class="mt-1 max-w-2xl text-sm text-gray-500 dark:text-gray-300">{{ $user->name }}님께서는 {{ $participateDate }}에 만족도 조사에 참여하셨습니다.</p>
+                <h2 class="text-xl lg:text-2xl font-bold">참여 완료</h2>
+                <p class="mt-1 max-w-2xl text-sm text-gray-500 dark:text-gray-300">{{ $user->name }}님께서는 만족도 조사를 {{ $participateDate }}에 참여하셨습니다.</p>
             </div>
             <div class="flex flex-col space-y-4">
                 <x-survey.form :survey="$survey" action="" :answer="$answer"/>
