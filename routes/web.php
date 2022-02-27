@@ -13,15 +13,16 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-require_once __DIR__ . '/web/admin/application.php';
-require_once __DIR__ . '/web/admin/memo.php';
-
-
 require_once __DIR__ . '/web/user/account.php';
 require_once __DIR__ . '/web/user/app.php';
 require_once __DIR__ . '/web/user/application.php';
 require_once __DIR__ . '/web/user/file.php';
 require_once __DIR__ . '/web/user/mission.php';
+require_once __DIR__ . '/web/user/updater.php';
+
+
+require_once __DIR__ . '/web/admin/application.php';
+require_once __DIR__ . '/web/admin/memo.php';
 
 
 Route::get('/', function () {

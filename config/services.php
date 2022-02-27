@@ -37,4 +37,8 @@ return [
         'redirect' => env('STEAM_REDIRECT_URI')
     ],
 
+    'github' => [
+        'token' => env('GITHUB_TOKEN_SECRET')
+    ]
+
 ];

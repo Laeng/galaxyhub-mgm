@@ -5,6 +5,7 @@ namespace App\Services\File;
 use App\Models\File;
 use App\Repositories\File\Interfaces\FileRepositoryInterface;
 use App\Services\File\Contracts\FileServiceContract;
+use Carbon\Carbon;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 
@@ -74,6 +75,28 @@ class FileService implements FileServiceContract
         }
         else {
             $path = Storage::disk($file->storage)->temporaryUrl($path, now()->addHours(1));
+        }
+
+        return $path;
+    }
+
+    public function getUrlToDirectly(string $storage, string $path, string $filename, bool $visible = true, ?Carbon $expire = null): string
+    {
+        $baseUrl = rtrim(config("filesystems.disks.{$storage}.endpoint"), '/');
+        $path = sprintf("%s/%s", $path, $filename);
+
+        if ($visible)
+        {
+            if ($storage === 'do')
+            {
+                $baseUrl = rtrim(config("filesystems.disks.{$storage}.url"), '/');
+            }
+
+            $path = sprintf("%s%s", $baseUrl, $path);
+        }
+        else
+        {
+            $path = Storage::disk($storage)->temporaryUrl($path, $expire ?? now()->addHour());
         }
 
         return $path;

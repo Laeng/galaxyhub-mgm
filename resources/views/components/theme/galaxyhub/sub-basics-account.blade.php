@@ -1,4 +1,4 @@
-<x-theme.galaxyhub.sub-basics :title="$title" :description="$title" website-name="MGM LOUNGE">
+<x-theme.galaxyhub.sub-basics :title="$title" :description="$title">
     <div class="flex flex-col-reverse md:flex-row items-start">
         <aside class="md:basis-4/12 xl:basis-3/12 md:sticky md:top-[4.75rem] md:py-8 md:px-4 w-full">
             <div class="flex flex-col space-y-8">

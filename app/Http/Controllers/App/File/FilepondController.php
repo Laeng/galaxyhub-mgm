@@ -67,7 +67,7 @@ class FilepondController extends Controller
                 'visible' => ['boolean']
             ]);
 
-            if (!in_array($directory, ['survey']))
+            if (!in_array($directory, ['survey', 'memo']))
             {
                 throw new Exception('Validation failed', 422);
             }

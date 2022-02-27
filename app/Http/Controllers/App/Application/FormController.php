@@ -104,7 +104,7 @@ class FormController extends Controller
 
             $user->assignRole(RoleType::APPLY->name);
             $data = [
-                'comment' => "{$user->name}, 가입 신청서 제출"
+                'comment' => "가입 신청서가 접수되었습니다."
             ];
 
             $userService->createRecord($user->id, UserRecordType::USER_APPLICATION->name, $data);

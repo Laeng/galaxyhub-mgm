@@ -7,21 +7,29 @@ use App\Enums\UserRecordType;
 use App\Http\Controllers\Controller;
 use App\Repositories\User\Interfaces\UserRecordRepositoryInterface;
 use App\Repositories\User\Interfaces\UserRepositoryInterface;
+use App\Services\File\Contracts\FileServiceContract;
 use App\Services\User\Contracts\UserServiceContract;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 use function asset;
 use function config;
 
 class MemoController extends Controller
 {
+    private FileServiceContract $fileService;
     private UserServiceContract $userService;
     private UserRepositoryInterface $userRepository;
     private UserRecordRepositoryInterface $recordRepository;
 
-    public function __construct(UserServiceContract $userService, UserRepositoryInterface $userRepository, UserRecordRepositoryInterface $recordRepository)
+    public function __construct
+    (
+        UserServiceContract $userService, UserRepositoryInterface $userRepository,
+        UserRecordRepositoryInterface $recordRepository, FileServiceContract $fileService
+    )
     {
+        $this->fileService = $fileService;
         $this->userService = $userService;
         $this->userRepository = $userRepository;
         $this->recordRepository = $recordRepository;
@@ -54,6 +62,24 @@ class MemoController extends Controller
                 $userRecordType = array_flip(UserRecordType::getKoreanNames());
                 $type = array_flip(UserRecordType::getKoreanNames())[$record->type];
 
+                if ($record->type === UserRecordType::USER_MEMO_IMAGE_FORM_ADMIN->name)
+                {
+                    $html = '';
+                    $imageIds = json_decode($record->data['comment']);
+
+                    foreach ($imageIds as $imageId)
+                    {
+                        $path = $this->fileService->getUrl($imageId);
+                        $html .= "<a class='flex justify-center items-center' href='{$path}' target='_blank' rel='noopener'><img class='object-scale-down rounded' alt='image' src='{$path}'/></a>";
+                    }
+
+                    $comment = "<div class='grid grid-cols-2 gap-2 pt-2'>{$html}</div>";
+                }
+                else
+                {
+                    $comment = nl2br($record->data['comment']);
+                }
+
                 $datum = [
                     'recorder' => [
                         'avatar' => null,
@@ -61,7 +87,7 @@ class MemoController extends Controller
                     ],
                     'id' => $record->id,
                     'type' => $type,
-                    'comment' => nl2br($record->data['comment']),
+                    'comment' => $comment,
                     'date' => $record->created_at->format('Y-m-d H:i'),
                     'can_delete' => false
                 ];
@@ -77,7 +103,7 @@ class MemoController extends Controller
 
                         $user = Auth::user();
 
-                        if ($recorder->id === $user->id && $record->type === UserRecordType::USER_MEMO_FOR_ADMIN->name)
+                        if ($recorder->id === $user->id && in_array($record->type, [UserRecordType::USER_MEMO_TEXT_FOR_ADMIN->name, UserRecordType::USER_MEMO_IMAGE_FORM_ADMIN->name]))
                         {
                             $datum['can_delete'] = true;
                         }
@@ -117,6 +143,7 @@ class MemoController extends Controller
         try
         {
             $this->jsonValidator($request, [
+                'type' => ['string', Rule::in(['text', 'image'])],
                 'user_id' => ['int', 'required'],
                 'comment' => ['string', 'required']
             ]);
@@ -134,7 +161,13 @@ class MemoController extends Controller
                 throw new \Exception('NOT FOUND USER', 422);
             }
 
-            $this->userService->createRecord($target->id, UserRecordType::USER_MEMO_FOR_ADMIN->name, $data, $user->id);
+            $type = match ($request->get('type'))
+            {
+                'text' => UserRecordType::USER_MEMO_TEXT_FOR_ADMIN->name,
+                'image' => UserRecordType::USER_MEMO_IMAGE_FORM_ADMIN->name
+            };
+
+            $this->userService->createRecord($target->id, $type, $data, $user->id);
 
             return $this->jsonResponse(200, 'SUCCESS', []);
         }
@@ -153,21 +186,31 @@ class MemoController extends Controller
                 'memo_id' => ['int', 'required']
             ]);
 
-            $recode = $this->recordRepository->findById($request->get('memo_id'));
+            $record = $this->recordRepository->findById($request->get('memo_id'));
 
-            if (is_null($recode))
+            if (is_null($record))
             {
                 throw new \Exception('NOT FOUND MEMO', 422);
             }
 
             $user = Auth::user();
 
-            if ($recode->recorder_id !== $user->id)
+            if ($record->recorder_id !== $user->id)
             {
                 throw new \Exception('NOT RECORDER', 422);
             }
 
-            $recode->delete();
+            if ($record->type === UserRecordType::USER_MEMO_IMAGE_FORM_ADMIN->name)
+            {
+                $imageIds = json_decode($record->data['comment']);
+
+                foreach ($imageIds as $imageId)
+                {
+                    $path = $this->fileService->delete($imageId, $user->id);
+                }
+            }
+
+            $record->delete();
 
             return $this->jsonResponse('200', 'SUCCESS', []);
         }

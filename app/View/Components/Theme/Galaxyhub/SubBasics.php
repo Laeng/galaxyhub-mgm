@@ -17,7 +17,7 @@ class SubBasics extends Component
      *
      * @return void
      */
-    public function __construct($title = '', $description = '', $websiteName = '', $class = '')
+    public function __construct($title = '', $description = '', $websiteName = 'MGM Lounge', $class = '')
     {
         $this->title = $title;
         $this->description = $description;
