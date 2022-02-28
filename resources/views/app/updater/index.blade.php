@@ -8,7 +8,7 @@
 
         <div class="lg:basis-2/5 pt-8 pb-4 lg:py-8 grid grid-cols-1 gap-4">
             <div>
-                <h1 class="text-2xl lg:text-4xl font-black">MGM 업데이터</h1>
+                <h1 class="text-2xl lg:text-4xl font-black tracking-wide">MGM 업데이터</h1>
             </div>
 
             <div class="">
@@ -25,7 +25,7 @@
             <div>
                 <p class="text-xs text-gray-500 dark:text-gray-300">
                     MGM 업데이터는 멀티플레이 게임 매니지먼트의 독점 프로그램이며 프로그램에 대한 사용권은 MGM 아르마 클랜 회원과 멀티플레이 게임 매니지먼트가 인가한 외부인에게만 제공됩니다.
-                    본 프로그램에 대한 모든 권리는 멀티플레이 게임 매니지먼트와 윤창욱에게 있습니다. 본 프로그램을 사용하시면 개인정보처리방침에 기재된 서비스 제공을 위한 선택항목 수집에 동의하신 것으로 간주됨을 알려드립니다.
+                    본 프로그램에 대한 모든 권리는 멀티플레이 게임 매니지먼트와 윤창욱에게 있습니다. 본 프로그램을 사용하시면 개인정보처리방침에 기재된 바와 같이 서비스 제공을 위한 선택항목 수집에 동의하신 것으로 간주됨을 알려드립니다.
                 </p>
             </div>
 
@@ -44,7 +44,8 @@
         <h1 class="my-4 lg:hidden text-2xl font-bold">MGM 업데이터</h1>
         <div class="mt-4 lg:mt-6">
             <x-panel.galaxyhub.basics>
-
+                <h2 class="text-xl lg:text-2xl font-bold">설치된 PC</h2>
+                <p class="mt-1 max-w-2xl text-sm text-gray-500 dark:text-gray-300">MGM 업데이터가 설치된 PC 입니다.</p>
             </x-panel.galaxyhub.basics>
         </div>
     </section>
