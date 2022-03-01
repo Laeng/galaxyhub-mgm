@@ -41,7 +41,7 @@
                                 @if($isAdmin)
                                     <x-alert.galaxyhub.danger title="주의">
                                         <ul>
-                                            <li>주관식 문항 작성자는 관리자에게만 표시됩니다. 회원 정보가 표시 되지 않도록 주의하십시오.</li>
+                                            <li>주관식 문항 작성자는 관리자에게만 표시됩니다. 회원 정보가 노출 되지 않도록 주의하십시오.</li>
                                         </ul>
                                     </x-alert.galaxyhub.danger>
                                 @endif

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\App\Application;
 use App\Enums\RoleType;
 use App\Http\Controllers\Controller;
 use App\Repositories\User\Interfaces\UserAccountRepositoryInterface;
+use App\Repositories\User\Interfaces\UserRecordRepositoryInterface;
 use App\Services\Steam\Contracts\SteamServiceContract;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\View;
@@ -33,11 +34,15 @@ class AgreementController extends Controller
         return view('app.application.agreements');
     }
 
-    public function checkAccount(Request $request, UserAccountRepositoryInterface $userAccountRepository, SteamServiceContract $steamService): JsonResponse
+    public function checkAccount
+    (
+        Request $request, UserAccountRepositoryInterface $userAccountRepository,
+        SteamServiceContract $steamService,
+    ): JsonResponse
     {
         try
         {
-            $user = Auth()->user();
+            $user = Auth::user();
             $accounts = $userAccountRepository->findByUserId($user->id);
             $steamAccount = $accounts->filter(fn ($v, $k) => $v->provider === 'steam')->first();
 

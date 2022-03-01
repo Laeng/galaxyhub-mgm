@@ -103,7 +103,7 @@ class AttendController extends Controller
             }
 
             $survey = $this->surveyRepository->findById($mission->survey_id);
-            $userSurvey = $this->surveyEntryRepository->findByUserIdAndSurveyId($user->id, $mission->id);
+            $userSurvey = $this->surveyEntryRepository->findByUserIdAndSurveyId($user->id, $survey->id);
 
             if ($userSurvey->count() <= 0)
             {

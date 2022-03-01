@@ -119,7 +119,7 @@
         </x-container.galaxyhub.basics>
     </div>
 
-    <div class="bg-white dark:bg-gray-800">
+    <div class="dark:bg-gray-800">
         <x-container.galaxyhub.basics class="py-16 lg:py-32 space-y-8">
 
             <dl class="grid grid-cols-1 md:grid-cols-3  gap-4">
@@ -150,6 +150,14 @@
                 <div class="px-4 py-5 bg-white dark:bg-gray-900 shadow overflow-hidden sm:p-6 flex flex-col">
                     <dt class="text-2xl font-bold text-gray-900 dark:text-gray-100">스타 시티즌 유저 한국어 프로젝트</dt>
                     <dd class="mt-1 mb-4 text-sm text-gray-500 dark:text-gray-300">스타 시티즌의 언어 장벽을 허물고자 타 커뮤니티와 연합하여 번역 및 인프라를 지원하고 있습니다.</dd>
+                    <x-button.filled.md-white class="w-full mt-auto">
+                        바로가기
+                    </x-button.filled.md-white>
+                </div>
+
+                <div class="px-4 py-5 bg-white dark:bg-gray-900 shadow overflow-hidden sm:p-6 flex flex-col">
+                    <dt class="text-2xl font-bold text-gray-900 dark:text-gray-100">아르마3 사표 계산기</dt>
+                    <dd class="mt-1 mb-4 text-sm text-gray-500 dark:text-gray-300">아르마3 장비들의 조준을 돕는 사표 계산기입니다.</dd>
                     <x-button.filled.md-white class="w-full mt-auto">
                         바로가기
                     </x-button.filled.md-white>

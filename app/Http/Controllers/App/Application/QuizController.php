@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers\App\Application;
 
+use App\Enums\BanCommentType;
 use App\Enums\RoleType;
+use App\Enums\UserRecordType;
 use App\Http\Controllers\Controller;
 use App\Repositories\Survey\Interfaces\SurveyEntryRepositoryInterface;
+use App\Repositories\User\Interfaces\UserRecordRepositoryInterface;
 use App\Services\Survey\Contracts\SurveyServiceContract;
+use App\Services\User\Contracts\UserServiceContract;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
@@ -60,7 +64,7 @@ class QuizController extends Controller
         ]);
     }
 
-    public function score(Request $request): View|Application|RedirectResponse|Redirector
+    public function score(Request $request, UserServiceContract $userService): View|Application|RedirectResponse|Redirector
     {
         $user = Auth::user();
 
@@ -115,6 +119,10 @@ class QuizController extends Controller
                     $user->ban([
                         'comment' => 'ARMA3 퀴즈를 3개 이상 맞추지 못하셨습니다. 7일 후 다시 도전 하실 수 있습니다.',
                         'expired_at' => now()->addDays(7),
+                    ]);
+
+                    $userService->createRecord($user->id, UserRecordType::BAN_DATA->name, [
+                        'comment' => BanCommentType::APPLICATION_QUIZ_FAIL->value
                     ]);
                 }
             }

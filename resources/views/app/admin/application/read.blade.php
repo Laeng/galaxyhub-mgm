@@ -90,7 +90,7 @@
                                 구입한 게임
                             </p>
                             <p class="text-sm text-gray-600 dark:text-gray-300">
-                                <a href="{{ route('admin.application.read', [$user->id]) }}" target="_blank" rel="noopener">확인하기</a>
+                                <a href="{{ route('admin.application.read.games', [$user->id]) }}" target="_blank" rel="noopener">확인하기</a>
                             </p>
                         </div>
                     </li>
