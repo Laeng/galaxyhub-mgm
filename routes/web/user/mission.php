@@ -5,10 +5,11 @@ use App\Http\Controllers\App\Mission\EditorController;
 use App\Http\Controllers\App\Mission\ListController;
 use App\Http\Controllers\App\Mission\ReadController;
 use App\Http\Controllers\App\Mission\SurveyController;
+use App\Http\Middleware\ForbidBannedUser;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('app')->group(function () {
-    Route::prefix('mission')->name('mission.')->middleware(['auth.member:web'])->group(function() {
+    Route::prefix('mission')->name('mission.')->middleware(['auth.member:web', ForbidBannedUser::class])->group(function() {
         //VIEW
         Route::redirect('/', '/app/missions');
         Route::get('/new', [EditorController::class, 'new'])->name('new');

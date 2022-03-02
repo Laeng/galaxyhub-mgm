@@ -78,7 +78,7 @@ class ReadController extends Controller
         }
         catch (\Exception $e)
         {
-            return $this->jsonResponse($e->getCode(), Str::upper($e->getMessage()), []);
+            return $this->jsonResponse($e->getCode(), Str::upper($e->getMessage()), config('app.debug') ? $e->getTrace() : []);
         }
     }
 

@@ -119,7 +119,7 @@ class ReadController extends Controller
         ]);
     }
 
-    public function data(Request $request, int $userId): JsonResponse
+    public function data(Request $request, int $userId, SteamServiceContract $steamService): JsonResponse
     {
         try
         {
@@ -201,7 +201,7 @@ class ReadController extends Controller
                 'arma' => $arma3?->data,
                 'ban' => $ban?->data,
                 'naver_id' => $naverId,
-                'created_at' => "{$summaries->created_at->format('Y-m-d')} 기준"
+                'created_at' => "{$summaries->created_at->format('Y-m-d')} 기준",
             ]);
         }
         catch (\Exception $e)

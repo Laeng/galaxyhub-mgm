@@ -96,7 +96,7 @@
                     </li>
 
                     <li class="py-4">
-                        <template x-if="data.load.data.group.groupID64 === ''">
+                        <template x-if="data.load.data.group.length <= 0">
                             <div class="flex justify-between">
                                 <p class="text-sm font-medium text-gray-800 dark:text-gray-200">
                                     가입한 클랜
@@ -106,22 +106,26 @@
                                 </p>
                             </div>
                         </template>
-                        <template x-if="data.load.data.group.groupID64 !== ''">
-                            <div>
+                        <template x-if="data.load.data.group.length > 0">
+                            <div x-cloak>
                                 <p class="text-sm font-medium text-gray-800 dark:text-gray-200 pb-2">
                                     가입한 클랜 - <a class="text-blue-500 hover:text-blue-800" :href="'https://steamcommunity.com/profiles/' +  data.load.data.summaries.steamid + '/groups/'" target="_blank">더보기</a>
                                 </p>
-                                <a :href="'https://steamcommunity.com/gid/' + data.load.data.group.groupID64" target="_blank">
-                                    <div class="flex">
-                                        <div class="mr-4 flex-shrink-0">
-                                            <div class="h-16 w-16" x-html="data.load.data.group.groupDetails.avatarFull"></div>
-                                        </div>
-                                        <div>
-                                            <p class="-mt-1 text-sm font-medium" x-text="data.load.data.group.groupDetails.groupName"></p>
-                                            <p class="text-sm text-gray-600 dark:text-gray-300" x-text="data.load.data.group.groupDetails.summary.replace(/(<([^>]+)>)/ig,'')"></p>
-                                        </div>
-                                    </div>
-                                </a>
+                                <div class="max-h-96" data-simplebar>
+                                    <template x-for="i in data.load.data.group">
+                                        <a :href="'https://steamcommunity.com/gid/' + i.groupID64" target="_blank">
+                                            <div class="flex py-1">
+                                                <div class="mr-4 flex-shrink-0">
+                                                    <img class="h-16 w-16 rounded" :alt="i.groupName" :src="i.avatarFull"/>
+                                                </div>
+                                                <div>
+                                                    <p class="-mt-1 text-sm font-medium" x-text="i.groupName"></p>
+                                                    <p class="text-sm text-gray-600 dark:text-gray-300" x-text="i.summary.replace(/(<([^>]+)>)/ig,'')"></p>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </template>
+                                </div>
                             </div>
                         </template>
                     </li>

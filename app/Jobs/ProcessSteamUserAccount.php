@@ -50,13 +50,24 @@ class ProcessSteamUserAccount implements ShouldQueue
             if ($playerSummaries['response']['players'][0]['communityvisibilitystate'] == 3)
             {
                 $userId = $this->user->id;
+                $playerGroups = $steamService->getPlayerGroups($playerSummaries['response']['players'][0]['steamid'])['response']['groups'];
+                $groups = array();
+
+                if (count($playerGroups) > 0)
+                {
+                    foreach($playerGroups as $id)
+                    {
+                        $data = $steamService->getGroupSummary($id['gid']);
+                        $groups[] = array_merge($data['groupDetails'], ['groupID64' => $data['groupID64']]);
+                    }
+                }
 
                 $data = [
                     UserRecordType::STEAM_DATA_SUMMARIES->name => $playerSummaries['response']['players'][0],
                     UserRecordType::STEAM_DATA_GAMES->name => $steamService->getOwnedGames($accountId, true)['response'],
                     UserRecordType::STEAM_DATA_ARMA3->name => $steamService->getOwnedGames($accountId, true, true, [107410])['response']['games']['0'],
                     UserRecordType::STEAM_DATA_BANS->name => $steamService->getPlayerBans($accountId)['players']['0'],
-                    UserRecordType::STEAM_DATA_GROUPS->name => $steamService->getGroupSummary($playerSummaries['response']['players'][0]['primaryclanid'])
+                    UserRecordType::STEAM_DATA_GROUPS->name => $groups
                 ];
 
                 foreach ($data as $k => $v)

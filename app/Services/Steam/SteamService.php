@@ -45,6 +45,11 @@ class SteamService implements SteamServiceContract
         return $this->steamUser->GetPlayerBansV1($this->steamApiKey, $steamId);
     }
 
+    public function getPlayerGroups(int $steamId): array
+    {
+        return $this->steamUser->GetUserGroupListV1($this->steamApiKey, $steamId);
+    }
+
     public function getGroupSummary(int $steamGroupId): array
     {
         if ($steamGroupId == 103582791429521408) return [];
@@ -56,7 +61,7 @@ class SteamService implements SteamServiceContract
         try
         {
             $response = $webClient->request('GET',"gid/{$steamGroupId}/memberslistxml", ['xml' => 1]);
-            $xml = simplexml_load_string($response->getBody()->getContents());
+            $xml = simplexml_load_string($response->getBody()->getContents(),"SimpleXMLElement", LIBXML_NOCDATA);
 
             return json_decode(json_encode($xml), true);
         }

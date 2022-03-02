@@ -14,5 +14,7 @@ interface SteamServiceContract
 
     public function getPlayerBans(int $steamId): array;
 
+    public function getPlayerGroups(int $steamId): array;
+
     public function getGroupSummary(int $steamGroupId): array;
 }
