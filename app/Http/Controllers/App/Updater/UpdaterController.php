@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\App\Updater;
 
+use App\Enums\PermissionType;
 use App\Http\Controllers\Controller;
+use App\Repositories\Updater\Interfaces\UpdaterRepositoryInterface;
 use App\Services\File\Contracts\FileServiceContract;
 use App\Services\Github\Contracts\GithubServiceContract;
 use Illuminate\Contracts\View\View;
@@ -12,6 +14,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
 class UpdaterController extends Controller
@@ -41,7 +44,7 @@ class UpdaterController extends Controller
         return redirect()->to($path);
     }
 
-    public function release(Request $request, FileServiceContract $fileService): JsonResponse
+    public function release(Request $request): JsonResponse
     {
         try {
             $user = Auth::user();
@@ -67,4 +70,43 @@ class UpdaterController extends Controller
             return $this->jsonResponse($e->getCode(), Str::upper($e->getMessage()), config('app.debug') ? $e->getTrace() : []);
         }
     }
+
+    public function authorize_code(Request $request, string $code, UpdaterRepositoryInterface $updaterRepository): View
+    {
+
+        $validator = Validator::make($request->all(), [
+            'name' => ['string', 'required']
+        ]);
+
+        $data = [
+            'status' => false,
+            'softwareName' => '',
+            'machineName' => '',
+            'machineIp' => ''
+        ];
+
+        if (!$validator->fails())
+        {
+            $user = Auth::user();
+            $updater = $updaterRepository->findByUserIdMachineNameAndCode($user->id, base64_decode($request->get('name')), $code);
+
+            if (!is_null($updater) && !$user->isBanned())
+            {
+                if ($user->hasPermissionTo(PermissionType::MEMBER->name))
+                {
+                    $updater->user_id = $user->id;
+                    $updater->save();
+
+                    $data = [
+                        'status' => false,
+                        'machineName' => $updater->machine_name,
+                        'machineIp' => $updater->ip
+                    ];
+                }
+            }
+        }
+
+        return view('app.updater.authorize', $data);
+    }
+
 }

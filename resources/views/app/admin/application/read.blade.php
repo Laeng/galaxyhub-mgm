@@ -109,7 +109,7 @@
                         <template x-if="data.load.data.group.length > 0">
                             <div x-cloak>
                                 <p class="text-sm font-medium text-gray-800 dark:text-gray-200 pb-2">
-                                    가입한 클랜 - <a class="text-blue-500 hover:text-blue-800" :href="'https://steamcommunity.com/profiles/' +  data.load.data.summaries.steamid + '/groups/'" target="_blank">더보기</a>
+                                    가입한 그룹 - <a class="text-blue-500 hover:text-blue-800" :href="'https://steamcommunity.com/profiles/' +  data.load.data.summaries.steamid + '/groups/'" target="_blank">더보기</a>
                                 </p>
                                 <div class="max-h-96" data-simplebar>
                                     <template x-for="i in data.load.data.group">

@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('ip')->nullable();
             $table->string('machine_name')->nullable();
             $table->string('machine_version')->nullable();
-            $table->uuid('code')->index();
+            $table->uuid('code')->index()->unique();
             $table->longtext('data')->nullable();
             $table->timestamps();
         });

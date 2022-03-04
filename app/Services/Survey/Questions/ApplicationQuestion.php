@@ -38,19 +38,19 @@ class ApplicationQuestion extends Question
 
         $one->questions()->create([
             'title' => '네이버 아이디',
-            'content' => '멀티플레이 게임 매니지먼트 네이버 카페에 가입한 네이버 아이디를 입력하여 주십시오.',
+            'content' => '멀티플레이 게임 매니지먼트 네이버 카페에 가입한 네이버 아이디를 입력하여 주십시오. (예) gudtks0422',
             'rules' => ['required']
         ]);
 
         $one->questions()->create([
             'title' => '디스코드 사용자명',
-            'content' => '디스코드 사용자명(예: laeng#1990)을 입력하여 주십시오. 디스코드 사용자명 또는 서버 별명을 커뮤니티 및 스팀 닉네임과 동일하게 설정하여 주십시오.',
+            'content' => '디스코드 사용자명을 입력하여 주십시오. (예) laeng#1990<br/> 디스코드 사용자명 또는 서버 별명을 커뮤니티 및 스팀 닉네임과 동일하게 설정하여 주십시오.',
             'rules' => ['required']
         ]);
 
         $one->questions()->create([
             'title' => '본인의 생년월일',
-            'content' => '과거 가입 여부를 확인을 위해 사용됩니다. 기타 용도로 사용되지 않습니다.(예)1991-01-01',
+            'content' => '과거 가입 여부를 확인을 위해 사용됩니다. 기타 용도로 사용되지 않습니다.(예) 1991-01-01',
             'rules' => ['required']
         ]);
 
@@ -75,7 +75,8 @@ class ApplicationQuestion extends Question
         ]);
 
         $two->questions()->create([
-            'title' => '타 커뮤니티내 닉네임',
+            'title' => '타 커뮤니티 닉네임',
+            'type' => 'long-text',
             'content' => '아르마 관련 커뮤니티(클랜, 카페, 디스코드)에서 활동 중이거나 활동 시 사용하셨던 닉네임을 기재하여 주십시오.',
         ]);
 

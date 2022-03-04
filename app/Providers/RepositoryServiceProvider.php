@@ -12,6 +12,8 @@ use App\Repositories\Survey\Interfaces\SurveyEntryRepositoryInterface;
 use App\Repositories\Survey\Interfaces\SurveyRepositoryInterface;
 use App\Repositories\Survey\SurveyEntryRepository;
 use App\Repositories\Survey\SurveyRepository;
+use App\Repositories\Updater\Interfaces\UpdaterRepositoryInterface;
+use App\Repositories\Updater\UpdaterRepository;
 use App\Repositories\User\Interfaces\UserAccountRepositoryInterface;
 use App\Repositories\User\Interfaces\UserMissionRepositoryInterface;
 use App\Repositories\User\Interfaces\UserRecordRepositoryInterface;
@@ -44,6 +46,9 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(UserAccountRepositoryInterface::class, UserAccountRepository::class);
         $this->app->bind(UserMissionRepositoryInterface::class, UserMissionRepository::class);
         $this->app->bind(UserRecordRepositoryInterface::class, UserRecordRepository::class);
+
+        //-- UPDATER
+        $this->app->bind(UpdaterRepositoryInterface::class, UpdaterRepository::class);
 
         //-- SURVEY
         $this->app->bind(SurveyRepositoryInterface::class, SurveyRepository::class);
