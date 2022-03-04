@@ -22,7 +22,6 @@ return new class extends Migration
             $table->string('provider')->default('default');
             $table->string('username')->unique();
             $table->string('password')->nullable();
-            $table->unsignedInteger('reputation')->default(0);
             $table->rememberToken();
             $table->timestamp('agreed_at')->nullable();
             $table->timestamp('banned_at')->nullable();

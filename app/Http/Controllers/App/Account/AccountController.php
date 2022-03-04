@@ -59,7 +59,7 @@ class AccountController extends Controller
 
     public function me
     (
-        Request $request, UserAccountRepositoryInterface $userAccountRepository, SurveyServiceContract $surveyServiceContract
+        Request $request, UserAccountRepositoryInterface $userAccountRepository, SurveyServiceContract $surveyService
     ): View
     {
         $user = Auth::user();
@@ -79,7 +79,7 @@ class AccountController extends Controller
 
         $role = $user->roles()->latest()->first();
 
-        $application = $surveyServiceContract->getLatestApplicationForm($user->id);
+        $application = $surveyService->getLatestApplicationForm($user->id);
         $response = $application->answers()->latest()->get();
 
         $naverId = '';

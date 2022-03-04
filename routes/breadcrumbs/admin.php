@@ -14,3 +14,9 @@ Breadcrumbs::for('app.admin.application', function(BreadcrumbTrail $trail, strin
     $trail->push($title);
 });
 
+Breadcrumbs::for('app.admin.user', function(BreadcrumbTrail $trail, string $title) {
+    $trail->push('관리자', route('app.index'));
+    $trail->push('회원', route('admin.user.index'));
+    $trail->push($title);
+});
+

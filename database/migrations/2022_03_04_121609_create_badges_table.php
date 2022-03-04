@@ -1,8 +1,10 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
+use App\Enums\BadgeType;
+use App\Models\Badge;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
@@ -13,25 +15,12 @@ return new class extends Migration
      */
     public function up()
     {
-        // reputations table
-        Schema::create('reputations', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('name');
-            $table->mediumInteger('point', false)->default(0);
-            $table->integer('subject_id')->nullable();
-            $table->string('subject_type')->nullable();
-            $table->unsignedInteger('payee_id')->nullable();
-            $table->text('meta')->nullable();
-            $table->timestamps();
-        });
-
         // badges table
         Schema::create('badges', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
             $table->string('description')->nullable();
             $table->string('icon')->nullable();
-            $table->tinyInteger('level')->default(config('gamify.badge_default_level', 1));
             $table->timestamps();
         });
 
@@ -42,6 +31,22 @@ return new class extends Migration
             $table->unsignedInteger('badge_id');
             $table->timestamps();
         });
+
+        $this->createBadge();
+    }
+
+    private function createBadge()
+    {
+        $badges = BadgeType::getKoreanNames();
+
+        foreach ($badges as $key => $value)
+        {
+            Badge::create([
+                'name' => $key,
+                'description' => $value,
+                'icon' => "images/badges/{$key}.svg"
+            ]);
+        }
     }
 
     /**
@@ -53,6 +58,5 @@ return new class extends Migration
     {
         Schema::dropIfExists('user_badges');
         Schema::dropIfExists('badges');
-        Schema::dropIfExists('reputations');
     }
 };
