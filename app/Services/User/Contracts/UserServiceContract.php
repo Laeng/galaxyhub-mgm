@@ -17,6 +17,8 @@ interface UserServiceContract
 
     public function createRecord(int $userId, string $type, array $data, ?int $recorderId = null): ?UserRecord;
 
+    public function delete(int $userId): bool;
+
     public function findBanRecordByUuid(int $uuid): ?Collection;
 
     public function findRoleRecordeByUserId(int $userId, string $role): ?Collection;

@@ -3,7 +3,7 @@
 @endphp
 <x-theme.galaxyhub.sub-content title="가입 신청자" description="가입 신청자 목록" :breadcrumbs="Diglactic\Breadcrumbs\Breadcrumbs::render('app.admin', '가입 신청자')">
     <x-panel.galaxyhub.basics>
-        <div class="flex flex-col space-y-2 mb-3">
+        <div class="flex flex-col space-y-2 mb-2">
             <x-alert.galaxyhub.warning title="유의사항">
                 <ul>
                     <li>{{ now()->subYears(18)->year . '년생 이상만 가입을 허용해 주십시오. (' . now()->year . '년 기준)' }}</li>
@@ -15,7 +15,7 @@
         <div>
             <x-list.galaxyhub.basics :component-id="$componentId" name="user_id" :action="route('admin.application.index.list')" :refresh="true"/>
         </div>
-        <div class="flex justify-start space-x-2 mt-3" x-data="application_list" >
+        <div class="flex justify-start space-x-2 mt-2" x-data="application_list" >
             <x-button.filled.md-white @click="process('{{ \App\Enums\RoleType::MEMBER->name  }}', '가입 승인', '가입을 승인 하시겠습니까?', false)" type="button">
                 승인
             </x-button.filled.md-white>

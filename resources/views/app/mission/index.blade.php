@@ -11,7 +11,7 @@
                 </x-dynamic-component>
             @endforeach
             <div class="flex items-center">
-                <div class="w-full lg:w-auto mr-3 hidden md:block">
+                <div class="w-full lg:w-auto mr-2 hidden md:block">
                     <x-input.select.basics id="group" name="group" x-model="data.list.body.query.type" required>
                         <option value="">모든 분류</option>
                         @foreach($types as $key => $item)
@@ -19,7 +19,7 @@
                         @endforeach
                     </x-input.select.basics>
                 </div>
-                <div class="w-full lg:w-auto mr-3 hidden md:block">
+                <div class="w-full lg:w-auto mr-2 hidden md:block">
                     <x-input.select.basics id="group" name="group" x-model="data.list.body.query.phase" required>
                         <option value="">모든 상태</option>
                         @foreach($phase as $key => $item)
@@ -27,13 +27,13 @@
                         @endforeach
                     </x-input.select.basics>
                 </div>
-                <div class="w-full lg:w-auto mr-3 hidden md:block">
+                <div class="w-full lg:w-auto mr-2 hidden md:block">
                     <x-input.select.basics id="filter" name="filter" x-model="data.list.body.query.filter" required>
                         <option value="">모든 미션</option>
                         <option value="종료된 미션 제외">종료된 미션 제외</option>
                     </x-input.select.basics>
                 </div>
-                <div class="w-full lg:w-auto md:mr-3">
+                <div class="w-full lg:w-auto md:mr-2">
                     <x-input.select.basics id="limit" name="limit" x-model="data.list.body.limit" required>
                         <option value="">보기</option>
                         <option value="10">10개</option>

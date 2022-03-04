@@ -7,6 +7,8 @@ use JetBrains\PhpStorm\Pure;
 
 enum UserRecordType {
     case BAN_DATA;
+    case UNBAN_DATA;
+    case USER_DELETE;
     case USER_APPLICATION;
     case USER_MEMO_TEXT_FOR_ADMIN;
     case USER_MEMO_IMAGE_FORM_ADMIN;
@@ -21,6 +23,8 @@ enum UserRecordType {
 
     #[ArrayShape([
         '계정 비활성' => "\App\Enums\UserRecordType",
+        '계정 비활성 해제' => "\App\Enums\UserRecordType",
+        '유저 데이터 삭제' => "\App\Enums\UserRecordType",
         '가입 신청' => "\App\Enums\UserRecordType",
         '관리자 기록 (텍스트)' => "\App\Enums\UserRecordType",
         '관리자 기록 (이미지)' => "\App\Enums\UserRecordType",
@@ -37,6 +41,8 @@ enum UserRecordType {
     {
         return [
             '계정 비활성' => self::BAN_DATA->name,
+            '계정 비활성 해제' => self::UNBAN_DATA->name,
+            '유저 데이터 삭제' => self::USER_DELETE,
             '가입 신청' => self::USER_APPLICATION->name,
             '관리자 기록 (텍스트)' => self::USER_MEMO_TEXT_FOR_ADMIN->name,
             '관리자 기록 (이미지)' => self::USER_MEMO_IMAGE_FORM_ADMIN->name,

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\App\Account;
 
+use App\Enums\PermissionType;
 use App\Enums\RoleType;
 use App\Enums\UserRecordType;
 use App\Http\Controllers\Controller;
@@ -9,6 +10,7 @@ use App\Repositories\User\Interfaces\UserAccountRepositoryInterface;
 use App\Repositories\User\Interfaces\UserRecordRepositoryInterface;
 use App\Repositories\User\UserMissionRepository;
 use App\Services\Survey\Contracts\SurveyServiceContract;
+use App\Services\User\Contracts\UserServiceContract;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -23,16 +25,16 @@ class AccountController extends Controller
         $this->userMissionRepository = $userMissionRepository;
     }
 
-    public function delete(Request $request): JsonResponse
+    public function delete(Request $request, UserServiceContract $userService): JsonResponse
     {
         try
         {
             $user = Auth::user();
 
-            $user->accounts()->where('user_id', $user->id)->delete();
-            $user->bans()->where('bannable_id', $user->id)->delete();
-            $user->surveys()->where('user_id', $user->id)->delete();
-            $user->delete();
+            $userService->delete($user->id);
+            $userService->createRecord($user->id, UserRecordType::USER_DELETE->name, [
+                'comment' => "{$user->name}님의 요청으로 계정 데이터를 삭제하였습니다."
+            ]);
 
             Auth::logout();
 
@@ -61,7 +63,7 @@ class AccountController extends Controller
     ): View
     {
         $user = Auth::user();
-        $steamAccount = $userAccountRepository->findSteamAccountByUserId($user->id, ['account_id']);
+        $steamAccount = $userAccountRepository->findSteamAccountByUserId($user->id, ['account_id'])->first();
         $userMission = $this->userMissionRepository->findAttendedMissionByUserId($user->id);
 
         if (!is_null($userMission) && $userMission->count() > 0)

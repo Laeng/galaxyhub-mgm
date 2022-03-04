@@ -23,7 +23,12 @@ class BaseRepository implements EloquentRepositoryInterface
 
     public function all(array $columns = ['*'], array $relations = []): Collection
     {
-        return $this->model->with($relations)->get($columns);
+        return $this->model->select($columns)->with($relations)->get();
+    }
+
+    public function count(array $columns = ['*'], array $relations = []): int
+    {
+        return $this->model->select($columns)->with($relations)->count();
     }
 
     public function create(array $attributes): ?Model

@@ -20,14 +20,17 @@ use function now;
 class UserService implements UserServiceContract
 {
     private UserRepositoryInterface $userRepository;
-    private UserAccountRepositoryInterface $accountRepository;
+    private UserAccountRepositoryInterface $userAccountRepository;
     private UserRecordRepositoryInterface $recordRepository;
 
-    public function __construct(UserRepositoryInterface $user, UserAccountRepositoryInterface $account, UserRecordRepositoryInterface $record)
+    public function __construct
+    (
+        UserRepositoryInterface $userRepository, UserAccountRepositoryInterface $userAccountRepository,
+        UserRecordRepositoryInterface $recordRepository)
     {
-        $this->userRepository = $user;
-        $this->accountRepository = $account;
-        $this->recordRepository = $record;
+        $this->userRepository = $userRepository;
+        $this->userAccountRepository = $userAccountRepository;
+        $this->recordRepository = $recordRepository;
     }
 
     public function createUser(array $attributes): ?UserModel
@@ -35,7 +38,7 @@ class UserService implements UserServiceContract
         if($attributes['provider'] !== 'default')
         {
             //OAuth 로그인 절차
-            $account = $this->accountRepository->findByAccountId($attributes['provider'], $attributes['id']);
+            $account = $this->userAccountRepository->findByAccountId($attributes['provider'], $attributes['id'])->first();
 
             $userAttributes = [
                 'name' => $attributes['nickname'],
@@ -51,7 +54,15 @@ class UserService implements UserServiceContract
                 $isDifferent = count($diff) > 0;
 
                 if ($isDifferent){
-                    $account->update($attributes);
+                    if ($account->nickname !== $attributes['nickname'])
+                    {
+                        // 닉네임 검색을 위하여 닉네임이 변경되면 새로 등록한다.
+                        $this->userAccountRepository->create($attributes);
+                    }
+                    else
+                    {
+                        $account->update($attributes);
+                    }
                 }
                 else
                 {
@@ -83,7 +94,7 @@ class UserService implements UserServiceContract
 
                 unset($accountAttributes['id']);
 
-                $account = $this->accountRepository->create($accountAttributes);
+                $account = $this->userAccountRepository->create($accountAttributes);
             }
 
             //$bans = $this->findBanRecordByUuid($this->recordRepository->getUuidV5($account->account_id))->filter(function ($v, $k) {
@@ -102,7 +113,7 @@ class UserService implements UserServiceContract
 
     public function createRecord(int $userId, string $type, array $data, ?int $recorderId = null): ?UserRecord
     {
-        $steamAccount = $this->accountRepository->findSteamAccountByUserId($userId);
+        $steamAccount = $this->userAccountRepository->findSteamAccountByUserId($userId);
 
         if (is_null($steamAccount)) return null;
 
@@ -115,6 +126,30 @@ class UserService implements UserServiceContract
             'data' => $data,
             'uuid' => $uuid
         ]);
+    }
+
+    public function delete(int $userId): bool
+    {
+        $user = $this->userRepository->findById($userId);
+
+        if (!is_null($user))
+        {
+            $roles = $user->getRoleNames();
+
+            foreach ($roles as $role)
+            {
+                $user->removeRole($role);
+            }
+
+            $user->accounts()->where('user_id', $user->id)->delete();
+            $user->bans()->where('bannable_id', $user->id)->delete();
+            $user->surveys()->where('user_id', $user->id)->delete();
+            $user->delete();
+
+            return true;
+        }
+
+        return false;
     }
 
     public function findBanRecordByUuid(int $uuid): ?Collection

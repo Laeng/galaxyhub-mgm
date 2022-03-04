@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Repositories\Ban\BanRepository;
+use App\Repositories\Ban\Interfaces\BanRepositoryInterface;
 use App\Repositories\Base\BaseRepository;
 use App\Repositories\Base\Interfaces\EloquentRepositoryInterface;
 use App\Repositories\File\FileRepository;
@@ -34,6 +36,9 @@ class RepositoryServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->bind(EloquentRepositoryInterface::class, BaseRepository::class);
+
+        //-- BAN
+        $this->app->bind(BanRepositoryInterface::class, BanRepository::class);
 
         //-- FILE
         $this->app->bind(FileRepositoryInterface::class, FileRepository::class);

@@ -160,9 +160,13 @@
                    this.data.list.lock = true;
 
                    this.post(this.data.list.url, this.data.list.body, success, error, complete);
-                   this.interval.list = setInterval(() => {
-                       this.post(this.data.list.url, this.data.list.body, success, error, complete)
-                   }, 10000);
+
+                   if (this.interval.list === -1)
+                   {
+                       this.interval.list = setInterval(() => {
+                           this.post(this.data.list.url, this.data.list.body, success, error, complete)
+                       }, 10000);
+                   }
                }
            },
            checkbox(componentId, checked = null) {

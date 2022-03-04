@@ -40,7 +40,7 @@ class ProcessSteamUserAccount implements ShouldQueue
      */
     public function handle(UserService $userService, SteamServiceContract $steamService, UserAccountRepositoryInterface $accountRepository)
     {
-        $steamAccount = $accountRepository->findSteamAccountByUserId($this->user->id);
+        $steamAccount = $accountRepository->findSteamAccountByUserId($this->user->id)->first();
 
         if (!is_null($steamAccount))
         {

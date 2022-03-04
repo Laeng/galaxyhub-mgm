@@ -11,6 +11,8 @@ interface EloquentRepositoryInterface
 
     public function all(array $columns = ['*'], array $relations = []): Collection;
 
+    public function count(array $columns = ['*'], array $relations = []): int;
+
     public function create(array $attributes): ?Model;
 
     public function update(int $id, array $attributes): bool;

@@ -6,8 +6,8 @@ use App\Enums\RoleType;
 use App\Enums\UserRecordType;
 use App\Http\Controllers\Controller;
 use App\Jobs\ProcessSteamUserAccount;
-use App\Repositories\Survey\SurveyEntryRepository;
-use App\Repositories\User\UserAccountRepository;
+use App\Repositories\Survey\Interfaces\SurveyEntryRepositoryInterface;
+use App\Repositories\User\Interfaces\UserAccountRepositoryInterface;
 use App\Services\Steam\Contracts\SteamServiceContract;
 use App\Services\Survey\Contracts\SurveyServiceContract;
 use App\Services\User\Contracts\UserServiceContract;
@@ -58,7 +58,7 @@ class FormController extends Controller
     }
 
     public function store(
-        Request $request, SurveyEntryRepository $surveyEntryRepository, UserAccountRepository $userAccountRepository,
+        Request $request, SurveyEntryRepositoryInterface $surveyEntryRepository, UserAccountRepositoryInterface $userAccountRepository,
         UserServiceContract $userService, SteamServiceContract $steamService): View|Application|RedirectResponse|Redirector
     {
         try
@@ -78,7 +78,7 @@ class FormController extends Controller
             $form = $this->surveyService->createApplicationForm();
             $answers = $this->validate($request, $form->validateRules());
 
-            $steamAccount = $userAccountRepository->findSteamAccountByUserId($user->id);
+            $steamAccount = $userAccountRepository->findSteamAccountByUserId($user->id)->first();
 
             if (is_null($steamAccount))
             {

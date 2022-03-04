@@ -20,9 +20,9 @@ class UserAccountRepository extends BaseRepository implements UserAccountReposit
         parent::__construct($model);
     }
 
-    public function findByAccountId(string $provider, string $accountId, array $columns = ['*'], array $relations = []): ?UserAccount
+    public function findByAccountId(string $provider, string $accountId, array $columns = ['*'], array $relations = []): ?Collection
     {
-        return $this->model->select($columns)->where('provider', $provider)->where('account_id', $accountId)->with($relations)->latest()->first();
+        return $this->model->select($columns)->where('provider', $provider)->where('account_id', $accountId)->with($relations)->latest()->get();
     }
 
     public function findByUserId(string $userId, array $columns = ['*'], array $relations = []): ?Collection
@@ -30,8 +30,13 @@ class UserAccountRepository extends BaseRepository implements UserAccountReposit
         return $this->model->select($columns)->where('user_id', $userId)->with($relations)->latest()->get();
     }
 
-    public function findSteamAccountByUserId(string $userId, array $columns = ['*'], array $relations = []): ?UserAccount
+    public function findByNickname(string $nickname, array $columns = ['*'], array $relations = []): ?Collection
     {
-        return $this->model->select($columns)->where('user_id', $userId)->where('provider', 'steam')->with($relations)->latest()->first();
+        return $this->model->select($columns)->where('nickname', $nickname)->with($relations)->latest()->get();
+    }
+
+    public function findSteamAccountByUserId(string $userId, array $columns = ['*'], array $relations = []): ?Collection
+    {
+        return $this->model->select($columns)->where('user_id', $userId)->where('provider', 'steam')->with($relations)->latest()->get();
     }
 }

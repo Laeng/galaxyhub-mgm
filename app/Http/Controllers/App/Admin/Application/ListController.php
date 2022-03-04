@@ -41,7 +41,7 @@ class ListController extends Controller
                 'limit' => 'int'
             ]);
 
-            $count = $this->userRepository->findByRole(RoleType::APPLY->name)->count();
+            $count = $this->userRepository->countByRole(RoleType::APPLY->name);
 
             $limit = $request->get('limit', 20);
             $step = $this->getPaginationStep($request->get('step', 0), $limit, $count);
@@ -58,7 +58,7 @@ class ListController extends Controller
 
                 foreach ($users as $user)
                 {
-                    $steamAccount = $accountRepository->findSteamAccountByUserId($user->id);
+                    $steamAccount = $accountRepository->findSteamAccountByUserId($user->id)->first();
                     $application = $surveyService->getLatestApplicationForm($user->id);
                     $response = $application->answers()->latest()->get();
 
@@ -166,9 +166,13 @@ class ListController extends Controller
 
             foreach ($users as $user)
             {
-                $user->removeRole(RoleType::REJECT->name);
-                $user->removeRole(RoleType::DEFER->name);
-                $user->removeRole(RoleType::APPLY->name);
+                $roles = $user->getRoleNames();
+
+                foreach ($roles as $role)
+                {
+                    $user->removeRole($role);
+                }
+
                 $user->assignRole($type);
 
                 $data = [

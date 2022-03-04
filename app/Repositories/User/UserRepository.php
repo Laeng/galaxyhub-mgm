@@ -20,6 +20,11 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
         $this->model = $model;
     }
 
+    public function findByIds(array $ids, array $columns = ['*'], array $relations = []): Collection
+    {
+        return $this->model->select($columns)->whereIn('id', $ids)->with($relations)->latest()->get();
+    }
+
     public function findByIdsWithRole(array $ids, string $role, array $columns = ['*'], array $relations = []): ?Collection
     {
         return $this->model->role($role)->select($columns)->whereIn('id', $ids)->with($relations)->latest()->get();
@@ -35,8 +40,23 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
         return $this->model->role($role)->select($columns)->with($relations)->latest()->get();
     }
 
+    public function countByRole(string $role, array $columns = ['*'], array $relations = []): int
+    {
+        return $this->model->role($role)->select($columns)->with($relations)->count();
+    }
+
     public function findByRoleWithPagination(string $role, int $offset = 0, int $limit = 10, array $columns = ['*'], array $relations = []): ?Collection
     {
         return $this->model->role($role)->select($columns)->with($relations)->offset($offset)->limit($limit)->latest()->get();
+    }
+
+    public function pagination(int $offset = 0, int $limit = 10, array $columns = ['*'], array $relations = []): ?Collection
+    {
+        return $this->model->select($columns)->with($relations)->offset($offset)->limit($limit)->latest()->get();
+    }
+
+    public function new(): User
+    {
+        return new User();
     }
 }
