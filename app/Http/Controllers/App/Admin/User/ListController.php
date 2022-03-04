@@ -73,7 +73,7 @@ class ListController extends Controller
                         break;
                     case 'nickname':
                         $id = array_unique(array_column($userAccountRepository->findByNickname($q['find_id'], ['user_id'])->toArray(), 'user_id'));
-                        $query->whereIn('user.id', $id);
+                        $query->whereIn('users.id', $id);
                         break;
                 }
             }
@@ -206,7 +206,7 @@ class ListController extends Controller
 
             $executor = Auth::user();
             $users = $this->userRepository->findByIds($request->get('user_id'));
-            $reason = strip_tags($request->get('reason', ''));
+            $reason = strip_tags($request->get('reason', '변경 사유를 입력하지 않음.'));
             $q = $request->get('query');
 
             switch ($request->get('type')) {
@@ -242,7 +242,7 @@ class ListController extends Controller
                     foreach ($users as $user) {
                         $roleNames = array_flip(RoleType::getKoreanNames());
 
-                        if (isset($roleNames[$q['group']])) {
+                        if (isset(RoleType::getKoreanNames()[$q['group']])) {
                             $roles = $user->getRoleNames();
 
                             foreach ($roles as $role) {
@@ -252,6 +252,7 @@ class ListController extends Controller
                             $user->assignRole($q['group']);
 
                             $userService->createRecord($user->id, UserRecordType::ROLE_DATA->name, [
+                                'role' => $q['group'],
                                 'comment' => $reason
                             ], $executor->id);
                         } else {

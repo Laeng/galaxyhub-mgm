@@ -1819,6 +1819,9 @@ select{
 .border-r{
   border-right-width: 1px;
 }
+.border-dashed{
+  border-style: dashed;
+}
 .border-double{
   border-style: double;
 }

@@ -1,11 +1,11 @@
 @php
     $componentId = 'LIST_' . \Str::upper(\Str::random(6));
 @endphp
-<x-theme.galaxyhub.sub-content title="가입 신청자" description="가입 신청자 목록" :breadcrumbs="Diglactic\Breadcrumbs\Breadcrumbs::render('app.admin', '회원')">
+<x-theme.galaxyhub.sub-content title="회원" description="회원 목록" :breadcrumbs="Diglactic\Breadcrumbs\Breadcrumbs::render('app.admin', '회원')">
     <x-panel.galaxyhub.basics>
         <div x-data="user_list">
 
-            <div class="rounded border border-gray-200 bg-gray-50 p-4 mb-4 w-full">
+            <div class="rounded border border-gray-300 dark:border-gray-800 p-4 mb-8 w-full">
                 <div class="flex items-center space-x-2">
                     <div>
                         <x-input.select.basics id="find" name="find" x-model="data.list.body.query.find" required>
@@ -15,7 +15,7 @@
                         </x-input.select.basics>
                     </div>
                     <div class="grow">
-                        <x-input.text.basics type="text" class="w-full" id="find_id" name="find_id" x-model="data.list.body.query.find_id" placeholder="회원 검색"/>
+                        <x-input.text.basics type="text" class="w-full" id="find_id" name="find_id" x-model="data.list.body.query.find_id" placeholder="회원 검색" @keyup.enter="find()"/>
                     </div>
                     <x-button.filled.md-white @click="find()" type="button">
                         검색
@@ -156,6 +156,8 @@
 
                         let callback = (r) => {
                             if (r.isConfirmed) {
+                                this.data.process.body.reason = (r.value.length > 0) ? r.value : '';
+
                                 let success = (r) => {
                                     console.log(r);
                                     window.modal.alert('처리 완료', '정상적으로 처리되었습니다.', (c) => {});

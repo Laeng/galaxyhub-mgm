@@ -59,7 +59,6 @@ class MemoController extends Controller
             {
                 if (empty($record->data['comment'])) continue;
 
-                $userRecordType = array_flip(UserRecordType::getKoreanNames());
                 $type = array_flip(UserRecordType::getKoreanNames())[$record->type];
 
                 if ($record->type === UserRecordType::USER_MEMO_IMAGE_FORM_ADMIN->name)
