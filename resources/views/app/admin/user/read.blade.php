@@ -183,7 +183,35 @@
                 <h2 class="text-xl lg:text-2xl font-bold">활동 기록</h2>
                 <x-memo.galaxyhub.basics :user-id="$user->id"/>
             </div>
-
+            <div class="flex flex-col space-y-2">
+                <div class="flex flex-col space-y-2">
+                    <h2 class="text-xl lg:text-2xl font-bold">활동 정지</h2>
+                </div>
+                <div>
+                    <x-input.select.basics id="days" name="days" x-model="data.process.body.query.days" required>
+                        <option value="">무기한</option>
+                        <option value="1">1일</option>
+                        <option value="3">3일</option>
+                        <option value="7">7일</option>
+                        <option value="14">14일</option>
+                        <option value="30">30일</option>
+                    </x-input.select.basics>
+                </div>
+                <x-button.filled.md-white @click="process('ban', '활동 정지', '정지 사유를 입력해 주십시오.')" type="button">
+                    활동 정지
+                </x-button.filled.md-white>
+                <x-button.filled.md-white @click="process('unban', '활동 정지 해제', '해제 사유를 입력해 주십시오.')" type="button">
+                    정지 해제
+                </x-button.filled.md-white>
+            </div>
+            <div class="flex flex-col space-y-2">
+                <div class="flex flex-col space-y-2">
+                    <h2 class="text-xl lg:text-2xl font-bold">강제 탈퇴</h2>
+                </div>
+                <x-button.filled.md-white @click="process('drop', '강제 탈퇴', '강제 탈퇴 사유를 입력해 주십시오.')" type="button">
+                    강제 탈퇴
+                </x-button.filled.md-white>
+            </div>
 
         </aside>
     </div>
@@ -230,6 +258,11 @@
                         },
                         data: {!! $groups !!},
                         lock: false,
+                    },
+                    process: {
+                        url: '{{ route('admin.application.index.process') }}',
+                        body: {},
+                        lock: false
                     },
                     participate: {
                         body: {
@@ -346,6 +379,68 @@
 
                     window.modal.prompt('권한 변경', '변경 사유를 입력해 주십시오.', (v) => {}, callback);
                 },
+                process(type, title, message, prompt = true) {
+                    let callback = (r) => {
+                        if (r.isConfirmed) {
+                            this.data.process.body = {
+                                type: type,
+                                user_id: ['{{ $user->id }}'],
+                                reason: (prompt) ? r.value : null
+                            };
+
+                            let success = (r) => {
+                                this.load();
+                                window.modal.alert('처리 완료', '정상적으로 처리되었습니다.', (c) => {});
+                            };
+
+                            let error = (e) => {
+                                if (typeof e.response !== 'undefined') {
+                                    if (e.response.status === 401) {
+                                        Location.reload();
+                                    }
+
+                                    if (e.response.status === 415) {
+                                        //CSRF 토큰 오류 발생
+                                        window.modal.alert('처리 실패', '로그인 정보를 확인할 수 없습니다.', (c) => {
+                                            Location.reload();
+                                        }, 'error');
+                                        return;
+                                    }
+
+                                    if (e.response.status === 422) {
+                                        let msg = '';
+                                        switch (e.response.data.description) {
+                                            default:
+                                                msg = e.response.data.description;
+                                                break;
+                                        }
+
+                                        window.modal.alert('처리 실패', msg, (c) => {}, 'error');
+                                        return;
+                                    }
+                                }
+
+                                window.modal.alert('처리 실패', '데이터 처리 중 문제가 발생하였습니다.', (c) => {}, 'error');
+                                console.log(e);
+                            };
+
+                            let complete = () => {
+                                this.data.process.lock = false;
+                            };
+
+                            if (!this.data.process.lock) {
+                                this.data.process.lock = true;
+                                this.post(this.data.process.url, this.data.process.body, success, error, complete);
+                            }
+                        }
+                    };
+
+                    if (prompt) {
+                        window.modal.prompt(title, message, (v) => {}, callback);
+                    } else {
+                        window.modal.confirm(title, message, callback, 'question', '예', '아니요');
+                    }
+                },
                 load() {
                     let success = (r) => {
                         if (r.data.data !== null) {
@@ -425,24 +520,6 @@
 
                     participate.list();
                     make.list();
-                },
-                checkbox(componentId, checked = null) {
-                    if (checked == null) {
-                        this.data.checkbox = !this.data.checkbox;
-                    } else {
-                        this.data.checkbox = checked;
-                    }
-
-                    let checkboxes = document.querySelectorAll('.' + componentId);
-                    [...checkboxes].map((el) => {
-                        el.checked = this.data.checkbox;
-                    })
-                },
-                checked(checkboxes) {
-                    let checked = [];
-                    [...checkboxes].map((el) => {checked.push(el.value);});
-
-                    return checked;
                 },
                 post(url, body, success, error, complete) {
                     window.axios.post(url, body).then(success).catch(error).then(complete);
