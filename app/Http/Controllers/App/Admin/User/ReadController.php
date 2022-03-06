@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\App\Admin\User;
 
 use App\Enums\BadgeType;
+use App\Enums\MissionPhaseType;
+use App\Enums\MissionType;
 use App\Enums\PermissionType;
 use App\Enums\RoleType;
 use App\Http\Controllers\Controller;
@@ -15,6 +17,7 @@ use App\Services\Survey\Contracts\SurveyServiceContract;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ReadController extends Controller
 {
@@ -118,7 +121,8 @@ class ReadController extends Controller
             'missionLatest' => $missionLatest,
             'naverId' => $naverId,
             'discordName' => $discordName,
-            'birthday' => $birthday
+            'birthday' => $birthday,
+            'types' => MissionType::getKoreanNames()
         ]);
 
     }
@@ -197,6 +201,238 @@ class ReadController extends Controller
             }
 
             return $this->jsonResponse(200, 'SUCCESS', []);
+        }
+        catch (\Exception $e)
+        {
+            return $this->jsonResponse($e->getCode(), $e->getMessage(), config('app.debug') ? $e->getTrace() : []);
+        }
+    }
+
+    public function participate(Request $request, int $userId): JsonResponse
+    {
+        try
+        {
+            $this->jsonValidator($request, [
+                'step' => 'int',
+                'limit' => 'int',
+                'query' => 'array'
+            ]);
+
+            $user = $this->userRepository->findById($userId);
+            $step = $request->get('step', 0);
+            $limit = $request->get('limit', 10);
+            $q = $request->get('query', []);
+
+            $query = $this->userMissionRepository->new()->where('user_id', $user->id);
+            $conditions = array();
+
+            if (isset($q['type'])) {
+                $conditions[] = ['type', '=', $q['type']];
+            }
+
+            foreach ($conditions as $condition)
+            {
+                $query = $query->whereHas('mission', function ($query) use ($condition) {
+                    $query->where($condition[0], $condition[1], $condition[2]);
+                });
+            }
+
+            $count = $query->count();
+
+            $th = ['분류', '시작 시간', '미션 메이커', '&nbsp;', '미션'];
+            $tr = array();
+
+            if ($count > 0)
+            {
+                $userMission = $query->offset($step * $limit)->limit($limit)->get();
+
+                $missionType = MissionType::getKoreanNames();
+
+                foreach ($userMission as $item)
+                {
+                    $mission = $item->mission;
+                    $url = route('mission.read', $mission->id);
+                    $text = ['link-indigo', '미션 정보'];
+
+                    if ($mission->user_id !== $user->id)
+                    {
+                        $hasFailAttendance = $userMission->try_attends >= $this->userMissionRepository::MAX_ATTENDANCE_ATTEMPTS;
+                        $hasAttend = !is_null($userMission->attended_at);
+                        $canAttend = !$hasFailAttendance && $mission->phase === MissionPhaseType::IN_ATTENDANCE->value;
+
+                        if ($mission->phase >= MissionPhaseType::IN_ATTENDANCE->value)
+                        {
+                            if (!$hasAttend)
+                            {
+                                if ($canAttend)
+                                {
+                                    $text = ['link-yellow', '출석 하기'];
+                                }
+                                else
+                                {
+                                    $text = ['link-red', '출석 실패'];
+                                }
+                            }
+                            else
+                            {
+                                $text = ['link-green', '출석 성공'];
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if ($mission->phase === MissionPhaseType::RECRUITING->value || ($mission->can_tardy && $mission->phase === MissionPhaseType::IN_PROGRESS->value))
+                        {
+                            $text = ['link-fuchsia', '참가 신청'];
+                        }
+                    }
+
+                    $row = [
+                        $missionType[$mission->type],
+                        $mission->expected_at->format('m월 d일 H시 i분'),
+                        $mission->user()->first()->name,
+                        "<a href='{$url}' class='{$text[0]}' title='{$text[1]}'>{$text[1]}</a>",
+                        "<a href='{$url}' title='{$mission->title}'><div class='flex justify-between'><p>{$mission->title}</p><p class='{$text[0]}'>{$text[1]}</p></div>"
+                    ];
+
+                    $tr[] = $row;
+                }
+
+            }
+            else
+            {
+                $th = ['신청한 미션이 없습니다.', '신청한 미션이 없습니다.'];
+            }
+
+
+            return $this->jsonResponse(200, 'SUCCESS', [
+                'checkbox' => false,
+                'mobile' => true,
+                'name' => '',
+                'th' => $th,
+                'tr' => $tr,
+                'count' => [
+                    'step' => $step,
+                    'limit' => $limit,
+                    'total' => $count
+                ]
+            ]);
+        }
+        catch (\Exception $e)
+        {
+            return $this->jsonResponse($e->getCode(), $e->getMessage(), config('app.debug') ? $e->getTrace() : []);
+        }
+    }
+
+    public function make(Request $request, int $userId): JsonResponse
+    {
+        try
+        {
+            $this->jsonValidator($request, [
+                'step' => 'int',
+                'limit' => 'int',
+                'query' => 'array'
+            ]);
+
+            $user = $this->userRepository->findById($userId);
+            $step = $request->get('step', 0);
+            $limit = $request->get('limit', 10);
+            $q = $request->get('query', []);
+
+            $query = $this->userMissionRepository->new()->where('user_id', $user->id)->where('is_maker', true);
+            $conditions = array();
+
+            if (isset($q['type'])) {
+                $conditions[] = ['type', '=', $q['type']];
+            }
+
+            foreach ($conditions as $condition)
+            {
+                $query = $query->whereHas('mission', function ($query) use ($condition) {
+                    $query->where($condition[0], $condition[1], $condition[2]);
+                });
+            }
+
+            $count = $query->count();
+
+            $th = ['분류', '시작 시간', '미션 메이커', '&nbsp;', '미션'];
+            $tr = array();
+
+            if ($count > 0)
+            {
+                $userMission = $query->offset($step * $limit)->limit($limit)->get();
+
+                $missionType = MissionType::getKoreanNames();
+
+                foreach ($userMission as $item)
+                {
+                    $mission = $item->mission;
+                    $url = route('mission.read', $mission->id);
+                    $text = ['link-indigo', '미션 정보'];
+
+                    if ($mission->user_id !== $user->id)
+                    {
+                        $hasFailAttendance = $userMission->try_attends >= $this->userMissionRepository::MAX_ATTENDANCE_ATTEMPTS;
+                        $hasAttend = !is_null($userMission->attended_at);
+                        $canAttend = !$hasFailAttendance && $mission->phase === MissionPhaseType::IN_ATTENDANCE->value;
+
+                        if ($mission->phase >= MissionPhaseType::IN_ATTENDANCE->value)
+                        {
+                            if (!$hasAttend)
+                            {
+                                if ($canAttend)
+                                {
+                                    $text = ['link-yellow', '출석 하기'];
+                                }
+                                else
+                                {
+                                    $text = ['link-red', '출석 실패'];
+                                }
+                            }
+                            else
+                            {
+                                $text = ['link-green', '출석 성공'];
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if ($mission->phase === MissionPhaseType::RECRUITING->value || ($mission->can_tardy && $mission->phase === MissionPhaseType::IN_PROGRESS->value))
+                        {
+                            $text = ['link-fuchsia', '참가 신청'];
+                        }
+                    }
+
+                    $row = [
+                        $missionType[$mission->type],
+                        $mission->expected_at->format('m월 d일 H시 i분'),
+                        $mission->user()->first()->name,
+                        "<a href='{$url}' class='{$text[0]}' title='{$text[1]}'>{$text[1]}</a>",
+                        "<a href='{$url}' title='{$mission->title}'><div class='flex justify-between'><p>{$mission->title}</p><p class='{$text[0]}'>{$text[1]}</p></div>"
+                    ];
+
+                    $tr[] = $row;
+                }
+
+            }
+            else
+            {
+                $th = ['만든 미션이 없습니다.', '만든 미션이 없습니다.'];
+            }
+
+
+            return $this->jsonResponse(200, 'SUCCESS', [
+                'checkbox' => false,
+                'mobile' => true,
+                'name' => '',
+                'th' => $th,
+                'tr' => $tr,
+                'count' => [
+                    'step' => $step,
+                    'limit' => $limit,
+                    'total' => $count
+                ]
+            ]);
         }
         catch (\Exception $e)
         {

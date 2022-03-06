@@ -13,7 +13,7 @@ Route::prefix('app')->group(function () {
         Route::redirect('/', '/app/account/me');
         Route::get('/leave', [AccountController::class, 'leave'])->name('leave');
         Route::get('/me', [AccountController::class, 'me'])->middleware(AuthenticateMember::class)->name('me');
-        Route::get('/missions', [AccountController::class, 'me'])->middleware(AuthenticateMember::class)->name('missions');
+        Route::get('/missions', [ListController::class, 'mission'])->middleware(AuthenticateMember::class)->name('missions');
         Route::get('/suspended', [AccountController::class, 'suspended'])->name('suspended');
         Route::get('/pause', [PauseController::class, 'pause'])->middleware(AuthenticateMember::class)->name('pause');
         Route::get('/versions', [PauseController::class, 'pause'])->name('versions');

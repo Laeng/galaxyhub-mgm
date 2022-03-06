@@ -63,6 +63,11 @@ class User extends Authenticatable implements BannableContract
         return $this->hasMany(UserAccount::class);
     }
 
+    public function badges(): HasMany
+    {
+        return $this->hasMany(UserBadge::class);
+    }
+
     public function surveys(): HasMany
     {
         return $this->hasMany(SurveyEntry::class, 'participant_id');

@@ -14,6 +14,8 @@ Route::prefix('app')->group(function () {
             //AJAX
             Route::post('/{userId}/badge', [ReadController::class, 'badge'])->name('read.badge')->whereNumber('userId');
             Route::post('/{userId}/data', [ReadController::class, 'data'])->name('read.data')->whereNumber('userId');
+            Route::post('/{userId}/make', [ReadController::class, 'make'])->name('missions.make')->whereNumber('userId');
+            Route::post('/{userId}/participate', [ReadController::class, 'participate'])->name('missions.participate')->whereNumber('userId');
         });
 
         Route::prefix('users')->name('user.')->middleware(['auth.admin:web'])->group(function() {

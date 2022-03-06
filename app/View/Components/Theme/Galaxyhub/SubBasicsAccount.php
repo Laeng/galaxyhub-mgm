@@ -4,6 +4,7 @@ namespace App\View\Components\Theme\Galaxyhub;
 
 use App\Enums\PermissionType;
 use App\Models\User;
+use App\Repositories\User\Interfaces\UserBadgeRepositoryInterface;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
@@ -29,6 +30,8 @@ class SubBasicsAccount extends Component
 
     public function render(): View
     {
+        $badges = $this->user->badges()->with('badge')->get();
+
         $isMember = $this->user->hasAnyPermission([
             PermissionType::MEMBER->name,
             PermissionType::MAKER1->name,
@@ -57,7 +60,7 @@ class SubBasicsAccount extends Component
                         </svg>
                     ',
                 ],
-                '참가한 미션' => [
+                '신청한 미션' => [
                     'url' => route('account.missions'),
                     'icon' => '
                         <svg class="text-center text-gray-400 group-hover:text-gray-500 flex-shrink-0 -ml-1 mr-3 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512" fill="currentColor">
@@ -94,7 +97,8 @@ class SubBasicsAccount extends Component
 
         return view('components.theme.galaxyhub.sub-basics-account', [
             'isMember' => $isMember,
-            'menu' => $menu
+            'menu' => $menu,
+            'badges' => $badges
         ]);
     }
 }

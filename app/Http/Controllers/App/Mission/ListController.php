@@ -99,19 +99,18 @@ class ListController extends Controller
             $step = $this->getPaginationStep($step, $limit, $count);
             $missions = $query->offset($step * $limit)->limit($limit)->get();
             $userMissions = $userMissionRepository->findByUserId($user->id, ['id', 'mission_id', 'try_attends', 'attended_at']);
-            $userMissionIds = $userMissions->pluck('id');
 
             if ($count > 0)
             {
                 $th = ['분류', '시작 시간', '중도 참여', '미션 메이커', '상태', '&nbsp;', '미션'];
                 $tr = array();
 
+                $missionType = MissionType::getKoreanNames();
+                $missionPhaseType = MissionPhaseType::getKoreanNames();
+
                 foreach ($missions as $v)
                 {
                     $userMission = $userMissions->first(fn ($i) => $i->mission_id == $v->id);
-
-                    $missionType = MissionType::getKoreanNames();
-                    $missionPhaseType = MissionPhaseType::getKoreanNames();
 
                     $url = route('mission.read', $v->id);
                     $text = ['link-indigo', '미션 정보'];
