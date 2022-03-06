@@ -296,7 +296,11 @@
 
                     if (!this.data.load.lock) {
                         this.post(this.data.load.url, this.data.load.body, success, error, complete);
-                        this.interval.load = setInterval(() => {this.post(this.data.load.url, this.data.load.body, success, error, complete)}, 5000);
+
+                        if (this.interval.load === -1)
+                        {
+                            this.interval.load = setInterval(() => {this.post(this.data.load.url, this.data.load.body, success, error, complete)}, 5000);
+                        }
                     }
                 },
                 init() {

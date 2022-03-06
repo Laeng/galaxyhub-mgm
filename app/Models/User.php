@@ -11,12 +11,11 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use JetBrains\PhpStorm\ArrayShape;
 use Laravel\Sanctum\HasApiTokens;
-use QCod\Gamify\Gamify;
 use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable implements BannableContract
 {
-    use HasApiTokens, HasFactory, Notifiable, Gamify, Bannable, HasRoles;
+    use HasApiTokens, HasFactory, Notifiable, Bannable, HasRoles;
 
     /**
      * The attributes that are mass assignable.

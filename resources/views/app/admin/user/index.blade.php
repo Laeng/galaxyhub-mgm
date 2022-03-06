@@ -69,17 +69,17 @@
             </div>
 
             <div class="flex divide-x divide-gray-200 flex-wrap">
-                <div class="flex items-center space-x-3 pr-3">
-                    <div class="flex items-center space-x-3">
+                <div class="flex items-center space-x-2 pr-2">
+                    <div class="flex items-center space-x-2">
                         <div>
                             <x-input.select.basics id="group" name="group" x-model="data.process.body.query.group" required>
-                                <option value="">등급 선택</option>
+                                <option value="">권한 선택</option>
                                 @foreach($groups as $key => $item)
                                     <option value="{{ $key }}">{{ $item }}</option>
                                 @endforeach
                             </x-input.select.basics>
                         </div>
-                        <x-button.filled.md-white @click="process('group', '등급 변경', '변경 사유를 입력해 주십시오.')" type="button">
+                        <x-button.filled.md-white @click="process('group', '권한 변경', '변경 사유를 입력해 주십시오.')" type="button">
                             변경
                         </x-button.filled.md-white>
                     </div>
@@ -159,7 +159,6 @@
                                 this.data.process.body.reason = (r.value.length > 0) ? r.value : '';
 
                                 let success = (r) => {
-                                    console.log(r);
                                     window.modal.alert('처리 완료', '정상적으로 처리되었습니다.', (c) => {});
 
                                     this.$store.{{$componentId}}.checkbox(false);

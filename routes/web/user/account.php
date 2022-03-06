@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\App\Account\AccountController;
 use App\Http\Controllers\App\Account\AuthenticateController;
+use App\Http\Controllers\App\Account\ListController;
 use App\Http\Controllers\App\Account\PauseController;
 use App\Http\Middleware\AuthenticateMember;
 use Illuminate\Support\Facades\Route;
@@ -20,6 +21,8 @@ Route::prefix('app')->group(function () {
 
         //AJAX
         Route::post('/delete', [AccountController::class, 'delete'])->name('delete');
+        Route::post('/missions/make', [ListController::class, 'make'])->middleware(AuthenticateMember::class)->name('missions.make');
+        Route::post('/missions/participate', [ListController::class, 'participate'])->middleware(AuthenticateMember::class)->name('missions.participate');
         Route::post('/pause/enable', [PauseController::class, 'enable'])->middleware(AuthenticateMember::class)->name('pause.enable');
         Route::post('/pause/disable', [PauseController::class, 'disable'])->middleware(AuthenticateMember::class)->name('pause.disable');
 

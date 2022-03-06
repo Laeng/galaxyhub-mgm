@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Services\Badge\BadgeService;
+use App\Services\Badge\Contracts\BadgeServiceContract;
 use App\Services\Github\Contracts\GithubServiceContract;
 use App\Services\Github\GithubService;
 use App\Services\Mission\Contracts\MissionServiceContract;
@@ -26,6 +28,7 @@ class AppServiceProvider extends ServiceProvider
     public function register()
     {
         //Services ------------------
+        $this->app->bind(BadgeServiceContract::class, BadgeService::class);
         $this->app->bind(FileServiceContract::class, FileService::class);
         $this->app->bind(GithubServiceContract::class, GithubService::class);
         $this->app->bind(MissionServiceContract::class, MissionService::class);

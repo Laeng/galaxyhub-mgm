@@ -26,8 +26,8 @@ return new class extends Migration
 
         // user_badges pivot
         Schema::create('user_badges', function (Blueprint $table) {
-            $table->primary(['user_id', 'badge_id']);
-            $table->unsignedInteger('user_id');
+            $table->increments('id');
+            $table->unsignedInteger('user_id')->index();
             $table->unsignedInteger('badge_id');
             $table->timestamps();
         });
