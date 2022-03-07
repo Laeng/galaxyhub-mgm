@@ -2,7 +2,7 @@
 
 namespace App\Enums;
 
-enum MissionType:int  {
+enum MissionType: int  {
     case NIGHT_OF_ARMA = 0;
     case MISSION = 1;
     case NON_MISSION_MAKER = 2;
