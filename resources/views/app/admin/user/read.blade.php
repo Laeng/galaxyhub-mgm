@@ -7,6 +7,27 @@
     <div class="md:flex md:space-x-4 items-start" x-data="user_read">
         <div class="self-start md:basis-3/5 lg:basis-2/3 space-y-8">
             <x-panel.galaxyhub.basics>
+                <template x-if="data.load.data.ban !== ''">
+                    <div class="space-y-2 mb-8">
+                        <div class="rounded-md bg-red-50 dark:bg-gray-900 dark:border dark:border-red-500 p-4">
+                            <div class="flex">
+                                <div class="flex-shrink-0">
+                                    <svg class="h-5 w-5 text-red-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                                        <path fill="currentColor" d="M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256s256-114.6 256-256S397.4 0 256 0zM256 464c-114.7 0-208-93.31-208-208S141.3 48 256 48s208 93.31 208 208S370.7 464 256 464zM256 304c13.25 0 24-10.75 24-24v-128C280 138.8 269.3 128 256 128S232 138.8 232 152v128C232 293.3 242.8 304 256 304zM256 337.1c-17.36 0-31.44 14.08-31.44 31.44C224.6 385.9 238.6 400 256 400s31.44-14.08 31.44-31.44C287.4 351.2 273.4 337.1 256 337.1z"></path>
+                                    </svg>
+                                </div>
+                                <div class="ml-3">
+                                    <h3 class="text-sm font-bold text-red-800 dark:text-red-200">활동 정지된 회원입니다.</h3>
+                                    <div class="mt-2 text-sm text-red-700 dark:text-red-300">
+                                        <p>해제 예정 날짜: <span x-text="data.load.data.ban">무기한</span></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+
+
                 <div class="">
                     <div>
                         <h2 class="text-xl lg:text-2xl font-bold">기본 정보</h2>
@@ -115,64 +136,58 @@
             </x-panel.galaxyhub.basics>
 
             <x-panel.galaxyhub.basics>
-                <div class="flex flex-col space-y-2">
-                    <div>
-                        <h2 class="text-xl lg:text-2xl font-bold">신청한 미션</h2>
-                        <p class="mt-1 max-w-2xl text-sm text-gray-500 dark:text-gray-300">
-                            {{ $user->name }}님께서 지금까지 신청한 미션입니다.
-                        </p>
-                    </div>
-                    <div class="flex items-center">
-                        <div class="w-full lg:w-auto mr-2 hidden md:block">
-                            <x-input.select.basics id="group" name="group" x-model="data.participate.body.query.type" required>
-                                <option value="">모든 분류</option>
-                                @foreach($types as $key => $item)
-                                    <option value="{{ $key }}">{{ $item }}</option>
-                                @endforeach
-                            </x-input.select.basics>
+                <div class="space-y-8">
+                    <div class="flex flex-col space-y-2">
+                        <div>
+                            <h2 class="text-xl lg:text-2xl font-bold">신청한 미션</h2>
                         </div>
-                        <div class="w-full lg:w-auto md:mr-2">
-                            <x-input.select.basics id="limit" name="limit" x-model="data.participate.body.limit" required>
-                                <option value="">보기</option>
-                                <option value="10">10개</option>
-                                <option value="20">20개</option>
-                                <option value="30">30개</option>
-                                <option value="50">50개</option>
-                            </x-input.select.basics>
+                        <div class="flex items-center">
+                            <div class="w-full lg:w-auto mr-2 hidden md:block">
+                                <x-input.select.basics id="group" name="group" x-model="data.participate.body.query.type" required>
+                                    <option value="">모든 분류</option>
+                                    @foreach($types as $key => $item)
+                                        <option value="{{ $key }}">{{ $item }}</option>
+                                    @endforeach
+                                </x-input.select.basics>
+                            </div>
+                            <div class="w-full lg:w-auto md:mr-2">
+                                <x-input.select.basics id="limit" name="limit" x-model="data.participate.body.limit" required>
+                                    <option value="">보기</option>
+                                    <option value="10">10개</option>
+                                    <option value="20">20개</option>
+                                    <option value="30">30개</option>
+                                    <option value="50">50개</option>
+                                </x-input.select.basics>
+                            </div>
                         </div>
+                        <x-list.galaxyhub.basics :component-id="$componentId1" name="" :action="route('admin.user.missions.participate', $user->id)" :refresh="true"/>
                     </div>
-                    <x-list.galaxyhub.basics :component-id="$componentId1" name="" :action="route('admin.user.missions.participate', $user->id)" :refresh="true"/>
-                </div>
-            </x-panel.galaxyhub.basics>
 
-            <x-panel.galaxyhub.basics>
-                <div class="flex flex-col space-y-2">
-                    <div>
-                        <h2 class="text-xl lg:text-2xl font-bold">만든 미션</h2>
-                        <p class="mt-1 max-w-2xl text-sm text-gray-500 dark:text-gray-300">
-                            {{ $user->name }}님께서 지금까지 만든 미션입니다.
-                        </p>
-                    </div>
-                    <div class="flex items-center">
-                        <div class="w-full lg:w-auto mr-2 hidden md:block">
-                            <x-input.select.basics id="group" name="group" x-model="data.make.body.query.type" required>
-                                <option value="">모든 분류</option>
-                                @foreach($types as $key => $item)
-                                    <option value="{{ $key }}">{{ $item }}</option>
-                                @endforeach
-                            </x-input.select.basics>
+                    <div class="flex flex-col space-y-2">
+                        <div>
+                            <h2 class="text-xl lg:text-2xl font-bold">만든 미션</h2>
                         </div>
-                        <div class="w-full lg:w-auto md:mr-2">
-                            <x-input.select.basics id="limit" name="limit" x-model="data.make.body.limit" required>
-                                <option value="">보기</option>
-                                <option value="10">10개</option>
-                                <option value="20">20개</option>
-                                <option value="30">30개</option>
-                                <option value="50">50개</option>
-                            </x-input.select.basics>
+                        <div class="flex items-center">
+                            <div class="w-full lg:w-auto mr-2 hidden md:block">
+                                <x-input.select.basics id="group" name="group" x-model="data.make.body.query.type" required>
+                                    <option value="">모든 분류</option>
+                                    @foreach($types as $key => $item)
+                                        <option value="{{ $key }}">{{ $item }}</option>
+                                    @endforeach
+                                </x-input.select.basics>
+                            </div>
+                            <div class="w-full lg:w-auto md:mr-2">
+                                <x-input.select.basics id="limit" name="limit" x-model="data.make.body.limit" required>
+                                    <option value="">보기</option>
+                                    <option value="10">10개</option>
+                                    <option value="20">20개</option>
+                                    <option value="30">30개</option>
+                                    <option value="50">50개</option>
+                                </x-input.select.basics>
+                            </div>
                         </div>
+                        <x-list.galaxyhub.basics :component-id="$componentId2" name="" :action="route('admin.user.missions.make', $user->id)" :refresh="true"/>
                     </div>
-                    <x-list.galaxyhub.basics :component-id="$componentId2" name="" :action="route('admin.user.missions.make', $user->id)" :refresh="true"/>
                 </div>
             </x-panel.galaxyhub.basics>
         </div>
@@ -235,7 +250,8 @@
                             group: '{{ $group }}',
                             mission_count: '{{ $missionCount }}',
                             mission_date: '{{ $missionLatest }}',
-                            badges: {!! $userBadge !!}
+                            badges: {!! $userBadge !!},
+                            ban: '{{ $ban }}'
                         },
                     },
                     badges: {
@@ -250,7 +266,7 @@
                         url: '{{ route('admin.user.index.process') }}',
                         body: {
                             type: 'group',
-                            user_id: [ '{{$user->id}}' ],
+                            user_id: ['{{$user->id}}'],
                             reason: '',
                             query: {
                                 group: ''
@@ -260,15 +276,19 @@
                         lock: false,
                     },
                     process: {
-                        url: '{{ route('admin.application.index.process') }}',
-                        body: {},
+                        url: '{{ route('admin.user.index.process') }}',
+                        body: {
+                            query: {
+                                days: ''
+                            },
+                        },
                         lock: false
                     },
                     participate: {
                         body: {
                             limit: 10,
                             query: {
-                                type: '',
+                                type: ''
                             },
                         },
                     },
@@ -276,7 +296,7 @@
                         body: {
                             limit: 10,
                             query: {
-                                type: '',
+                                type: ''
                             },
                         },
                     },
@@ -289,6 +309,7 @@
 
                         this.edit.badge = false;
                         this.load();
+                        this.$store.memo_list.list();
                     };
 
                     let error = (e) => {
@@ -337,6 +358,7 @@
 
                                 this.edit.group = false;
                                 this.load();
+                                this.$store.memo_list.list();
                             };
 
                             let error = (e) => {
@@ -390,6 +412,7 @@
 
                             let success = (r) => {
                                 this.load();
+                                this.$store.memo_list.list();
                                 window.modal.alert('처리 완료', '정상적으로 처리되었습니다.', (c) => {});
                             };
 

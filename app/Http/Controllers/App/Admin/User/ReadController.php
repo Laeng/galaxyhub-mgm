@@ -98,6 +98,13 @@ class ReadController extends Controller
         $badges = $this->badgeRepository->all();
         $badge = array();
 
+        $ban = '';
+        if ($user->isBanned())
+        {
+            $userBan = $user->bans()->first();
+            $ban = is_null($userBan->expired_at) ? '무기한' : "{$userBan->expired_at->format('Y년 m월 d일 H시 i분')} 까지";
+        }
+
         foreach ($badges as $item)
         {
             $badge[] = [
@@ -122,7 +129,8 @@ class ReadController extends Controller
             'naverId' => $naverId,
             'discordName' => $discordName,
             'birthday' => $birthday,
-            'types' => MissionType::getKoreanNames()
+            'types' => MissionType::getKoreanNames(),
+            'ban' => $ban
         ]);
 
     }
@@ -157,11 +165,19 @@ class ReadController extends Controller
                 ];
             }
 
+            $ban = '';
+            if ($user->isBanned())
+            {
+                $userBan = $user->bans()->first();
+                $ban = is_null($userBan->expired_at) ? '무기한' : "{$userBan->expired_at->format('Y년 m월 d일 H시 i분')} 까지";
+            }
+
             return $this->jsonResponse(200, 'SUCCESS', [
                 'badges' => $userBadge,
                 'group' => RoleType::getKoreanNames()[$role->name],
                 'mission_count' => $missionCount,
                 'mission_date' => $missionLatest,
+                'ban' => $ban
             ]);
         }
         catch (\Exception $e)

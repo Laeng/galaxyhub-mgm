@@ -1,4 +1,4 @@
-<div class="flex flex-col space-y-2" x-data="memo_list">
+<div class="flex flex-col space-y-2" x-data="$store.memo_list">
     <div class="flex flex-col space-y-2" x-cloak x-show="finish.list">
         <div class="max-h-96" data-simplebar>
             <ul role="list" class="divide-y divide-gray-200 dark:divide-gray-800">
@@ -63,7 +63,7 @@
 
 <script type="text/javascript">
     window.document.addEventListener('alpine:init', () => {
-        window.alpine.data('memo_list', () => ({
+        window.alpine.store('memo_list', {
             finish: {
               list: false
             },
@@ -309,7 +309,6 @@
                 });
             },
             remove(id) {
-                console.log('dd');
                 if (!this.data.delete.lock) {
                     window.modal.confirm('삭제', '메모를 삭제하시겠습니까?', (r) => {
                         if (r.isConfirmed) {
@@ -368,6 +367,6 @@
             post(url, body, success, error, complete) {
                 window.axios.post(url, body).then(success).catch(error).then(complete);
             }
-        }));
+        });
     });
 </script>

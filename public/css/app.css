@@ -1717,11 +1717,6 @@ select{
   margin-right: calc(0.25rem * var(--tw-space-x-reverse));
   margin-left: calc(0.25rem * calc(1 - var(--tw-space-x-reverse)));
 }
-.space-x-8 > :not([hidden]) ~ :not([hidden]){
-  --tw-space-x-reverse: 0;
-  margin-right: calc(2rem * var(--tw-space-x-reverse));
-  margin-left: calc(2rem * calc(1 - var(--tw-space-x-reverse)));
-}
 .divide-y > :not([hidden]) ~ :not([hidden]){
   --tw-divide-y-reverse: 0;
   border-top-width: calc(1px * calc(1 - var(--tw-divide-y-reverse)));
@@ -1815,6 +1810,15 @@ select{
 }
 .border-r{
   border-right-width: 1px;
+}
+.border-b{
+  border-bottom-width: 1px;
+}
+.border-dashed{
+  border-style: dashed;
+}
+.border-dotted{
+  border-style: dotted;
 }
 .border-double{
   border-style: double;
@@ -2099,9 +2103,6 @@ select{
 }
 .text-center{
   text-align: center;
-}
-.text-right{
-  text-align: right;
 }
 .align-baseline{
   vertical-align: baseline;
