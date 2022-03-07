@@ -130,7 +130,7 @@
                 <div class="px-4 py-5 bg-white dark:bg-gray-900 shadow overflow-hidden sm:p-6 flex flex-col">
                     <dt class="text-2xl font-bold text-gray-900 dark:text-gray-100">MGM</dt>
                     <dd class="mt-1 mb-4 text-sm text-gray-500 dark:text-gray-300">멀티플레이 게임 매니지먼트의 중심입니다. 2008년 게임 플레이 영상 제작 및 공유 카페에서 아르마2 및 게리 모드 커뮤니티를 거쳐 국내 최대의 아르마3 클랜과 스타 시티즌 함대를 운영중인 커뮤니티로 거듭났습니다.</dd>
-                    <x-button.filled.md-white class="w-full mt-auto">
+                    <x-button.filled.md-white class="w-full mt-auto" onclick="location.href='https://cafe.naver.com/gamemmakers'">
                         바로가기
                     </x-button.filled.md-white>
                 </div>
@@ -138,15 +138,15 @@
                 <div class="px-4 py-5 bg-white dark:bg-gray-900 shadow overflow-hidden sm:p-6 flex flex-col">
                     <dt class="text-2xl font-bold text-gray-900 dark:text-gray-100">Galaxyhub</dt>
                     <dd class="mt-1 mb-4 text-sm text-gray-500 dark:text-gray-300">크라우드 펀딩으로 제작되는 AAA 게임인 스타 시티즌의 개발 정보를 공유하고 함께 즐기는 공간입니다. 한국 스타 시티즌의 진흥과 언어 장벽 해소에 기여하고자 노력하고 있습니다.</dd>
-                    <x-button.filled.md-white class="w-full mt-auto">
+                    <x-button.filled.md-white class="w-full mt-auto" onclick="location.href='https://galaxyhub.kr'">
                         바로가기
                     </x-button.filled.md-white>
                 </div>
 
                 <div class="px-4 py-5 bg-white dark:bg-gray-900 shadow overflow-hidden sm:p-6 flex flex-col">
-                    <dt class="text-2xl font-bold text-gray-900 dark:text-gray-100">MGM 라운지</dt>
+                    <dt class="text-2xl font-bold text-gray-900 dark:text-gray-100">MGM Lounge</dt>
                     <dd class="mt-1 mb-4 text-sm text-gray-500 dark:text-gray-300">MGM 아르마 클랜 회원분들을 위한 미션 신청 및 출석 그리고 애드온을 간편하게 다운로드 받을 수 있도록 돕는 MGM 업데이터를 다운로드 받을 수 있습니다.</dd>
-                    <x-button.filled.md-white class="w-full mt-auto">
+                    <x-button.filled.md-white class="w-full mt-auto" onclick="location.href='{{ route('app.index') }}'">
                         바로가기
                     </x-button.filled.md-white>
                 </div>
@@ -154,7 +154,7 @@
                 <div class="px-4 py-5 bg-white dark:bg-gray-900 shadow overflow-hidden sm:p-6 flex flex-col">
                     <dt class="text-2xl font-bold text-gray-900 dark:text-gray-100">스타 시티즌 유저 한국어 프로젝트</dt>
                     <dd class="mt-1 mb-4 text-sm text-gray-500 dark:text-gray-300">스타 시티즌의 언어 장벽을 허물고자 타 커뮤니티와 연합하여 번역 및 인프라를 지원하고 있습니다.</dd>
-                    <x-button.filled.md-white class="w-full mt-auto">
+                    <x-button.filled.md-white class="w-full mt-auto" onclick="location.href='https://sc.galaxyhub.kr'">
                         바로가기
                     </x-button.filled.md-white>
                 </div>
@@ -162,7 +162,7 @@
                 <div class="px-4 py-5 bg-white dark:bg-gray-900 shadow overflow-hidden sm:p-6 flex flex-col">
                     <dt class="text-2xl font-bold text-gray-900 dark:text-gray-100">아르마3 사표 계산기</dt>
                     <dd class="mt-1 mb-4 text-sm text-gray-500 dark:text-gray-300">아르마3 장비들의 조준을 돕는 사표 계산기입니다.</dd>
-                    <x-button.filled.md-white class="w-full mt-auto">
+                    <x-button.filled.md-white class="w-full mt-auto" onclick="location.href='https://calc.galaxyhub.kr'">
                         바로가기
                     </x-button.filled.md-white>
                 </div>
