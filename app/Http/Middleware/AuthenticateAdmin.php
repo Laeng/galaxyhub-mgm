@@ -16,7 +16,7 @@ class AuthenticateAdmin extends Middleware
 
         if (!$user->hasPermissionTo(PermissionType::MEMBER->name))
         {
-            //return redirect()->route('application.index');
+            return redirect()->route('application.index');
         }
 
         return $next($request);
