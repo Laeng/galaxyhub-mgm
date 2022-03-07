@@ -24,7 +24,7 @@
                     </div>
                     <hr class="mb-6 border-t dark:border-gray-600" />
                     <div class="text-center">
-                        <a class="inline-block text-sm text-blue-600 align-baseline hover:text-blue-800 dark:hover:text-blue-400" href="./register.html">
+                        <a class="inline-block text-sm text-blue-600 align-baseline hover:text-blue-800 dark:hover:text-blue-400" href="{{ route('welcome') }}">
                             돌아가기
                         </a>
                     </div>
