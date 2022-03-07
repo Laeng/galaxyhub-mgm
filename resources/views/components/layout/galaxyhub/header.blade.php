@@ -35,7 +35,7 @@
                 </svg>
             </div>
             <div class="z-10">
-                <a href="#">
+                <a href="{{ mb_strtolower($websiteName) === 'mgm lounge' ? route('app.index') : route('welcome') }}">
                     <svg class="{{ $logoTextClass }} font-medium w-full h-5 htf htf-hover">
                         <text class="fill-current w-full h-5" x="0" y="16" font-size="100%">{{$websiteName}}</text>
                     </svg>
@@ -52,38 +52,8 @@
                     </svg>
                 </button>
                 <div class="hidden lg:block col-span-2 lg:col-auto lg:ml-5" :class="{'hidden': !modal_navigation, 'block': modal_navigation}">
-                    <div class="fixed lg:static top-0 right-0 h-full w-full lg:top-auto lg:right-auto lg:w-auto lg:w-auto lg:bg-transparent" :class="{'bg-gray-900': modal_navigation}">
-                        <ul class="navigation {{ $menuTextClass }}">
-                            <li>
-                                <a href="#">aaa</a>
-                            </li>
-                            <li>
-                                <a href="#">bbb</a>
-                                <ul>
-                                    <li>
-                                        <a href="#">가가가</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">나나나</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">다다다</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">다다다</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">다다다</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">다다다</a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li>
-                                <a href="#">로그아웃</a>
-                            </li>
-                        </ul>
+                    <div class="fixed lg:static top-0 right-0 h-full w-full lg:top-auto lg:right-auto lg:w-auto lg:w-auto lg:bg-transparent navigation text-white" :class="{'bg-gray-900': modal_navigation}">
+                        {!! $menu->render(); !!}
                     </div>
                 </div>
             </div>

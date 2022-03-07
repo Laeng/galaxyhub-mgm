@@ -18,5 +18,7 @@ interface UserMissionRepositoryInterface extends EloquentRepositoryInterface
 
     public function findAttendedMissionByUserId(int $userId, array $columns = ['*'], array $relations = []): ?Collection;
 
+    public function findBetweenDatesByUserId(string $column, array $dates, int $userId, array $columns = ['*'], array $relations = []): ?Collection;
+
     public function new(): UserMission;
 }

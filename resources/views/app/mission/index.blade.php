@@ -46,7 +46,7 @@
                     <div class="md:ml-auto hidden md:block">
                         <div class="flex justify-end space-x-2">
                             <x-button.filled.md-blue type="button" onClick="location.href='{{ route('mission.new') }}'">
-                                미션 생성
+                                새로 만들기
                             </x-button.filled.md-blue>
                         </div>
                     </div>

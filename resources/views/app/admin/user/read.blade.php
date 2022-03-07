@@ -227,7 +227,6 @@
                     강제 탈퇴
                 </x-button.filled.md-white>
             </div>
-
         </aside>
     </div>
 

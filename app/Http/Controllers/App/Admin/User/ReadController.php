@@ -295,13 +295,6 @@ class ReadController extends Controller
                             }
                         }
                     }
-                    else
-                    {
-                        if ($mission->phase === MissionPhaseType::RECRUITING->value || ($mission->can_tardy && $mission->phase === MissionPhaseType::IN_PROGRESS->value))
-                        {
-                            $text = ['link-fuchsia', '참가 신청'];
-                        }
-                    }
 
                     $row = [
                         $missionType[$mission->type],
@@ -409,13 +402,6 @@ class ReadController extends Controller
                             {
                                 $text = ['link-green', '출석 성공'];
                             }
-                        }
-                    }
-                    else
-                    {
-                        if ($mission->phase === MissionPhaseType::RECRUITING->value || ($mission->can_tardy && $mission->phase === MissionPhaseType::IN_PROGRESS->value))
-                        {
-                            $text = ['link-fuchsia', '참가 신청'];
                         }
                     }
 

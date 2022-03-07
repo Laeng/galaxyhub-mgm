@@ -47,8 +47,22 @@ class UpdaterController extends Controller
     public function release(Request $request): JsonResponse
     {
         try {
+            $this->jsonValidator($request, [
+                'release' => 'bool'
+            ]);
+
+
             $user = Auth::user();
-            $path = URL::signedRoute('updater.download', $user->id);
+
+            if ($request->get('release', true))
+            {
+                $path = URL::signedRoute('updater.download', $user->id);
+            }
+            else
+            {
+                $path = '';
+            }
+
             $github = $this->githubService->getLatestRelease('Laeng', 'MGM_UPDATER');
 
             $data = [

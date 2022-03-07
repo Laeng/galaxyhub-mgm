@@ -29,20 +29,20 @@
     display: none !important;
 }
 
-.navigation {
-    @apply absolute lg:relative top-14 lg:top-0 lg:left-0 lg:space-x-4 w-full lg:w-auto;
+.navigation > ul {
+    @apply absolute lg:relative top-14 lg:top-0 lg:left-0 lg:space-x-4 w-full lg:w-auto text-white;
 }
 
-.navigation li {
-    @apply py-2 lg:py-0 text-xl lg:text-sm text-center lg:text-left lg:float-left;
+.navigation > ul > li {
+    @apply py-2 lg:py-0 text-xl lg:text-sm text-center lg:text-left lg:float-left hover:text-gray-400 relative;
 }
 
-.navigation li ul {
+.navigation > ul > li > ul {
     @apply lg:hidden;
 }
 
 @media (min-width: 1024px) {
-    .navigation li ul {
+    .navigation > ul > li > ul {
         --tw-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
         min-width: 9rem;
         position: absolute;
@@ -54,13 +54,22 @@
 }
 
 
-.navigation li li {
-    @apply p-1.5 my-3 lg:my-2 lg:px-8 text-base lg:text-sm text-center lg:text-left text-white lg:text-black hover:text-gray-400 lg:hover:text-black lg:float-none lg:hover:bg-gray-100;
+.navigation > ul > li > ul > li {
+    @apply p-1.5 my-3 lg:my-2 lg:px-4 text-base lg:text-sm text-center lg:text-left text-white hover:text-gray-400 lg:hover:bg-gray-100 lg:text-black lg:hover:text-black lg:float-none;
 }
 
-.navigation li:hover ul {
-    @apply lg:block;
+.navigation > ul > li:hover > ul {
+    @apply lg:block lg:-ml-6;
 }
+
+.navigation > ul > li .active {
+    @apply text-gray-400;
+}
+
+.navigation > ul > li .exact-active {
+    @apply text-gray-400 lg:text-gray-800;
+}
+
 
 @keyframes scroll {
     0% {

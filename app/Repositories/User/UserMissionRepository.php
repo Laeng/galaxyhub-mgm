@@ -40,6 +40,11 @@ class UserMissionRepository extends BaseRepository implements UserMissionReposit
         return $this->model->select($columns)->where('user_id', $userId)->whereNotNull('attended_at')->with($relations)->latest()->get();
     }
 
+    public function findBetweenDatesByUserId(string $column, array $dates, int $userId, array $columns = ['*'], array $relations = []): ?Collection
+    {
+        return $this->model->select($columns)->whereBetween($column, $dates)->where('user_id', $userId)->with($relations)->latest()->get();
+    }
+
     public function new(): UserMission
     {
         return new UserMission();

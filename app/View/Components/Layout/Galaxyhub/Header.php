@@ -2,8 +2,13 @@
 
 namespace App\View\Components\Layout\Galaxyhub;
 
+use App\Enums\RoleType;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\URL;
 use Illuminate\View\Component;
 use Illuminate\Contracts\View\View;
+use Spatie\Menu\Laravel\Link;
+use Spatie\Menu\Laravel\Menu;
 
 class Header extends Component
 {
@@ -31,6 +36,59 @@ class Header extends Component
 
     public function render(): View
     {
-        return view('components.layout.galaxyhub.header');
+        $user = Auth::user();
+        $menu = Menu::new();
+
+        if (is_null($user) || mb_strtolower($this->websiteName) !== 'mgm lounge')
+        {
+            $menu = $menu->add(Link::toRoute('app.index', 'MGM Lounge'));
+        }
+        else
+        {
+            $roles = $user->where('id', $user->id)->with('roles')->get();
+
+            if (!is_null($roles) && count($roles->first()->roles) > 0)
+            {
+                $role = $roles->first()->roles;
+                $roleType = $role->first()->name;
+
+                if (!$user->isBanned() && in_array($roleType, [RoleType::MEMBER->name, RoleType::MAKER1->name, RoleType::MAKER2->name, RoleType::ADMIN->name]))
+                {
+                    //멤버 이상.
+
+                    if ($roleType !== RoleType::MEMBER->name)
+                    {
+                        $menu = $menu->submenu("<a href='#'>미션</a>", function (Menu $menu) {
+                            $menu = $menu->add(Link::toRoute('mission.index', '미션 목록'));
+                            $menu = $menu->add(Link::toRoute('mission.new', '새로 만들기'));
+                        });
+                    }
+                    else
+                    {
+                        $menu = $menu->add(Link::toRoute('mission.index', '미션'));
+                    }
+
+                    //$menu = $menu->add(Link::toRoute('updater.index', '업데이터'));
+                    $menu = $menu->add(Link::toRoute('account.pause', '장기 미접속'));
+
+                    if ($roleType === RoleType::ADMIN->name)
+                    {
+                        $menu = $menu->submenu("<a href='#'>관리</a>", function (Menu $menu) {
+                            $menu = $menu->add(Link::toRoute('admin.user.index', '회원 목록'));
+                            $menu = $menu->add(Link::toRoute('admin.application.index', '가입 신청자 목록'));
+                        });
+                    }
+                }
+
+                $menu = $menu->add(Link::toRoute('account.me', '내 정보'));
+                $menu = $menu->add(Link::toRoute('auth.logout', '로그아웃'));
+            }
+        }
+
+        $menu->setActive(URL::full());
+
+        return view('components.layout.galaxyhub.header', [
+            'menu' => $menu
+        ]);
     }
 }
