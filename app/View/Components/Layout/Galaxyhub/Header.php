@@ -41,7 +41,7 @@ class Header extends Component
 
         if (is_null($user) || mb_strtolower($this->websiteName) !== 'mgm lounge')
         {
-            $menu = $menu->add(Link::toRoute('app.index', 'MGM Lounge'));
+            $menu = $menu->add(Link::toRoute('app.index', "MGM Lounge"));
         }
         else
         {

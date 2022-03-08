@@ -4,7 +4,7 @@
         <div class="bg-black/50">
             <x-container.galaxyhub.basics class="h-screen flex justify-center items-center">
                 <div class="grid grid-cols-1 place-items-center">
-                    <img class="w-16 lg:w-36 pb-4" alt="logo" src="https://mgmupdater.com/images/mgm.png"/>
+                    <img class="w-16 lg:w-36 pb-4" alt="logo" src="{{ asset('images/mgm_logo.svg') }}"/>
                     <h1 class="text-3xl lg:text-5xl font-bold text-white mb-2 text-[#969B74]">멀티플레이 게임 매니지먼트</h1>
                     <p class="text-xl lg:text-2xl text-white/50 tracking-wider">Multiplay Game Management</p>
                 </div>
