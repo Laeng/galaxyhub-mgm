@@ -5,7 +5,9 @@ namespace App\Http\Controllers\App\Account;
 use App\Enums\BanCommentType;
 use App\Enums\UserRecordType;
 use App\Http\Controllers\Controller;
+use App\Repositories\Ban\Interfaces\BanRepositoryInterface;
 use App\Repositories\User\Interfaces\UserRecordRepositoryInterface;
+use App\Repositories\User\Interfaces\UserRepositoryInterface;
 use App\Repositories\User\UserMissionRepository;
 use App\Services\User\Contracts\UserServiceContract;
 use Illuminate\Http\JsonResponse;
@@ -18,26 +20,38 @@ class PauseController extends Controller
     private UserMissionRepository $userMissionRepository;
     private UserRecordRepositoryInterface $userRecordRepository;
     private UserServiceContract $userService;
+    private BanRepositoryInterface $banRepository;
 
     public function __construct
     (
         UserMissionRepository $userMissionRepository, UserRecordRepositoryInterface $userRecordRepository,
-        UserServiceContract $userService
+        UserServiceContract $userService, BanRepositoryInterface $banRepository
     )
     {
         $this->userMissionRepository = $userMissionRepository;
         $this->userRecordRepository = $userRecordRepository;
         $this->userService = $userService;
+        $this->banRepository = $banRepository;
     }
 
     public function pause(Request $request): View
     {
         $user = Auth::user();
         $userMission = $this->userMissionRepository->findAttendedMissionByUserId($user->id);
-        $pause = $this->userRecordRepository->findByUserIdAndTypes($user->id, [UserRecordType::USER_PAUSE_ENABLE->name, UserRecordType::USER_PAUSE_DISABLE->name])->first();
 
-        $canPause = !is_null($userMission) && $userMission->count() > 0;
+        $ban = $this->banRepository->findByUserId($user->id)->first();
+
+        $pause = $this->userRecordRepository->findByUserIdAndTypes($user->id, [UserRecordType::USER_PAUSE_ENABLE->name, UserRecordType::USER_PAUSE_DISABLE->name])->first();
         $isPause = !is_null($pause) && $pause->type === UserRecordType::USER_PAUSE_ENABLE->name;
+
+        if (!is_null($ban) && (is_null($ban->expired_at) || !$ban->expired_at->isPast()))
+        {
+            $canPause = $ban->comment === BanCommentType::USER_PAUSE->value;
+        }
+        else
+        {
+            $canPause = !is_null($userMission) && $userMission->count() > 0;
+        }
 
         return view('app.account.pause', [
             'title' => '장기 미접속',
@@ -57,8 +71,17 @@ class PauseController extends Controller
             ]);
 
             $user = Auth::user();
+            $ban = $this->banRepository->findByUserId($user->id)->first();
 
-            if (!$this->can($user->id))
+            if (!is_null($ban) && (is_null($ban->expired_at) || !$ban->expired_at->isPast()))
+            {
+                if ($ban->comment !== BanCommentType::USER_PAUSE->value)
+                {
+                    throw new \Exception('BANNED USER', 422);
+                }
+            }
+
+            if (!$this->isEnabled($user->id))
             {
                 $this->userService->createRecord($user->id, UserRecordType::USER_PAUSE_ENABLE->name, ['comment' => ' ']);
                 $user->ban(['comment' => BanCommentType::USER_PAUSE->value]);
@@ -82,8 +105,17 @@ class PauseController extends Controller
             ]);
 
             $user = Auth::user();
+            $ban = $this->banRepository->findByUserId($user->id)->first();
 
-            if ($this->can($user->id))
+            if (!is_null($ban) && (is_null($ban->expired_at) || !$ban->expired_at->isPast()))
+            {
+                if ($ban->comment !== BanCommentType::USER_PAUSE->value)
+                {
+                    throw new \Exception('BANNED USER', 422);
+                }
+            }
+
+            if ($this->isEnabled($user->id))
             {
                 $ban = $user->bans()->first();
 
@@ -110,7 +142,7 @@ class PauseController extends Controller
         }
     }
 
-    private function can(int $userId): bool
+    private function isEnabled(int $userId): bool
     {
         $userMission = $this->userMissionRepository->findAttendedMissionByUserId($userId);
         $pause = $this->userRecordRepository->findByUserIdAndTypes($userId, [UserRecordType::USER_PAUSE_ENABLE->name, UserRecordType::USER_PAUSE_DISABLE->name])->first();

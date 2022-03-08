@@ -36,7 +36,7 @@ Route::prefix('app')->group(function () {
 
     });
 
-    Route::prefix('missions')->name('mission.')->middleware(['auth.member:web'])->group(function() {
+    Route::prefix('missions')->name('mission.')->middleware(['auth.member:web', ForbidBannedUser::class])->group(function() {
         //VIEW
         Route::get('/', [ListController::class, 'index'])->name('index');
 

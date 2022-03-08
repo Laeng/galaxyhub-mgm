@@ -35,8 +35,7 @@ class UpdaterController extends Controller
     {
         $user = Auth::user();
 
-        echo $request->hasValidSignature();
-        echo $user->id !== $userId;
+        info($request->hasValidSignature() . " ---- " . ($user->id !== $userId));
 
         if (!$request->hasValidSignature() || $user->id !== $userId) {
             abort(404);

@@ -1,4 +1,4 @@
-<x-theme.galaxyhub.sub-center title="ERROR!" website-name="MGM Lounge" description="MGM Lounge" align-content="start">
+<x-theme.galaxyhub.sub-center website-name="MGM Lounge" description="MGM Lounge" align-content="start">
     <div class="flex justify-center lg:justify-start pt-16 lg:pt-48">
         <div class="text-center lg:text-left">
             <h1 class="text-6xl lg:text-9xl font-bold lg:font-extrabold">@yield('code')</h1>

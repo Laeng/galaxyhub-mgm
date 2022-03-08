@@ -23,7 +23,7 @@
             </a>
             <a href="{{ !is_null($latestMission) ? route('mission.read', $latestMission->id) : '#' }}" class="p-8 border-b md:border-b-0 md:border-r border-gray-300 dark:border-gray-800 text-center md:rounded-bl lg:rounded-bl-none hover:shadow-inner hover:bg-gray-200 dark:hover:bg-[#080C15]/50">
                 <p class="text-sm text-purple-600 hover:text-purple-700 dark:hover:text-purple-500">예정된 미션</p>
-                <p class="text-base">{{ !is_null($latestMission) ? $latestMission->mission->title : '--' }}</p>
+                <p class="text-base">{{ !is_null($latestMission) ? $latestMission->title : '--' }}</p>
             </a>
             <div class="p-8 border-gray-300 dark:border-gray-800 text-center rounded-b-lg md:rounded-bl-none lg:rounded-tr-lg hover:shadow-inner hover:bg-gray-200 dark:hover:bg-[#080C15]/50">
                 <p class="text-sm text-indigo-600 hover:text-indigo-700 dark:hover:text-indigo-500">팀스피크</p>

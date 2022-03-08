@@ -17,13 +17,6 @@
                     </ul>
                 </x-alert.galaxyhub.info>
             @endif
-
-            @if(!$canPause)
-                <x-alert.galaxyhub.danger title="장기 미접속 신청 불가">
-                    <p>{{ $user->name }}님께서는 미션에 참석하시지 않으셨으므로 장기 미접속 신청을 하실 수 없습니다.</p>
-                </x-alert.galaxyhub.danger>
-            @endif
-
         </div>
 
         <div class="mt-8">

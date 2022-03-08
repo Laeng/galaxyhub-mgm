@@ -52,7 +52,7 @@ class Header extends Component
                 $role = $roles->first()->roles;
                 $roleType = $role->first()->name;
 
-                if (!$user->isBanned() && in_array($roleType, [RoleType::MEMBER->name, RoleType::MAKER1->name, RoleType::MAKER2->name, RoleType::ADMIN->name]))
+                if (in_array($roleType, [RoleType::MEMBER->name, RoleType::MAKER1->name, RoleType::MAKER2->name, RoleType::ADMIN->name]))
                 {
                     //멤버 이상.
 
@@ -80,10 +80,6 @@ class Header extends Component
                     }
 
                     $menu = $menu->add(Link::toRoute('account.me', '내 정보'));
-                }
-                else
-                {
-                    $menu = $menu->add(Link::toRoute('account.leave', '데이터 삭제'));
                 }
 
                 $menu = $menu->add(Link::toRoute('auth.logout', '로그아웃'));
