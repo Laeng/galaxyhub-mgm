@@ -32,6 +32,8 @@ jobs:
           git fetch --all
           git reset --hard origin/master
           git pull
+          npm install
+          npx mix --production
           composer install --optimize-autoloader --no-dev
           php artisan config:cache
           php artisan route:cache
