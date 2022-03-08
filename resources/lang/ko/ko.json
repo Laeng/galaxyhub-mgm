@@ -1,0 +1,15 @@
+{
+    "The :attribute must be a valid role.": ":attribute은(는) 반드시 유효한 역할이어야 합니다.",
+    "The :attribute must be at least :length characters and contain at least one number.": ":attribute은(는) 반드시 적어도 :length글자 이상이면서 하나 이상의 숫자를 포함해야 합니다.",
+    "The :attribute must be at least :length characters and contain at least one special character and one number.": ":attribute은(는) 반드시 :length글자 이상이면서 하나 이상의 특수 문자 그리고 숫자를 포함해야 합니다.",
+    "The :attribute must be at least :length characters and contain at least one special character.": ":attribute은(는) 반드시 :length글자 이상이면서 하나 이상의 특수 문자를 포함해야 합니다.",
+    "The :attribute must be at least :length characters and contain at least one uppercase character and one number.": ":attribute은(는) 반드시 :length글자 이상이면서 하나 이상의 대문자, 숫자를 포함해야 합니다.",
+    "The :attribute must be at least :length characters and contain at least one uppercase character and one special character.": ":attribute은(는) 반드시 :length글자 이상이면서 하나 이상의 대문자, 특수문자를 포함해야 합니다.",
+    "The :attribute must be at least :length characters and contain at least one uppercase character, one number, and one special character.": ":attribute은(는) 반드시 :length글자 이상이면서 하나 이상의 대문자, 숫자, 그리고 특수문자를 포함해야 합니다.",
+    "The :attribute must be at least :length characters and contain at least one uppercase character.": ":attribute은(는) 반드시 :length글자 이상이면서 하나 이상의 대문자를 포함해야 합니다.",
+    "The :attribute must be at least :length characters.": ":attribute은(는) 반드시 :length글자 이상이어야 합니다.",
+    "The :attribute must contain at least one letter.": ":attribute은(는) 반드시 하나 이상의 문자를 포함해야합니다.",
+    "The :attribute must contain at least one number.": ":attribute은(는) 반드시 하나 이상의 숫자를 포함해야합니다.",
+    "The :attribute must contain at least one symbol.": "attribute은(는) 반드시 하나 이상의 특수 문자를 포함해야합니다.",
+    "The :attribute must contain at least one uppercase and one lowercase letter.": ":attribute에는 하나 이상의 대문자와 하나의 소문자가 포함되어야 합니다.",
+}

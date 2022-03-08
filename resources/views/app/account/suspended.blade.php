@@ -34,6 +34,4 @@
             @endif
         @endif
     </div>
-
-
 </x-theme.galaxyhub.sub-center>
