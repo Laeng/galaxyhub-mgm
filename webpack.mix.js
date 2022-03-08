@@ -18,5 +18,10 @@ mix.postCss('resources/css/app.css', 'public/css', [
     require('autoprefixer'),
 ]);
 
+if (mix.inProduction()) {
+    mix.minify(['public/js/app.js', 'public/css/app.css']);
+    mix.version();
+}
+
 mix.disableNotifications();
 
