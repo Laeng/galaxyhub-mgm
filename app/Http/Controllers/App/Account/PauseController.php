@@ -83,7 +83,9 @@ class PauseController extends Controller
 
             if (!$this->isEnabled($user->id))
             {
-                $this->userService->createRecord($user->id, UserRecordType::USER_PAUSE_ENABLE->name, ['comment' => ' ']);
+                $this->userService->createRecord($user->id, UserRecordType::USER_PAUSE_ENABLE->name, [
+                    'comment' => '회원님이 장기 미접속을 신청하였습니다.'
+                ]);
                 $user->ban(['comment' => BanCommentType::USER_PAUSE->value]);
             }
 
@@ -122,7 +124,7 @@ class PauseController extends Controller
                 if (is_null($ban) || $ban->comment === BanCommentType::USER_PAUSE->value)
                 {
                     $data = [
-                        'comment' => ' '
+                        'comment' => '회원님이 장기 미접속을 해제 하였습니다.'
                     ];
 
                     $this->userService->createRecord($user->id, UserRecordType::USER_PAUSE_DISABLE->name, $data);

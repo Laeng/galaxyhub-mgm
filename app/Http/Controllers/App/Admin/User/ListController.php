@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\App\Admin\User;
 
+use App\Enums\BanCommentType;
 use App\Enums\RoleType;
 use App\Enums\UserRecordType;
 use App\Http\Controllers\Controller;
@@ -65,8 +66,10 @@ class ListController extends Controller
 
             $query = $query->whereNotNull('users.agreed_at');
 
-            if (!empty($q['find'])) {
-                switch ($q['find']) {
+            if (!empty($q['find']))
+            {
+                switch ($q['find'])
+                {
                     case 'id64':
                         $id = array_unique(array_column($userAccountRepository->findByAccountId('steam', $q['find_id'], ['user_id'])->toArray(), 'user_id'));
                         $query->whereIn('users.id', $id);
@@ -78,8 +81,10 @@ class ListController extends Controller
                 }
             }
 
-            if (!empty($q['filter'])) {
-                switch ($q['filter']) {
+            if (!empty($q['filter']))
+            {
+                switch ($q['filter'])
+                {
                     case '신규가입 미참여':
                         $query = $query->whereNull('user_missions.attended_at')->whereDate('users.created_at', '<=', now()->subDays(14));
                         break;
@@ -95,8 +100,10 @@ class ListController extends Controller
 
             $query = $query->select(['users.id', 'users.name', 'users.visited_at', 'users.visit', 'users.created_at', 'user_missions.attended_at']);
 
-            if (!empty($q['order'])) {
-                switch ($q['order']) {
+            if (!empty($q['order']))
+            {
+                switch ($q['order'])
+                {
                     case '가입일 오른차순':
                         $query = $query->oldest('created_at');
                         break;
@@ -190,7 +197,7 @@ class ListController extends Controller
         }
     }
 
-    public function process(Request $request, UserServiceContract $userService): JsonResponse
+    public function process(Request $request, UserServiceContract $userService, BanRepositoryInterface $banRepository): JsonResponse
     {
         try {
             $this->jsonValidator($request, [
@@ -200,7 +207,8 @@ class ListController extends Controller
                 'reason' => ''
             ]);
 
-            if (count($request->get('user_id')) <= 0) {
+            if (count($request->get('user_id')) <= 0)
+            {
                 throw new Exception('USER NOT SELECTED', 422);
             }
 
@@ -209,9 +217,11 @@ class ListController extends Controller
             $reason = strip_tags($request->get('reason', '변경 사유를 입력하지 않음.'));
             $q = $request->get('query');
 
-            switch ($request->get('type')) {
+            switch ($request->get('type'))
+            {
                 case 'ban':
-                    foreach ($users as $user) {
+                    foreach ($users as $user)
+                    {
                         $data = [
                             'comment' => $reason,
                         ];
@@ -226,23 +236,28 @@ class ListController extends Controller
                     break;
 
                 case 'unban':
-                    foreach ($users as $user) {
+                    foreach ($users as $user)
+                    {
+                        $ban = $banRepository->findByUserId($user->id)->first();
+                        $type = !is_null($ban) && $ban->comment === BanCommentType::USER_PAUSE->value ? UserRecordType::USER_PAUSE_DISABLE : UserRecordType::UNBAN_DATA;
+
                         $user->unban();
-                        $userService->createRecord($user->id, UserRecordType::UNBAN_DATA->name, [
+                        $userService->createRecord($user->id, $type->name, [
                             'comment' => $reason
                         ], $executor->id);
                     }
                     break;
 
                 case 'group':
-                    if (empty($q['group'])) {
+                    if (empty($q['group']))
+                    {
                         throw new Exception('ROLE EMPTY', 422);
                     }
 
-                    foreach ($users as $user) {
-                        $roleNames = array_flip(RoleType::getKoreanNames());
-
-                        if (isset(RoleType::getKoreanNames()[$q['group']])) {
+                    foreach ($users as $user)
+                    {
+                        if (isset(RoleType::getKoreanNames()[$q['group']]))
+                        {
                             $roles = $user->getRoleNames();
 
                             foreach ($roles as $role) {
@@ -255,14 +270,16 @@ class ListController extends Controller
                                 'role' => $q['group'],
                                 'comment' => $reason
                             ], $executor->id);
-                        } else {
+                        } else
+                        {
                             throw new Exception('NOT FOUND ROLE', 422);
                         }
                     }
                     break;
 
                 case 'drop':
-                    foreach ($users as $user) {
+                    foreach ($users as $user)
+                    {
                         $userService->delete($user->id);
                         $userService->createRecord($user->id, UserRecordType::USER_DELETE->name, [
                             'comment' => $reason
