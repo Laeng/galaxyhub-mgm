@@ -21,7 +21,7 @@
                 <nav aria-label="Sidebar">
                     <div class="space-y-1">
                         @foreach($menu as $k => $v)
-                            <a href="{{ $v['url'] }}" class="@if($v['url'] === '#') bg-white @endif text-gray-900 group flex items-center px-3 py-2 text-sm font-medium rounded-md space-x-2" aria-current="page">
+                            <a href="{{ $v['url'] }}" class="@if($v['url'] === '#') bg-white dark:bg-[#080C15]/50 @else hover:bg-gray-50 dark:hover:bg-[#080C15]/50 @endif text-gray-900 dark:text-gray-100 group flex items-center px-3 py-2 text-sm font-medium rounded-md space-x-2" aria-current="page">
                                 {!! $v['icon'] !!}
                                 <span class="truncate">{{ $k }}</span>
                             </a>
@@ -30,19 +30,19 @@
                     <div class="mt-8">
                         <h3 class="px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider" id="projects-headline">링크</h3>
                         <div class="mt-1 space-y-1" aria-labelledby="projects-headline">
-                            <a href="#" class="group flex items-center px-3 py-2 text-sm font-medium text-gray-600 rounded-md hover:text-gray-900 hover:bg-gray-50">
+                            <a href="https://cafe.naver.com/gamemmakers/book5086642/37323" class="group flex items-center px-3 py-2 text-sm font-medium text-gray-600 dark:text-gray-400 rounded-md hover:text-gray-900 dark:hover:text-gray-100 hover:bg-gray-50 dark:hover:bg-[#080C15]/50 ">
                                 <span class="truncate">MGM 회칙</span>
                             </a>
 
-                            <a href="#" class="group flex items-center px-3 py-2 text-sm font-medium text-gray-600 rounded-md hover:text-gray-900 hover:bg-gray-50">
+                            <a href="https://cafe.naver.com/gamemmakers/menu/1" class="group flex items-center px-3 py-2 text-sm font-medium text-gray-600 dark:text-gray-400 rounded-md hover:text-gray-900 dark:hover:text-gray-100 hover:bg-gray-50 dark:hover:bg-[#080C15]/50 ">
                                 <span class="truncate">MGM 공지사항</span>
                             </a>
 
-                            <a href="#" class="group flex items-center px-3 py-2 text-sm font-medium text-gray-600 rounded-md hover:text-gray-900 hover:bg-gray-50">
+                            <a href="https://cafe.naver.com/gamemmakers/book5076085" class="group flex items-center px-3 py-2 text-sm font-medium text-gray-600 dark:text-gray-400 rounded-md hover:text-gray-900 dark:hover:text-gray-100 hover:bg-gray-50 dark:hover:bg-[#080C15]/50 ">
                                 <span class="truncate">아르마 길잡이</span>
                             </a>
 
-                            <a href="#" class="group flex items-center px-3 py-2 text-sm font-medium text-gray-600 rounded-md hover:text-gray-900 hover:bg-gray-50">
+                            <a href="https://cafe.naver.com/gamemmakers/book5076085/23127" class="group flex items-center px-3 py-2 text-sm font-medium text-gray-600 dark:text-gray-400 rounded-md hover:text-gray-900 dark:hover:text-gray-100 hover:bg-gray-50 dark:hover:bg-[#080C15]/50 ">
                                 <span class="truncate">팀스피크 설치</span>
                             </a>
                         </div>

@@ -12,6 +12,7 @@ use App\Repositories\User\UserMissionRepository;
 use App\Services\Survey\Contracts\SurveyServiceContract;
 use App\Services\User\Contracts\UserServiceContract;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
@@ -23,6 +24,20 @@ class AccountController extends Controller
     public function __construct(UserMissionRepository $userMissionRepository)
     {
         $this->userMissionRepository = $userMissionRepository;
+    }
+
+    public function index(Request $request): RedirectResponse
+    {
+        $user = Auth::user();
+
+        if ($user->hasPermissionTo(PermissionType::MEMBER->name))
+        {
+            return redirect()->route('account.me');
+        }
+        else
+        {
+            return redirect()->route('account.delete');
+        }
     }
 
     public function delete(Request $request, UserServiceContract $userService): JsonResponse

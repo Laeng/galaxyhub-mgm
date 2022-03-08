@@ -68,7 +68,7 @@ class Header extends Component
                         $menu = $menu->add(Link::toRoute('mission.index', '미션'));
                     }
 
-                    //$menu = $menu->add(Link::toRoute('updater.index', '업데이터'));
+                    $menu = $menu->add(Link::toRoute('updater.index', '업데이터'));
                     $menu = $menu->add(Link::toRoute('account.pause', '장기 미접속'));
 
                     if ($roleType === RoleType::ADMIN->name)
@@ -78,10 +78,19 @@ class Header extends Component
                             $menu = $menu->add(Link::toRoute('admin.application.index', '가입 신청자 목록'));
                         });
                     }
+
+                    $menu = $menu->add(Link::toRoute('account.me', '내 정보'));
+                }
+                else
+                {
+                    $menu = $menu->add(Link::toRoute('account.leave', '데이터 삭제'));
                 }
 
-                $menu = $menu->add(Link::toRoute('account.me', '내 정보'));
                 $menu = $menu->add(Link::toRoute('auth.logout', '로그아웃'));
+            }
+            else
+            {
+                $menu = $menu->add(Link::toRoute('welcome', '돌아가기'));
             }
         }
 

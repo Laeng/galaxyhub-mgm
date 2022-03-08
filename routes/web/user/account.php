@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Route;
 Route::prefix('app')->group(function () {
     Route::prefix('account')->name('account.')->middleware(['auth:web'])->group(function () {
         //VIEW
-        Route::redirect('/', '/app/account/me');
+        Route::get('/', [AccountController::class, 'index'])->name('index');
         Route::get('/leave', [AccountController::class, 'leave'])->name('leave');
         Route::get('/me', [AccountController::class, 'me'])->middleware(AuthenticateMember::class)->name('me');
         Route::get('/missions', [ListController::class, 'mission'])->middleware(AuthenticateMember::class)->name('missions');

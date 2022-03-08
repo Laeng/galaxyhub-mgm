@@ -9,7 +9,7 @@
                     <div class="grow">
                         <div class="flex items-center justify-center h-full">
                             <div>
-                                <h3 class="pt-4 font-bold text-2xl text-blue-600 text-center">MGM Lounge</h3>
+                                <h3 class="pt-4 font-bold text-2xl text-indigo-600 text-center">MGM Lounge</h3>
                                 <p class="p-4 text-center">
                                     MGM 라운지는 MGM 아르마 클랜 회원님을 위한 공간입니다.
                                     <span class="font-bold">STEAM</span>&reg; 계정으로 로그인 하실 수 있습니다.

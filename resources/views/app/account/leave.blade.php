@@ -3,9 +3,8 @@
         <div class="flex flex-col space-y-2">
             <x-alert.galaxyhub.warning title="주의">
                 <ul>
-                    <li>MGM Lounge에 저장된 귀하의 개인 정보를 삭제하여 MGM Lounge를 탈퇴할 수 있습니다.</li>
+                    <li>MGM Lounge에 저장된 귀하의 개인 정보를 삭제할 수 있으며 가입 승인을 받은 회원을 경우 본 기능을 통해 탈퇴 할 수 있습니다.</li>
                     <li>데이터 삭제는 취소할 수 없으며 MGM Lounge에서 완전히 삭제되므로 복구할 수 없습니다.</li>
-                    <li>단방향 암호화된 개인정보를 활용하여 서비스 개선을 위해 저장된 데이터는 탈퇴일로부터 5년간 저장됩니다.</li>
                 </ul>
             </x-alert.galaxyhub.warning>
         </div>

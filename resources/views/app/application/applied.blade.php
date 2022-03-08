@@ -59,7 +59,7 @@
                 <div class="group flex items-center w-full">
                     <p class="px-6 py-4 flex items-center text-sm font-medium">
                         <span class="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-full border-2 border-blue-600">
-                            <span class="text-blue-600">03</span>
+                            <span class="text-blue-600">04</span>
                         </span>
                         <span class="ml-4 text-sm font-medium text-gray-900 dark:text-gray-100">가입 심사 중</span>
                     </p>
