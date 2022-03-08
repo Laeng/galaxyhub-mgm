@@ -2,7 +2,7 @@
     <x-container.galaxyhub.single align-content="center">
         <div class="w-full flex flex-col lg:flex-row">
             <div class="w-full h-44 lg:h-auto bg-gray-400 block lg:w-1/2 bg-cover bg-center rounded-t-lg lg:rounded-l-lg lg:rounded-tr-none"
-                 style="background-image: url('https://cdn.discordapp.com/attachments/229099609140494336/834692945776869376/20210422134727_1.jpg')">
+                 style="background-image: url('{{ asset('images/background/login.jpg') }}')">
             </div>
             <div class="w-full lg:w-1/2 lg:h-[32rem] bg-white dark:bg-gray-600/10 dark:border dark:border-gray-600 p-5 rounded-b-lg lg:rounded-tr-lg lg:rounded-bl-none">
                 <div class="flex flex-col h-full">
