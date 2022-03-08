@@ -60,7 +60,7 @@ class SubBasicsAccount extends Component
                         </svg>
                     ',
                 ],
-                '신청한 미션' => [
+                '미션 기록' => [
                     'url' => route('account.missions'),
                     'icon' => '
                         <svg class="text-center text-gray-400 group-hover:text-gray-500 dark:group-hover:text-gray-300 flex-shrink-0 -ml-1 mr-3 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512" fill="currentColor">

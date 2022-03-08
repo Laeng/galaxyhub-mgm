@@ -9,11 +9,14 @@ use App\Http\Controllers\Controller;
 use App\Repositories\User\Interfaces\UserAccountRepositoryInterface;
 use App\Repositories\User\Interfaces\UserRecordRepositoryInterface;
 use App\Repositories\User\UserMissionRepository;
+use App\Services\Github\Contracts\GithubServiceContract;
 use App\Services\Survey\Contracts\SurveyServiceContract;
 use App\Services\User\Contracts\UserServiceContract;
+use DateTime;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
@@ -108,7 +111,8 @@ class AccountController extends Controller
 
             if (is_null($question)) continue;
 
-            switch ($question->title) {
+            switch ($question->title)
+            {
                 case '네이버 아이디': $naverId = explode ('@', $value)[0]; break;
 
                 case '디스코드 사용자명': $discordName = $value; break;
@@ -142,7 +146,8 @@ class AccountController extends Controller
             abort(404);
         }
 
-        $ban->comment = match ($ban->comment) {
+        $ban->comment = match ($ban->comment)
+        {
             '장기미접속' => '회원님의 장기 미접속 신청이 접수되어 계정이 정지되었습니다.<br/> 만약 활동을 재개하시기로 결정하셨다면, <a href="https://cafe.naver.com/ArticleList.nhn?search.clubid=17091584&search.menuid=223&search.boardtype=L" class="link-indigo" target="_blank">커뮤니티</a>에서 권한 복구 신청해주시기 바랍니다.',
             default => $ban->comment
         };
@@ -152,5 +157,32 @@ class AccountController extends Controller
             'isPermanent' => is_null($ban->expired_at),
             'ban' => $ban
         ]);
+    }
+
+    public function versions(Request $request): View
+    {
+        $user = Auth::user();
+
+        $data = [
+            'title' => '버전 정보',
+            'user' => $user,
+        ];
+
+        try
+        {
+            $data = array_merge($data, [
+                'commitHash' => trim(exec('git log --pretty="%h" -n1 HEAD')),
+                'commitDate' => Carbon::instance(new DateTime(trim(exec('git log -n1 --pretty=%ci HEAD'))))
+            ]);
+        }
+        catch (\Exception $e)
+        {
+            $data = array_merge($data, [
+                'commitHash' => '',
+                'commitDate' => ''
+            ]);
+        }
+
+        return view('app.account.versions', $data);
     }
 }

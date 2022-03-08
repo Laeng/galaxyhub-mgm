@@ -16,7 +16,7 @@ Route::prefix('app')->group(function () {
         Route::get('/missions', [ListController::class, 'mission'])->middleware(AuthenticateMember::class)->name('missions');
         Route::get('/suspended', [AccountController::class, 'suspended'])->name('suspended');
         Route::get('/pause', [PauseController::class, 'pause'])->middleware(AuthenticateMember::class)->name('pause');
-        Route::get('/versions', [PauseController::class, 'pause'])->name('versions');
+        Route::get('/versions', [AccountController::class, 'versions'])->name('versions');
 
 
         //AJAX
