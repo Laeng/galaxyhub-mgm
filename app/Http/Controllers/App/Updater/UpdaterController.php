@@ -31,16 +31,8 @@ class UpdaterController extends Controller
         return view('app.updater.index');
     }
 
-    public function download(Request $request, int $userId, FileServiceContract $fileService): RedirectResponse
+    public function download(Request $request, FileServiceContract $fileService): RedirectResponse
     {
-        $user = Auth::user();
-
-        info($request->hasValidSignature() . " ---- " . ($user->id !== $userId));
-
-        if (!$request->hasValidSignature() || $user->id !== $userId) {
-            abort(404);
-        }
-
         $path = $fileService->getUrlToDirectly('do', 'mgm/updater', 'MGM UPDATER.exe', false, now()->addSeconds(15));
 
         return redirect()->to($path);
@@ -53,12 +45,9 @@ class UpdaterController extends Controller
                 'release' => 'bool'
             ]);
 
-
-            $user = Auth::user();
-
             if ($request->get('release', true))
             {
-                $path = URL::signedRoute('updater.download', $user->id);
+                $path = route('updater.download');
             }
             else
             {
