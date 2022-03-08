@@ -33,6 +33,7 @@ jobs:
           git reset --hard origin/master
           git pull
           npm install
+          npm audit fix
           npx mix --production
           composer install --optimize-autoloader --no-dev
           php artisan config:cache
