@@ -1,6 +1,6 @@
 <x-theme.galaxyhub.main website-name="멀티플레이 게임 매니지먼트" class="bg-gray-100">
 
-    <div class="bg-cover bg-center relative -mt-[3.75rem]" style="background-image: url('https://cdn.discordapp.com/attachments/895120134149111808/921008318477139968/202101162307238bf72d2030e32fdf4bf9f789b042911d4ade9e70.png')">
+    <div class="bg-cover bg-center relative -mt-[3.75rem]" style="background-image: url('{{ asset('images/background/welcome.jpg') }}')">
         <div class="bg-black/50">
             <x-container.galaxyhub.basics class="h-screen flex justify-center items-center">
                 <div class="grid grid-cols-1 place-items-center">
@@ -44,7 +44,7 @@
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 pb-8 lg:pb-16">
                 <div class="lg:order-last">
                     <div class="flex justify-end">
-                        <img class="object-cover object-center rounded-lg bg-gray-200 h-48 lg:h-[32rem] w-full lg:w-4/5" src="https://cdn.discordapp.com/attachments/435715019888394240/887132576563724358/arma3_agls_asip_mod1.png" alt=""/>
+                        <img class="object-cover object-center rounded-lg bg-gray-200 h-48 lg:h-[32rem] w-full lg:w-4/5" src="{{ asset('images/background/welcome_desc_01.jpg') }}" alt=""/>
                     </div>
                 </div>
 
@@ -72,7 +72,7 @@
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16">
                 <div class="">
                     <div class="flex justify-start">
-                        <img class="object-cover object-center rounded-lg bg-gray-200 h-48 lg:h-[32rem] w-full lg:w-4/5" src="https://cdn.discordapp.com/attachments/229019174087688194/886552502235975710/ScreenShot-2021-09-12_18-17-48-726.jpg" alt=""/>
+                        <img class="object-cover object-center rounded-lg bg-gray-200 h-48 lg:h-[32rem] w-full lg:w-4/5" src="{{ asset('images/background/welcome_desc_02.jpg') }}" alt=""/>
                     </div>
                 </div>
 
