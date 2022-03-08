@@ -34,11 +34,18 @@
                     <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4">
                         <dt class="text-sm font-medium text-gray-500 dark:text-gray-300">획득한 약장</dt>
                         <dd class="mt-1 text-sm text-gray-900 dark:text-gray-100 sm:mt-0 sm:col-span-2">
-                            <ul>
-                                <li>[x] 하나</li>
-                                <li>[x] 하나</li>
-                                <li>[x] 하나</li>
-                            </ul>
+                            @if(count($userBadge) > 0)
+                                <div class="grid grid-cols-2 gap-2">
+                                    @foreach($userBadge as $badge)
+                                        <div class="flex space-x-1 items-center">
+                                            <img alt="{{ $badge['name'] }}" class="h-4 w-4" src="{{ $badge['icon'] }}"/>
+                                            <p>{{ $badge['name'] }}</p>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            @else
+                                획득한 약장 없음
+                            @endif
                         </dd>
                     </div>
                     <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4">

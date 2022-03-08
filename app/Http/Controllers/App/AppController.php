@@ -44,7 +44,7 @@ class AppController extends Controller
         return view('app.privacy');
     }
 
-    public function rules()
+    public function rules(): View
     {
         return view('app.rules');
     }

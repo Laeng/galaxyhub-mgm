@@ -35,8 +35,11 @@ class UpdaterController extends Controller
     {
         $user = Auth::user();
 
+        echo $request->hasValidSignature();
+        echo $user->id !== $userId;
+
         if (!$request->hasValidSignature() || $user->id !== $userId) {
-            abort(401);
+            abort(404);
         }
 
         $path = $fileService->getUrlToDirectly('do', 'mgm/updater', 'MGM UPDATER.exe', false, now()->addSeconds(15));

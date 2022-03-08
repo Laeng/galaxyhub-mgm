@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers\App\Account;
 
+use App\Enums\BadgeType;
 use App\Enums\PermissionType;
 use App\Enums\RoleType;
 use App\Enums\UserRecordType;
 use App\Http\Controllers\Controller;
+use App\Repositories\Badge\Interfaces\BadgeRepositoryInterface;
 use App\Repositories\User\Interfaces\UserAccountRepositoryInterface;
+use App\Repositories\User\Interfaces\UserBadgeRepositoryInterface;
 use App\Repositories\User\Interfaces\UserRecordRepositoryInterface;
 use App\Repositories\User\UserMissionRepository;
 use App\Services\Github\Contracts\GithubServiceContract;
@@ -77,7 +80,8 @@ class AccountController extends Controller
 
     public function me
     (
-        Request $request, UserAccountRepositoryInterface $userAccountRepository, SurveyServiceContract $surveyService
+        Request $request, UserAccountRepositoryInterface $userAccountRepository, SurveyServiceContract $surveyService,
+        UserBadgeRepositoryInterface $userBadgeRepository, BadgeRepositoryInterface $badgeRepository
     ): View
     {
         $user = Auth::user();
@@ -121,6 +125,17 @@ class AccountController extends Controller
             }
         }
 
+        $userBadges = $userBadgeRepository->findByUserId($user->id, ['*'], ['badge']);
+        $userBadge = array();
+
+        foreach ($userBadges as $badge)
+        {
+            $userBadge[] = [
+                'name' => BadgeType::getKoreanNames()[$badge->badge->name],
+                'icon' => asset($badge->badge->icon)
+            ];
+        }
+
 
         return view('app.account.me', [
             'title' => '개인 정보',
@@ -132,7 +147,8 @@ class AccountController extends Controller
             'missionLatest' => $missionLatest,
             'naverId' => $naverId,
             'discordName' => $discordName,
-            'birthday' => $birthday
+            'birthday' => $birthday,
+            'userBadge' => $userBadge
         ]);
     }
 

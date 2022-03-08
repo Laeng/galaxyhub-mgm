@@ -80,7 +80,7 @@
                                         <template x-for="badge in data.load.data.badges">
                                             <div class="flex space-x-1 items-center">
                                                 <img :alt="badge.name" class="h-4 w-4" :src="badge.icon"/>
-                                                <span x-text="badge.name"></span>
+                                                <p x-text="badge.name"></p>
                                             </div>
                                         </template>
                                     </div>
@@ -542,6 +542,12 @@
 
                     participate.list();
                     make.list();
+                },
+                checked(checkboxes) {
+                    let checked = [];
+                    [...checkboxes].map((el) => {checked.push(el.value);});
+
+                    return checked;
                 },
                 post(url, body, success, error, complete) {
                     window.axios.post(url, body).then(success).catch(error).then(complete);

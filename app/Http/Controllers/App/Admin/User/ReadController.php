@@ -98,13 +98,6 @@ class ReadController extends Controller
         $badges = $this->badgeRepository->all();
         $badge = array();
 
-        $ban = '';
-        if ($user->isBanned())
-        {
-            $userBan = $user->bans()->first();
-            $ban = is_null($userBan->expired_at) ? '무기한' : "{$userBan->expired_at->format('Y년 m월 d일 H시 i분')} 까지";
-        }
-
         foreach ($badges as $item)
         {
             $badge[] = [
@@ -113,6 +106,13 @@ class ReadController extends Controller
                 'icon' => asset($item->icon),
                 'checked' => $userBadges->first(fn ($v, $k) => $v->badge->id === $item->id)
             ];
+        }
+
+        $ban = '';
+        if ($user->isBanned())
+        {
+            $userBan = $user->bans()->first();
+            $ban = is_null($userBan->expired_at) ? '무기한' : "{$userBan->expired_at->format('Y년 m월 d일 H시 i분')} 까지";
         }
 
         return view('app.admin.user.read', [
