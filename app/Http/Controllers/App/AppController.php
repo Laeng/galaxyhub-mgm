@@ -39,13 +39,13 @@ class AppController extends Controller
         ]);
     }
 
-    public function privacy()
+    public function privacy(): View
     {
-
+        return view('app.privacy');
     }
 
     public function rules()
     {
-
+        return view('app.rules');
     }
 }
