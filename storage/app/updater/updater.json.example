@@ -1,0 +1,37 @@
+{
+    "type": "SFTP",
+    "provider": {
+        "SFTP": {
+            "ReadWrite": {
+                "ip": "",
+                "port": "",
+                "id": "",
+                "pw": ""
+            },
+            "ReadOnly": {
+                "ip": "",
+                "port": "",
+                "id": "",
+                "pw": ""
+            }
+        },
+        "S3": {
+            "ReadWrite": {
+                "url": "",
+                "region": "",
+                "bucket": "",
+                "key": "",
+                "secret": ""
+            },
+            "ReadOnly": {
+                "url": "",
+                "region": "",
+                "bucket": "",
+                "key": "",
+                "secret": ""
+            }
+        }
+    },
+    "token": "000000-0000-0000-0000-000000000000",
+    "maintenance" : false
+}

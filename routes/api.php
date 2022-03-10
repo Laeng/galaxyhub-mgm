@@ -14,6 +14,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::prefix('v1')->group(function () {
+    Route::name('updater.')->prefix('updater')->group(function () {
+        Route::post('/verify', [\App\Http\Controllers\App\Updater\APIController::class, 'verify']);
+        Route::post('/user/data', [\App\Http\Controllers\App\Updater\APIController::class, 'getUserData']);
+        Route::patch('/user/data', [\App\Http\Controllers\App\Updater\APIController::class, 'setUserData']);
+        Route::post('/server/data', [\App\Http\Controllers\App\Updater\APIController::class, 'getServerData']);
+        Route::post('/ping', [\App\Http\Controllers\App\Updater\APIController::class, 'ping']);
+    });
+
 });
