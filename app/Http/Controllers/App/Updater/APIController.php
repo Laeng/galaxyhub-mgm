@@ -218,24 +218,18 @@ class APIController extends Controller
                 throw new Exception('CAN NOT FOUND DATA', 200);
             }
 
-            if ($updater->machineName !== $request->get('machine_name'))
+            if ($updater->machine_name === $request->get('machine_name'))
             {
-                $result = false;
+                $result = true;
+
+                $updater->ip = $request->getClientIp();
+                $updater->setUpdatedAt(now());
+                $updater->save();
             }
             else
             {
-                $result = true;
+                $result = false;
             }
-
-
-            $userSoftware = $this->query($request->getClientIp(), $request->get('code'), false);
-
-            if (is_null($userSoftware)) {
-                throw new Exception('CAN NOT FOUND DATA', 200);
-            }
-
-            $userSoftware->setUpdatedAt(now());
-            $userSoftware->save();
 
             return $this->jsonResponse(200, 'SUCCESS', [
                 'result' => $result
