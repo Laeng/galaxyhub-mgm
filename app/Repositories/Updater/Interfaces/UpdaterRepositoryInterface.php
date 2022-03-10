@@ -12,9 +12,9 @@ interface UpdaterRepositoryInterface extends EloquentRepositoryInterface
 
     public function findByCodeAndIp(string $code, string $ip, array $columns = ['*'], array $relations = []): ?Updater;
 
+    public function findByMachineNameAndCode(string $machineName, string $code, array $columns = ['*'], array $relations = []): ?Updater;
+
     public function findByIpMachineNameAndMachineVersion(string $ip, string $machineName, string $machineVersion, array $columns = ['*'], array $relations = []): ?Updater;
 
     public function findByUserId(int $userId, array $columns = ['*'], array $relations = []): ?Collection;
-
-    public function findByUserIdMachineNameAndCode(int $userId, string $machineName, string $code, array $columns = ['*'], array $relations = []): ?Updater;
 }

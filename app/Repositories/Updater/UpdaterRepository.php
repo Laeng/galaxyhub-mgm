@@ -30,19 +30,19 @@ class UpdaterRepository extends BaseRepository implements UpdaterRepositoryInter
         return $this->model->select($columns)->where('code', $code)->where('ip', $ip)->with($relations)->latest()->first();
     }
 
+    public function findByMachineNameAndCode(string $machineName, string $code, array $columns = ['*'], array $relations = []): ?Updater
+    {
+        return $this->model->select($columns)->where('machine_name', $machineName)->where('code', $code)->with($relations)->latest()->first();
+    }
+
     public function findByIpMachineNameAndMachineVersion(string $ip, string $machineName, string $machineVersion, array $columns = ['*'], array $relations = []): ?Updater
     {
-        return $this->model->select($columns)->where('ip', $ip)->with('machine_name', $machineName)->with('machine_version', $machineVersion)->with($relations)->latest()->first();
+        return $this->model->select($columns)->where('ip', $ip)->where('machine_name', $machineName)->where('machine_version', $machineVersion)->with($relations)->latest()->first();
     }
 
     public function findByUserId(int $userId, array $columns = ['*'], array $relations = []): ?Collection
     {
         return $this->model->select($columns)->where('user_id', $userId)->with($relations)->latest()->get();
-    }
-
-    public function findByUserIdMachineNameAndCode(int $userId, string $machineName, string $code, array $columns = ['*'], array $relations = []): ?Updater
-    {
-        return $this->model->select($columns)->where('user_id', $userId)->where('machine_name', $machineName)->where('code', $code)->with($relations)->latest()->first();
     }
 
 

@@ -9,5 +9,29 @@ class Updater extends Model
 {
     use HasFactory;
 
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var string[]
+     */
+    protected $fillable = [
+        'user_id',
+        'version',
+        'ip',
+        'machine_name',
+        'machine_version',
+        'code',
+        'data'
+    ];
 
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'data' => 'array',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime'
+    ];
 }

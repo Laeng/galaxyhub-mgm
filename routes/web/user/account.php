@@ -4,6 +4,7 @@ use App\Http\Controllers\App\Account\AccountController;
 use App\Http\Controllers\App\Account\AuthenticateController;
 use App\Http\Controllers\App\Account\ListController;
 use App\Http\Controllers\App\Account\PauseController;
+use App\Http\Controllers\App\Updater\UpdaterController;
 use App\Http\Middleware\AuthenticateMember;
 use Illuminate\Support\Facades\Route;
 
@@ -11,6 +12,7 @@ Route::prefix('app')->group(function () {
     Route::prefix('account')->name('account.')->middleware(['auth:web'])->group(function () {
         //VIEW
         Route::get('/', [AccountController::class, 'index'])->name('index');
+        Route::get('/authorize/{code}', [UpdaterController::class, 'authorize_code'])->name('authorize')->whereUuid('code');
         Route::get('/leave', [AccountController::class, 'leave'])->name('leave');
         Route::get('/me', [AccountController::class, 'me'])->middleware(AuthenticateMember::class)->name('me');
         Route::get('/missions', [ListController::class, 'mission'])->middleware(AuthenticateMember::class)->name('missions');

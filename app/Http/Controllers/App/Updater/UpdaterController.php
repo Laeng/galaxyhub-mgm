@@ -93,7 +93,7 @@ class UpdaterController extends Controller
         if (!$validator->fails())
         {
             $user = Auth::user();
-            $updater = $updaterRepository->findByUserIdMachineNameAndCode($user->id, base64_decode($request->get('name')), $code);
+            $updater = $updaterRepository->findByMachineNameAndCode(base64_decode($request->get('name')), $code);
 
             if (!is_null($updater) && !$user->isBanned())
             {
@@ -103,7 +103,7 @@ class UpdaterController extends Controller
                     $updater->save();
 
                     $data = [
-                        'status' => false,
+                        'status' => true,
                         'machineName' => $updater->machine_name,
                         'machineIp' => $updater->ip
                     ];
@@ -111,7 +111,6 @@ class UpdaterController extends Controller
             }
         }
 
-        return view('app.updater.authorize', $data);
+        return view('app.account.authorize', $data);
     }
-
 }

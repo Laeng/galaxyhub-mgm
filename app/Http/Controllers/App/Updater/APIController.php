@@ -70,6 +70,7 @@ class APIController extends Controller
         catch (Exception $e) {
             return Response()->json([
                 'result' => false,
+                'message' => $e->getMessage(),
                 'code' => ''
             ]);
         }
@@ -105,7 +106,9 @@ class APIController extends Controller
         catch (Exception $e) {
             return Response()->json([
                 'result' => false,
-                'data' => []
+                'data' => [
+                    'path' => ''
+                ]
             ]);
         }
     }
