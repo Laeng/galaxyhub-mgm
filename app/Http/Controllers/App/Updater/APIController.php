@@ -174,12 +174,14 @@ class APIController extends Controller
             $data = match($updater['type'])
             {
                 'SFTP' => [
+                    'type' => 'SFTP',
                     'ip' => $updater['provider'][$type][$permission]['ip'],
                     'port' => $updater['provider'][$type][$permission]['port'],
                     'id' => $updater['provider'][$type][$permission]['id'],
                     'pw' => $updater['provider'][$type][$permission]['pw'],
                 ],
                 'S3' => [
+                    'type' => 'S3',
                     'url' => $updater['provider'][$type][$permission]['url'],
                     'region' => $updater['provider'][$type][$permission]['region'],
                     'bucket' => $updater['provider'][$type][$permission]['bucket'],
@@ -196,6 +198,7 @@ class APIController extends Controller
         catch (Exception $e) {
             return Response()->json([
                 'result' => false,
+                'message' => $e->getMessage(),
                 'data' => []
             ]);
         }
