@@ -17,4 +17,6 @@ interface UpdaterRepositoryInterface extends EloquentRepositoryInterface
     public function findByIpMachineNameAndMachineVersion(string $ip, string $machineName, string $machineVersion, array $columns = ['*'], array $relations = []): ?Updater;
 
     public function findByUserId(int $userId, array $columns = ['*'], array $relations = []): ?Collection;
+
+    public function findLatestUpdatedByUserId(int $userId, array $columns = ['*'], array $relations = []): ?Collection;
 }

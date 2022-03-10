@@ -45,5 +45,10 @@ class UpdaterRepository extends BaseRepository implements UpdaterRepositoryInter
         return $this->model->select($columns)->where('user_id', $userId)->with($relations)->latest()->get();
     }
 
+    public function findLatestUpdatedByUserId(int $userId, array $columns = ['*'], array $relations = []): ?Collection
+    {
+        return $this->model->select($columns)->where('user_id', $userId)->with($relations)->latest('updated_at')->get();
+    }
+
 
 }

@@ -198,7 +198,6 @@ class APIController extends Controller
         catch (Exception $e) {
             return Response()->json([
                 'result' => false,
-                'message' => $e->getMessage(),
                 'data' => []
             ]);
         }
@@ -208,8 +207,7 @@ class APIController extends Controller
     {
         try {
             $this->jsonValidator($request, [
-                'code' => ['uuid', 'required'],
-                'machine_name' => ['string', 'required']
+                'code' => ['uuid', 'required']
             ]);
 
             $updater = $this->updaterRepository->findByCode($request->get('code'));
@@ -218,7 +216,9 @@ class APIController extends Controller
                 throw new Exception('CAN NOT FOUND DATA', 200);
             }
 
-            if ($updater->machine_name === $request->get('machine_name'))
+            $latest = $this->updaterRepository->findLatestUpdatedByUserId($updater->user_id)->first();
+
+            if ($latest->id === $updater->id)
             {
                 $result = true;
 
@@ -231,12 +231,12 @@ class APIController extends Controller
                 $result = false;
             }
 
-            return $this->jsonResponse(200, 'SUCCESS', [
-                'result' => $result
+            return Response()->json([
+                'result' => $result,
             ]);
 
         } catch (Exception $e) {
-            return $this->jsonResponse($e->getCode(), Str::upper($e->getMessage()), [
+            return Response()->json([
                 'result' => false
             ]);
         }
