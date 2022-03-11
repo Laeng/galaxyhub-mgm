@@ -47,7 +47,8 @@ class APIController extends Controller
                 throw new Exception('CAN NOT FOUND REPOSITORY');
             }
 
-            if (!config('app.debug') && (empty($github['tag_name']) || $github['tag_name'] !== $version))
+            $explode = explode('.', $version);
+            if (!config('app.debug') && (empty($github['tag_name']) || $github['tag_name'] !== "{$explode[0]}.{$explode[1]}.{$explode[2]}"))
             {
                 throw new Exception('VERSION MISMATCH');
             }
