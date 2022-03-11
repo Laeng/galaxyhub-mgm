@@ -4,7 +4,9 @@ namespace App\Http\Controllers\App\Updater;
 
 use App\Http\Controllers\Controller;
 use App\Repositories\Updater\Interfaces\UpdaterRepositoryInterface;
+use App\Services\Github\Contracts\GithubServiceContract;
 use Exception;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -19,7 +21,7 @@ class APIController extends Controller
         $this->updaterRepository = $updaterRepository;
     }
 
-    public function verify(Request $request): JsonResponse
+    public function verify(Request $request, GithubServiceContract $githubService): JsonResponse
     {
         // 사용 권한이 있다면, code 를 제공하고, 없다면 생성
         try
@@ -36,6 +38,26 @@ class APIController extends Controller
             $machineVersion = $request->get('machine_version');
             $uuid = Str::uuid();
             $result = true;
+            $message = 'SUCCESS';
+
+            $github = $githubService->getLatestRelease('Laeng', 'MGM_UPDATER');
+
+            if (is_null($github))
+            {
+                throw new Exception('CAN NOT FOUND REPOSITORY');
+            }
+
+            if (!config('app.debug') && (empty($github['tag_name']) || $github['tag_name'] !== $version))
+            {
+                throw new Exception('VERSION MISMATCH');
+            }
+
+            $data = json_decode(Storage::disk('local')->get('updater/updater.json'), true);
+
+            if ($data['maintenance'])
+            {
+                throw new Exception('MAINTENANCE');
+            }
 
             $updater = $this->updaterRepository->findByIpMachineNameAndMachineVersion($ip, $machineName, $machineVersion);
 
@@ -50,6 +72,7 @@ class APIController extends Controller
                 ]);
 
                 $result = false;
+                $message = 'NEED VERIFY';
             }
             else
             {
@@ -64,6 +87,7 @@ class APIController extends Controller
 
             return Response()->json([
                 'result' => $result,
+                'message' => $message,
                 'code' => $updater->code
             ]);
         }
@@ -100,12 +124,14 @@ class APIController extends Controller
 
             return Response()->json([
                 'result' => true,
+                'message' => 'SUCCESS',
                 'data' => $data
             ]);
         }
         catch (Exception $e) {
             return Response()->json([
                 'result' => false,
+                'message' => $e->getMessage(),
                 'data' => [
                     'path' => ''
                 ]
@@ -134,6 +160,7 @@ class APIController extends Controller
 
             return Response()->json([
                 'result' => true,
+                'message' => 'SUCCESS'
             ]);
 
         }
@@ -141,6 +168,7 @@ class APIController extends Controller
         {
             return Response()->json([
                 'result' => false,
+                'message' => $e->getMessage()
             ]);
         }
     }
@@ -192,12 +220,14 @@ class APIController extends Controller
 
             return Response()->json([
                 'result' => true,
+                'message' => 'SUCCESS',
                 'data' => $data
             ]);
         }
         catch (Exception $e) {
             return Response()->json([
                 'result' => false,
+                'message' => $e->getMessage(),
                 'data' => []
             ]);
         }
@@ -209,6 +239,13 @@ class APIController extends Controller
             $this->jsonValidator($request, [
                 'code' => ['uuid', 'required']
             ]);
+
+            $data = json_decode(Storage::disk('local')->get('updater/updater.json'), true);
+
+            if ($data['maintenance'])
+            {
+                throw new Exception('MAINTENANCE');
+            }
 
             $updater = $this->updaterRepository->findByCode($request->get('code'));
 
@@ -233,12 +270,30 @@ class APIController extends Controller
 
             return Response()->json([
                 'result' => $result,
+                'message' => 'SUCCESS'
             ]);
 
         } catch (Exception $e) {
             return Response()->json([
-                'result' => false
+                'result' => false,
+                'message' => $e->getMessage()
             ]);
+        }
+    }
+
+    public function viewUpdaterIndex(Request $request, string $code): View
+    {
+        try {
+            $updater = $this->updaterRepository->findByCode($code);
+
+            if (is_null($updater)) {
+                throw new Exception('CAN NOT FOUND DATA', 200);
+            }
+
+            return view('app.updater.api.updater-main');
+
+        } catch (Exception $e) {
+            return view('app.updater.api.updater-error');
         }
     }
 

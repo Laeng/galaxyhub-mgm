@@ -21,6 +21,8 @@ Route::prefix('v1')->group(function () {
         Route::patch('/user/data', [\App\Http\Controllers\App\Updater\APIController::class, 'setUserData']);
         Route::post('/server/data', [\App\Http\Controllers\App\Updater\APIController::class, 'getServerData']);
         Route::post('/ping', [\App\Http\Controllers\App\Updater\APIController::class, 'ping']);
+
+        Route::get('/view/updater/{code}', [\App\Http\Controllers\App\Updater\APIController::class, 'viewUpdaterIndex'])->whereUuid('code');
     });
 
 });
