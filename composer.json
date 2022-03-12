@@ -21,6 +21,7 @@
         "laravel/socialite": "^5.5",
         "laravel/tinker": "^2.7",
         "league/flysystem-aws-s3-v3": "^3.0",
+        "monicahq/laravel-cloudflare": "^3.2",
         "nyholm/psr7": "^1.5",
         "socialiteproviders/manager": "^4.1",
         "socialiteproviders/steam": "^4.1",
