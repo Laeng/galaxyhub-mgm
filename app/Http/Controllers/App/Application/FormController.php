@@ -17,6 +17,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use function now;
 use function redirect;
 use function view;
@@ -113,6 +114,7 @@ class FormController extends Controller
         }
         catch (\Exception $e)
         {
+            Log::error($e->getMessage(), $e->getTrace());
             return redirect()->back()->withErrors(['error' => $e->getMessage()]);
         }
     }

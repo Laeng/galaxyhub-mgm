@@ -15,6 +15,7 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Redirector;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use function auth;
 use function config;
 use function redirect;
@@ -65,6 +66,7 @@ class AgreementController extends Controller
         }
         catch (\Exception $e)
         {
+            Log::error($e->getMessage(), $e->getTrace());
             return $this->jsonResponse($e->getCode(), $e->getMessage(), config('app.debug') ? $e->getTrace() : []);
         }
     }
