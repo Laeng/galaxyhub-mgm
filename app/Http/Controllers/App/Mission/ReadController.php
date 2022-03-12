@@ -96,7 +96,7 @@ class ReadController extends Controller
         $maker = $userRepository->findById($mission->user_id);
 
         $isAdmin = $user->hasPermissionTo(PermissionType::ADMIN->name);
-        $isMaker = $maker->id === $user->id;
+        $isMaker = !is_null($maker) && $maker->id === $user->id;
         $isParticipant = !is_null($userMission) && !$isMaker;
         $visibleDate = $this->visibleDate($mission);
 

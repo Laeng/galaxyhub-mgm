@@ -141,7 +141,7 @@
                                 메이커
                             </p>
                             <p class="text-sm text-gray-600 dark:text-gray-300">
-                                {{ $maker->name }}
+                                {{ !is_null($maker) ? $maker->name : '탈퇴 회원' }}
                             </p>
                         </div>
                     </li>

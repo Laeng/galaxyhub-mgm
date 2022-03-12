@@ -77,6 +77,15 @@
                     </ul>
                 </div>
             </div>
+
+            <div>
+                <h3 class="text-lg lg:text-xl font-bold mb-2">가입 전 확인해주십시오.</h3>
+                <ul>
+                    <li>Steam&reg; API를 활용하여 가입 조건 충족 여부를 확인하고 있습니다.</li>
+                    <li>아래 다음 버튼을 누르기 전 <strong class="font-bold">스팀 프로필, 게임 세부 정보, 게임 플레이 시간 공개로 변경</strong>해주시기를 요청드립니다.</li>
+                </ul>
+            </div>
+
             <div class="text-center pt-1 lg:pt-4">
                 <x-button.filled.md-blue type="button" onclick="location.href='{{ route('application.agreements') }}'">
                     다음

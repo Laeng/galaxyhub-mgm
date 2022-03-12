@@ -55,6 +55,12 @@ class AgreementController extends Controller
             }
 
             $steamOwnedGames = $steamService->getOwnedGames($steamAccount->account_id);
+
+            if (count($steamOwnedGames['response']) <= 0)
+            {
+                return $this->jsonResponse(200, '아르마 3 구매 여부를 확인할 수 없습니다. 스팀 프로필 설정에서 게임 세부 정보 와 게임 플레이 시간을 공개로 변경하여 주십시오. ', false);
+            }
+
             $steamOwnedGamesCollection = new Collection($steamOwnedGames['response']['games']);
 
             if ($steamOwnedGamesCollection->filter(fn ($v, $k) => $v['appid'] == 107410)->count() == 0)
@@ -66,7 +72,6 @@ class AgreementController extends Controller
         }
         catch (\Exception $e)
         {
-            Log::error($e->getMessage(), $e->getTrace());
             return $this->jsonResponse($e->getCode(), $e->getMessage(), config('app.debug') ? $e->getTrace() : []);
         }
     }

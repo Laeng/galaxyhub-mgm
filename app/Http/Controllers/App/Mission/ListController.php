@@ -110,6 +110,8 @@ class ListController extends Controller
 
                 foreach ($missions as $v)
                 {
+                    $maker = $v->user()->first();
+
                     $userMission = $userMissions->first(fn ($i) => $i->mission_id == $v->id);
 
                     $url = route('mission.read', $v->id);
@@ -156,7 +158,7 @@ class ListController extends Controller
                         $missionType[$v->type],
                         $v->expected_at->format('m월 d일 H시 i분'),
                         $v->can_tardy ? '가능' : '불가능',
-                        $v->user()->first()->name,
+                        !is_null($maker) ? $maker->name : '탈퇴 회원',
                         $missionPhaseType[$v->phase],
                         "<a href='{$url}' class='{$text[0]}' title='{$text[1]}'>{$text[1]}</a>",
                         "<a href='{$url}' title='{$v->title}'><div class='flex justify-between'><p>{$v->title}</p><p class='{$text[0]}'>{$text[1]}</p></div>"

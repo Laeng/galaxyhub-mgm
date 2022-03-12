@@ -114,7 +114,6 @@ class FormController extends Controller
         }
         catch (\Exception $e)
         {
-            Log::error($e->getMessage(), $e->getTrace());
             return redirect()->back()->withErrors(['error' => $e->getMessage()]);
         }
     }
