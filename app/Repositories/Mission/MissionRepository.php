@@ -30,18 +30,6 @@ class MissionRepository extends BaseRepository implements MissionRepositoryInter
         return $this->model->select($columns)->where('user_id', $userId)->with($relations)->latest()->get();
     }
 
-    public function findByConditions(array $conditions, array $order = ['created_at', 'desc'], array $columns = ['*'], array $relations = []): ?Collection
-    {
-        $query = $this->model->select($columns);
-
-        foreach ($conditions as $condition)
-        {
-            $query = $query->where($condition[0], $condition[1], $condition[2]);
-        }
-
-        return $query->with($relations)->orderBy($order[0], $order[1])->get();
-    }
-
     public function findByPhase(int $phase, array $columns = ['*'], array $relations = []): ?Collection
     {
         return $this->model->select($columns)->where('phase', $phase)->with($relations)->latest()->get();
