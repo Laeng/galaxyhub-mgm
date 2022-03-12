@@ -59,7 +59,7 @@ class AuthenticateController extends Controller
             $accountArray = [
                 'provider' => $provider,
                 'id' => $account->getId(),
-                'name' => $account->getName(),
+                //'name' => $account->getName(), //수집 하지 않음
                 'nickname' => $account->getNickname(),
                 'avatar' => $account->getAvatar(),
                 'email' => $account->getEmail()
