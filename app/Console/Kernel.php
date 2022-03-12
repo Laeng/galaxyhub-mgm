@@ -16,6 +16,10 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         // $schedule->command('inspire')->hourly();
+
+        $schedule->command('ban:delete-expired')->everyMinute();
+        $schedule->command('mission:close')->everyMinute();
+        $schedule->command('updater:clean')->daily();
     }
 
     /**

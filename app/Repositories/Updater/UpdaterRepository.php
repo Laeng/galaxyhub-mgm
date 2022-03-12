@@ -50,5 +50,10 @@ class UpdaterRepository extends BaseRepository implements UpdaterRepositoryInter
         return $this->model->select($columns)->where('user_id', $userId)->with($relations)->latest('updated_at')->get();
     }
 
+    public function findUnusedOverDay(array $columns = ['*'], array $relations = []): ?Collection
+    {
+        return $this->model->select($columns)->whereNull('user_id')->whereBetween('created_at', [today()->subYear(), today()->subDay()])->with($relations)->latest('updated_at')->get();
+    }
+
 
 }
