@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\App\Mission;
 
+use App\Enums\BadgeType;
 use App\Enums\MissionPhaseType;
 use App\Enums\MissionType;
 use App\Enums\PermissionType;
@@ -9,6 +10,7 @@ use App\Enums\RoleType;
 use App\Http\Controllers\Controller;
 use App\Repositories\Mission\Interfaces\MissionRepositoryInterface;
 use App\Repositories\Survey\Interfaces\SurveyRepositoryInterface;
+use App\Repositories\User\Interfaces\UserBadgeRepositoryInterface;
 use App\Repositories\User\Interfaces\UserMissionRepositoryInterface;
 use App\Repositories\User\Interfaces\UserRepositoryInterface;
 use App\Services\Mission\Contracts\MissionServiceContract;
@@ -24,16 +26,18 @@ class ReadController extends Controller
     private MissionRepositoryInterface $missionRepository;
     private UserMissionRepositoryInterface $userMissionRepository;
     private MissionServiceContract $missionService;
+    private UserRepositoryInterface $userRepository;
 
     public function __construct
     (
         MissionRepositoryInterface $missionRepository, UserMissionRepositoryInterface $userMissionRepository,
-        MissionServiceContract $missionService
+        MissionServiceContract $missionService, UserRepositoryInterface $userRepository
     )
     {
         $this->missionRepository = $missionRepository;
         $this->userMissionRepository = $userMissionRepository;
         $this->missionService = $missionService;
+        $this->userRepository = $userRepository;
     }
 
     public function delete(Request $request, SurveyRepositoryInterface $surveyRepository): JsonResponse
@@ -82,7 +86,7 @@ class ReadController extends Controller
         }
     }
 
-    public function read(Request $request, int $missionId, UserRepositoryInterface $userRepository): View
+    public function read(Request $request, int $missionId): View
     {
         $user = Auth::user();
         $mission = $this->missionRepository->findById($missionId);
@@ -93,7 +97,7 @@ class ReadController extends Controller
         }
 
         $userMission = $this->userMissionRepository->findByUserId($user->id)->first(fn ($i) => $i->mission_id === $mission->id);
-        $maker = $userRepository->findById($mission->user_id);
+        $maker = $this->userRepository->findById($mission->user_id);
 
         $isAdmin = $user->hasPermissionTo(PermissionType::ADMIN->name);
         $isMaker = !is_null($maker) && $maker->id === $user->id;
@@ -203,7 +207,7 @@ class ReadController extends Controller
                         break;
 
                     case 'CANCEL':
-                        if ($mission->phase !== MissionPhaseType::RECRUITING->value)
+                        if ($mission->phase !== MissionPhaseType::IN_PROGRESS->value)
                         {
                             throw new \Exception('MISSION STATUS DOES\'T MATCH THE CONDITIONS', 422);
                         }
@@ -321,7 +325,7 @@ class ReadController extends Controller
         }
     }
 
-    public function participants(Request $request, int $missionId, UserRepositoryInterface $userRepository): JsonResponse
+    public function participants(Request $request, int $missionId, UserBadgeRepositoryInterface $userBadgeRepository): JsonResponse
     {
         try {
             $mission = $this->missionRepository->findById($missionId);
@@ -336,11 +340,24 @@ class ReadController extends Controller
 
             foreach ($participants as $k => $v)
             {
-                $user = $userRepository->findById($v->user_id);
+                $user = $this->userRepository->findById($v->user_id);
+
+                $userBadges = $userBadgeRepository->findByUserId($user->id, ['*'], ['badge']);
+                $userBadge = array();
+
+                foreach ($userBadges as $badge)
+                {
+                    $userBadge[] = [
+                        'name' => BadgeType::getKoreanNames()[$badge->badge->name],
+                        'icon' => asset($badge->badge->icon)
+                    ];
+                }
+
                 $data[] = [
                     'name' => $user->name,
                     'avatar' => $user->avatar,
-                    'attend' => $this->userMissionRepository->findAttendedMissionByUserId($user->id)->count() // TODO - 약장으로 대체
+                    'attend' => $this->userMissionRepository->findAttendedMissionByUserId($user->id)->count(), // TODO - 약장으로 대체
+                    'badges' => $userBadge
                 ];
             }
 
