@@ -39,6 +39,10 @@ return [
 
     'github' => [
         'token' => env('GITHUB_TOKEN_SECRET')
+    ],
+
+    'discord' => [
+        'webhook' => env('DISCORD_WEBHOOK_URL')
     ]
 
 ];

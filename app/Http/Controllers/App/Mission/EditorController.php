@@ -11,6 +11,7 @@ use App\Enums\RoleType;
 use App\Http\Controllers\Controller;
 use App\Repositories\Mission\Interfaces\MissionRepositoryInterface;
 use App\Repositories\User\Interfaces\UserMissionRepositoryInterface;
+use App\Services\Discord\Contracts\DiscordServiceContract;
 use App\Services\Mission\Contracts\MissionServiceContract;
 use App\Services\Survey\Contracts\SurveyServiceContract;
 use Auth;
@@ -90,7 +91,7 @@ class EditorController extends Controller
         ]);
     }
 
-    public function create(Request $request, SurveyServiceContract $surveyService): JsonResponse
+    public function create(Request $request, SurveyServiceContract $surveyService, DiscordServiceContract $discordService): JsonResponse
     {
         try {
             $this->jsonValidator($request, [
@@ -150,6 +151,8 @@ class EditorController extends Controller
             }
 
             $this->missionService->addParticipant($mission->id, $user->id, true);
+
+            $discordService->sendMissionCreatedMessage($mission);
 
             return $this->jsonResponse(200, 'OK', [
                 'url' => route('mission.read', $mission->id)

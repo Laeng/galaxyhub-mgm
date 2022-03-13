@@ -18,7 +18,7 @@
                     </div>
                 </div>
 
-                <div class="lg:basis-2/5 pt-8 pb-4 lg:py-8 grid grid-cols-1 gap-4">
+                <div class="lg:basis-2/5  grid grid-cols-1 gap-4 pt-4 lg:pt-0">
                     <div>
                         <h1 class="text-2xl lg:text-4xl font-black tracking-wide">MGM 업데이터</h1>
                     </div>
@@ -57,11 +57,13 @@
                                 </svg>
                             </x-button.filled.xl-blue>
                         </div>
+                        <!--
                         <div class="flex justify-center lg:block">
                             <x-button.filled.xl-white class="w-full">
                                 설치 방법
                             </x-button.filled.xl-white>
                         </div>
+                        -->
                     </div>
                 </div>
             </div>
@@ -71,6 +73,7 @@
 
         <x-panel.galaxyhub.basics>
             <div class="">
+                <!--
                 <div class="grid grid-cols-2 gap-1 bg-gray-500 bg-opacity-25 shadow-inner rounded-lg p-1 mb-4">
                     <button type="button" @click="data.ui.mode = true"
                             :class="data.ui.mode ? 'text-black shadow-md bg-white focus:ring-2 ring-offset-1 ring-offset-transparent ring-transparent': 'text-gray-600 hover:text-gray-500 hover:bg-white hover:bg-opacity-50 focus:ring-2 ring-offset-1 ring-offset-transparent ring-transparent'"
@@ -83,12 +86,12 @@
                         설치된 PC
                     </button>
                 </div>
-
+                -->
                 <div>
                     <div class="prose dark:prose-invert prose-sm max-w-full" x-show="data.ui.mode" x-html="data.release.data.body">
                     </div>
                     <div class="prose max-w-full" x-show="!data.ui.mode">
-                        kk
+                        준비중
                     </div>
                 </div>
             </div>
