@@ -9,6 +9,7 @@ use App\Enums\MissionType;
 use App\Enums\PermissionType;
 use App\Enums\RoleType;
 use App\Http\Controllers\Controller;
+use App\Jobs\SendMissionCreatedMessage;
 use App\Repositories\Mission\Interfaces\MissionRepositoryInterface;
 use App\Repositories\User\Interfaces\UserMissionRepositoryInterface;
 use App\Services\Discord\Contracts\DiscordServiceContract;
@@ -127,7 +128,6 @@ class EditorController extends Controller
                 throw new \Exception('DATE UNAVAILABLE', 422);
             }
 
-
             $mission = $this->missionRepository->create([
                 'user_id' => $user->id,
                 'type' => $type,
@@ -152,7 +152,7 @@ class EditorController extends Controller
 
             $this->missionService->addParticipant($mission->id, $user->id, true);
 
-            $discordService->sendMissionCreatedMessage($mission);
+            SendMissionCreatedMessage::dispatch($mission);
 
             return $this->jsonResponse(200, 'OK', [
                 'url' => route('mission.read', $mission->id)
