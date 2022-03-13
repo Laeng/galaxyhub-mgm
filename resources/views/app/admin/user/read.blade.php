@@ -190,6 +190,10 @@
                     </div>
                 </div>
             </x-panel.galaxyhub.basics>
+
+            <x-button.filled.md-white class="w-full" type="button" onclick="location.href='{{ route('admin.application.read', $user->id) }}'">
+                가입 신청서 확인
+            </x-button.filled.md-white>
         </div>
 
 
