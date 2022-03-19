@@ -8,6 +8,12 @@ Route::prefix('app')->group(function () {
     Route::name('app.')->middleware(['auth.member:web'])->group(function() {
         //VIEW
         Route::get('/', [AppController::class, 'index'])->middleware([ForbidBannedUser::class])->name('index');
+
+        //AJAX
+    });
+
+    Route::name('app.')->group(function() {
+        //VIEW
         Route::get('/privacy', [AppController::class, 'privacy'])->name('privacy');
         Route::get('/rules', [AppController::class, 'rules'])->name('rules');
 

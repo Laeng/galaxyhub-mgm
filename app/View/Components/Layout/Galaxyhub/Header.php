@@ -76,6 +76,7 @@ class Header extends Component
                         $menu = $menu->submenu("<a href='#'>관리</a>", function (Menu $menu) {
                             $menu = $menu->add(Link::toRoute('admin.user.index', '회원 목록'));
                             $menu = $menu->add(Link::toRoute('admin.application.index', '가입 신청자 목록'));
+                            $menu = $menu->add(Link::toRoute('admin.broadcast.naver.index', '네이버 계정 설정'));
                         });
                     }
 
