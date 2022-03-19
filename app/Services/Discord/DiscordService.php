@@ -42,7 +42,7 @@ class DiscordService implements DiscordServiceContract
             $client = new Client();
             $client->post($this->webhook, [
                 RequestOptions::JSON => [
-                    'name' => "MGM 라운지",
+                    'username' => "MGM 라운지",
                     'avatar_url' => 'https://mgm.galaxyhub.kr/images/mgm_300x300.png',
                     'type' => "rich",
                     'embeds' => [
@@ -50,7 +50,7 @@ class DiscordService implements DiscordServiceContract
                             'title' => $mission->title,
                             'description' => "새로운 {$type} 등록 되었습니다.",
                             'url' => $missionUrl,
-                            'color' => '5195493',
+                            'color' => '9936498',
                             'author' => [
                                 'name' => 'MGM 라운지',
                                 'url' => $homeUrl
