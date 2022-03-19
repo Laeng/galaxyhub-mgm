@@ -28,7 +28,7 @@ jobs:
         port: ${{ secrets.PORT }}
         script: |
           cd ${{ secrets.PATH }}
-          php artisan down
+          php artisan down --render="errors::503" --refresh=15
           git fetch --all
           git reset --hard origin/master
           git pull

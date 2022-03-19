@@ -15,4 +15,6 @@ interface UserAccountRepositoryInterface
     public function findByNickname(string $nickname, array $columns = ['*'], array $relations = []): ?Collection;
 
     public function findSteamAccountByUserId(string $userId, array $columns = ['*'], array $relations = []): ?Collection;
+
+    public function findNaverAccountByUserId(string $userId, array $columns = ['*'], array $relations = []): ?Collection;
 }

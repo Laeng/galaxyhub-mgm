@@ -67,16 +67,20 @@
             <div>
                 <h2 class="text-xl lg:text-2xl font-bold">개인정보처리방침 <span class="text-base font-normal">(필수 동의 항목)</span></h2>
                 <div class="mt-2 rounded-md bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-800 text-gray-800 dark:text-gray-300">
-                    <div class="h-64 px-4 prose dark:prose-invert prose-sm max-w-none" data-simplebar>
-                        @include('components.agreements.privacy')
+                    <div class="h-64 px-4" data-simplebar>
+                        <div class="prose dark:prose-invert prose-sm max-w-none">
+                            @include('components.agreements.privacy')
+                        </div>
                     </div>
                 </div>
             </div>
             <div>
                 <h2 class="text-xl lg:text-2xl font-bold">이용약관 <span class="text-base font-normal">(필수 동의 항목)</span></h2>
                 <div class="mt-2 rounded-md bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-800 text-gray-800 dark:text-gray-300">
-                    <div class="h-64 px-4 prose dark:prose-invert prose-sm max-w-none" data-simplebar>
-                        @include('components.agreements.rules')
+                    <div class="h-64 px-4" data-simplebar>
+                        <div class="prose dark:prose-invert prose-sm max-w-none">
+                            @include('components.agreements.rules')
+                        </div>
                     </div>
                 </div>
             </div>

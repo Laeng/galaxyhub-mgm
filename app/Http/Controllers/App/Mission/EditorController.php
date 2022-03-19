@@ -10,10 +10,12 @@ use App\Enums\PermissionType;
 use App\Enums\RoleType;
 use App\Http\Controllers\Controller;
 use App\Jobs\SendMissionCreatedMessage;
+use App\Jobs\SendNaverCafeMissionCreatedMessage;
 use App\Repositories\Mission\Interfaces\MissionRepositoryInterface;
 use App\Repositories\User\Interfaces\UserMissionRepositoryInterface;
 use App\Services\Discord\Contracts\DiscordServiceContract;
 use App\Services\Mission\Contracts\MissionServiceContract;
+use App\Services\Naver\Contracts\NaverServiceContract;
 use App\Services\Survey\Contracts\SurveyServiceContract;
 use Auth;
 use Illuminate\Contracts\View\View;
@@ -92,7 +94,7 @@ class EditorController extends Controller
         ]);
     }
 
-    public function create(Request $request, SurveyServiceContract $surveyService, DiscordServiceContract $discordService): JsonResponse
+    public function create(Request $request, SurveyServiceContract $surveyService, NaverServiceContract $naverService): JsonResponse
     {
         try {
             $this->jsonValidator($request, [
@@ -153,6 +155,8 @@ class EditorController extends Controller
             $this->missionService->addParticipant($mission->id, $user->id, true);
 
             SendMissionCreatedMessage::dispatch($mission);
+            SendNaverCafeMissionCreatedMessage::dispatch(config('services.naver.cafe.id'), config('services.naver.cafe.menu'), $mission);
+
 
             return $this->jsonResponse(200, 'OK', [
                 'url' => route('mission.read', $mission->id)

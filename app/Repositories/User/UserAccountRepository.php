@@ -39,4 +39,10 @@ class UserAccountRepository extends BaseRepository implements UserAccountReposit
     {
         return $this->model->select($columns)->where('user_id', $userId)->where('provider', 'steam')->with($relations)->latest()->get();
     }
+
+    public function findNaverAccountByUserId(string $userId, array $columns = ['*'], array $relations = []): ?Collection
+    {
+        return $this->model->select($columns)->where('user_id', $userId)->where('provider', 'naver')->with($relations)->latest()->get();
+    }
+
 }

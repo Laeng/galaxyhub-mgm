@@ -2,12 +2,15 @@
 
 namespace App\Enums;
 
+use JetBrains\PhpStorm\Pure;
+
 enum MissionType: int  {
+    // array_flip 할 때 value 를 건너 뛰게 설정하게 되면 오류 발생
     case NIGHT_OF_ARMA = 0;
     case MISSION = 1;
     case NON_MISSION_MAKER = 2;
-    case BOOTCAMP = 10;
-    case SERVICE_RIBBON_TEST = 11;
+    case BOOTCAMP = 3;
+    case SERVICE_RIBBON_TEST = 4;
 
     public static function getKoreanNames(): array
     {
@@ -20,6 +23,7 @@ enum MissionType: int  {
         ];
     }
 
+    #[Pure]
     public static function getByRole(string $role): array
     {
         $types = [];

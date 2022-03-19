@@ -48,4 +48,5 @@ class AppController extends Controller
     {
         return view('app.rules');
     }
+
 }

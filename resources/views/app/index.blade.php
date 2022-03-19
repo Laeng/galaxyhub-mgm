@@ -37,7 +37,7 @@
             <a class="md:col-span-2 lg:row-span-2 bg-red-500 rounded-lg p-8 lg:p-16 shadow-lg hover:shadow-inner transform hover:translate-y-0.5" href="{{route('mission.index')}}">
                 <div class="flex items-center justify-between h-full">
                     <div class="text-left text-white font-bold text-xl lg:text-5xl">
-                        <p class="">아르마3 미션</p>
+                        <p class="">아르마 3 미션</p>
                         <p class="">참가 신청하기</p>
                     </div>
                     <div class="transform -rotate-12">
@@ -78,9 +78,9 @@
                 <div>
                     <h2 class="text-xl lg:text-2xl font-bold">공지사항</h2>
                 </div>
-                <div class="pr-8 overflow-y-auto h-96 ">
-                    <div class="h-hull grid place-items-center items-center grid-cols-1">
-                        <p>준비중</p>
+                <div class="mt-4 overflow-y-auto h-96" data-simplebar>
+                    <div class="prose prose-sm dark:prose-invert max-w-none pr-3">
+                        @include('components.description.lounge-notice')
                     </div>
                 </div>
             </x-panel.galaxyhub.basics>
@@ -89,8 +89,8 @@
                 <div>
                     <h2 class="text-xl lg:text-2xl font-bold">업데이터</h2>
                 </div>
-                <div class="mt-4 overflow-y-auto h-96 prose prose-sm dark:prose-invert max-w-full" data-simplebar>
-                    <div x-html="data.release.data.body"></div>
+                <div class="mt-4 overflow-y-auto h-96" data-simplebar>
+                    <div class="prose prose-sm dark:prose-invert max-w-full pr-3" x-html="data.release.data.body"></div>
                 </div>
             </x-panel.galaxyhub.basics>
         </div>

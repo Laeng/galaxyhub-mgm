@@ -43,6 +43,15 @@ return [
 
     'discord' => [
         'webhook' => env('DISCORD_WEBHOOK_URL')
+    ],
+
+    'naver' => [
+        'key' => env('NAVER_CLIENT_KEY'),
+        'secret' => env('NAVER_CLIENT_SECRET'),
+        'cafe' => [
+            'id' => env('NAVER_CAFE_ID'),
+            'menu' => env('NAVER_CAFE_MENU')
+        ]
     ]
 
 ];

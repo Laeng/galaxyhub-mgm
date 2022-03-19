@@ -13,12 +13,10 @@ use GuzzleHttp\RequestOptions;
 
 class DiscordService implements DiscordServiceContract
 {
-    private Client $client;
     private string $webhook;
 
     public function __construct()
     {
-        $this->client = new Client();
         $this->webhook = config('services.discord.webhook');
     }
 
@@ -41,7 +39,8 @@ class DiscordService implements DiscordServiceContract
 
         try
         {
-            $this->client->post($this->webhook, [
+            $client = new Client();
+            $client->post($this->webhook, [
                 RequestOptions::JSON => [
                     'name' => "MGM 라운지",
                     'avatar_url' => 'https://mgm.galaxyhub.kr/images/mgm_300x300.png',

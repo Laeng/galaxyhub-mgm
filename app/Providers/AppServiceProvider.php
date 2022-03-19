@@ -10,6 +10,8 @@ use App\Services\Github\Contracts\GithubServiceContract;
 use App\Services\Github\GithubService;
 use App\Services\Mission\Contracts\MissionServiceContract;
 use App\Services\Mission\MissionService;
+use App\Services\Naver\Contracts\NaverServiceContract;
+use App\Services\Naver\NaverService;
 use App\Services\User\UserService;
 use App\Services\User\Contracts\UserServiceContract;
 use App\Services\File\Contracts\FileServiceContract;
@@ -36,6 +38,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(FileServiceContract::class, FileService::class);
         $this->app->bind(GithubServiceContract::class, GithubService::class);
         $this->app->bind(MissionServiceContract::class, MissionService::class);
+        $this->app->bind(NaverServiceContract::class, NaverService::class);
         $this->app->bind(SteamServiceContract::class, SteamService::class);
         $this->app->bind(SurveyServiceContract::class, SurveyService::class);
         $this->app->bind(UserServiceContract::class, UserService::class);
