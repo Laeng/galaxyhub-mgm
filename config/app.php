@@ -195,4 +195,8 @@ return [
         // ...
     ])->toArray(),
 
+    'config' => [
+        'enable-join-quiz' => env('CONFIG_ENABLE_JOIN_QUIZ', true)
+    ]
+
 ];

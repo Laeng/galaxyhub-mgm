@@ -50,6 +50,11 @@ class FormController extends Controller
             return redirect()->route('application.agreements');
         }
 
+        if (config('app.config.enable-join-quiz') && $this->surveyService->getApplicationQuizWithIn7Days($user->id)->count() == 0)
+        {
+            return redirect()->route('application.agreements');
+        }
+
         $form = $this->surveyService->createApplicationForm();
 
         return view('app.application.form', [

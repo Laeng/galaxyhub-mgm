@@ -104,7 +104,7 @@
                 <p class="py-2 text-center">
                     개인정보처리방침 및 이용약관을 읽으셨으며 모두 동의하십니까?
                 </p>
-                <form action="{{ route('application.quiz') }}" method="post" onsubmit="return (data.check.load && data.check.status)">
+                <form action="{{ config('app.config.enable-join-quiz') ? route('application.quiz') : route('application.form')}}" method="post" onsubmit="return (data.check.load && data.check.status)">
                     @csrf
                     <div class="flex justify-center pt-2 space-x-4">
                         <x-button.filled.md-blue
