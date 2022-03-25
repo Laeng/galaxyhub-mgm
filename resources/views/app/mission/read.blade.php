@@ -49,7 +49,7 @@
             </div>
 
             <div class="flex flex-col space-y-2" x-cloak>
-                <h2 class="text-xl lg:text-2xl font-bold">참가자</h2>
+                <h2 class="text-xl lg:text-2xl font-bold" x-tooltip="크아앙!">참가자</h2>
                 <div class="">
                     <div class="grid grid-cols-1 gap-4 lg:grid-cols-2">
                         <template x-for="i in data.participants.data.participants">
@@ -63,7 +63,7 @@
                                     <p class="text-sm text-gray-500 dark:text-gray-300 truncate tabular-nums" x-text="i.attend + '회 참가'"></p>
                                     <div class="mt-1 flex flex-row flex-wrap">
                                         <template x-for="ii in i.badges">
-                                            <img class="h-5 w-5 p-0.5" :alt="ii.name" :title="ii.name" :src="ii.icon" >
+                                            <img class="h-5 w-5 p-0.5" :alt="ii.name" :title="ii.name" :src="ii.icon" x-tooltip="ii.name">
                                         </template>
                                     </div>
                                 </div>
@@ -339,6 +339,9 @@
                                 switch (e.response.data.description) {
                                     case "MISSION STATUS DOES'T MATCH THE CONDITIONS":
                                         msg = '현재 미션 상태에서 실행할 수 없는 요청입니다.';
+                                        break;
+                                    case "REQUIRES 10 PARTICIPATION":
+                                        msg = '미션 10회를 참여하셔야만 부트캠프를 신청할 수 있습니다.'
                                         break;
                                     default:
                                         msg = e.response.data.description;

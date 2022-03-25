@@ -5,9 +5,11 @@
             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                 <template x-for="game in data.games">
                     <div class="rounded border border-gray-300 dark:border-gray-800 shadow-sm">
-                        <img class="w-full rounded-t" :src="'http://media.steampowered.com/steamcommunity/public/images/apps/' + game.appid + '/' + game.img_logo_url + '.jpg'" :alt="game.name">
+                        <template x-if="game.img_logo_url !== undefined">
+                            <img class="w-full rounded-t" :src="'http://media.steampowered.com/steamcommunity/public/images/apps/' + game.appid + '/' + game.img_logo_url + '.jpg'" :alt="game.name">
+                        </template>
                         <div class="px-6 py-4">
-                            <p class="font-bold text mb-2 line-clamp-2 h-12" x-text="game.name"></p>
+                            <a :href="'https://store.steampowered.com/app/' + game.appid" rel="noopener" target="_blank" class="font-bold mb-2 line-clamp-2 h-12" x-text="game.name"></a>
                             <p class="text-gray-700 dark:text-gray-300 text-base" x-text="minutesToHm(game.playtime_forever)"></p>
                         </div>
                     </div>

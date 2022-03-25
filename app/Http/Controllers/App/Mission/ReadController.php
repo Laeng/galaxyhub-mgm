@@ -230,6 +230,14 @@ class ReadController extends Controller
                         throw new \Exception('MISSION STATUS DOES\'T MATCH THE CONDITIONS', 422);
                     }
 
+                    if ($mission->type === MissionType::BOOTCAMP->value)
+                    {
+                        if (!$user->hasPermissionTo(PermissionType::ADMIN->name) && $this->userMissionRepository->findByUserId($user->id)->count() < 10)
+                        {
+                            throw new \Exception('REQUIRES 10 PARTICIPATION', 422);
+                        }
+                    }
+
                     $this->missionService->addParticipant($mission->id, $user->id);
                     break;
 
