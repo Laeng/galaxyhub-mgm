@@ -45,6 +45,12 @@ class ReadController extends Controller
     ): View
     {
         $user = $this->userRepository->findById($userId);
+
+        if ($user == null)
+        {
+            abort(404);
+        }
+
         $steamAccount = $userAccountRepository->findSteamAccountByUserId($user->id, ['account_id'])->first();
         $userMission = $this->userMissionRepository->findAttendedMissionByUserId($user->id);
 

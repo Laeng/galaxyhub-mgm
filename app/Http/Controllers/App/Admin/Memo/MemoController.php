@@ -57,7 +57,7 @@ class MemoController extends Controller
 
             foreach ($records as $record)
             {
-                if (empty($record->data['comment'])) continue;
+                if (!array_key_exists('comment', $record->data)) continue;
 
                 $type = array_flip(UserRecordType::getKoreanNames())[$record->type];
 

@@ -129,6 +129,8 @@ class ListController extends Controller
                         $query = $query->latest('attended_at');
                         break;
                 }
+            } else {
+                $query = $query->latest('created_at');
             }
 
             $count = $query->count();
@@ -216,6 +218,11 @@ class ListController extends Controller
             $users = $this->userRepository->findByIds($request->get('user_id'));
             $reason = strip_tags($request->get('reason', '변경 사유를 입력하지 않음.'));
             $q = $request->get('query');
+
+            if ($reason === '')
+            {
+                $reason = '변경 사유를 입력하지 않음.';
+            }
 
             switch ($request->get('type'))
             {
