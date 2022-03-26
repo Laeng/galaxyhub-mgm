@@ -13,7 +13,7 @@ enum BadgeType
     case MISSION_MAKER;
     case ONE_OF_ALL;
     case SENIOR_MEMBER;
-    case SQUID_LEADER;
+    case SQUAD_LEADER;
     case STEELRAIN;
     case WARPIG;
     case STAFF;
@@ -44,7 +44,7 @@ enum BadgeType
             self::MISSION_MAKER->name => '미션 메이커',
             self::ONE_OF_ALL->name => 'One of All',
             self::SENIOR_MEMBER->name => '시니어 멤버',
-            self::SQUID_LEADER->name => '분대장',
+            self::SQUAD_LEADER->name => '분대장',
             self::STEELRAIN->name => '스틸레인',
             self::WARPIG->name => '워피그',
             self::STAFF->name => '스탭',
