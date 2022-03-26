@@ -41,7 +41,7 @@ class SendNaverCafeMissionCreatedMessage implements ShouldQueue
     {
         $link = route('mission.read', $this->mission->id);
 
-        $content = $this->mission->body;
+        $content = strip_tags($this->mission->body, '<h2><h3><h4><p><a><i><br><u><strong><sub><sup><ol><ul><li><blockquote><span><table><tbody><tr><td>');
         $content .= "<p>메이커: {$this->mission->user()->first()->name}</p>";
         $content .= "<div class='CafeViewer'><div class='se-viewer' lang='ko-KR'><div class='se-section-text se-text se-l-default'>";
         $content .= "<p class='se-text-paragraph se-text-paragraph-align-'><span class='se-fs-fs11 se-ff-'>&nbsp;</span></p>";

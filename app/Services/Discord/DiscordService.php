@@ -37,18 +37,21 @@ class DiscordService implements DiscordServiceContract
             '약장 시험' => '약장 시험이'
         };
 
+        $body = str_replace('&nbsp;', ' ', strip_tags($mission->body));
+        $user = $mission->user()->first();
+
         try
         {
             $client = new Client();
             $client->post($this->webhook, [
                 RequestOptions::JSON => [
-                    'username' => "MGM 라운지",
-                    'avatar_url' => 'https://mgm.galaxyhub.kr/images/mgm_300x300.png',
+                    'username' => $user->name,
+                    'avatar_url' => $user->avatar,
                     'type' => "rich",
                     'embeds' => [
                         [
                             'title' => $mission->title,
-                            'description' => "새로운 {$type} 등록 되었습니다.",
+                            'description' => $body !== "" ? $body : "새로운 {$type} 등록 되었습니다.",
                             'url' => $missionUrl,
                             'color' => '9936498',
                             'author' => [
