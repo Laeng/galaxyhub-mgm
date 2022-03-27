@@ -51,6 +51,7 @@
                         <option value="">필터</option>
                         <option value="신규가입 미참여">신규가입 미참여</option>
                         <option value="30일이상 미참여">30일이상 미참여</option>
+                        <option value="활동 정지 회원">활동 정지 회원</option>
                     </x-input.select.basics>
                 </div>
                 <div class="w-full lg:w-auto">
@@ -65,7 +66,7 @@
             </div>
 
             <div class="my-2">
-                <x-list.galaxyhub.basics :component-id="$componentId" name="user_id" :action="route('admin.user.index.list')" :refresh="true"/>
+                <x-list.galaxyhub.basics :component-id="$componentId" name="user_id" :action="route('admin.user.index.list')" :refresh="true" limit="20" query="{order:'가입일 내림차순'}"/>
             </div>
 
             <div class="flex divide-x divide-gray-200 flex-wrap">

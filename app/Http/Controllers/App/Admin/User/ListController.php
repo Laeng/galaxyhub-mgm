@@ -91,6 +91,9 @@ class ListController extends Controller
                     case '30일이상 미참여':
                         $query = $query->whereNotNull('user_missions.attended_at')->whereDate('user_missions.attended_at', '<=', now()->subDays(30));
                         break;
+                    case '활동 정지 회원':
+                        $query = $query->whereNotNull('banned_at');
+                        break;
                 }
             }
 
@@ -129,8 +132,6 @@ class ListController extends Controller
                         $query = $query->latest('attended_at');
                         break;
                 }
-            } else {
-                $query = $query->latest('created_at');
             }
 
             $count = $query->count();
