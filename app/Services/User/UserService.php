@@ -56,8 +56,16 @@ class UserService implements UserServiceContract
                 if ($isDifferent){
                     if ($account->nickname !== $attributes['nickname'])
                     {
+                        $accountAttributes = array_merge($attributes, [
+                            'user_id' => $user->id,
+                            'account_id' => $attributes['id']
+                        ]);
+
                         // 닉네임 검색을 위하여 닉네임이 변경되면 새로 등록한다.
-                        $this->userAccountRepository->create($attributes);
+                        $this->userAccountRepository->create($accountAttributes);
+                        $this->createRecord($user->id, UserRecordType::STEAM_DATA_CHANGE_NICKNAME->name, [
+                            'comment' => "{$user->name} → {$attributes['nickname']}"
+                        ]);
                     }
                     else
                     {

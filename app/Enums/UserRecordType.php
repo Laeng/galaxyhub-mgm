@@ -8,8 +8,8 @@ use JetBrains\PhpStorm\Pure;
 enum UserRecordType {
     case BAN_DATA;
     case UNBAN_DATA;
-    case USER_DELETE;
     case USER_APPLICATION;
+    case USER_DELETE;
     case USER_MEMO_TEXT_FOR_ADMIN;
     case USER_MEMO_IMAGE_FORM_ADMIN;
     case USER_PAUSE_ENABLE;
@@ -20,6 +20,7 @@ enum UserRecordType {
     case STEAM_DATA_ARMA3;
     case STEAM_DATA_BANS;
     case STEAM_DATA_GROUPS;
+    case STEAM_DATA_CHANGE_NICKNAME;
 
     #[ArrayShape([
         '계정 비활성' => "\App\Enums\UserRecordType",
@@ -35,7 +36,8 @@ enum UserRecordType {
         'STEAM_DATA_GAMES' => "\App\Enums\UserRecordType",
         'STEAM_DATA_ARMA3' => "\App\Enums\UserRecordType",
         'STEAM_DATA_BANS' => "\App\Enums\UserRecordType",
-        'STEAM_DATA_GROUPS' => "\App\Enums\UserRecordType"
+        'STEAM_DATA_GROUPS' => "\App\Enums\UserRecordType",
+        '스팀 닉네임 변경' => "\App\Enums\UserRecordType"
     ])]
     public static function getKoreanNames(): array
     {
@@ -53,7 +55,8 @@ enum UserRecordType {
             'STEAM_DATA_GAMES' => self::STEAM_DATA_GAMES->name,
             'STEAM_DATA_ARMA3' => self::STEAM_DATA_ARMA3->name,
             'STEAM_DATA_BANS' => self::STEAM_DATA_BANS->name,
-            'STEAM_DATA_GROUPS' => self::STEAM_DATA_GROUPS->name
+            'STEAM_DATA_GROUPS' => self::STEAM_DATA_GROUPS->name,
+            '스팀 닉네임 변경' => self::STEAM_DATA_CHANGE_NICKNAME->name
         ];
     }
 }
