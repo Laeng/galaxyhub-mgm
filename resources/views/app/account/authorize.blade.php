@@ -7,6 +7,7 @@
                 </h1>
                 <p>
                     이제 <span class="font-bold">MGM 업데이터</span>에서 <span class="font-bold">다음</span> 버튼을 눌러주십시오.<br/>
+                    사용자 인증이 완료되었으므로 이 창을 닫으셔도 무방합니다.
                 </p>
             </div>
             <div class="mt-8 space-y-1">

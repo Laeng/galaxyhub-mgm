@@ -5,6 +5,7 @@ namespace App\Http\Controllers\App\Admin\Memo;
 use App\Enums\RoleType;
 use App\Enums\UserRecordType;
 use App\Http\Controllers\Controller;
+use App\Repositories\User\Interfaces\UserAccountRepositoryInterface;
 use App\Repositories\User\Interfaces\UserRecordRepositoryInterface;
 use App\Repositories\User\Interfaces\UserRepositoryInterface;
 use App\Services\File\Contracts\FileServiceContract;
@@ -35,10 +36,8 @@ class MemoController extends Controller
         $this->recordRepository = $recordRepository;
     }
 
-    public function list(Request $request): JsonResponse
+    public function list(Request $request, UserAccountRepositoryInterface $userAccountRepository): JsonResponse
     {
-        /* 등급 변경시 변경 기록 남길 때, reason 대신 comment 를 사용하도록 달고, 추후 MEMO 불러올 때는 comment 로 단일화 해서 내용이 출력되도록 하자! */
-
         try
         {
             $this->jsonValidator($request, [
@@ -52,7 +51,8 @@ class MemoController extends Controller
                 throw new \Exception('NOT FOUND USER', 422);
             }
 
-            $records = $this->recordRepository->findByUserId($target->id);
+            $steamAccount = $userAccountRepository->findSteamAccountByUserId($target->id)->first();
+            $records = $this->recordRepository->findByUuid($this->recordRepository->getUuidV5($steamAccount->account_id));
             $data = array();
 
             foreach ($records as $record)

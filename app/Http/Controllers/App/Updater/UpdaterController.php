@@ -99,14 +99,17 @@ class UpdaterController extends Controller
             {
                 if ($user->hasPermissionTo(PermissionType::MEMBER->name))
                 {
-                    $updater->user_id = $user->id;
-                    $updater->save();
+                    if (is_null($updater->user_id))
+                    {
+                        $updater->user_id = $user->id;
+                        $updater->save();
 
-                    $data = [
-                        'status' => true,
-                        'machineName' => $updater->machine_name,
-                        'machineIp' => $updater->ip
-                    ];
+                        $data = [
+                            'status' => true,
+                            'machineName' => $updater->machine_name,
+                            'machineIp' => $updater->ip
+                        ];
+                    }
                 }
             }
         }

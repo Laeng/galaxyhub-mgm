@@ -7,6 +7,7 @@ use App\Enums\RoleType;
 use App\Enums\UserRecordType;
 use App\Http\Controllers\Controller;
 use App\Repositories\Survey\Interfaces\SurveyRepositoryInterface;
+use App\Repositories\User\Interfaces\UserAccountRepositoryInterface;
 use App\Repositories\User\Interfaces\UserRecordRepositoryInterface;
 use App\Repositories\User\Interfaces\UserRepositoryInterface;
 use App\Repositories\User\UserAccountRepository;
@@ -36,7 +37,7 @@ class ReadController extends Controller
         $this->surveyService = $surveyService;
     }
 
-    public function read(Request $request, int $userId): View
+    public function read(Request $request, int $userId, UserAccountRepositoryInterface $userAccountRepository): View
     {
         $user = $this->userRepository->findById($userId);
 
@@ -44,6 +45,9 @@ class ReadController extends Controller
         {
             abort('404');
         }
+
+        $isBanned = false;
+        $isRejoin = false;
 
         $application = $this->surveyService->getLatestApplicationForm($user->id);
         $survey = $application?->survey()->first();
@@ -82,6 +86,26 @@ class ReadController extends Controller
                 $role = RoleType::DEFER;
                 $status = '거절';
             }
+
+            $steamAccount = $userAccountRepository->findSteamAccountByUserId($user->id)->first();
+
+            if (!is_null($steamAccount))
+            {
+                $records = $this->recordRepository->findByUuid($this->recordRepository->getUuidV5($steamAccount->account_id));
+
+                foreach ($records as $record)
+                {
+                    if ($record->type === UserRecordType::BAN_DATA->name && !array_key_exists('expired_at', $record->data))
+                    {
+                        $isBanned = true;
+                    }
+
+                    if ($record->type === UserRecordType::USER_DELETE->name)
+                    {
+                        $isRejoin = true;
+                    }
+                }
+            }
         }
 
         $record = $this->userService->findRoleRecordeByUserId($user->id, $role->name)->first();
@@ -97,6 +121,8 @@ class ReadController extends Controller
             'survey' => $survey,
             'answer' => $application->id,
             'status' => $status,
+            'isBanned' => $isBanned,
+            'isRejoin' => $isRejoin
         ]);
     }
 
@@ -201,7 +227,7 @@ class ReadController extends Controller
                 'arma' => $arma3?->data,
                 'ban' => $ban?->data,
                 'naver_id' => $naverId,
-                'created_at' => "{$summaries->created_at->format('Y-m-d')} 기준",
+                'created_at' => "{$summaries->updated_at->format('Y-m-d')} 기준",
             ]);
         }
         catch (\Exception $e)

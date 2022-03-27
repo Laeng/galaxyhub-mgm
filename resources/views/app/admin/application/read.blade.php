@@ -1,4 +1,18 @@
 <x-theme.galaxyhub.sub-content :title="$title" :description="$title" :breadcrumbs="Diglactic\Breadcrumbs\Breadcrumbs::render('app.admin.application', $user->name)">
+    <div class="space-y-2 mb-4">
+        @if($isBanned)
+            <x-alert.galaxyhub.danger title="경고">
+                <p class="font-bold">과거 무기한 활동 정지 이력이 있는 가입 신청자입니다.</p>
+            </x-alert.galaxyhub.danger>
+        @endif
+
+        @if(!$isBanned && $isRejoin)
+            <x-alert.galaxyhub.danger title="주의">
+                <p class="font-bold">과거 탈퇴 기록이 있는 가입 신청자 입니다. 활동 기록을 확인하여 주십시오.</p>
+            </x-alert.galaxyhub.danger>
+        @endif
+    </div>
+
     <div class="md:flex md:space-x-4" x-data="application_read">
         <x-panel.galaxyhub.basics class="self-start md:basis-3/5 lg:basis-2/3">
             <h2 class="text-xl lg:text-2xl font-bold">가입 신청서</h2>
