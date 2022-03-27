@@ -125,16 +125,26 @@ class UserService implements UserServiceContract
 
     public function createRecord(int $userId, string $type, array $data, ?int $recorderId = null): ?UserRecord
     {
-        $steamAccount = $this->userAccountRepository->findSteamAccountByUserId($userId)->first();
-        $uuid = $this->recordRepository->getUuidV5($steamAccount->account_id);
+        $query = $this->recordRepository->findByUserIdAndType($userId, $type);
 
-        return $this->recordRepository->create([
-            'user_id' => $userId,
-            'recorder_id' => $recorderId,
-            'type' => $type,
-            'data' => $data,
-            'uuid' => $uuid
-        ]);
+        if ($query->count() < 0)
+        {
+            $steamAccount = $this->userAccountRepository->findSteamAccountByUserId($userId)->first();
+            $uuid = $this->recordRepository->getUuidV5($steamAccount->account_id);
+
+            return $this->recordRepository->create([
+                'user_id' => $userId,
+                'recorder_id' => $recorderId,
+                'type' => $type,
+                'data' => $data,
+                'uuid' => $uuid
+            ]);
+        }
+        else
+        {
+            $this->editRecord($userId, $type, $data, $recorderId);
+            return $this->recordRepository->findByUserIdAndType($userId, $type)->first();
+        }
     }
 
     public function editRecord(int $userId, string $type, array $data, ?int $recorderId = null): ?bool

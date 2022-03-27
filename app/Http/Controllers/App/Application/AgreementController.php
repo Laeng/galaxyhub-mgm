@@ -4,6 +4,7 @@ namespace App\Http\Controllers\App\Application;
 
 use App\Enums\RoleType;
 use App\Http\Controllers\Controller;
+use App\Jobs\CreateSteamAccount;
 use App\Repositories\User\Interfaces\UserAccountRepositoryInterface;
 use App\Repositories\User\Interfaces\UserRecordRepositoryInterface;
 use App\Services\Steam\Contracts\SteamServiceContract;
@@ -67,6 +68,8 @@ class AgreementController extends Controller
             {
                 return $this->jsonResponse(200, '\'아르마 3\'를 구매하셔야만  MGM 라운지 및 MGM 아르마 클랜 가입 신청이 가능합니다.', false);
             }
+
+            CreateSteamAccount::dispatch($user);
 
             return $this->jsonResponse(200, 'OK', true);
         }
