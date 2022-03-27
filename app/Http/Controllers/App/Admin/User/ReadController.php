@@ -51,23 +51,13 @@ class ReadController extends Controller
             abort(404);
         }
 
-        $steamAccount = $userAccountRepository->findSteamAccountByUserId($user->id, ['account_id'])->first();
-        $userMission = $this->userMissionRepository->findAttendedMissionByUserId($user->id);
-
-        if (!is_null($userMission) && $userMission->count() > 0)
-        {
-            $missionCount = $userMission->count();
-            $missionLatest = $userMission->first()->attended_at->format('Y-m-d');
-        }
-        else
-        {
-            $missionCount = 0;
-            $missionLatest = '참가하지 않음';
-        }
-
-        $role = $user->roles()->latest()->first();
-
         $application = $surveyService->getLatestApplicationForm($user->id);
+
+        if (is_null($application))
+        {
+            abort(404);
+        }
+
         $response = $application->answers()->latest()->get();
 
         $naverId = '';
@@ -89,6 +79,22 @@ class ReadController extends Controller
                 case '본인의 생년월일': $birthday = $value; break;
             }
         }
+
+        $steamAccount = $userAccountRepository->findSteamAccountByUserId($user->id, ['account_id'])->first();
+        $userMission = $this->userMissionRepository->findAttendedMissionByUserId($user->id);
+
+        if (!is_null($userMission) && $userMission->count() > 0)
+        {
+            $missionCount = $userMission->count();
+            $missionLatest = $userMission->first()->attended_at->format('Y-m-d');
+        }
+        else
+        {
+            $missionCount = 0;
+            $missionLatest = '참가하지 않음';
+        }
+
+        $role = $user->roles()->latest()->first();
 
         $userBadges = $this->userBadgeRepository->findByUserId($userId, ['*'], ['badge']);
         $userBadge = array();

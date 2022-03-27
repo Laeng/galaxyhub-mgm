@@ -137,19 +137,21 @@ class UserService implements UserServiceContract
         ]);
     }
 
-    public function editRecord(int $userId, string $type, array $data): ?bool
+    public function editRecord(int $userId, string $type, array $data, ?int $recorderId = null): ?bool
     {
         $query = $this->recordRepository->findByUserIdAndType($userId, $type);
 
         if ($query->count() < 0)
         {
-            return false;
+            $this->createRecord($userId, $type, $data, $recorderId);
         }
+        else
+        {
+            $record = $query->first();
+            $record->data = $data;
 
-        $record = $query->first();
-        $record->data = $data;
-
-        $record->save();
+            $record->save();
+        }
 
         return true;
     }
