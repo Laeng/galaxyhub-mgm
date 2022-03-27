@@ -230,29 +230,14 @@ class ListController extends Controller
                 case 'ban':
                     foreach ($users as $user)
                     {
-                        $data = [
-                            'comment' => $reason,
-                        ];
-
-                        if (!empty($q['days'])) {
-                            $data['expired_at'] = now()->addDays((int)$q['days']);
-                        }
-
-                        $user->ban($data);
-                        $userService->createRecord($user->id, UserRecordType::BAN_DATA->name, $data, $executor->id);
+                        $userService->ban($user->id, $reason, !empty($q['days']) ? $q['days'] : null, $executor->id);
                     }
                     break;
 
                 case 'unban':
                     foreach ($users as $user)
                     {
-                        $ban = $banRepository->findByUserId($user->id)->first();
-                        $type = !is_null($ban) && $ban->comment === BanCommentType::USER_PAUSE->value ? UserRecordType::USER_PAUSE_DISABLE : UserRecordType::UNBAN_DATA;
-
-                        $user->unban();
-                        $userService->createRecord($user->id, $type->name, [
-                            'comment' => $reason
-                        ], $executor->id);
+                        $userService->unban($user->id, $reason, $executor->id);
                     }
                     break;
 

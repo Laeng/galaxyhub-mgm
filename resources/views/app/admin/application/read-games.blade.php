@@ -5,13 +5,13 @@
             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                 <template x-for="game in data.games">
                     <div class="rounded border border-gray-300 dark:border-gray-800 shadow-sm">
-                        <template x-if="game.img_logo_url !== undefined">
-                            <img class="w-full rounded-t" :src="'http://media.steampowered.com/steamcommunity/public/images/apps/' + game.appid + '/' + game.img_logo_url + '.jpg'" :alt="game.name">
-                        </template>
                         <div class="p-4">
                             <a class="flex h-8 items-center mb-2" :href="'https://store.steampowered.com/app/' + game.appid" rel="noopener" target="_blank">
-                                <template x-if="game.img_logo_url === undefined && game.img_icon_url !== undefined">
+                                <template x-if="game.img_icon_url !== undefined && game.img_icon_url !== ''">
                                     <img class="mr-2 rounded h-8 w-8" :src="'http://media.steampowered.com/steamcommunity/public/images/apps/' + game.appid + '/' + game.img_icon_url + '.jpg'" :alt="game.name">
+                                </template>
+                                <template x-if="game.img_icon_url === undefined || game.img_icon_url === ''">
+                                    <div class="mr-2 rounded h-8 w-8 bg-black"></div>
                                 </template>
                                 <p class="font-bold leading-none" x-text="game.name"></p>
                             </a>

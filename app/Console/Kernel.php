@@ -2,6 +2,7 @@
 
 namespace App\Console;
 
+use App\Jobs\UpdateSteamAccounts;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -20,6 +21,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('ban:delete-expired')->everyMinute();
         $schedule->command('mission:close')->everyMinute();
         $schedule->command('updater:clean')->daily();
+        $schedule->job(new UpdateSteamAccounts)->timezone('Asia/Seoul')->monthlyOn(1, '04:00');
     }
 
     /**

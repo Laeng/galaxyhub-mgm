@@ -17,7 +17,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Str;
 use Ramsey\Uuid\Uuid;
 
-class ProcessSteamUserAccount implements ShouldQueue
+class CreateSteamAccount implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 

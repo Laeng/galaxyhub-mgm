@@ -2,10 +2,12 @@
 
 namespace App\Services\User;
 
+use App\Enums\BanCommentType;
 use App\Enums\UserRecordType;
 use App\Models\User as UserModel;
 use App\Models\UserAccount;
 use App\Models\UserRecord;
+use App\Repositories\Ban\Interfaces\BanRepositoryInterface;
 use App\Repositories\User\Interfaces\UserAccountRepositoryInterface;
 use App\Repositories\User\Interfaces\UserRecordRepositoryInterface;
 use App\Repositories\User\Interfaces\UserRepositoryInterface;
@@ -22,15 +24,17 @@ class UserService implements UserServiceContract
     private UserRepositoryInterface $userRepository;
     private UserAccountRepositoryInterface $userAccountRepository;
     private UserRecordRepositoryInterface $recordRepository;
+    private BanRepositoryInterface $banRepository;
 
     public function __construct
     (
         UserRepositoryInterface $userRepository, UserAccountRepositoryInterface $userAccountRepository,
-        UserRecordRepositoryInterface $recordRepository)
+        UserRecordRepositoryInterface $recordRepository, BanRepositoryInterface $banRepository)
     {
         $this->userRepository = $userRepository;
         $this->userAccountRepository = $userAccountRepository;
         $this->recordRepository = $recordRepository;
+        $this->banRepository = $banRepository;
     }
 
     public function createUser(array $attributes): ?UserModel
@@ -121,10 +125,6 @@ class UserService implements UserServiceContract
 
     public function createRecord(int $userId, string $type, array $data, ?int $recorderId = null): ?UserRecord
     {
-        $steamAccount = $this->userAccountRepository->findSteamAccountByUserId($userId);
-
-        if (is_null($steamAccount)) return null;
-
         $uuid = $this->recordRepository->getUuidV5($userId);
 
         return $this->recordRepository->create([
@@ -134,6 +134,66 @@ class UserService implements UserServiceContract
             'data' => $data,
             'uuid' => $uuid
         ]);
+    }
+
+    public function editRecord(int $userId, string $type, array $data): ?bool
+    {
+        $query = $this->recordRepository->findByUserIdAndType($userId, $type);
+
+        if ($query->count() < 0)
+        {
+            return false;
+        }
+
+        $record = $query->first();
+        $record->data = $data;
+
+        $record->save();
+
+        return true;
+    }
+
+    public function ban(int $userId, ?string $reason = null, ?int $days = null, ?int $executeId = null): bool
+    {
+        $user = $this->userRepository->findById($userId);
+
+        if (!is_null($user))
+        {
+            $data = [
+                'comment' => $reason,
+            ];
+
+            if ($days != null) {
+                $data['expired_at'] = now()->addDays($days);
+            }
+
+            $user->ban($data);
+            $this->createRecord($user->id, UserRecordType::BAN_DATA->name, $data, $executeId);
+
+            return true;
+        }
+
+        return false;
+    }
+
+    public function unban(int $userId, string $reason = null, $executeId = null): bool
+    {
+        $user = $this->userRepository->findById($userId);
+
+        if (!is_null($user))
+        {
+            $ban = $this->banRepository->findByUserId($user->id)->first();
+            $type = !is_null($ban) && $ban->comment === BanCommentType::USER_PAUSE->value ? UserRecordType::USER_PAUSE_DISABLE : UserRecordType::UNBAN_DATA;
+
+            $user->unban();
+            $this->createRecord($user->id, $type->name, [
+                'comment' => $reason
+            ], $executeId);
+
+            return true;
+        }
+
+        return false;
     }
 
     public function delete(int $userId): bool

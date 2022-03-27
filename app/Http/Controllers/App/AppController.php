@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\App;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\UpdateSteamAccounts;
 use App\Repositories\Mission\Interfaces\MissionRepositoryInterface;
 use App\Repositories\User\Interfaces\UserMissionRepositoryInterface;
 use Illuminate\Contracts\Foundation\Application;

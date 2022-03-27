@@ -5,7 +5,7 @@ namespace App\Http\Controllers\App\Application;
 use App\Enums\RoleType;
 use App\Enums\UserRecordType;
 use App\Http\Controllers\Controller;
-use App\Jobs\ProcessSteamUserAccount;
+use App\Jobs\CreateSteamAccount;
 use App\Repositories\Survey\Interfaces\SurveyEntryRepositoryInterface;
 use App\Repositories\User\Interfaces\UserAccountRepositoryInterface;
 use App\Services\Steam\Contracts\SteamServiceContract;
@@ -98,7 +98,7 @@ class FormController extends Controller
                 throw new \Exception('스팀 프로필이 친구 공개 또는 비공개 상태입니다. 프로필을 공개로 변경해 주십시오.');
             }
 
-            ProcessSteamUserAccount::dispatch($user);
+            CreateSteamAccount::dispatch($user);
 
             $surveyEntryRepository->new()->for($form)->by($user)->fromArray($answers)->push();
 
