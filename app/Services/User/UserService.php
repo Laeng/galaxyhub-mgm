@@ -127,7 +127,7 @@ class UserService implements UserServiceContract
     {
         $query = $this->recordRepository->findByUserIdAndType($userId, $type);
 
-        if ($query->count() < 0)
+        if ($query->count() <= 0)
         {
             $steamAccount = $this->userAccountRepository->findSteamAccountByUserId($userId)->first();
             $uuid = $this->recordRepository->getUuidV5($steamAccount->account_id);
@@ -151,7 +151,7 @@ class UserService implements UserServiceContract
     {
         $query = $this->recordRepository->findByUserIdAndType($userId, $type);
 
-        if ($query->count() < 0)
+        if ($query->count() <= 0)
         {
             $this->createRecord($userId, $type, $data, $recorderId);
         }
