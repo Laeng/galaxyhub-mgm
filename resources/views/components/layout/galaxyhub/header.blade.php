@@ -36,7 +36,7 @@
                     </svg>
                 </button>
                 <div class="hidden lg:block col-span-2 lg:col-auto lg:ml-5" :class="{'hidden': !modal_navigation, 'block': modal_navigation}">
-                    <div class="fixed lg:static top-0 right-0 h-full w-full lg:top-auto lg:right-auto lg:w-auto lg:w-auto lg:bg-transparent navigation text-white my-8 lg:my-0" :class="{'bg-gray-900': modal_navigation}" >
+                    <div class="fixed lg:static top-0 right-0 h-full w-full lg:top-auto lg:right-auto lg:w-auto lg:w-auto lg:bg-transparent navigation text-white" :class="{'bg-gray-900': modal_navigation}" >
                         {!! $menu->render(); !!}
                     </div>
                 </div>

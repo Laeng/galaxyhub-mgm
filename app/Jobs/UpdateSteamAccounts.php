@@ -73,7 +73,7 @@ class UpdateSteamAccounts implements ShouldQueue
 
                             $data = [
                                 UserRecordType::STEAM_DATA_SUMMARIES->name => $playerSummaries['response']['players'][0],
-                                UserRecordType::STEAM_DATA_GAMES->name => $steamOwnedGames,
+                                UserRecordType::STEAM_DATA_GAMES->name => $steamOwnedGames['response'],
                                 UserRecordType::STEAM_DATA_ARMA3->name => $steamService->getOwnedGames($accountId, true, true, [107410])['response']['games']['0'],
                                 UserRecordType::STEAM_DATA_BANS->name => $steamService->getPlayerBans($accountId)['players']['0'],
                                 UserRecordType::STEAM_DATA_GROUPS->name => $groups
