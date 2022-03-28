@@ -11,7 +11,7 @@
                                     <img class="mr-2 rounded h-8 w-8" :src="'http://media.steampowered.com/steamcommunity/public/images/apps/' + game.appid + '/' + game.img_icon_url + '.jpg'" :alt="game.name">
                                 </template>
                                 <template x-if="game.img_icon_url === undefined || game.img_icon_url === ''">
-                                    <div class="mr-2 rounded h-8 w-8 bg-black"></div>
+                                    <div class="mr-2 rounded h-8 w-8 bg-black flex-shrink-0 flex items-center justify-center text-white">?</div>
                                 </template>
                                 <p class="font-bold leading-none" x-text="game.name"></p>
                             </a>
