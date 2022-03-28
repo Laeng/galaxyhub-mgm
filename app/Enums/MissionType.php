@@ -30,25 +30,25 @@ enum MissionType: int  {
 
         if (in_array($role, [RoleType::MAKER2->name, RoleType::ADMIN->name]))
         {
-            $types = array_merge($types, [
+            $types += array(
                 self::NIGHT_OF_ARMA->value => self::getKoreanNames()[self::NIGHT_OF_ARMA->value]
-            ]);
+            );
         }
 
         if (in_array($role, [RoleType::MAKER1->name, RoleType::MAKER2->name, RoleType::ADMIN->name]))
         {
-            $types = array_merge($types, [
+            $types += array(
                 self::MISSION->value => self::getKoreanNames()[self::MISSION->value],
                 self::NON_MISSION_MAKER->value => self::getKoreanNames()[self::NON_MISSION_MAKER->value]
-            ]);
+            );
         }
 
         if ($role === RoleType::ADMIN->name)
         {
-            $types = array_merge($types, [
+            $types += array(
                 self::BOOTCAMP->value => self::getKoreanNames()[self::BOOTCAMP->value],
                 self::SERVICE_RIBBON_TEST->value => self::getKoreanNames()[self::SERVICE_RIBBON_TEST->value]
-            ]);
+            );
         }
 
         return $types;
