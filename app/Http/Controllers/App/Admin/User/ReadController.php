@@ -284,8 +284,8 @@ class ReadController extends Controller
 
                     if ($mission->user_id !== $user->id)
                     {
-                        $hasFailAttendance = $userMission->try_attends >= $this->userMissionRepository::MAX_ATTENDANCE_ATTEMPTS;
-                        $hasAttend = !is_null($userMission->attended_at);
+                        $hasFailAttendance = $item->try_attends >= $this->userMissionRepository::MAX_ATTENDANCE_ATTEMPTS;
+                        $hasAttend = !is_null($item->attended_at);
                         $canAttend = !$hasFailAttendance && $mission->phase === MissionPhaseType::IN_ATTENDANCE->value;
 
                         if ($mission->phase >= MissionPhaseType::IN_ATTENDANCE->value)
