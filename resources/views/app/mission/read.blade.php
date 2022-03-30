@@ -49,7 +49,7 @@
             </div>
 
             <div class="flex flex-col space-y-2" x-cloak>
-                <h2 class="text-xl lg:text-2xl font-bold" x-tooltip="크아앙!">참가자</h2>
+                <h2 class="text-xl lg:text-2xl font-bold">참가자</h2>
                 <div class="">
                     <div class="grid grid-cols-1 gap-4 lg:grid-cols-2">
                         <template x-for="i in data.participants.data.participants">
@@ -63,7 +63,7 @@
                                     <p class="text-sm text-gray-500 dark:text-gray-300 truncate tabular-nums" x-text="i.attend + '회 참가'"></p>
                                     <div class="mt-1 flex flex-row flex-wrap">
                                         <template x-for="ii in i.badges">
-                                            <img class="h-5 w-5 p-0.5" :alt="ii.name" :title="ii.name" :src="ii.icon" x-tooltip="ii.name">
+                                            <img class="h-5 w-5 p-0.5" :alt="ii.name" :title="ii.name" :src="ii.icon">
                                         </template>
                                     </div>
                                 </div>

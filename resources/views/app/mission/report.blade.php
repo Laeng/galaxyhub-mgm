@@ -51,7 +51,7 @@
                                         <li class="py-2">
                                             <div class="flex space-x-3">
                                                 @if($isAdmin)
-                                                    <a href="{{ route('staff.user.read', $userAnswer['user']->id) }}" target="_blank" class="link-indigo pb-1">{{ $userAnswer['user']->name }}</a>
+                                                    <a href="{{ route('admin.user.read', $userAnswer['user']->id) }}" target="_blank" class="link-indigo pb-1">{{ $userAnswer['user']->name }}</a>
                                                 @endif
                                                 <p class="text-sm text-gray-900 dark:text-gray-100">
                                                     {{ $userAnswer['answer'] }}
