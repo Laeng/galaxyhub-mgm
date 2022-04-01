@@ -51,9 +51,15 @@ class Mission extends Model
     {
         return $this->belongsTo(User::class);
     }
+
     public function participants(): HasMany
     {
         return $this->hasMany(UserMission::class);
+    }
+
+    public function survey(): ?HasOne
+    {
+        return $this->hasOne(Survey::class, 'id', 'survey_id');
     }
 
 }
