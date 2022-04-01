@@ -70,26 +70,26 @@ class ApplicationQuestion extends Question
 
         $two->questions()->create([
             'title' => '타 커뮤니티 이름',
-            'type' => 'long-text',
             'content' => '활동하셨거나 활동 중인 아르마 관련 커뮤니티(클랜, 카페, 디스코드) 이름을 모두 기재하여 주십시오.',
+            'type' => 'long-text',
         ]);
 
         $two->questions()->create([
             'title' => '타 커뮤니티 닉네임',
-            'type' => 'long-text',
             'content' => '아르마 관련 커뮤니티(클랜, 카페, 디스코드)에서 활동 중이거나 활동 시 사용하셨던 닉네임을 기재하여 주십시오.',
+            'type' => 'long-text',
         ]);
 
         $two->questions()->create([
             'title' => '(탈퇴 하였다면) 탈퇴 이유',
-            'type' => 'long-text',
             'content' => '해당 커뮤니티(클랜, 카페, 디스코드)를 탈퇴하셨다면 탈퇴 이유를 기재하여 주십시오. 탈퇴 이유를 피드백 받아 본 카페 운영에 참조하도록 하겠습니다.',
+            'type' => 'long-text',
         ]);
 
         $two->questions()->create([
             'title' => '탈퇴를 증명할 수 있는 자료',
-            'type' => 'image',
             'content' => '해당 커뮤니티(클랜, 카페, 디스코드)를 탈퇴했음을 증명할 수 있는 스크린샷을 업로드하여 주십시오.',
+            'type' => 'image',
         ]);
 
 

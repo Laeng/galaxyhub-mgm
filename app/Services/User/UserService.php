@@ -123,47 +123,42 @@ class UserService implements UserServiceContract
         }
     }
 
+    public function getRecord(int $userId, string $type): Collection
+    {
+        return $this->recordRepository->findByUserIdAndType($userId, $type);
+    }
+
     public function createRecord(int $userId, string $type, array $data, ?int $recorderId = null): ?UserRecord
     {
-        $query = $this->recordRepository->findByUserIdAndType($userId, $type);
+        $steamAccount = $this->userAccountRepository->findSteamAccountByUserId($userId)->first();
+        $uuid = $this->recordRepository->getUuidV5($steamAccount->account_id);
 
-        if ($query->count() <= 0)
-        {
-            $steamAccount = $this->userAccountRepository->findSteamAccountByUserId($userId)->first();
-            $uuid = $this->recordRepository->getUuidV5($steamAccount->account_id);
-
-            return $this->recordRepository->create([
-                'user_id' => $userId,
-                'recorder_id' => $recorderId,
-                'type' => $type,
-                'data' => $data,
-                'uuid' => $uuid
-            ]);
-        }
-        else
-        {
-            $this->editRecord($userId, $type, $data, $recorderId);
-            return $this->recordRepository->findByUserIdAndType($userId, $type)->first();
-        }
+        return $this->recordRepository->create([
+            'user_id' => $userId,
+            'recorder_id' => $recorderId,
+            'type' => $type,
+            'data' => $data,
+            'uuid' => $uuid
+        ]);
     }
 
     public function editRecord(int $userId, string $type, array $data, ?int $recorderId = null): ?bool
     {
-        $query = $this->recordRepository->findByUserIdAndType($userId, $type);
+        $query = $this->getRecord($userId, $type);
 
-        if ($query->count() <= 0)
-        {
-            $this->createRecord($userId, $type, $data, $recorderId);
-        }
-        else
+        if ($query->count() > 0)
         {
             $record = $query->first();
             $record->data = $data;
 
             $record->save();
-        }
 
-        return true;
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
     public function ban(int $userId, ?string $reason = null, ?int $days = null, ?int $executeId = null): bool

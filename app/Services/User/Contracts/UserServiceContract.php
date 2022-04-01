@@ -15,6 +15,8 @@ interface UserServiceContract
 {
     public function createUser(array $attributes): ?User;
 
+    public function getRecord(int $userId, string $type): Collection;
+
     public function createRecord(int $userId, string $type, array $data, ?int $recorderId = null): ?UserRecord;
 
     public function editRecord(int $userId, string $type, array $data): ?bool;

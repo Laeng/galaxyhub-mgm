@@ -72,7 +72,14 @@ class CreateSteamAccount implements ShouldQueue
 
                 foreach ($data as $k => $v)
                 {
-                    $userService->createRecord($userId, $k, $v);
+                    if ($userService->getRecord($userId, $k)->count() > 0)
+                    {
+                        $userService->editRecord($userId, $k, $v);
+                    }
+                    else
+                    {
+                        $userService->createRecord($userId, $k, $v);
+                    }
                 }
             }
         }

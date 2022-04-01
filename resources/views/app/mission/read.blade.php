@@ -23,6 +23,7 @@
                         <ul>
                             <li>만약 {{ $type }} 시작이 늦을 경우 참가자 분들께 즉시 알려주세요.</li>
                             <li>출석 코드 발급은 {{ $type }} 종료 처리를 해주시면 됩니다.</li>
+                            <li>{{ $type }} 종료 처리 이후에는 참가 신청이 안되므로 참가 신청 안하신 분들 참가 신청하도록 안내 부탁드립니다.</li>
                             <li>{{ $type }} 시작 처리 이후에는 {{ $type }} 내용과 시간을 수정할 수 없습니다!</li>
                         </ul>
                     </x-alert.galaxyhub.info>
@@ -35,6 +36,27 @@
                         </ul>
                     </x-alert.galaxyhub.info>
                 @endif
+                <template x-if="!data.load.data.is_participant && data.load.data.can_tardy && (data.load.data.phase === 0 || data.load.data.phase === 1)">
+                    <x-alert.galaxyhub.success title="참가 신청 가능">
+                        <ul>
+                            <li>현재 참가 신청 가능한 {{ $type }} 입니다.</li>
+                        </ul>
+                    </x-alert.galaxyhub.success>
+                </template>
+                <template x-if="!data.load.data.is_participant && !data.load.data.can_tardy && (data.load.data.phase === 0 || data.load.data.phase === 1)">
+                    <x-alert.galaxyhub.warning title="중도 참여 불가">
+                        <ul>
+                            <li>중도 참여가 불가능한 {{ $type }} 입니다. </li>
+                        </ul>
+                    </x-alert.galaxyhub.warning>
+                </template>
+                <template x-if="!data.load.data.is_participant && (data.load.data.phase === -1 || data.load.data.phase === 3)">
+                    <x-alert.galaxyhub.warning title="참가 신청 불가">
+                        <ul>
+                            <li><span x-show="data.load.data.phase === -1">취소된 </span><span x-show="data.load.data.phase === 3">종료된 </span>{{ $type }} 이므로 참가 신청을 할 수 없습니다.</li>
+                        </ul>
+                    </x-alert.galaxyhub.warning>
+                </template>
                 <template x-if="data.load.data.is_edit">
                     <x-alert.galaxyhub.warning title="새로고침 필요">
                         <ul>

@@ -67,7 +67,11 @@ class UpdateSteamAccounts implements ShouldQueue
                                 foreach($playerGroups as $id)
                                 {
                                     $data = $steamService->getGroupSummary($id['gid']);
-                                    $groups[] = array_merge($data['groupDetails'], ['groupID64' => $data['groupID64']]);
+
+                                    if (array_key_exists('groupDetails', $data))
+                                    {
+                                        $groups[] = array_merge($data['groupDetails'], ['groupID64' => $data['groupID64']]);
+                                    }
                                 }
                             }
 
@@ -81,7 +85,10 @@ class UpdateSteamAccounts implements ShouldQueue
 
                             foreach ($data as $k => $v)
                             {
-                                $userService->editRecord($userId, $k, $v);
+                                if (!$userService->editRecord($userId, $k, $v))
+                                {
+                                    $userService->createRecord($userId, $k, $v);
+                                }
                             }
 
                             continue;
