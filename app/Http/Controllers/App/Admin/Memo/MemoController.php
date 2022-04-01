@@ -74,6 +74,12 @@ class MemoController extends Controller
 
                     $comment = "<div class='grid grid-cols-2 gap-2 pt-2'>{$html}</div>";
                 }
+                elseif($record->type === UserRecordType::BAN_DATA)
+                {
+                    $comment = $record->data['comment'];
+                    $comment = array_key_exists($comment, \App\Enums\BanCommentType::getKoreanNames()) ? \App\Enums\BanCommentType::getKoreanNames()[$comment] : $comment;
+                    $comment = nl2br($comment);
+                }
                 else
                 {
                     $comment = nl2br($record->data['comment']);
