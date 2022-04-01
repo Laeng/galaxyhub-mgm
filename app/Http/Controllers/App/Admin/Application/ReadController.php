@@ -168,6 +168,7 @@ class ReadController extends Controller
 
             if (is_null($summaries) || count($summaries->data) <= 0)
             {
+                $summaries = new \stdClass();
                 $summaries->data = [
                     'steamid' => ''
                 ];
@@ -177,6 +178,7 @@ class ReadController extends Controller
 
             if (is_null($group) || count($group->data) <= 0)
             {
+                $group = new \stdClass();
                 $group->data = [
                     'groupID64' => '',
                     'groupDetails' => [
@@ -191,8 +193,9 @@ class ReadController extends Controller
 
             if (is_null($arma3) || count($arma3->data) <= 0)
             {
+                $arma3 = new \stdClass();
                 $arma3->data = [
-                    'playtime_forever' => 0
+                    'playtime_forever' => ''
                 ];
             }
 
@@ -200,9 +203,10 @@ class ReadController extends Controller
 
             if (is_null($ban) || count($ban->data) <= 0)
             {
+                $ban = new \stdClass();
                 $ban->data = [
-                    'NumberOfVACBans' => 0,
-                    'NumberOfGameBans' => 0
+                    'NumberOfVACBans' => 'NaN',
+                    'NumberOfGameBans' => 'NaN'
                 ];
             }
 
@@ -227,7 +231,7 @@ class ReadController extends Controller
                 'arma' => $arma3?->data,
                 'ban' => $ban?->data,
                 'naver_id' => $naverId,
-                'created_at' => "{$summaries->updated_at->format('Y-m-d')} 기준",
+                'created_at' => isset($summaries->updated_at) ? "{$summaries->updated_at->format('Y-m-d')} 기준" : '',
             ]);
         }
         catch (\Exception $e)

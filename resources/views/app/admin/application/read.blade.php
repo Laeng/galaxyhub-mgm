@@ -1,15 +1,15 @@
 <x-theme.galaxyhub.sub-content :title="$title" :description="$title" :breadcrumbs="Diglactic\Breadcrumbs\Breadcrumbs::render('app.admin.application', $user->name)">
     <div class="space-y-2 mb-4">
         @if($isBanned)
-            <x-alert.galaxyhub.danger title="경고">
+            <x-alert.galaxyhub.warning title="주의">
                 <p class="font-bold">과거 무기한 활동 정지 이력이 있는 가입 신청자입니다.</p>
-            </x-alert.galaxyhub.danger>
+            </x-alert.galaxyhub.warning>
         @endif
 
         @if(!$isBanned && $isRejoin)
-            <x-alert.galaxyhub.danger title="주의">
+            <x-alert.galaxyhub.warning title="주의">
                 <p class="font-bold">과거 탈퇴 기록이 있는 가입 신청자 입니다. 활동 기록을 확인하여 주십시오.</p>
-            </x-alert.galaxyhub.danger>
+            </x-alert.galaxyhub.warning>
         @endif
     </div>
 
@@ -22,6 +22,11 @@
         <div class="self-start p-4 lg:p-8 md:basis-2/5 lg:basis-1/3 flex flex-col space-y-4">
             <div class="flex flex-col space-y-2">
                 <h2 class="text-xl lg:text-2xl font-bold">부가 정보 <span class="text-xs font-normal" x-text="data.load.data.created_at"></span></h2>
+                <template x-if="data.load.data.summaries.steamid === ''">
+                    <x-alert.galaxyhub.danger title="정보 없음">
+                        <p>등록된 Steam 정보가 없습니다.</p>
+                    </x-alert.galaxyhub.danger>
+                </template>
                 <ul class="divide-y divide-gray-200 dark:divide-gray-800">
                     <li class="py-4">
                         <div class="flex justify-between">
