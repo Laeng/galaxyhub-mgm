@@ -52,7 +52,7 @@ class UpdaterRepository extends BaseRepository implements UpdaterRepositoryInter
 
     public function findUnusedOverDay(array $columns = ['*'], array $relations = []): ?Collection
     {
-        return $this->model->select($columns)->whereNull('user_id')->whereBetween('created_at', [today()->subYear(), today()->subDay()])->with($relations)->latest('updated_at')->get();
+        return $this->model->select($columns)->whereNull('user_id')->whereBetween('updated_at', [today()->subYear(), today()->subDay()])->with($relations)->latest('updated_at')->get();
     }
 
     public function findOver6MonthsByUserId(int $userId, array $columns = ['*'], array $relations = []): ?Collection

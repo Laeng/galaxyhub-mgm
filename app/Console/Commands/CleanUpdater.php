@@ -42,8 +42,7 @@ class CleanUpdater extends Command
 
         foreach ($updaters as $item)
         {
-            $item->phase = 3;
-            $item->save();
+            $item->delete();
         }
 
         return 0;

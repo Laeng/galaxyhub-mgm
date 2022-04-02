@@ -19,7 +19,9 @@
                                 <div class="ml-3">
                                     <h3 class="text-sm font-bold text-red-800 dark:text-red-200">활동 정지된 회원입니다.</h3>
                                     <div class="mt-2 text-sm text-red-700 dark:text-red-300">
-                                        <p>해제 예정 날짜: <span x-text="data.load.data.ban">무기한</span></p>
+                                        <ul>
+                                            <li>해제 예정 날짜: <span x-text="data.load.data.ban"></span></li>
+                                        </ul>
                                     </div>
                                 </div>
                             </div>

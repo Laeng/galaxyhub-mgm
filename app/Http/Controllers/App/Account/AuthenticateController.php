@@ -66,8 +66,7 @@ class AuthenticateController extends Controller
             ];
 
             $user = $this->authService->createUser($accountArray);
-
-            Auth::login($user);
+            Auth::login($user, true);
 
             $request->session()->regenerate();
 

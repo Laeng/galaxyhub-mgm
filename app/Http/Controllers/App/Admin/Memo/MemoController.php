@@ -77,8 +77,7 @@ class MemoController extends Controller
                 elseif($record->type === UserRecordType::BAN_DATA)
                 {
                     $comment = $record->data['comment'];
-                    $comment = array_key_exists($comment, \App\Enums\BanCommentType::getKoreanNames()) ? \App\Enums\BanCommentType::getKoreanNames()[$comment] : $comment;
-                    $comment = nl2br($comment);
+                    $comment = array_key_exists($comment, \App\Enums\BanCommentType::getKoreanNames()) ? \App\Enums\BanCommentType::getKoreanNames()[$comment] : nl2br($comment);
                 }
                 else
                 {

@@ -25,12 +25,12 @@
                 <p class="text-sm text-purple-600 hover:text-purple-700 dark:hover:text-purple-500">예정된 미션</p>
                 <p class="text-base">{{ !is_null($latestMission) ? $latestMission->title : '--' }}</p>
             </a>
-            <div class="p-8 border-gray-300 dark:border-gray-800 text-center rounded-b-lg md:rounded-bl-none lg:rounded-tr-lg hover:shadow-inner hover:bg-gray-200 dark:hover:bg-[#080C15]/50">
+            <a href="ts3server://ts3.galaxyhub.kr?port=9987" class="p-8 border-gray-300 dark:border-gray-800 text-center rounded-b-lg md:rounded-bl-none lg:rounded-tr-lg hover:shadow-inner hover:bg-gray-200 dark:hover:bg-[#080C15]/50">
                 <p class="text-sm text-indigo-600 hover:text-indigo-700 dark:hover:text-indigo-500">팀스피크</p>
                 <ul class="text-base">
                     <li>ts3.galaxyhub.kr</li>
                 </ul>
-            </div>
+            </a>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 my-6 gap-4">
