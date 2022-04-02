@@ -44,7 +44,8 @@
                             </div>
                             <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4">
                                 <dt class="text-sm font-medium text-gray-500 dark:text-gray-300">Steam&reg; 고유번호</dt>
-                                <dd class="mt-1 text-sm text-gray-900 dark:text-gray-100 sm:mt-0 sm:col-span-2">{{ $steamAccount->account_id }}</dd>
+                                <dd class="mt-1 text-sm text-gray-900 dark:text-gray-100 sm:mt-0 sm:col-span-2">
+                                    <a href="https://steamcommunity.com/profiles/{{ $steamAccount->account_id }}" target="_blank" rel="noopener" class="link-indigo">{{ $steamAccount->account_id }}</a></dd>
                             </div>
                             <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4">
                                 <dt class="text-sm font-medium text-gray-500 dark:text-gray-300">권한 [<span class="link-indigo cursor-pointer" @click="edit.group = !edit.group" x-text="!edit.group ? '변경' : '취소'"></span>]</dt>

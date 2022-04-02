@@ -45,57 +45,10 @@ class UpdateSteamAccounts implements ShouldQueue
             foreach ($users as $user) {
                 if ($user->hasAnyRole([RoleType::MEMBER->name, RoleType::MAKER1->name, RoleType::MAKER2->name]))
                 {
-                    $steamAccount = $userAccountRepository->findSteamAccountByUserId($user->id)->first();
-
-                    if (is_null($steamAccount)) continue;
-
-                    $userId = $user->id;
-                    $accountId = $steamAccount->account_id;
-                    $playerSummaries = $steamService->getPlayerSummaries($accountId);
-
-                    if ($playerSummaries['response']['players'][0]['communityvisibilitystate'] == 3)
+                    if (!$userService->updateSteamAccount($user->id))
                     {
-                        $steamOwnedGames = $steamService->getOwnedGames($steamAccount->account_id);
-
-                        if (count($steamOwnedGames['response']) > 0)
-                        {
-                            $playerGroups = $steamService->getPlayerGroups($playerSummaries['response']['players'][0]['steamid'])['response']['groups'];
-                            $groups = array();
-
-                            if (count($playerGroups) > 0)
-                            {
-                                foreach($playerGroups as $id)
-                                {
-                                    $data = $steamService->getGroupSummary($id['gid']);
-
-                                    if (array_key_exists('groupDetails', $data))
-                                    {
-                                        $groups[] = array_merge($data['groupDetails'], ['groupID64' => $data['groupID64']]);
-                                    }
-                                }
-                            }
-
-                            $data = [
-                                UserRecordType::STEAM_DATA_SUMMARIES->name => $playerSummaries['response']['players'][0],
-                                UserRecordType::STEAM_DATA_GAMES->name => $steamOwnedGames['response'],
-                                UserRecordType::STEAM_DATA_ARMA3->name => $steamService->getOwnedGames($accountId, true, true, [107410])['response']['games']['0'],
-                                UserRecordType::STEAM_DATA_BANS->name => $steamService->getPlayerBans($accountId)['players']['0'],
-                                UserRecordType::STEAM_DATA_GROUPS->name => $groups
-                            ];
-
-                            foreach ($data as $k => $v)
-                            {
-                                if (!$userService->editRecord($userId, $k, $v))
-                                {
-                                    $userService->createRecord($userId, $k, $v);
-                                }
-                            }
-
-                            continue;
-                        }
+                        $userService->ban($user->id, BanCommentType::STEAM_PROFILE_STATUS_PRIVATE->name);
                     }
-
-                    $userService->ban($userId, BanCommentType::STEAM_PROFILE_STATUS_PRIVATE->name);
                 }
             }
         });

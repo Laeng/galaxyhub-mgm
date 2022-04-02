@@ -15,11 +15,11 @@
                         </template>
                         <template x-for="(v, i) in data.list.data.th">
                             <template x-if="!data.list.data.mobile || (data.list.data.mobile && data.list.data.th.length -1 !== i)">
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider whitespace-nowrap" :class="data.list.data.mobile ? 'hidden md:table-cell' : ''" x-html="v"></th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider whitespace-nowrap tabular-nums" :class="data.list.data.mobile ? 'hidden md:table-cell' : ''" x-html="v"></th>
                             </template>
                         </template>
                         <template x-if="data.list.data.mobile">
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider whitespace-nowrap md:hidden" x-html="window._.last(data.list.data.th)"></th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider whitespace-nowrap md:hidden tabular-nums" x-html="window._.last(data.list.data.th)"></th>
                         </template>
                     </tr>
                     </thead>
@@ -36,11 +36,11 @@
                             </template>
                             <template x-for="(vv, ii) in v">
                                 <template x-if="!data.list.data.mobile || (data.list.data.mobile && v.length -1 !== ii)">
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300" :class="data.list.data.mobile ? 'hidden md:table-cell' : ''" x-html="vv"></td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300 tabular-nums" :class="data.list.data.mobile ? 'hidden md:table-cell' : ''" x-html="vv"></td>
                                 </template>
                             </template>
                             <template x-if="data.list.data.mobile">
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300 md:hidden" x-html="window._.last(v)"></td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300 md:hidden tabular-nums" x-html="window._.last(v)"></td>
                             </template>
                         </tr>
                     </template>
