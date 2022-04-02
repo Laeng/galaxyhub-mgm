@@ -7,6 +7,7 @@ use App\Enums\MissionPhaseType;
 use App\Enums\MissionType;
 use App\Enums\PermissionType;
 use App\Enums\RoleType;
+use App\Enums\UserRecordType;
 use App\Http\Controllers\Controller;
 use App\Repositories\Badge\Interfaces\BadgeRepositoryInterface;
 use App\Repositories\User\Interfaces\UserAccountRepositoryInterface;
@@ -14,6 +15,7 @@ use App\Repositories\User\Interfaces\UserBadgeRepositoryInterface;
 use App\Repositories\User\Interfaces\UserMissionRepositoryInterface;
 use App\Repositories\User\Interfaces\UserRepositoryInterface;
 use App\Services\Survey\Contracts\SurveyServiceContract;
+use App\Services\User\Contracts\UserServiceContract;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -25,23 +27,26 @@ class ReadController extends Controller
     private UserRepositoryInterface $userRepository;
     private UserBadgeRepositoryInterface $userBadgeRepository;
     private UserMissionRepositoryInterface $userMissionRepository;
+    private UserServiceContract $userService;
 
     public function __construct
     (
         UserRepositoryInterface $userRepository, UserBadgeRepositoryInterface $userBadgeRepository,
         BadgeRepositoryInterface $badgeRepository, UserMissionRepositoryInterface $userMissionRepository,
+        UserServiceContract $userService
     )
     {
         $this->badgeRepository = $badgeRepository;
         $this->userRepository = $userRepository;
         $this->userBadgeRepository = $userBadgeRepository;
         $this->userMissionRepository = $userMissionRepository;
+        $this->userService = $userService;
     }
 
     public function read
     (
         Request $request, int $userId, UserAccountRepositoryInterface $userAccountRepository,
-        SurveyServiceContract $surveyService,
+        SurveyServiceContract $surveyService
     ): View
     {
         $user = $this->userRepository->findById($userId);
@@ -127,6 +132,13 @@ class ReadController extends Controller
             $ban = is_null($userBan->expired_at) ? '무기한' : "{$userBan->expired_at->format('Y년 m월 d일 H시 i분')} 까지";
         }
 
+        $steamPlayer = $this->userService->getRecord($user->id, UserRecordType::STEAM_DATA_SUMMARIES->name);
+        $steamDataDate = '등록 안됨';
+        if ($steamPlayer->count() > 0)
+        {
+            $steamDataDate = $steamPlayer->first()->updated_at->format('Y-m-d H:i:s');
+        }
+
         return view('app.admin.user.read', [
             'title' => $user->name,
             'user' => $user,
@@ -142,7 +154,8 @@ class ReadController extends Controller
             'discordName' => $discordName,
             'birthday' => $birthday,
             'types' => MissionType::getKoreanNames(),
-            'ban' => $ban
+            'ban' => $ban,
+            'steamDataDate' => $steamDataDate
         ]);
 
     }
@@ -184,12 +197,20 @@ class ReadController extends Controller
                 $ban = is_null($userBan->expired_at) ? '무기한' : "{$userBan->expired_at->format('Y년 m월 d일 H시 i분')} 까지";
             }
 
+            $steamPlayer = $this->userService->getRecord($user->id, UserRecordType::STEAM_DATA_SUMMARIES->name);
+            $steamDataDate = '등록 안됨';
+            if ($steamPlayer->count() > 0)
+            {
+                $steamDataDate = $steamPlayer->first()->updated_at->format('Y-m-d H:i:s');
+            }
+
             return $this->jsonResponse(200, 'SUCCESS', [
                 'badges' => $userBadge,
                 'group' => RoleType::getKoreanNames()[$role->name],
                 'mission_count' => $missionCount,
                 'mission_date' => $missionLatest,
-                'ban' => $ban
+                'ban' => $ban,
+                'steam_date' => $steamDataDate
             ]);
         }
         catch (\Exception $e)
@@ -453,5 +474,4 @@ class ReadController extends Controller
             return $this->jsonResponse($e->getCode(), $e->getMessage(), config('app.debug') ? $e->getTrace() : []);
         }
     }
-
 }

@@ -129,6 +129,19 @@
                                 <dt class="text-sm font-medium text-gray-500 dark:text-gray-300">생년월일</dt>
                                 <dd class="mt-1 text-sm text-gray-900 dark:text-gray-100 sm:mt-0 sm:col-span-2">{{ $birthday }}</dd>
                             </div>
+                            <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4">
+                                <dt class="text-sm font-medium text-gray-500 dark:text-gray-300">Steam 정보 [<span class="link-indigo cursor-pointer" @click="steam()">갱신</span>]</dt>
+                                <dd class="mt-1 text-sm text-gray-900 dark:text-gray-100 sm:mt-0 sm:col-span-2">
+                                    <template x-if="data.steam.lock">
+                                        <svg class='spinner h-5' viewBox='0 0 50 50'>
+                                            <circle class='path' cx='25' cy='25' r='20' fill='none' stroke-width='4'/>
+                                        </svg>
+                                    </template>
+                                    <template x-if="!data.steam.lock">
+                                        <p x-text="data.load.data.steam_date"></p>
+                                    </template>
+                                </dd>
+                            </div>
                         </dl>
                     </div>
                 </div>
@@ -247,18 +260,19 @@
                 },
                 data: {
                     load: {
-                        url: '{{ route('admin.user.read.data', $user->id) }}',
+                        url: '{{ route('admin.user.read.data', [$user->id]) }}',
                         body: {},
                         data: {
                             group: '{{ $group }}',
                             mission_count: '{{ $missionCount }}',
                             mission_date: '{{ $missionLatest }}',
                             badges: {!! $userBadge !!},
-                            ban: '{{ $ban }}'
+                            ban: '{{ $ban }}',
+                            steam_date: '{{ $steamDataDate }}'
                         },
                     },
                     badges: {
-                        url: '{{ route('admin.user.read.badge', $user->id) }}',
+                        url: '{{ route('admin.user.read.badge', [$user->id]) }}',
                         body: {
                             badges: []
                         },
@@ -302,6 +316,11 @@
                                 type: ''
                             },
                         },
+                    },
+                    steam: {
+                        url: '{{ route('admin.application.read.steam', [$user->id]) }}',
+                        body: {},
+                        lock: false
                     },
                 },
                 badge() {
@@ -518,6 +537,57 @@
                         {
                             this.interval.load = setInterval(() => {this.post(this.data.load.url, this.data.load.body, success, error, complete)}, 5000);
                         }
+                    }
+                },
+                steam() {
+                    let success = (r) => {
+                        if (r.data.data !== null) {
+                            if (r.data.data.result) {
+                                window.modal.alert('처리 완료', '스팀 프로필 갱신에 성공하였습니다.', (c) => {
+                                    this.load();
+                                });
+                            } else {
+                                window.modal.alert('처리 실패', '스팀 프로필이 비공개 상태입니다.', (c) => {
+                                    this.load();
+                                }, 'error');
+                            }
+                        }
+                    };
+
+                    let error = (e) => {
+                        if (typeof e.response !== 'undefined') {
+                            if (e.response.status === 415) {
+                                //CSRF 토큰 오류 발생
+                                window.modal.alert('처리 실패', '로그인 정보를 확인할 수 없습니다.', (c) => {
+                                    Location.reload();
+                                }, 'error');
+                                return;
+                            }
+
+                            if (e.response.status === 422) {
+                                let msg = '';
+                                switch (e.response.data.description) {
+                                    default:
+                                        msg = e.response.data.description;
+                                        break;
+                                }
+
+                                window.modal.alert('처리 실패', msg, (c) => {}, 'error');
+                                return;
+                            }
+                        }
+
+                        window.modal.alert('처리 실패', '데이터 처리 중 문제가 발생하였습니다.', (c) => {}, 'error');
+                        console.log(e);
+                    };
+
+                    let complete = () => {
+                        this.data.steam.lock = false;
+                    };
+
+                    if (!this.data.steam.lock) {
+                        this.data.steam.lock = true;
+                        this.post(this.data.steam.url, this.data.steam.body, success, error, complete);
                     }
                 },
                 init() {

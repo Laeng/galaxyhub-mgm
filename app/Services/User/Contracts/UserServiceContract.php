@@ -30,4 +30,6 @@ interface UserServiceContract
     public function findBanRecordByUuid(int $uuid): ?Collection;
 
     public function findRoleRecordeByUserId(int $userId, string $role): ?Collection;
+
+    public function updateSteamAccount(int $userId): bool;
 }

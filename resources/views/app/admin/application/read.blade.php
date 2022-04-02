@@ -22,11 +22,6 @@
         <div class="self-start p-4 lg:p-8 md:basis-2/5 lg:basis-1/3 flex flex-col space-y-4">
             <div class="flex flex-col space-y-2">
                 <h2 class="text-xl lg:text-2xl font-bold">부가 정보 <span class="text-xs font-normal" x-text="data.load.data.created_at"></span></h2>
-                <template x-if="data.load.data.summaries.steamid === ''">
-                    <x-alert.galaxyhub.danger title="정보 없음">
-                        <p>등록된 Steam 정보가 없습니다.</p>
-                    </x-alert.galaxyhub.danger>
-                </template>
                 <ul class="divide-y divide-gray-200 dark:divide-gray-800">
                     <li class="py-4">
                         <div class="flex justify-between">
@@ -152,6 +147,18 @@
             </div>
 
             <div class="flex flex-col space-y-2">
+                <template x-if="data.load.data.naver_id !== ''">
+                    <x-button.filled.md-white @click="steam()" type="button">
+                        <template x-if="data.steam.lock">
+                            <svg class='spinner h-5' viewBox='0 0 50 50'>
+                                <circle class='path' cx='25' cy='25' r='20' fill='none' stroke-width='4'/>
+                            </svg>
+                        </template>
+                        <template x-if="!data.steam.lock">
+                            <p>STEAM 프로필 갱신</p>
+                        </template>
+                    </x-button.filled.md-white>
+                </template>
                 <template x-if="data.load.data.summaries.steamid !== ''">
                     <x-button.filled.md-white @click="window.open('https://steamcommunity.com/profiles/' + data.load.data.summaries.steamid)" type="button">
                         STEAM 프로필 보기
@@ -202,6 +209,11 @@
                 data: {
                     process: {
                         url: '{{ route('admin.application.index.process') }}',
+                        body: {},
+                        lock: false
+                    },
+                    steam: {
+                        url: '{{ route('admin.application.read.steam', [$user->id]) }}',
                         body: {},
                         lock: false
                     },
@@ -294,6 +306,57 @@
                     }
                 },
                 @endif
+                steam() {
+                    let success = (r) => {
+                        if (r.data.data !== null) {
+                            if (r.data.data.result) {
+                                window.modal.alert('처리 완료', '스팀 프로필 갱신에 성공하였습니다.', (c) => {
+                                    this.load();
+                                });
+                            } else {
+                                window.modal.alert('처리 실패', '스팀 프로필이 비공개 상태입니다.', (c) => {
+                                    this.load();
+                                }, 'error');
+                            }
+                        }
+                    };
+
+                    let error = (e) => {
+                        if (typeof e.response !== 'undefined') {
+                            if (e.response.status === 415) {
+                                //CSRF 토큰 오류 발생
+                                window.modal.alert('처리 실패', '로그인 정보를 확인할 수 없습니다.', (c) => {
+                                    Location.reload();
+                                }, 'error');
+                                return;
+                            }
+
+                            if (e.response.status === 422) {
+                                let msg = '';
+                                switch (e.response.data.description) {
+                                    default:
+                                        msg = e.response.data.description;
+                                        break;
+                                }
+
+                                window.modal.alert('처리 실패', msg, (c) => {}, 'error');
+                                return;
+                            }
+                        }
+
+                        window.modal.alert('처리 실패', '데이터 처리 중 문제가 발생하였습니다.', (c) => {}, 'error');
+                        console.log(e);
+                    };
+
+                    let complete = () => {
+                        this.data.steam.lock = false;
+                    };
+
+                    if (!this.data.steam.lock) {
+                        this.data.steam.lock = true;
+                        this.post(this.data.steam.url, this.data.steam.body, success, error, complete);
+                    }
+                },
                 load() {
                     let success = (r) => {
                         if (r.data.data !== null) {

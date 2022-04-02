@@ -14,6 +14,7 @@ Route::prefix('app')->group(function () {
 
             //AJAX
             Route::post('/{userId}/data', [ReadController::class, 'data'])->name('read.data')->whereNumber('userId');
+            Route::post('/{userId}/steam', [ReadController::class, 'steam'])->name('read.steam')->whereNumber('userId');
         });
 
         Route::prefix('applications')->name('application.')->middleware(['auth.admin:web'])->group(function() {

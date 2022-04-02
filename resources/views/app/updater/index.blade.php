@@ -50,11 +50,15 @@
 
                     <div class="pt-2 grid grid-cols-1 lg:grid-cols-2 gap-2 lg:w-2/3">
                         <div class="flex justify-center lg:block">
-                            <x-button.filled.xl-blue class="w-full" x-html="(data.release.data.assets[0].browser_download_url !== '') ? '다운로드' : $el.innerHTML"
-                                                     @click="() => {location.href=(data.release.data.assets[0].browser_download_url !== '') ? data.release.data.assets[0].browser_download_url : '#'}">
-                                <svg class="spinner h-5" viewBox="0 0 50 50">
-                                    <circle class="path text-white" cx="25" cy="25" r="20" fill="none" stroke-width="4"></circle>
-                                </svg>
+                            <x-button.filled.xl-blue class="w-full" @click="() => {location.href=(data.release.data.assets[0].browser_download_url !== '') ? data.release.data.assets[0].browser_download_url : '#'}">
+                                <template x-if="data.release.data.assets[0].browser_download_url === ''">
+                                    <svg class='spinner h-5' viewBox='0 0 50 50'>
+                                        <circle class='path text-white' cx='25' cy='25' r='20' fill='none' stroke-width='4'/>
+                                    </svg>
+                                </template>
+                                <template x-if="data.release.data.assets[0].browser_download_url !== ''">
+                                    <p>다운로드</p>
+                                </template>
                             </x-button.filled.xl-blue>
                         </div>
                         <!--

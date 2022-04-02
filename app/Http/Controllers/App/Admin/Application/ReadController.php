@@ -149,6 +149,11 @@ class ReadController extends Controller
     {
         try
         {
+            if (is_null($userId))
+            {
+                throw new \Exception('NOT FOND USER', 422);
+            }
+
             $user = $this->userRepository->findById($userId);
 
             if (is_null($user))
@@ -232,6 +237,34 @@ class ReadController extends Controller
                 'ban' => $ban?->data,
                 'naver_id' => $naverId,
                 'created_at' => isset($summaries->updated_at) ? "{$summaries->updated_at->format('Y-m-d')} 기준" : '',
+            ]);
+        }
+        catch (\Exception $e)
+        {
+            return $this->jsonResponse($e->getCode(), $e->getMessage(), config('app.debug') ? $e->getTrace() : []);
+        }
+    }
+
+    public function steam(Request $request, ?int $userId)
+    {
+        try
+        {
+            if (is_null($userId))
+            {
+                throw new \Exception('NOT FOND USER', 422);
+            }
+
+            $user = $this->userRepository->findById($userId);
+
+            if (is_null($user))
+            {
+                throw new \Exception('NOT FOUND USER', 422);
+            }
+
+            $result = $this->userService->updateSteamAccount($user->id);
+
+            return $this->jsonResponse(200, 'OK', [
+                'result' => $result
             ]);
         }
         catch (\Exception $e)
