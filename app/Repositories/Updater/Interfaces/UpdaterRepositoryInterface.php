@@ -21,4 +21,6 @@ interface UpdaterRepositoryInterface extends EloquentRepositoryInterface
     public function findLatestUpdatedByUserId(int $userId, array $columns = ['*'], array $relations = []): ?Collection;
 
     public function findUnusedOverDay(array $columns = ['*'], array $relations = []): ?Collection;
+
+    public function findOver6MonthsByUserId(int $userId, array $columns = ['*'], array $relations = []): ?Collection;
 }

@@ -15,6 +15,7 @@ Route::prefix('app')->group(function () {
 
         //AJAX
         Route::post('/release', [UpdaterController::class, 'release'])->name('release');
+        Route::post('/updater', [UpdaterController::class, 'updater'])->name('updater');
     });
 });
 

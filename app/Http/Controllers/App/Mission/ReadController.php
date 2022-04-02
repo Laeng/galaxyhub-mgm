@@ -373,7 +373,7 @@ class ReadController extends Controller
 
                 if ($isAdmin)
                 {
-                    $chunk['id'] = $user->id;
+                    $chunk['id'] = $participant->id;
                 }
 
                 $data[] = $chunk;

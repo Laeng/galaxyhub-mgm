@@ -5,6 +5,7 @@ namespace App\Http\Controllers\App\Updater;
 use App\Enums\PermissionType;
 use App\Http\Controllers\Controller;
 use App\Repositories\Updater\Interfaces\UpdaterRepositoryInterface;
+use App\Repositories\User\Interfaces\UserRepositoryInterface;
 use App\Services\File\Contracts\FileServiceContract;
 use App\Services\Github\Contracts\GithubServiceContract;
 use Illuminate\Contracts\View\View;
@@ -28,7 +29,10 @@ class UpdaterController extends Controller
 
     public function index(Request $request): view
     {
-        return view('app.updater.index');
+
+        return view('app.updater.index', [
+            'user' => Auth::user()
+        ]);
     }
 
     public function download(Request $request, FileServiceContract $fileService): RedirectResponse
@@ -115,5 +119,47 @@ class UpdaterController extends Controller
         }
 
         return view('app.account.authorize', $data);
+    }
+
+    public function updater(Request $request, UpdaterRepositoryInterface $updaterRepository, UserRepositoryInterface $userRepository): JsonResponse
+    {
+        try {
+            $this->jsonValidator($request, [
+                'user_id' => ['required', 'int']
+            ]);
+
+            $user = $userRepository->findById($request->get('user_id'));
+
+            if (is_null($user))
+            {
+                throw new \Exception('CAN NOT FOUND USER', 422);
+            }
+
+            $data = [];
+            $updaters = $updaterRepository->findOver6MonthsByUserId($user->id);
+
+            foreach ($updaters as $updater)
+            {
+                $codes = explode('-', $updater->code);
+                $versions = explode('.', $updater->version);
+
+                $chunk = [
+                    'name' => $updater->machine_name,
+                    'code' => "{$codes[1]}-{$codes[2]}-{$codes[3]}",
+                    'ip' => $updater->ip,
+                    'version' => "v{$versions[0]}.{$versions[1]}.{$versions[2]}",
+                    'updated_at' => $updater->updated_at->format('Y-m-d H:i:s'),
+                    'is_online' => !$updater->updated_at->addMinutes(2)->isPast()
+                ];
+
+                $data[] = $chunk;
+            }
+
+            return $this->jsonResponse(200, 'SUCCESS', $data);
+        }
+        catch (\Exception $e)
+        {
+            return $this->jsonResponse($e->getCode(), Str::upper($e->getMessage()), config('app.debug') ? $e->getTrace() : []);
+        }
     }
 }
