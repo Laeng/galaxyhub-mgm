@@ -36,14 +36,14 @@
                         </ul>
                     </x-alert.galaxyhub.info>
                 @endif
-                <template x-if="!data.load.data.is_participant && data.load.data.can_tardy && (data.load.data.phase === 0 || data.load.data.phase === 1)">
+                <template x-if="!data.load.data.is_participant && (data.load.data.phase === 0 || (data.load.data.can_tardy && data.load.data.phase === 1))">
                     <x-alert.galaxyhub.success title="참가 신청 가능">
                         <ul>
                             <li>현재 참가 신청 가능한 {{ $type }} 입니다.</li>
                         </ul>
                     </x-alert.galaxyhub.success>
                 </template>
-                <template x-if="!data.load.data.is_participant && !data.load.data.can_tardy && (data.load.data.phase === 0 || data.load.data.phase === 1)">
+                <template x-if="!data.load.data.is_participant && !data.load.data.can_tardy && data.load.data.phase === 1">
                     <x-alert.galaxyhub.warning title="중도 참여 불가">
                         <ul>
                             <li>중도 참여가 불가능한 {{ $type }} 입니다. </li>

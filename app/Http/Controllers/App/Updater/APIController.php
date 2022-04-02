@@ -9,6 +9,7 @@ use Exception;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -92,7 +93,10 @@ class APIController extends Controller
                 'code' => $updater->code
             ]);
         }
-        catch (Exception $e) {
+        catch (Exception $e)
+        {
+            Log::error($e->getMessage(), $e->getTrace());
+
             return Response()->json([
                 'result' => false,
                 'message' => $e->getMessage(),
@@ -129,7 +133,10 @@ class APIController extends Controller
                 'data' => $data
             ]);
         }
-        catch (Exception $e) {
+        catch (Exception $e)
+        {
+            Log::error($e->getMessage(), $e->getTrace());
+
             return Response()->json([
                 'result' => false,
                 'message' => $e->getMessage(),
@@ -167,6 +174,8 @@ class APIController extends Controller
         }
         catch (Exception $e)
         {
+            Log::error($e->getMessage(), $e->getTrace());
+
             return Response()->json([
                 'result' => false,
                 'message' => $e->getMessage()
@@ -225,7 +234,10 @@ class APIController extends Controller
                 'data' => $data
             ]);
         }
-        catch (Exception $e) {
+        catch (Exception $e)
+        {
+            Log::error($e->getMessage(), $e->getTrace());
+
             return Response()->json([
                 'result' => false,
                 'message' => $e->getMessage(),
@@ -274,7 +286,10 @@ class APIController extends Controller
                 'message' => 'SUCCESS'
             ]);
 
-        } catch (Exception $e) {
+        } catch (Exception $e)
+        {
+            Log::error($e->getMessage(), $e->getTrace());
+
             return Response()->json([
                 'result' => false,
                 'message' => $e->getMessage()
