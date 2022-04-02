@@ -346,11 +346,14 @@ class ReadController extends Controller
             $data = [];
             $participants = $this->userMissionRepository->findByMissionId($mission->id)->reverse();
 
+            $user = Auth::user();
+            $isAdmin = $user->hasRole(RoleType::ADMIN->name);
+
             foreach ($participants as $k => $v)
             {
-                $user = $this->userRepository->findById($v->user_id);
+                $participant = $this->userRepository->findById($v->user_id);
 
-                $userBadges = $userBadgeRepository->findByUserId($user->id, ['*'], ['badge']);
+                $userBadges = $userBadgeRepository->findByUserId($participant->id, ['*'], ['badge']);
                 $userBadge = array();
 
                 foreach ($userBadges as $badge)
@@ -361,12 +364,19 @@ class ReadController extends Controller
                     ];
                 }
 
-                $data[] = [
-                    'name' => $user->name,
-                    'avatar' => $user->avatar,
-                    'attend' => $this->userMissionRepository->findAttendedMissionByUserId($user->id)->count(), // TODO - 약장으로 대체
+                $chunk = [
+                    'name' => $participant->name,
+                    'avatar' => $participant->avatar,
+                    'attend' => $this->userMissionRepository->findAttendedMissionByUserId($participant->id)->count(), // TODO - 약장으로 대체
                     'badges' => $userBadge
                 ];
+
+                if ($isAdmin)
+                {
+                    $chunk['id'] = $user->id;
+                }
+
+                $data[] = $chunk;
             }
 
             return $this->jsonResponse(200, 'SUCCESS', [

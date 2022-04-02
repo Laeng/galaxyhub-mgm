@@ -9,7 +9,7 @@
                 <h2 class="text-xl lg:text-2xl font-bold">{{ $missionType }}</h2>
                 <p class="mt-1 text-sm text-gray-500 dark:text-gray-300">
                     {{ $mission->started_at->format('Y년 m월 d일 H시 m분') }}에 시작한 {{ $missionType }}에 대한 만족도 조사 결과입니다.<br class="hidden md:block"/>
-                    회원 {{ $mission->survey()->first()->entries()->count() }}명이 본 만족도 조사에 참가해주셨습니다. 만약 주관식 문항의 답변 중에 폭언이나 욕설을 발견하셨다면 스탭에게 알려주십시오.
+                    회원 {{ $count }}명이 본 만족도 조사에 참가해주셨습니다. 만약 주관식 문항의 답변 중에 폭언이나 욕설을 발견하셨다면 스탭에게 알려주십시오.
                 </p>
             </div>
         </div>

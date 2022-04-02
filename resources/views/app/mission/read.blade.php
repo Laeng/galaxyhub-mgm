@@ -72,8 +72,26 @@
 
             <div class="flex flex-col space-y-2" x-cloak>
                 <h2 class="text-xl lg:text-2xl font-bold">참가자</h2>
-                <div class="">
-                    <div class="grid grid-cols-1 gap-4 lg:grid-cols-2">
+                <div class="grid grid-cols-1 gap-4 lg:grid-cols-2">
+                    @if($isAdmin)
+                        <template x-for="i in data.participants.data.participants">
+                            <a :href="'/app/admin/user/' + i.id" rel="noopener" target="_blank" class="relative rounded-lg border border-gray-300 dark:border-gray-800 bg-white dark:bg-gray-900 px-6 py-5 shadow-sm flex items-center space-x-3 hover:border-gray-40">
+                                <div class="flex-shrink-0">
+                                    <img class="h-10 w-10 rounded-full" :src="i.avatar" alt="">
+                                </div>
+                                <div class="flex-1 min-w-0">
+                                    <span class="absolute inset-0" aria-hidden="true"></span>
+                                    <p class="text-sm font-medium link-indigo" x-text="i.name"></p>
+                                    <p class="text-sm text-gray-500 dark:text-gray-300 truncate tabular-nums" x-text="i.attend + '회 참가'"></p>
+                                    <div class="mt-1 flex flex-row flex-wrap">
+                                        <template x-for="ii in i.badges">
+                                            <img class="h-5 w-5 p-0.5" :alt="ii.name" :title="ii.name" :src="ii.icon">
+                                        </template>
+                                    </div>
+                                </div>
+                            </a>
+                        </template>
+                    @else
                         <template x-for="i in data.participants.data.participants">
                             <div class="relative rounded-lg border border-gray-300 dark:border-gray-800 bg-white dark:bg-gray-900 px-6 py-5 shadow-sm flex items-center space-x-3 hover:border-gray-40">
                                 <div class="flex-shrink-0">
@@ -91,7 +109,8 @@
                                 </div>
                             </div>
                         </template>
-                    </div>
+                    @endif
+
                 </div>
             </div>
         </x-panel.galaxyhub.basics>
