@@ -38,8 +38,8 @@ class APIController extends Controller
             $machineName = $request->get('machine_name');
             $machineVersion = $request->get('machine_version');
             $uuid = Str::uuid();
-            $result = true;
-            $message = 'SUCCESS';
+            $result = false;
+            $message = 'NEED VERIFY';
 
             $github = $githubService->getLatestRelease('Laeng', 'MGM_UPDATER');
 
@@ -72,18 +72,16 @@ class APIController extends Controller
                     'machine_version' => $machineVersion,
                     'code' => $uuid
                 ]);
-
-                $result = false;
-                $message = 'NEED VERIFY';
             }
             else
             {
                 $updater->code = $uuid;
                 $updater->save();
 
-                if (is_null($updater->user_id))
+                if (!is_null($updater->user_id))
                 {
-                    $result = false;
+                    $result = true;
+                    $message = 'success';
                 }
             }
 

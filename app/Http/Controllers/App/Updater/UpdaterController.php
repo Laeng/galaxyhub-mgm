@@ -149,7 +149,7 @@ class UpdaterController extends Controller
                     'ip' => $updater->ip,
                     'version' => "v{$versions[0]}.{$versions[1]}.{$versions[2]}",
                     'updated_at' => $updater->updated_at->format('Y-m-d H:i:s'),
-                    'is_online' => !$updater->updated_at->addMinutes(2)->isPast()
+                    'is_online' => !$updater->updated_at->addMinutes(1)->isPast()
                 ];
 
                 $data[] = $chunk;
