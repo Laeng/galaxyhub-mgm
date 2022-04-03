@@ -25,7 +25,7 @@
                         <span class="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-full border-2 border-blue-600">
                             <span class="text-blue-600">02</span>
                         </span>
-                        <span class="ml-4 text-sm font-medium text-gray-900 dark:text-gray-100">ARMA3 퀴즈 참여</span>
+                        <span class="ml-4 text-sm font-medium text-gray-900 dark:text-gray-100">가입 퀴즈 참여</span>
                     </p>
                 </div>
                 <div class="hidden md:block absolute top-0 right-0 h-full w-5" aria-hidden="true">

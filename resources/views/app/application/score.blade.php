@@ -28,14 +28,14 @@
                                     <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
                                 </svg>
                             </span>
-                            <span class="ml-4 text-sm font-medium text-gray-900 dark:text-gray-100">ARMA3 퀴즈 합격!</span>
+                            <span class="ml-4 text-sm font-medium text-gray-900 dark:text-gray-100">가입 퀴즈 합격!</span>
                         @else
                             <span class="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-full bg-red-600 group-hover:bg-red-800">
                                 <svg class="w-6 h-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                                 </svg>
                             </span>
-                            <span class="ml-4 text-sm font-medium text-gray-900 dark:text-gray-100">ARMA3 퀴즈 불합격...</span>
+                            <span class="ml-4 text-sm font-medium text-gray-900 dark:text-gray-100">가입 퀴즈 불합격...</span>
                         @endif
                     </p>
                 </div>
@@ -94,7 +94,7 @@
                     @else
                         <x-alert.galaxyhub.info title="앗... 이런...">
                             <ul>
-                                <li>{{ $user->name }}님께서는 5개의 문제 중 {{ $matches }}개를 맞추셨습니다. 원활한 아르마 플레이를 위해서는 3문제 이상 맞추셔야 합니다.</li>
+                                <li>{{ $user->name }}님께서는 5개의 문제 중 {{ $matches }}개를 맞추셨습니다. 가입을 위해서는 3문제 이상 맞추셔야 합니다.</li>
                                 <li>모든 문제는 <a href="https://cafe.naver.com/gamemmakers/book5076085" target="_blank" class="underline hover:no-underline font-bold">아르마 길잡이</a>에서 출제 됩니다.</li>
                                 <li>{{ $user->name }}님께서는 운영 정책에 따라 7일 뒤인 {{ $survey->created_at->copy()->addDays(7)->format('Y년 m월 d일 H시 i분') }}에 재도전 하실 수 있습니다.</li>
                             </ul>
