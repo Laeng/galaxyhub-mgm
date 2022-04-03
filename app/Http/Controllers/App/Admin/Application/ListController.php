@@ -184,7 +184,7 @@ class ListController extends Controller
 
                 if ($type === RoleType::REJECT->name)
                 {
-                    $count = $userService->findRoleRecordeByUserId($user->id, $user::ROLE_REJECT)->count();
+                    $count = $userService->findRoleRecordeByUserId($user->id, RoleType::REJECT->name)->count();
                     $ban = array();
 
                     if ($count == 1)

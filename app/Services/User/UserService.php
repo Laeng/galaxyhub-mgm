@@ -223,7 +223,7 @@ class UserService implements UserServiceContract
 
             $user->accounts()->where('user_id', $user->id)->delete();
             $user->bans()->where('bannable_id', $user->id)->delete();
-            $user->surveys()->where('user_id', $user->id)->delete();
+            $user->surveys()->where('participant_id', $user->id)->delete();
             $user->delete();
 
             return true;

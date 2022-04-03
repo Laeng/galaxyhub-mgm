@@ -52,10 +52,10 @@ class AccountController extends Controller
         {
             $user = Auth::user();
 
-            $userService->delete($user->id);
             $userService->createRecord($user->id, UserRecordType::USER_DELETE->name, [
                 'comment' => "{$user->name}님의 요청으로 계정 데이터를 삭제하였습니다."
             ]);
+            $userService->delete($user->id);
 
             Auth::logout();
 

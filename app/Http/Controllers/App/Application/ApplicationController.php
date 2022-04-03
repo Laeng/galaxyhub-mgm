@@ -67,11 +67,14 @@ class ApplicationController extends Controller
             return redirect()->route('application.index');
         }
 
-        $recode = $this->userService->findRoleRecordeByUserId($user->id, RoleType::REJECT->name)->first();
+        $recode = $this->userService->findRoleRecordeByUserId($user->id, RoleType::REJECT->name);
+        $latest = $recode->first();
+
+
 
         return view('app.application.rejected', [
-            'reason' => $recode->data['comment'],
-            'date' => $recode->created_at,
+            'reason' => $latest->data['comment'],
+            'date' => $latest->created_at,
             'count' => $recode->count()
         ]);
     }
