@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use App\Enums\PermissionType;
+use App\Enums\RoleType;
 use Closure;
 use Illuminate\Auth\Middleware\Authenticate as Middleware;
 
@@ -14,9 +15,9 @@ class AuthenticateAdmin extends Middleware
 
         $user = app('auth')->user();
 
-        if (!$user->hasPermissionTo(PermissionType::MEMBER->name))
+        if (!$user->hasRole(RoleType::ADMIN->name))
         {
-            return redirect()->route('application.index');
+            abort(404);
         }
 
         return $next($request);
