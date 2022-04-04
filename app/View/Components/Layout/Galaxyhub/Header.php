@@ -74,9 +74,9 @@ class Header extends Component
                     if ($roleType === RoleType::ADMIN->name)
                     {
                         $menu = $menu->submenu("<a href='#'>관리</a>", function (Menu $menu) {
-                            $menu = $menu->add(Link::toRoute('admin.user.index', '회원 목록'));
-                            $menu = $menu->add(Link::toRoute('admin.application.index', '가입 신청자 목록'));
-                            $menu = $menu->add(Link::toRoute('admin.broadcast.naver.index', '네이버 계정 설정'));
+                            $menu = $menu->add(Link::toRoute('admin.user.index', '회원'));
+                            $menu = $menu->add(Link::toRoute('admin.application.index', '가입 신청자'));
+                            $menu = $menu->add(Link::toRoute('admin.index', '관리자 메뉴'));
                         });
                     }
 

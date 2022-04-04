@@ -25,7 +25,7 @@ class ListController extends Controller
 
         if ($missions->count() <= 0)
         {
-            $expired_at = $user->agreed_at->addDays(14);
+            $expired_at = $user->agreed_at->addDays(30);
 
             if ($user->agreed_at->diffInDays($expired_at, false) <= 0) {
                 $messages[] = ['danger', '미션 참여 필요', "{$expired_at->format('Y년 m월 d일')} 이전까지 미션에 참석하여 주십시오. 미 참석시 규정에 따라 가입이 취소됩니다."];

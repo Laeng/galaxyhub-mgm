@@ -125,7 +125,7 @@ class EditorController extends Controller
                 throw new \Exception('DATE OLD', 422);
             }
 
-            if ($this->missionRepository->findBetweenDates('expected_at', [$date->copy()->subHours(2), $date->copy()->addHours(2)])->count() > 0)
+            if ($this->missionRepository->findBetweenDates('expected_at', [$date->copy()->subMinutes(30), $date->copy()->addMinutes(30)])->count() > 0)
             {
                 throw new \Exception('DATE UNAVAILABLE', 422);
             }
@@ -211,7 +211,7 @@ class EditorController extends Controller
                 throw new \Exception('DATE OLD', 422);
             }
 
-            if ($this->missionRepository->findBetweenDates('expected_at', [$date->copy()->subHours(2), $date->copy()->addHours(2)])->filter(fn ($v, $k) => $v->id !== $mission->id)->count() > 0)
+            if ($this->missionRepository->findBetweenDates('expected_at', [$date->copy()->subMinutes(30), $date->copy()->addMinutes(30)])->filter(fn ($v, $k) => $v->id !== $mission->id)->count() > 0)
             {
                 throw new \Exception('DATE UNAVAILABLE', 422);
             }
