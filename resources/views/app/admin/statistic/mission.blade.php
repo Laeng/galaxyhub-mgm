@@ -2,20 +2,28 @@
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.min.js"></script>
 @endpush
 
-<x-theme.galaxyhub.sub-content title="애드온 통계" description="애드온 통계" :breadcrumbs="Diglactic\Breadcrumbs\Breadcrumbs::render('app.admin', '애드온 통계')">
+<x-theme.galaxyhub.sub-content title="미션 통계" description="애드온 통계" :breadcrumbs="Diglactic\Breadcrumbs\Breadcrumbs::render('app.admin', '애드온 통계')">
     <x-panel.galaxyhub.basics>
-        <div class="space-y-4" x-data="statistic_addon">
+        <div class="space-y-4" x-data="statistic_mission">
             <div>
                 <div class="mb-4">
-                    <h2 class="text-xl lg:text-2xl font-bold">기간 설정</h2>
+                    <h2 class="text-xl lg:text-2xl font-bold">조건 설정</h2>
                     <p class="mt-1 text-sm text-gray-500 dark:text-gray-300">
-                        조회할 기간을 선택하여 주십시오.
+                        조건을 선택하여 주십시오.
                     </p>
                 </div>
                 <div class="flex items-center space-x-2">
                     <x-input.text.basics type="date" x-model="data.load.body.query.start"/>
                     <p class="text-2xl">~</p>
                     <x-input.text.basics type="date" x-model="data.load.body.query.end"/>
+                    <div>
+                        <x-input.select.basics type="date" x-model="data.load.body.query.user_id">
+                            <option value="">모든 미션 메이커&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
+                            @foreach($makers as $maker)
+                                <option value="{{ $maker->id }}">{{ $maker->name }}</option>
+                            @endforeach
+                        </x-input.select.basics>
+                    </div>
                     <x-button.filled.md-white @click="load()">
                         조회
                     </x-button.filled.md-white>
@@ -36,9 +44,9 @@
                     <thead>
                     <tr>
                         <th scope="col" class="py-3.5 p-4 text-left text-sm font-semibold text-gray-900 dark:text-gray-100">미션</th>
-                        <template x-for="type in data.load.data.addon_types">
-                            <th scope="col" class="py-3.5 px-4 text-left text-sm font-semibold text-gray-900 dark:text-gray-100 text-center" x-text="type"></th>
-                        </template>
+                        <th scope="col" class="py-3.5 p-4 text-left text-sm font-semibold text-gray-900 dark:text-gray-100">메이커</th>
+                        <th scope="col" class="py-3.5 p-4 text-left text-sm font-semibold text-gray-900 dark:text-gray-100 text-center">신청자</th>
+                        <th scope="col" class="py-3.5 p-4 text-left text-sm font-semibold text-gray-900 dark:text-gray-100 text-center">출석자</th>
                     </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-200">
@@ -47,9 +55,11 @@
                             <td class="whitespace-nowrap p-4 text-sm font-medium text-gray-900 dark:text-gray-100">
                                 <a :href="'/app/mission/' + value.id" target="_blank" rel="noopener" class="link-indigo" x-text="value.title"></a>
                             </td>
-                            <template x-for="type in data.load.data.addon_types">
-                                <td class="whitespace-nowrap p-4 text-sm font-medium text-gray-900 dark:text-gray-100 text-center"><input type="checkbox" class="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300 rounded" :checked="value.addons.includes(type)" disabled/></td>
-                            </template>
+                            <td class="whitespace-nowrap p-4 text-sm font-medium text-gray-900 dark:text-gray-100">
+                                <a :href="'/app/admin/user/' + value.user_id" target="_blank" rel="noopener" class="link-indigo" x-text="value.user_name"></a>
+                            </td>
+                            <td class="whitespace-nowrap p-4 text-sm font-medium text-gray-900 dark:text-gray-100 text-center" x-text="value.participants + '명'"></td>
+                            <td class="whitespace-nowrap p-4 text-sm font-medium text-gray-900 dark:text-gray-100 text-center" x-text="value.attenders + '명'"></td>
                         </tr>
                     </template>
                     </tbody>
@@ -58,17 +68,18 @@
         </div>
         <script type="text/javascript">
             window.document.addEventListener('alpine:init', () => {
-                window.alpine.data('statistic_addon', () => ({
+                window.alpine.data('statistic_mission', () => ({
                     interval: {
                         load: -1
                     },
                     data: {
                         load: {
-                            url: '{{ route('admin.statistic.addon.data') }}',
+                            url: '{{ route('admin.statistic.mission.data') }}',
                             body: {
                                 query: {
                                     start: '{{ today()->subMonth()->format('Y-m-d') }}',
-                                    end: '{{ today()->format('Y-m-d') }}'
+                                    end: '{{ today()->format('Y-m-d') }}',
+                                    user_id: ''
                                 },
                             },
                             data: {
@@ -76,23 +87,21 @@
                                 addon_types: [],
                                 values: []
                             },
+                            statistic: {
+                                keys: [],
+                                values1: [],
+                                values2: []
+                            },
                             lock: false
                         },
                     },
                     chart: {
-                        addon: null
+                        mission: null
                     },
                     load() {
                         let colors = [
                             '#f87171',
-                            '#fb923c',
-                            '#fbbf24',
-                            '#a3e635',
-                            '#34d399',
-                            '#22d3ee',
                             '#60a5fa',
-                            '#a78bfa',
-                            '#e879f9',
                         ];
 
                         let success = (r) => {
@@ -100,22 +109,36 @@
                                 if (!(typeof r.data.data === 'undefined' || r.data.data.length <= 0)) {
                                     this.data.load.data = r.data.data.data;
 
-                                    if (this.chart.addon !== null) {
-                                        this.chart.addon.destroy();
+                                    this.data.load.statistic.keys = [];
+                                    this.data.load.statistic.values1 = [];
+                                    this.data.load.statistic.values2 = [];
+
+                                    for (let key in r.data.data.data.values)
+                                    {
+                                        let value = r.data.data.data.values[key];
+                                        this.data.load.statistic.keys.push(value.title);
+                                        this.data.load.statistic.values1.push(value.participants);
+                                        this.data.load.statistic.values2.push(value.attenders);
                                     }
 
-                                    this.chart.addon = new Chart('addon', {
-                                        type: 'bar',
+                                    if (this.chart.mission !== null) {
+                                        this.chart.mission.destroy();
+                                    }
+
+                                    this.chart.mission = new Chart('addon', {
                                         data: {
-                                            labels: r.data.data.statistic.keys,
-                                            datasets: [{label: '애드온 사용 통계', data: r.data.data.statistic.values, backgroundColor: colors}]
+                                            labels: this.data.load.statistic.keys,
+                                            datasets: [
+                                                {type:'line', label: '신청자', data: this.data.load.statistic.values1, borderColor: colors, fill: false},
+                                                {type:'line', label: '출석자', data: this.data.load.statistic.values2, borderColor: colors, fill: false},
+                                            ]
                                         },
                                         options: {
                                             scales: {
                                                 y: {
                                                     beginAtZero: true,
                                                     suggestedMin: 0,
-                                                    suggestedMax: Math.max(r.data.data.statistic.values) + 1,
+                                                    suggestedMax: Math.max(this.data.load.statistic.values1) + 1,
                                                     ticks: {
                                                         stepSize: 1
                                                     }

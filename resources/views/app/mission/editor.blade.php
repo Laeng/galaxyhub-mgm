@@ -53,7 +53,7 @@
                         @foreach($addons as $k => $v)
                             <div class="flex items-start">
                                 <div class="flex items-center h-5">
-                                    <input id="{{$k}}" aria-describedby="offers-description" name="addons[]" value="{{$k}}" type="checkbox" class="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300 rounded" x-model="data.create.body.addons">
+                                    <input id="{{$k}}" name="addons[]" value="{{$k}}" type="checkbox" class="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300 rounded" x-model="data.create.body.addons">
                                 </div>
                                 <div class="ml-2 text-sm">
                                     <label for="{{$k}}" class="font-medium text-gray-700">{{$v}}</label>
