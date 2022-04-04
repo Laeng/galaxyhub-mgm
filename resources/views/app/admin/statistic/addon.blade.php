@@ -36,7 +36,7 @@
                             url: '{{ route('admin.statistic.addon.data') }}',
                             body: {
                                 query: {
-                                    start: '{{ today()->subYear()->format('Y-m-d') }}',
+                                    start: '{{ today()->subMonth()->format('Y-m-d') }}',
                                     end: '{{ today()->format('Y-m-d') }}'
                                 },
                             },
@@ -75,7 +75,12 @@
                                         options: {
                                             scales: {
                                                 y: {
-                                                    beginAtZero: true
+                                                    beginAtZero: true,
+                                                    suggestedMin: 0,
+                                                    suggestedMax: Math.max(r.data.data.statistic.values) + 1,
+                                                    ticks: {
+                                                        stepSize: 1
+                                                    }
                                                 }
                                             }
                                         }

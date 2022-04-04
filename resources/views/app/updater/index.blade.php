@@ -3,7 +3,7 @@
 @endpush
 
 <x-theme.galaxyhub.sub-content title="MGM 업데이터" description="MGM 업데이터" :breadcrumbs="Diglactic\Breadcrumbs\Breadcrumbs::render('app', 'MGM 업데이터')">
-    <div  x-data="updater">
+    <div x-data="updater">
         <x-panel.galaxyhub.basics class="space-y-4">
             <div class="">
                 <h2 class="text-xl lg:text-2xl font-bold">다운로드</h2>

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\App\Admin\Application\ListController;
 use App\Http\Controllers\App\Admin\Application\ReadController;
+use App\Http\Controllers\App\Admin\Application\SurveyController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('app')->group(function () {
@@ -11,6 +12,9 @@ Route::prefix('app')->group(function () {
             Route::redirect('/', '/app/admin/applications');
             Route::get('/{userId}', [ReadController::class, 'read'])->name('read')->whereNumber('userId');
             Route::get('/{userId}/games', [ReadController::class, 'games'])->name('read.games')->whereNumber('userId');
+
+            Route::get('/quiz', [SurveyController::class, 'quiz'])->name('quiz');
+            Route::get('/form', [SurveyController::class, 'form'])->name('form');
 
             //AJAX
             Route::post('/{userId}/data', [ReadController::class, 'data'])->name('read.data')->whereNumber('userId');

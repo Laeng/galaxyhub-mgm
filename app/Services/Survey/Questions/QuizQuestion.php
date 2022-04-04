@@ -48,13 +48,13 @@ class QuizQuestion extends Question
 
     private function getQuizzes(): array
     {
-        $questions = $this->questionBank();
+        $questions = self::questionBank();
         shuffle($questions);
 
         return array_map(function ($i) use ($questions) { return $questions[$i]; }, array_rand($questions, 5));
     }
 
-    private function questionBank(): array
+    public static function questionBank(): array
     {
         $form = [
             [
