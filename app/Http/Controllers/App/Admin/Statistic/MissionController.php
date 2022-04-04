@@ -38,7 +38,7 @@ class MissionController extends Controller
             $this->statisticMissionValues = [];
 
             $q = $request->get('query', []);
-            $query = $missionRepository->new()->newQuery();
+            $query = $missionRepository->new()->newQuery()->whereNotIn('phase', [MissionPhaseType::CANCEL->value]);
 
             $start = empty($q['start']) ? \Carbon\Carbon::createFromFormat('Y-m-d', "2020-01-01") : \Carbon\Carbon::createFromFormat('Y-m-d', "{$q['start']}");
             $end = empty($q['end']) ? today() : \Carbon\Carbon::createFromFormat('Y-m-d', "{$q['end']}");
