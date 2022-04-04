@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\App\Admin\Statistic;
 
+use App\Enums\MissionAddonType;
 use App\Enums\MissionPhaseType;
 use App\Http\Controllers\Controller;
 use App\Repositories\Mission\MissionRepository;
@@ -14,6 +15,7 @@ use Illuminate\Support\Str;
 class AddonController extends Controller
 {
     private array $statisticAddon;
+    private array $statisticAddonValues;
 
     public function addon(Request $request): View
     {
@@ -28,10 +30,11 @@ class AddonController extends Controller
                 'query' => 'array'
             ]);
 
-            $this->statisticAddon =[];
+            $this->statisticAddon = [];
+            $this->statisticAddonValues = [];
 
             $q = $request->get('query', []);
-            $query = $missionRepository->new()->newQuery()->whereIn('phase', [MissionPhaseType::END->value]);
+            $query = $missionRepository->new()->newQuery()->whereNotIn('phase', [MissionPhaseType::CANCEL->value]);
 
             $start = empty($q['start']) ? \Carbon\Carbon::createFromFormat('Y-m-d', "2020-01-01") : \Carbon\Carbon::createFromFormat('Y-m-d', "{$q['start']}");
             $end = empty($q['end']) ? today() : \Carbon\Carbon::createFromFormat('Y-m-d', "{$q['end']}");
@@ -47,6 +50,12 @@ class AddonController extends Controller
                     {
                         $this->statisticAddon[$addon] = array_key_exists($addon, $this->statisticAddon) ? $this->statisticAddon[$addon] + 1 : 1;
                     }
+
+                    $this->statisticAddonValues[] = [
+                        'id' => $mission->id,
+                        'title' => $mission->title,
+                        'addons' => $addons
+                    ];
                 }
             });
 
@@ -54,6 +63,11 @@ class AddonController extends Controller
                 'statistic' => [
                     'keys' => array_keys($this->statisticAddon),
                     'values' => array_values($this->statisticAddon)
+                ],
+                'data' => [
+                    'total' => $query->count(),
+                    'addon_types' => array_keys(MissionAddonType::getKoreanNames()),
+                    'values' => $this->statisticAddonValues
                 ]
             ]);
 

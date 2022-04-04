@@ -5,9 +5,6 @@
 <x-theme.galaxyhub.sub-content title="애드온 통계" description="애드온 통계" :breadcrumbs="Diglactic\Breadcrumbs\Breadcrumbs::render('app.admin', '애드온 통계')">
     <x-panel.galaxyhub.basics>
         <div class="space-y-4" x-data="statistic_addon">
-            <div class="">
-                <canvas id="addon"></canvas>
-            </div>
             <div>
                 <div class="mb-4">
                     <h2 class="text-xl lg:text-2xl font-bold">기간 설정</h2>
@@ -24,6 +21,40 @@
                     </x-button.filled.md-white>
                 </div>
             </div>
+
+            <div class="">
+                <x-alert.galaxyhub.info title="통계 안내" class="mb-2">
+                    <ul>
+                        <li><span x-text="data.load.data.total"></span>개 미션에 사용된 애드온 통계입니다.</li>
+                    </ul>
+                </x-alert.galaxyhub.info>
+                <canvas id="addon"></canvas>
+            </div>
+
+            <div class="border border-gray-300 dark:border-gray-800 rounded-md ">
+                <table class="divide-y divide-gray-300 dark:divide-gray-800 min-w-full">
+                    <thead>
+                    <tr>
+                        <th scope="col" class="py-3.5 p-4 text-left text-sm font-semibold text-gray-900 dark:text-gray-100">미션</th>
+                        <template x-for="type in data.load.data.addon_types">
+                            <th scope="col" class="py-3.5 px-4 text-left text-sm font-semibold text-gray-900 dark:text-gray-100 text-center" x-text="type"></th>
+                        </template>
+                    </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
+                    <template x-for="value in data.load.data.values">
+                        <tr>
+                            <td class="whitespace-nowrap p-4 text-sm font-medium text-gray-900 dark:text-gray-100">
+                                <a :href="'/app/mission/' + value.id" target="_blank" rel="noopener" class="link-indigo" x-text="value.title"></a>
+                            </td>
+                            <template x-for="type in data.load.data.addon_types">
+                                <td class="whitespace-nowrap p-4 text-sm font-medium text-gray-900 dark:text-gray-100 text-center"><input type="checkbox" :checked="value.addons.includes(type)" disabled/></td>
+                            </template>
+                        </tr>
+                    </template>
+                    </tbody>
+                </table>
+            </div>
         </div>
         <script type="text/javascript">
             window.document.addEventListener('alpine:init', () => {
@@ -39,6 +70,11 @@
                                     start: '{{ today()->subMonth()->format('Y-m-d') }}',
                                     end: '{{ today()->format('Y-m-d') }}'
                                 },
+                            },
+                            data: {
+                                total: 0,
+                                addon_types: [],
+                                values: []
                             },
                             lock: false
                         },
@@ -62,6 +98,8 @@
                         let success = (r) => {
                             if (r.data.data !== null) {
                                 if (!(typeof r.data.data === 'undefined' || r.data.data.length <= 0)) {
+                                    this.data.load.data = r.data.data.data;
+
                                     if (this.chart.addon !== null) {
                                         this.chart.addon.destroy();
                                     }

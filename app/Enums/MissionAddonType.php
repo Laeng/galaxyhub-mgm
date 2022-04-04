@@ -20,7 +20,7 @@ enum MissionAddonType
             self::F1->name => 'F1',
             self::F2->name => 'F2',
             self::WAR->name => 'WAR',
-            self::MAPS->name => 'MAP',
+            self::MAPS->name => 'MAPS',
             self::MAPS2->name => 'MAPS2',
             self::NAVY->name => 'NAVY',
             self::ETC->name => '기타'
