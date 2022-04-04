@@ -33,7 +33,7 @@
             <div class="">
                 <x-alert.galaxyhub.info title="통계 안내" class="mb-2">
                     <ul>
-                        <li><span x-text="data.load.data.total"></span>개 미션에 사용된 애드온 통계입니다.</li>
+                        <li><span x-text="data.load.data.total"></span>개 미션에 대한 통계입니다.</li>
                     </ul>
                 </x-alert.galaxyhub.info>
                 <canvas id="addon"></canvas>
