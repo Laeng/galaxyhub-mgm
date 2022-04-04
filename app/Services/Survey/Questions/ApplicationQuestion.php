@@ -40,7 +40,6 @@ class ApplicationQuestion extends Question
             [
                 'name' => '아르마 커뮤니티(클랜) 활동',
                 'description' => '명확히 작성 부탁드리며, 거짓이 있을 때 경고 없이 탈퇴 처리함을 알려드립니다.',
-                'rules' => ['required']
             ]
         ];
     }

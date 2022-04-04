@@ -42,7 +42,7 @@
             <div x-show="!data.ui.mode">
                 <div>
                     <h2 class="text-xl lg:text-2xl font-bold">퀴즈 수정</h2>
-                    <p class="mt-1 text-sm text-gray-500 dark:text-gray-300">현재 퀴즈 수정은 지원되지 않습니다. 디스코드 laeng#1990 으로 문의주십시오.</p>
+                    <p class="mt-1 text-sm text-gray-500 dark:text-gray-300">퀴즈 수정은 지원되지 않습니다. 디스코드 laeng#1990 으로 문의주십시오.</p>
                 </div>
             </div>
         </div>
