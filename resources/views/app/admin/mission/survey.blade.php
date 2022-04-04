@@ -1,17 +1,17 @@
-<x-theme.galaxyhub.sub-content title="가입 신청서" description="가입 신청서" :breadcrumbs="Diglactic\Breadcrumbs\Breadcrumbs::render('app.admin', '가입 신청서')">
+<x-theme.galaxyhub.sub-content title="미션 만족도 조사" description="미션 만족도 조사" :breadcrumbs="Diglactic\Breadcrumbs\Breadcrumbs::render('app.admin', '미션 만족도 조사')">
     <x-panel.galaxyhub.basics>
-        <div x-data="application_quiz">
+        <div x-data="mission_survey">
             <div class="border-b border-gray-300 dark:border-gray-800 -mt-2 sm:-mt-4 mb-4">
                 <nav class="-mb-px flex space-x-8" aria-label="Tabs">
-                    <button class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm" :class="data.ui.mode ? 'border-indigo-500 text-indigo-600' : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300'" @click="data.ui.mode = true"> 신청서 서식 </button>
-                    <button class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm" :class="!data.ui.mode ? 'border-indigo-500 text-indigo-600' : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300'" @click="data.ui.mode = false"> 신청서 수정 </button>
+                    <button class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm" :class="data.ui.mode ? 'border-indigo-500 text-indigo-600' : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300'" @click="data.ui.mode = true"> 만족도 조사 서식 </button>
+                    <button class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm" :class="!data.ui.mode ? 'border-indigo-500 text-indigo-600' : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300'" @click="data.ui.mode = false"> 만족도 조사 수정 </button>
                 </nav>
             </div>
 
             <div x-show="data.ui.mode">
                 <div class="space-y-8">
                     <div>
-                        @foreach($form as $item)
+                        @foreach($survey as $item)
                             @switch($item['type'])
                                 @case('section')
                                 <div>
@@ -81,14 +81,14 @@
 
             <div x-show="!data.ui.mode">
                 <div>
-                    <h2 class="text-xl lg:text-2xl font-bold">신청서 수정</h2>
-                    <p class="mt-1 text-sm text-gray-500 dark:text-gray-300">신청서 수정은 지원되지 않습니다. 디스코드 laeng#1990 으로 문의주십시오.</p>
+                    <h2 class="text-xl lg:text-2xl font-bold">만족도 조사 수정</h2>
+                    <p class="mt-1 text-sm text-gray-500 dark:text-gray-300">만족도 조사 수정은 지원되지 않습니다. 디스코드 laeng#1990 으로 문의주십시오.</p>
                 </div>
             </div>
         </div>
         <script type="text/javascript">
             document.addEventListener('alpine:init', () => {
-                window.alpine.data('application_quiz', () => ({
+                window.alpine.data('mission_survey', () => ({
                     data: {
                         ui: {
                             mode: true

@@ -3,7 +3,7 @@
         <div x-data="quiz">
             <div class="border-b border-gray-300 dark:border-gray-800 -mt-2 sm:-mt-4 mb-4">
                 <nav class="-mb-px flex space-x-8" aria-label="Tabs">
-                    <button class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm" :class="data.ui.mode ? 'border-indigo-500 text-indigo-600' : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300'" @click="data.ui.mode = true"> 퀴즈 조회 </button>
+                    <button class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm" :class="data.ui.mode ? 'border-indigo-500 text-indigo-600' : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300'" @click="data.ui.mode = true"> 퀴즈 </button>
                     <button class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm" :class="!data.ui.mode ? 'border-indigo-500 text-indigo-600' : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300'" @click="data.ui.mode = false"> 퀴즈 수정 </button>
                 </nav>
             </div>
