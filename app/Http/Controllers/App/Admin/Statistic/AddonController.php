@@ -34,11 +34,10 @@ class AddonController extends Controller
             $this->statisticAddonValues = [];
 
             $q = $request->get('query', []);
-            $query = $missionRepository->new()->newQuery()->whereNotIn('phase', [MissionPhaseType::CANCEL->value]);
-
             $start = empty($q['start']) ? \Carbon\Carbon::createFromFormat('Y-m-d', "2020-01-01") : \Carbon\Carbon::createFromFormat('Y-m-d', "{$q['start']}");
             $end = empty($q['end']) ? today() : \Carbon\Carbon::createFromFormat('Y-m-d', "{$q['end']}");
 
+            $query = $missionRepository->new()->newQuery()->whereNotIn('phase', [MissionPhaseType::CANCEL->value]);
             $query = $query->whereBetween('started_at', [$start, $end])->latest('started_at');
             $query->chunk(100, function ($missions)
             {

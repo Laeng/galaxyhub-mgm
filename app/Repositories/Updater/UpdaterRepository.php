@@ -60,5 +60,8 @@ class UpdaterRepository extends BaseRepository implements UpdaterRepositoryInter
         return $this->model->select($columns)->where('user_id', $userId)->where('updated_at', '>', today()->subMonths(6))->with($relations)->latest('updated_at')->get();
     }
 
-
+    public function new(): Updater
+    {
+        return new Updater();
+    }
 }

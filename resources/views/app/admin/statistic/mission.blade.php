@@ -2,7 +2,7 @@
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.min.js"></script>
 @endpush
 
-<x-theme.galaxyhub.sub-content title="미션 통계" description="애드온 통계" :breadcrumbs="Diglactic\Breadcrumbs\Breadcrumbs::render('app.admin', '애드온 통계')">
+<x-theme.galaxyhub.sub-content title="미션 통계" description="미션 통계" :breadcrumbs="Diglactic\Breadcrumbs\Breadcrumbs::render('app.admin', '미션 통계')">
     <x-panel.galaxyhub.basics>
         <div class="space-y-4" x-data="statistic_mission">
             <div>
