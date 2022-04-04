@@ -39,7 +39,7 @@ class AddonController extends Controller
             $start = empty($q['start']) ? \Carbon\Carbon::createFromFormat('Y-m-d', "2020-01-01") : \Carbon\Carbon::createFromFormat('Y-m-d', "{$q['start']}");
             $end = empty($q['end']) ? today() : \Carbon\Carbon::createFromFormat('Y-m-d', "{$q['end']}");
 
-            $query = $query->whereBetween('started_at', [$start, $end]);
+            $query = $query->whereBetween('started_at', [$start, $end])->latest('started_at');
             $query->chunk(100, function ($missions)
             {
                 foreach ($missions as $mission)
