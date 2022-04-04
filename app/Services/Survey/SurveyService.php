@@ -112,6 +112,11 @@ class SurveyService implements SurveyServiceContract
         $name = $this->getApplicationQuizName($userId);
         $survey = $this->surveyRepository->findByName($name)->first();
 
+        if (is_null($survey))
+        {
+            return null;
+        }
+
         return $this->surveyEntryRepository->findByUserIdAndSurveyId($userId, $survey->id)->first();
     }
 
