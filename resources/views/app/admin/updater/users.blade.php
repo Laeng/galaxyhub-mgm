@@ -19,7 +19,7 @@
             </div>
 
             <div class="space-y-4">
-                <x-alert.galaxyhub.info title="업데이터 사용자 인증 안내" class="mb-2">
+                <x-alert.galaxyhub.info title="업데이터 인증 현황" class="mb-2">
                     <ul>
                         <li><span x-text="data.load.data.total"></span>개가 조회되었습니다.</li>
                     </ul>
