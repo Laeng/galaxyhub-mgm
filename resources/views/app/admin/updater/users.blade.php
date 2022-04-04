@@ -28,56 +28,58 @@
                 <div class="bg-white dark:bg-gray-900 overflow-hidden rounded-md border-x border-t border-gray-300 dark:border-gray-800">
                     <ul role="list" class="">
                         <template x-for="updater in data.load.data.data">
-                            <li class="block font-mono border-b border-gray-300 dark:border-gray-800">
-                                <div class="px-4 py-4 sm:px-6">
-                                    <div class="flex items-center justify-between">
-                                        <p class="text-sm font-medium text-indigo-600 truncate uppercase" x-text="updater.code"></p>
-                                        <div class="ml-2 flex-shrink-0 flex">
-                                            <template x-if="updater.is_online">
-                                                <p class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Online</p>
-                                            </template>
-                                            <template x-if="!updater.is_online">
-                                                <p class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">Offline</p>
-                                            </template>
+                            <li class="block">
+                                <a :src="'/app/admin/user/' + updater.user_id" target="_blank" rel="noopener" class="block hover:bg-gray-50 border-b border-gray-300 dark:border-gray-800 font-mono">
+                                    <div class="px-4 py-4 sm:px-6">
+                                        <div class="flex items-center justify-between">
+                                            <p class="text-sm font-medium text-indigo-600 truncate uppercase" x-text="updater.code"></p>
+                                            <div class="ml-2 flex-shrink-0 flex">
+                                                <template x-if="updater.is_online">
+                                                    <p class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Online</p>
+                                                </template>
+                                                <template x-if="!updater.is_online">
+                                                    <p class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">Offline</p>
+                                                </template>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="mt-2 sm:flex sm:justify-between">
-                                        <div class="sm:flex">
-                                            <div class="flex items-center text-sm text-gray-500">
-                                                <svg class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" fill="currentColor">
-                                                    <path d="M224 256c70.7 0 128-57.31 128-128s-57.3-128-128-128C153.3 0 96 57.31 96 128S153.3 256 224 256zM274.7 304H173.3C77.61 304 0 381.6 0 477.3c0 19.14 15.52 34.67 34.66 34.67h378.7C432.5 512 448 496.5 448 477.3C448 381.6 370.4 304 274.7 304z"/>
-                                                </svg>
-                                                <p>
-                                                    <a class="link-indigo" :src="'/app/admin/user/' + updater.user_id" x-text="updater.user_name"></a>
-                                                </p>
+                                        <div class="mt-2 sm:flex sm:justify-between">
+                                            <div class="sm:flex">
+                                                <div class="flex items-center text-sm text-gray-500">
+                                                    <svg class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" fill="currentColor">
+                                                        <path d="M224 256c70.7 0 128-57.31 128-128s-57.3-128-128-128C153.3 0 96 57.31 96 128S153.3 256 224 256zM274.7 304H173.3C77.61 304 0 381.6 0 477.3c0 19.14 15.52 34.67 34.66 34.67h378.7C432.5 512 448 496.5 448 477.3C448 381.6 370.4 304 274.7 304z"/>
+                                                    </svg>
+                                                    <p>
+                                                    <p class="" x-text="updater.user_name"></p>
+                                                    </p>
+                                                </div>
+                                                <div class="mt-2 flex items-center text-sm text-gray-500 sm:mt-0 sm:ml-6">
+                                                    <svg class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" fill="currentColor">
+                                                        <path d="M528 0h-480C21.5 0 0 21.5 0 48v320C0 394.5 21.5 416 48 416h192L224 464H152C138.8 464 128 474.8 128 488S138.8 512 152 512h272c13.25 0 24-10.75 24-24s-10.75-24-24-24H352L336 416h192c26.5 0 48-21.5 48-48v-320C576 21.5 554.5 0 528 0zM512 288H64V64h448V288z"/>
+                                                    </svg>
+                                                    <p class="uppercase" x-text="updater.name"></p>
+                                                </div>
+                                                <div class="mt-2 flex items-center text-sm text-gray-500 sm:mt-0 sm:ml-6">
+                                                    <svg class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" fill="currentColor" viewBox="0 0 640 512">
+                                                        <path d="M400 0C426.5 0 448 21.49 448 48V144C448 170.5 426.5 192 400 192H352V224H608C625.7 224 640 238.3 640 256C640 273.7 625.7 288 608 288H512V320H560C586.5 320 608 341.5 608 368V464C608 490.5 586.5 512 560 512H400C373.5 512 352 490.5 352 464V368C352 341.5 373.5 320 400 320H448V288H192V320H240C266.5 320 288 341.5 288 368V464C288 490.5 266.5 512 240 512H80C53.49 512 32 490.5 32 464V368C32 341.5 53.49 320 80 320H128V288H32C14.33 288 0 273.7 0 256C0 238.3 14.33 224 32 224H288V192H240C213.5 192 192 170.5 192 144V48C192 21.49 213.5 0 240 0H400zM256 64V128H384V64H256zM224 448V384H96V448H224zM416 384V448H544V384H416z"/>
+                                                    </svg>
+                                                    <p class="uppercase" x-text="updater.ip"></p>
+                                                </div>
+                                                <div class="mt-2 flex items-center text-sm text-gray-500 sm:mt-0 sm:ml-6">
+                                                    <svg class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                                                        <path d="M7.724 65.49C13.36 55.11 21.79 46.47 32 40.56C39.63 36.15 48.25 33.26 57.46 32.33C59.61 32.11 61.79 32 64 32H448C483.3 32 512 60.65 512 96V416C512 451.3 483.3 480 448 480H64C28.65 480 0 451.3 0 416V96C0 93.79 .112 91.61 .3306 89.46C1.204 80.85 3.784 72.75 7.724 65.49V65.49zM48 416C48 424.8 55.16 432 64 432H448C456.8 432 464 424.8 464 416V160H48V416z"/>
+                                                    </svg>
+                                                    <p x-text="updater.version"></p>
+                                                </div>
                                             </div>
-                                            <div class="mt-2 flex items-center text-sm text-gray-500 sm:mt-0 sm:ml-6">
-                                                <svg class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" fill="currentColor">
-                                                    <path d="M528 0h-480C21.5 0 0 21.5 0 48v320C0 394.5 21.5 416 48 416h192L224 464H152C138.8 464 128 474.8 128 488S138.8 512 152 512h272c13.25 0 24-10.75 24-24s-10.75-24-24-24H352L336 416h192c26.5 0 48-21.5 48-48v-320C576 21.5 554.5 0 528 0zM512 288H64V64h448V288z"/>
-                                                </svg>
-                                                <p class="uppercase" x-text="updater.name"></p>
-                                            </div>
-                                            <div class="mt-2 flex items-center text-sm text-gray-500 sm:mt-0 sm:ml-6">
-                                                <svg class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" fill="currentColor" viewBox="0 0 640 512">
-                                                    <path d="M400 0C426.5 0 448 21.49 448 48V144C448 170.5 426.5 192 400 192H352V224H608C625.7 224 640 238.3 640 256C640 273.7 625.7 288 608 288H512V320H560C586.5 320 608 341.5 608 368V464C608 490.5 586.5 512 560 512H400C373.5 512 352 490.5 352 464V368C352 341.5 373.5 320 400 320H448V288H192V320H240C266.5 320 288 341.5 288 368V464C288 490.5 266.5 512 240 512H80C53.49 512 32 490.5 32 464V368C32 341.5 53.49 320 80 320H128V288H32C14.33 288 0 273.7 0 256C0 238.3 14.33 224 32 224H288V192H240C213.5 192 192 170.5 192 144V48C192 21.49 213.5 0 240 0H400zM256 64V128H384V64H256zM224 448V384H96V448H224zM416 384V448H544V384H416z"/>
-                                                </svg>
-                                                <p class="uppercase" x-text="updater.ip"></p>
-                                            </div>
-                                            <div class="mt-2 flex items-center text-sm text-gray-500 sm:mt-0 sm:ml-6">
+                                            <div class="mt-2 flex items-center text-sm text-gray-500 sm:mt-0">
                                                 <svg class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-                                                    <path d="M7.724 65.49C13.36 55.11 21.79 46.47 32 40.56C39.63 36.15 48.25 33.26 57.46 32.33C59.61 32.11 61.79 32 64 32H448C483.3 32 512 60.65 512 96V416C512 451.3 483.3 480 448 480H64C28.65 480 0 451.3 0 416V96C0 93.79 .112 91.61 .3306 89.46C1.204 80.85 3.784 72.75 7.724 65.49V65.49zM48 416C48 424.8 55.16 432 64 432H448C456.8 432 464 424.8 464 416V160H48V416z"/>
+                                                    <path d="M232 120C232 106.7 242.7 96 256 96C269.3 96 280 106.7 280 120V243.2L365.3 300C376.3 307.4 379.3 322.3 371.1 333.3C364.6 344.3 349.7 347.3 338.7 339.1L242.7 275.1C236 271.5 232 264 232 255.1L232 120zM256 0C397.4 0 512 114.6 512 256C512 397.4 397.4 512 256 512C114.6 512 0 397.4 0 256C0 114.6 114.6 0 256 0zM48 256C48 370.9 141.1 464 256 464C370.9 464 464 370.9 464 256C464 141.1 370.9 48 256 48C141.1 48 48 141.1 48 256z"/>
                                                 </svg>
-                                                <p x-text="updater.version"></p>
+                                                <p x-text="updater.updated_at"></p>
                                             </div>
                                         </div>
-                                        <div class="mt-2 flex items-center text-sm text-gray-500 sm:mt-0">
-                                            <svg class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-                                                <path d="M232 120C232 106.7 242.7 96 256 96C269.3 96 280 106.7 280 120V243.2L365.3 300C376.3 307.4 379.3 322.3 371.1 333.3C364.6 344.3 349.7 347.3 338.7 339.1L242.7 275.1C236 271.5 232 264 232 255.1L232 120zM256 0C397.4 0 512 114.6 512 256C512 397.4 397.4 512 256 512C114.6 512 0 397.4 0 256C0 114.6 114.6 0 256 0zM48 256C48 370.9 141.1 464 256 464C370.9 464 464 370.9 464 256C464 141.1 370.9 48 256 48C141.1 48 48 141.1 48 256z"/>
-                                            </svg>
-                                            <p x-text="updater.updated_at"></p>
-                                        </div>
                                     </div>
-                                </div>
+                                </a>
                             </li>
                         </template>
 

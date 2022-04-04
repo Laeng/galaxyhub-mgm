@@ -275,10 +275,10 @@ class ListController extends Controller
                 case 'drop':
                     foreach ($users as $user)
                     {
-                        $userService->delete($user->id);
                         $userService->createRecord($user->id, UserRecordType::USER_DELETE->name, [
                             'comment' => $reason
                         ], $executor->id);
+                        $userService->delete($user->id);
                     }
                     break;
 
