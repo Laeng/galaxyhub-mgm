@@ -47,7 +47,7 @@ class UpdateSteamAccounts implements ShouldQueue
                 {
                     if (!$userService->updateSteamAccount($user->id))
                     {
-                        $userService->ban($user->id, BanCommentType::STEAM_PROFILE_STATUS_PRIVATE->name);
+                        $userService->ban($user->id, BanCommentType::STEAM_PROFILE_STATUS_PRIVATE->value);
                     }
                 }
             }

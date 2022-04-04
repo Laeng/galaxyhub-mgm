@@ -20,7 +20,8 @@ class Kernel extends ConsoleKernel
 
         $schedule->command('ban:delete-expired')->everyMinute();
         $schedule->command('mission:close')->everyMinute();
-        $schedule->command('updater:clean')->daily();
+        $schedule->command('updater:clean')->timezone('Asia/Seoul')->dailyAt('06:00');
+        $schedule->command('user:pause-auto')->timezone('Asia/Seoul')->dailyAt('05:00');
         $schedule->command('account:update steam')->timezone('Asia/Seoul')->monthlyOn(1, '04:00');
     }
 
