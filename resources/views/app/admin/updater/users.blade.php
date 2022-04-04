@@ -1,4 +1,4 @@
-<x-theme.galaxyhub.sub-content title="미션 통계" description="애드온 통계" :breadcrumbs="Diglactic\Breadcrumbs\Breadcrumbs::render('app.admin', '애드온 통계')">
+<x-theme.galaxyhub.sub-content title="업데이터 인증 현황" description="업데이터 인증 현황" :breadcrumbs="Diglactic\Breadcrumbs\Breadcrumbs::render('app.admin', '업데이터 인증 현황')">
     <x-panel.galaxyhub.basics>
         <div class="space-y-4" x-data="updater_users">
             <div>
