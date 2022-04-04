@@ -107,6 +107,14 @@ class SurveyService implements SurveyServiceContract
         return $surveys->first();
     }
 
+    public function getLatestApplicationQuiz(int $userId): ?SurveyEntry
+    {
+        $name = $this->getApplicationQuizName($userId);
+        $survey = $this->surveyRepository->findByName($name)->first();
+
+        return $this->surveyEntryRepository->findByUserIdAndSurveyId($userId, $survey->id)->first();
+    }
+
     public function getApplicationQuizWithIn7Days(int $userId): ?Collection
     {
         $name = $this->getApplicationQuizName($userId);

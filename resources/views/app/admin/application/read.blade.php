@@ -14,10 +14,29 @@
     </div>
 
     <div class="md:flex md:space-x-4" x-data="application_read">
-        <x-panel.galaxyhub.basics class="self-start md:basis-3/5 lg:basis-2/3">
-            <h2 class="text-xl lg:text-2xl font-bold">가입 신청서</h2>
-            <x-survey.form :survey="$survey" :answer="$answer"/>
-        </x-panel.galaxyhub.basics>
+        <div class="self-start md:basis-3/5 lg:basis-2/3">
+            <x-panel.galaxyhub.basics>
+                <div class="border-b border-gray-300 dark:border-gray-800 -mt-2 sm:-mt-4 mb-6">
+                    <nav class="-mb-px flex space-x-8" aria-label="Tabs">
+                        <button class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm" :class="data.ui.mode ? 'border-indigo-500 text-indigo-600' : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300'" @click="data.ui.mode = true"> 가입 신청서 </button>
+                        <button class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm" :class="!data.ui.mode ? 'border-indigo-500 text-indigo-600' : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300'" @click="data.ui.mode = false"> 가입 퀴즈 </button>
+                    </nav>
+                </div>
+
+                <div x-show="data.ui.mode">
+                    <h2 class="text-xl lg:text-2xl font-bold">가입 신청서</h2>
+                    <x-survey.form :survey="$survey" :answer="$answer"/>
+                </div>
+                <div x-show="!data.ui.mode">
+                    <h2 class="text-xl lg:text-2xl font-bold">가입 퀴즈</h2>
+                    @if(!is_null($quiz))
+                        <x-survey.form :survey="$quiz" :answer="$quiz_answer"/>
+                    @else
+                        <p class="py-4 leading-6 font-medium text-gray-900 dark:text-gray-100 mb-2.5">생성된 가입 퀴즈가 없습니다.</p>
+                    @endif
+                </div>
+            </x-panel.galaxyhub.basics>
+        </div>
 
         <div class="self-start p-4 lg:p-8 md:basis-2/5 lg:basis-1/3 flex flex-col space-y-4">
             <div class="flex flex-col space-y-2">
@@ -207,6 +226,9 @@
                     load: -1
                 },
                 data: {
+                    ui: {
+                        mode: true
+                    },
                     process: {
                         url: '{{ route('admin.application.index.process') }}',
                         body: {},
