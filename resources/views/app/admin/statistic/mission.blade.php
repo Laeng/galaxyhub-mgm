@@ -113,7 +113,7 @@
                                     this.data.load.statistic.values1 = [];
                                     this.data.load.statistic.values2 = [];
 
-                                    for (let key in r.data.data.data.values)
+                                    for (let key in r.data.data.data.values.reverse())
                                     {
                                         let value = r.data.data.data.values[key];
                                         this.data.load.statistic.keys.push(value.title);

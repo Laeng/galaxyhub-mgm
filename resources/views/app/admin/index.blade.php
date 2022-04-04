@@ -98,7 +98,7 @@
                     <div class="flex-1 min-w-0">
                         <a href="{{ route('admin.updater.users') }}" class="focus:outline-none">
                             <span class="absolute inset-0" aria-hidden="true"></span>
-                            <p class="font-medium text-gray-900 dark:text-gray-100">업데이터 인증</p>
+                            <p class="font-medium text-gray-900 dark:text-gray-100">업데이터 인증 현황</p>
                             <p class="text-sm text-gray-500  dark:text-gray-300 truncate">MGM 업데이터 사용자 인증 현황을 확인합니다.</p>
                         </a>
                     </div>
