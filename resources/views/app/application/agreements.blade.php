@@ -104,7 +104,7 @@
                 <p class="py-2 text-center">
                     개인정보처리방침 및 이용약관을 읽으셨으며 모두 동의하십니까?
                 </p>
-                <form action="{{ config('app.config.enable-join-quiz') ? route('application.quiz') : route('application.form')}}" method="post" onsubmit="return (data.check.load && data.check.status)">
+                <form :action="data.form.action" :method="data.form.method" onsubmit="return (data.check.load && data.check.status)">
                     @csrf
                     <div class="flex justify-center pt-2 space-x-4">
                         <x-button.filled.md-blue
@@ -126,12 +126,19 @@
                         load: false,
                         status: false,
                         message: ''
+                    },
+                    form: {
+                        action: '#',
+                        method: 'get'
                     }
                 },
                 check() {
                     let url = '{{route('application.agreement.check.account')}}';
                     let body = {};
                     let success = (r) => {
+                        this.data.form.action = '{{ config('app.config.enable-join-quiz') ? route('application.quiz') : route('application.form') }}';
+                        this.data.form.method = 'post';
+
                         this.data.check.status = r.data.data;
                         this.data.check.message = r.data.description;
                     };

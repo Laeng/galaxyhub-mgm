@@ -98,7 +98,7 @@ class QuizController extends Controller
             $answers = $this->validate($request, $quiz->validateRules());
             $this->surveyEntryRepository->new()->for($quiz)->by($user)->fromArray($answers)->push();
 
-            $quizEntry = $this->surveyEntryRepository->findByUserIdAndSurveyId($user->id, $quizId)?->first();
+            $quizEntry = $this->surveyEntryRepository->findByUserIdAndSurveyId($user->id, $quizId)->first();
         }
 
         $answers = $quizEntry->answers()->get();
@@ -113,26 +113,90 @@ class QuizController extends Controller
             }
         }
 
-        if ($request->isMethod('POST')) {
-            if ($matches < 3) {
-                if (!$user->isBanned()) {
-                    $user->ban([
-                        'comment' => 'ARMA3 퀴즈를 3개 이상 맞추지 못하셨습니다. 7일 후 다시 도전 하실 수 있습니다.',
-                        'expired_at' => now()->addDays(7),
-                    ]);
+        $isPost = false;
+        $rejectCount = $userService->findRoleRecordeByUserId($user->id, RoleType::REJECT->name, true)->count();
 
-                    $userService->createRecord($user->id, UserRecordType::BAN_DATA->name, [
-                        'comment' => BanCommentType::APPLICATION_QUIZ_FAIL->value
-                    ]);
+        if ($request->isMethod('POST')) {
+            $isPost = true;
+
+            if ($matches < 4)
+            {
+                $quizzes = $this->surveyService->getApplicationQuiz($user->id);
+
+                if ($quizzes->count() >= 2)
+                {
+                    $banDays = null;
+
+                    switch ($rejectCount)
+                    {
+                        case 0:
+                            $banReason = '가입 퀴즈 2회 불합격';
+                            $banDays = 30;
+                            break;
+
+                        case 1:
+                            $banReason = '가입 퀴즈 3회 불합격';
+                            $banDays = 90;
+                            break;
+
+                        default:
+                            $banReason = '가입 퀴즈 4회 이상 불합격';
+                            break;
+                    }
+
+                    $rejectCount += 1;
+
+                    if (!is_null($user->bans()) && $user->bans()->first()->comment !== $banReason)
+                    {
+                        $roles = $user->getRoleNames();
+
+                        foreach ($roles as $role)
+                        {
+                            $user->removeRole($role);
+                        }
+
+                        $user->assignRole(RoleType::REJECT->name);
+
+                        $banType = is_null($banDays) ? ['무기한', '더 이상 가입 신청을 하실 수 없습니다.'] : ['일시', "{$banDays}일 이후 가입 신청을 하실 수 있습니다."];
+
+                        $user->ban([
+                            'comment' => "가입이 {$rejectCount}번 거절되어 계정이 {$banType[0]} 비활성 되었습니다. {$banType[1]}<br/><br/><span class='font-bold'>가입 거절 사유:</span><br/>{$banReason}",
+                            'expired_at' => !is_null($banDays) ? now()->addDays($banDays) : null
+                        ]);
+
+                        $userService->createRecord($user->id, UserRecordType::ROLE_DATA->name, [
+                            'role' => RoleType::REJECT->name,
+                            'comment' => $banReason
+                        ]);
+                    }
+                }
+                else
+                {
+                    $userService->ban($user->id, '가입 퀴즈 불합격', 7);
                 }
             }
+        }
+
+        if ($user->isBanned() || $isPost)
+        {
+            $pauseDays = match ($rejectCount) {
+                0 => 7,
+                1 => 30,
+                2 => 90,
+                default => null
+            };
+        }
+        else
+        {
+            $pauseDays = 0;
         }
 
         return view('app.application.score', [
             'user' => $user,
             'survey' => $quiz,
             'answer' => $quizEntry->id,
-            'matches' => $matches
+            'matches' => $matches,
+            'pauseDays' => $pauseDays
         ]);
     }
 }

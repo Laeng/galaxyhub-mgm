@@ -187,18 +187,26 @@ class ListController extends Controller
                     $count = $userService->findRoleRecordeByUserId($user->id, RoleType::REJECT->name)->count();
                     $ban = array();
 
-                    if ($count == 1)
+                    if ($count >= 3)
                     {
                         $ban = [
-                            'comment' => "가입이 거절되어 계정이 일시 정지되었습니다. 30일 이후 가입 신청을 하실 수 있습니다.<br/><br/><span class='font-bold'>가입 거절 사유:</span><br/>{$reason}",
-                            'expired_at' => now()->addDays(30),
+                            'comment' => "가입이 3번 거절되어 계정이 무기한 비활성 되었습니다. 더 이상 가입 신청을 하실 수 없습니다.<br/><br/><span class='font-bold'>가입 거절 사유:</span><br/>{$reason}"
                         ];
                     }
 
-                    if ($count >= 2)
+                    if ($count == 2)
                     {
                         $ban = [
-                            'comment' => "가입이 2번 거절되어 계정이 무기한 정지되었습니다. 더 이상 가입 신청을 하실 수 없습니다.<br/><br/><span class='font-bold'>가입 거절 사유:</span><br/>{$reason}"
+                            'comment' => "가입이 2번 거절되어 계정이 일시 비활성 되었습니다. 90일 이후 가입 신청을 하실 수 있습니다.<br/><br/><span class='font-bold'>가입 거절 사유:</span><br/>{$reason}",
+                            'expired_at' => now()->addDays(90),
+                        ];
+                    }
+
+                    if ($count == 1)
+                    {
+                        $ban = [
+                            'comment' => "가입이 거절되어 계정이 일시 비활성 되었습니다. 30일 이후 가입 신청을 하실 수 있습니다.<br/><br/><span class='font-bold'>가입 거절 사유:</span><br/>{$reason}",
+                            'expired_at' => now()->addDays(30),
                         ];
                     }
 

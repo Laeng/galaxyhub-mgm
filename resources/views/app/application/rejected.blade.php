@@ -38,21 +38,37 @@
             </li>
 
             <li class="hidden relative md:flex-1 md:flex">
-                <div class="group flex items-center w-full">
-                    <p class="px-6 py-4 flex items-center text-sm font-medium">
+                @if($hasApplication)
+                    <div class="group flex items-center w-full">
+                        <p class="px-6 py-4 flex items-center text-sm font-medium">
                         <span class="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-full bg-blue-600 group-hover:bg-blue-800">
                             <svg class="w-6 h-6 text-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                                 <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
                             </svg>
                         </span>
-                        <span class="ml-4 text-sm font-medium text-gray-900 dark:text-gray-100">가입 신청서 작성 완료!</span>
-                    </p>
-                </div>
-                <div class="hidden md:block absolute top-0 right-0 h-full w-5" aria-hidden="true">
-                    <svg class="h-full w-full text-gray-300 dark:text-gray-800" viewBox="0 0 22 80" fill="none" preserveAspectRatio="none">
-                        <path d="M0 -2L20 40L0 82" vector-effect="non-scaling-stroke" stroke="currentcolor" stroke-linejoin="round"/>
-                    </svg>
-                </div>
+                            <span class="ml-4 text-sm font-medium text-gray-900 dark:text-gray-100">가입 신청서 작성 완료!</span>
+                        </p>
+                    </div>
+                    <div class="hidden md:block absolute top-0 right-0 h-full w-5" aria-hidden="true">
+                        <svg class="h-full w-full text-gray-300 dark:text-gray-800" viewBox="0 0 22 80" fill="none" preserveAspectRatio="none">
+                            <path d="M0 -2L20 40L0 82" vector-effect="non-scaling-stroke" stroke="currentcolor" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                @else
+                    <div class="group flex items-center w-full">
+                        <p class="px-6 py-4 flex items-center text-sm font-medium">
+                        <span class="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-full border-2 border-gray-300 dark:border-gray-500 group-hover:border-gray-400">
+                            <span class="text-gray-500 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-gray-100">03</span>
+                        </span>
+                            <span class="ml-4 text-sm font-medium text-gray-500 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-gray-100">가입 신청서 작성</span>
+                        </p>
+                    </div>
+                    <div class="hidden md:block absolute top-0 right-0 h-full w-5" aria-hidden="true">
+                        <svg class="h-full w-full text-gray-300 dark:text-gray-800" viewBox="0 0 22 80" fill="none" preserveAspectRatio="none">
+                            <path d="M0 -2L20 40L0 82" vector-effect="non-scaling-stroke" stroke="currentcolor" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                @endif
             </li>
 
             <li class="hidden relative md:flex-1 md:flex">
@@ -77,23 +93,46 @@
                 <p>
                     가입 신청이 거절되었습니다. <br/>
                     {{ $count }}회 가입 거절 되셨으므로
-                    @if($count >= 2)
-                        규정에 따라 가입을 하실 수 없습니다.
-                    @else
+                    @switch($count)
+                        @case(1)
                         {{ $date->format('Y년 m월 d일') }}로부터 30일이 지난 후에 다시 가입을 신청할 수 있습니다.
-                    @endif
-                    @if(!is_null($reason) && $reason !== '')
-                        가입 거절 사유는 다음과 같습니다.
-                    @endif
-                <p class="font-medium my-4">{{ $reason }}</p>
+                        @break
+                        @case(2)
+                        {{ $date->format('Y년 m월 d일') }}로부터 90일이 지난 후에 다시 가입을 신청할 수 있습니다.
+                        @break
+                        @default
+                        규정에 따라 가입을 하실 수 없습니다.
+                        @break
+                    @endswitch
+                </p>
+                @if(!is_null($reason) && $reason !== '')
+                    <div class="pt-1 pb-4">
+                        <p>가입 거절 사유는 다음과 같습니다.</p>
+                        <p class="py-4 font-medium">{!! $reason !!}</p>
+                    </div>
+                @endif
                 <p class="text-sm">"데이터 삭제" 버튼을 통해 가입을 위해 제출한 정보를 삭제할 수 있습니다.<br/> 가입 거절 내역의 경우 개인정보취급방침에 따라 일정 기간 저장 됨을 알려드립니다.</p>
             </div>
-            <div class="flex justify-center pt-6 pb-4 lg:pb-0 space-x-2" x-data="account_leave">
-                @if($count < 2 &&  $date->diffInDays(\Carbon\Carbon::now(), false) >= 30)
-                    <x-button.filled.md-white type="button" onclick="location.href='{{ route('application.agreements') }}'">
-                        다시 신청하기
-                    </x-button.filled.md-white>
-                @endif
+            <div class="flex justify-center pt-6 pb-4 lg:pb-0 space-x-2">
+                @switch($count)
+                    @case(1)
+                    @if($date->diffInDays(\Carbon\Carbon::now(), false) >= 30)
+                        <x-button.filled.md-white type="button" onclick="location.href='{{ route('application.agreements') }}'">
+                            다시 신청하기
+                        </x-button.filled.md-white>
+                    @endif
+                    @break
+                    @case(2)
+                    @if($date->diffInDays(\Carbon\Carbon::now(), false) >= 90)
+                        <x-button.filled.md-white type="button" onclick="location.href='{{ route('application.agreements') }}'">
+                            다시 신청하기
+                        </x-button.filled.md-white>
+                    @endif
+                    @break
+                    @default
+                    @break
+                @endswitch
+
                 <x-button.filled.md-white onclick="location.href='{{ route('account.leave') }}'">
                     데이터 삭제
                 </x-button.filled.md-white>

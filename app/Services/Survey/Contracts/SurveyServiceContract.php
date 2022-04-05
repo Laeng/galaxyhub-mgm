@@ -24,5 +24,7 @@ interface SurveyServiceContract
 
     public function getLatestApplicationQuiz(int $userId): ?SurveyEntry;
 
+    public function getApplicationQuiz(int $userId): ?Collection;
+
     public function getApplicationQuizWithIn7Days(int $userId): ?Collection;
 }

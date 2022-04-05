@@ -6,6 +6,7 @@ use App\Enums\RoleType;
 use App\Http\Controllers\Controller;
 use App\Repositories\User\Interfaces\UserAccountRepositoryInterface;
 use App\Repositories\User\Interfaces\UserRecordRepositoryInterface;
+use App\Services\Survey\Contracts\SurveyServiceContract;
 use App\Services\User\Contracts\UserServiceContract;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\View;
@@ -58,7 +59,7 @@ class ApplicationController extends Controller
         return view('app.application.applied');
     }
 
-    public function rejected(): View|Application|RedirectResponse|Redirector
+    public function rejected(SurveyServiceContract $surveyService): View|Application|RedirectResponse|Redirector
     {
         $user = Auth::user();
 
@@ -70,12 +71,13 @@ class ApplicationController extends Controller
         $recode = $this->userService->findRoleRecordeByUserId($user->id, RoleType::REJECT->name);
         $latest = $recode->first();
 
-
+        $hasApplication = !is_null($surveyService->getLatestApplicationForm($user->id));
 
         return view('app.application.rejected', [
             'reason' => $latest->data['comment'],
-            'date' => $latest->created_at,
-            'count' => $recode->count()
+            'date' => $latest->updated_at,
+            'count' => $recode->count(),
+            'hasApplication' => $hasApplication
         ]);
     }
 

@@ -13,6 +13,7 @@ use App\Repositories\User\Interfaces\UserRecordRepositoryInterface;
 use App\Repositories\User\Interfaces\UserRepositoryInterface;
 use App\Services\Steam\Contracts\SteamServiceContract;
 use App\Services\User\Contracts\UserServiceContract;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use function now;
 
@@ -61,7 +62,8 @@ class UserService implements UserServiceContract
                 $diff = array_diff($account->toArray(), $attributes);
                 $isDifferent = count($diff) > 0;
 
-                if ($isDifferent){
+                if ($isDifferent)
+                {
                     if ($account->nickname !== $attributes['nickname'])
                     {
                         $accountAttributes = array_merge($attributes, [
@@ -109,14 +111,61 @@ class UserService implements UserServiceContract
                 ]);
 
                 unset($accountAttributes['id']);
+                $this->userAccountRepository->create($accountAttributes);
 
-                $account = $this->userAccountRepository->create($accountAttributes);
+                $isBanned = false;
+
+                $roles = $this->getRecord($user->id, UserRecordType::ROLE_DATA->name, true);
+
+                if ($roles->count() > 0)
+                {
+                    $role = $roles->first();
+                    $reason = array_key_exists('comment', $role->data) && $role->data['comment'] !== '' ? $role->data['comment'] : '가입 거절';
+
+                    switch ($roles->count())
+                    {
+                        case 1:
+                            $expired_at = $role->updated_at->addDays(30);
+                            break;
+
+                        case 2:
+                            $expired_at = $role->updated_at->addDays(90);
+                            break;
+
+                        default:
+                            $expired_at = null;
+                            $this->ban($user->id, $reason);
+                            break;
+                    }
+
+                    if (!is_null($expired_at) && !$expired_at->isPast())
+                    {
+                        $this->ban($user->id, $reason, today()->diffInDays($expired_at));
+                    }
+                }
+
+                $bans = $this->getRecord($user->id, UserRecordType::BAN_DATA->name, true);
+                $unbans = $this->getRecord($user->id, UserRecordType::UNBAN_DATA->name, true);
+
+                if ($bans->count() > $unbans->count())
+                {
+                    $ban = $bans->first();
+
+                    if (!array_key_exists('expired_at', $ban->data))
+                    {
+                        $this->ban($user->id, array_key_exists('comment', $ban->data) ? $ban->data['comment'] : '', null, null, true);
+                    }
+                    else
+                    {
+                        $expired_at = Carbon::parse($ban->data['expired_at']);
+
+                        if (!$expired_at->isPast())
+                        {
+                            $this->ban($user->id, array_key_exists('comment', $ban->data) ? $ban->data['comment'] : '', today()->diffInDays($expired_at), null, true);
+                        }
+                    }
+                }
             }
-
-            //$bans = $this->findBanRecordByUuid($this->recordRepository->getUuidV5($account->account_id))->filter(function ($v, $k) {
-                //return $v->data['expired_at']
-            //});
-
 
             return $user;
         }
@@ -127,23 +176,45 @@ class UserService implements UserServiceContract
         }
     }
 
-    public function getRecord(int $userId, string $type): Collection
+    public function getRecord(int $userId, string $type, bool $useSteamAccount = false): Collection
     {
-        return $this->recordRepository->findByUserIdAndType($userId, $type);
+        if ($useSteamAccount)
+        {
+            $steamAccount = $this->userAccountRepository->findSteamAccountByUserId($userId)->first();
+
+            if (!is_null($steamAccount))
+            {
+                $uuid = $this->recordRepository->getUuidV5($steamAccount->account_id);
+
+                return $this->recordRepository->findByUuidAndType($uuid, $type);
+            }
+
+            return new Collection();
+        }
+        else
+        {
+            return $this->recordRepository->findByUserIdAndType($userId, $type);
+        }
     }
 
     public function createRecord(int $userId, string $type, array $data, ?int $recorderId = null): ?UserRecord
     {
         $steamAccount = $this->userAccountRepository->findSteamAccountByUserId($userId)->first();
-        $uuid = $this->recordRepository->getUuidV5($steamAccount->account_id);
 
-        return $this->recordRepository->create([
-            'user_id' => $userId,
-            'recorder_id' => $recorderId,
-            'type' => $type,
-            'data' => $data,
-            'uuid' => $uuid
-        ]);
+        if (!is_null($steamAccount))
+        {
+            $uuid = $this->recordRepository->getUuidV5($steamAccount->account_id);
+
+            return $this->recordRepository->create([
+                'user_id' => $userId,
+                'recorder_id' => $recorderId,
+                'type' => $type,
+                'data' => $data,
+                'uuid' => $uuid
+            ]);
+        }
+
+        return null;
     }
 
     public function editRecord(int $userId, string $type, array $data, ?int $recorderId = null): ?bool
@@ -165,22 +236,25 @@ class UserService implements UserServiceContract
         }
     }
 
-    public function ban(int $userId, ?string $reason = null, ?int $days = null, ?int $executeId = null): bool
+    public function ban(int $userId, ?string $reason = null, ?int $days = null, ?int $executeId = null, ?bool $overwrite = false): bool
     {
         $user = $this->userRepository->findById($userId);
 
         if (!is_null($user))
         {
-            $data = [
-                'comment' => $reason,
-            ];
+            if (is_null($user->banned_at) || $overwrite)
+            {
+                $data = [
+                    'comment' => $reason,
+                ];
 
-            if ($days != null) {
-                $data['expired_at'] = now()->addDays($days);
+                if ($days != null) {
+                    $data['expired_at'] = now()->addDays($days);
+                }
+
+                $user->ban($data);
+                $this->createRecord($user->id, UserRecordType::BAN_DATA->name, $data, $executeId);
             }
-
-            $user->ban($data);
-            $this->createRecord($user->id, UserRecordType::BAN_DATA->name, $data, $executeId);
 
             return true;
         }
@@ -237,11 +311,29 @@ class UserService implements UserServiceContract
         return $this->recordRepository->findByUuidAndType($uuid, UserRecordType::BAN_DATA->name);
     }
 
-    public function findRoleRecordeByUserId(int $userId, string $role): ?Collection
+    public function findRoleRecordeByUserId(int $userId, string $role, bool $useSteamAccount = false): ?Collection
     {
-        return $this->recordRepository->findByUserIdAndType($userId, UserRecordType::ROLE_DATA->name)?->filter(
-            fn ($v, $k) => $v->data['role'] === $role
-        );
+        if ($useSteamAccount)
+        {
+            $steamAccount = $this->userAccountRepository->findSteamAccountByUserId($userId)->first();
+
+            if (!is_null($steamAccount))
+            {
+                $uuid = $this->recordRepository->getUuidV5($steamAccount->account_id);
+
+                return $this->recordRepository->findByUuidAndType($uuid, UserRecordType::ROLE_DATA->name)?->filter(
+                fn ($v, $k) => $v->data['role'] === $role
+            );
+            }
+        }
+        else
+        {
+            return $this->recordRepository->findByUserIdAndType($userId, UserRecordType::ROLE_DATA->name)?->filter(
+                fn ($v, $k) => $v->data['role'] === $role
+            );
+        }
+
+        return new Collection();
     }
 
     public function updateSteamAccount(int $userId): bool

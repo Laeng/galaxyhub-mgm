@@ -83,7 +83,7 @@
                 </h1>
 
                 <div class="mt-3 grid grid-cols-1 gap-3">
-                    @if($matches >= 3)
+                    @if($matches >= 4)
                         <x-alert.galaxyhub.success title="축하드립니다!">
                             <ul>
                                 <li>{{ $user->name }}님께서는 5개의 문제 중 {{ $matches }}개를 맞추셨습니다!</li>
@@ -94,9 +94,15 @@
                     @else
                         <x-alert.galaxyhub.info title="앗... 이런...">
                             <ul>
-                                <li>{{ $user->name }}님께서는 5개의 문제 중 {{ $matches }}개를 맞추셨습니다. 가입을 위해서는 3문제 이상 맞추셔야 합니다.</li>
+                                <li>{{ $user->name }}님께서는 5개의 문제 중 {{ $matches }}개를 맞추셨습니다. 가입을 위해서는 4문제 이상 맞추셔야 합니다.</li>
                                 <li>모든 문제는 <a href="https://cafe.naver.com/gamemmakers/book5076085" target="_blank" class="underline hover:no-underline font-bold">아르마 길잡이</a>에서 출제 됩니다.</li>
-                                <li>{{ $user->name }}님께서는 운영 정책에 따라 7일 뒤인 {{ $survey->created_at->copy()->addDays(7)->format('Y년 m월 d일 H시 i분') }}에 재도전 하실 수 있습니다.</li>
+                                <li>
+                                    @if(!is_null($pauseDays))
+                                        {{ $user->name }}님께서는 운영 정책에 따라 {{ $pauseDays }}일 뒤인 {{ $survey->created_at->copy()->addDays($pauseDays)->format('Y년 m월 d일 H시 i분') }}에 다시 도전 하실 수 있습니다.
+                                    @else
+                                        {{ $user->name }}님께서는 운영 정책에 따라 더이상 도전을 하실 수 없으며 가입이 불가 합니다.
+                                    @endif
+                                </li>
                             </ul>
                         </x-alert.galaxyhub.info>
                     @endif

@@ -21,7 +21,7 @@ class QuizQuestion extends Question
             'description' =>
                 "<p>MGM 아르마 클랜은 원활하고 재밌는 플레이 환경 조성을 위하여 규칙을 제정하였으며 본 퀴즈는 MGM 아르마 클랜의 규정을 다루고 있습니다.<br/>".
                 '모든 문제는 <a class="link-indigo" href="https://cafe.naver.com/gamemmakers/book5076085" target="_blank">아르마 길잡이</a>에서 출제되며 5문제 중 3문제 이상을 맞추어 주셔야 합니다.</p>'.
-                '<p>제한 시간은 없으며, 맞은 갯수가 3개 미만일 경우 7일간 재 가입 신청을 하실 수 없사오니 주의해 주시기 바랍니다.</p>'.
+                '<p>별도의 제한 시간은 없으며 맞은 갯수가 4개 미만일 경우 불합격 처리가 됨을 알려드립니다.</p>'.
                 '<p class="text-sm">퀴즈에 대한 모든 권리는 멀티플레이 게임 매니지먼트에게 있습니다.</p>'.
                 '<p class="text-red-600 text-base">* 필수 입력</p>'
         ]);
