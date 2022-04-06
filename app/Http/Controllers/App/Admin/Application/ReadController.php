@@ -50,13 +50,7 @@ class ReadController extends Controller
         $isRejoin = false;
 
         $application = $this->surveyService->getLatestApplicationForm($user->id);
-
-        if (is_null($application))
-        {
-            abort(404);
-        }
-
-        $survey = $application?->survey()->first();
+        $survey = !is_null($application) ? $application?->survey()->first() : null;
 
         $quiz = $this->surveyService->getLatestApplicationQuiz($user->id);
         $survey_quiz = !is_null($quiz) ? $quiz->survey()->first() : null;
@@ -123,10 +117,10 @@ class ReadController extends Controller
             'role' => $role,
             'title' => "{$user->name}님의 신청서",
             'survey' => $survey,
-            'answer' => $application->id,
+            'answer' => !is_null($quiz) ? $application->id : null,
             'quiz' => $survey_quiz,
             'quiz_answer' => !is_null($quiz) ? $quiz->id : null,
-            'status' => $status,
+            'status' => $status ?? '약관 동의',
             'isBanned' => $isBanned,
             'isRejoin' => $isRejoin,
         ]);

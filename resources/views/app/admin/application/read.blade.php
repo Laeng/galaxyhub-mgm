@@ -25,7 +25,11 @@
 
                 <div x-show="data.ui.mode">
                     <h2 class="text-xl lg:text-2xl font-bold">가입 신청서</h2>
-                    <x-survey.form :survey="$survey" :answer="$answer"/>
+                    @if(!is_null($survey))
+                        <x-survey.form :survey="$survey" :answer="$answer"/>
+                    @else
+                        <p class="py-4 leading-6 font-medium text-gray-900 dark:text-gray-100 mb-2.5">접수된 가입 신청서가 없습니다.</p>
+                    @endif
                 </div>
                 <div x-show="!data.ui.mode">
                     <h2 class="text-xl lg:text-2xl font-bold">가입 퀴즈</h2>
