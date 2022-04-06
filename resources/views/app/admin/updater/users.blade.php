@@ -116,10 +116,6 @@
                             if (r.data.data !== null) {
                                 if (!(typeof r.data.data === 'undefined' || r.data.data.length <= 0)) {
                                     this.data.load.data = r.data.data;
-
-                                    if (this.interval.load >= 0) {
-                                        clearInterval(this.interval.load);
-                                    }
                                 }
                             }
                         };
@@ -150,7 +146,7 @@
                             {
                                 this.interval.load = setInterval(() => {
                                     this.post(this.data.load.url, this.data.load.body, success, error, complete)
-                                }, 5000);
+                                }, 15000);
                             }
                         }
                     },
