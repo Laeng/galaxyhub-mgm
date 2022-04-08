@@ -77,7 +77,7 @@ class QuizQuestion extends Question
                     '㉠: NPC, ㉡: 주의',
                     '㉠: NPC, ㉡: 경고',
                 ],
-                'answer' => '㉠: 적군, ㉡: 주의',
+                'answer' => '㉠: 적군, ㉡: 경고',
             ],
             [
                 'title' => '아래 내용은 ARMA행동규칙  \'쾌적한 플레이를 위한 강령\' 내용입니다. 빈칸에 들어갈 단어를 선택하여 주십시오.',

@@ -106,7 +106,7 @@ class ReadController extends Controller
             }
         }
 
-        $record = $this->userService->findRoleRecordeByUserId($user->id, $role->name)->first();
+        $record = !is_null($role) ? $this->userService->findRoleRecordeByUserId($user->id, $role->name)->first() : null;
         $admin = !is_null($record?->recorder_id) ? $this->userRepository->findById($record->recorder_id) : null;
 
         return view('app.admin.application.read', [
