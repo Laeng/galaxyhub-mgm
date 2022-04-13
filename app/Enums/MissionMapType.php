@@ -2,8 +2,6 @@
 
 namespace App\Enums;
 
-use function Symfony\Component\String\s;
-
 enum MissionMapType {
     case ALITS;
     case ANIZAY;
