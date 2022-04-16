@@ -66,7 +66,7 @@
                 </template>
 
                 <div class="h-fit w-full rounded-md bg-gray-50 dark:border dark:bg-gray-900 dark:border-gray-800 p-4" x-cloak>
-                    <div class="ck-content" x-html="window.atob(data.load.data.body)"></div>
+                    <div class="ck-content" x-html="encodeURIComponent(window.atob(data.load.data.body))"></div>
                 </div>
             </div>
 
