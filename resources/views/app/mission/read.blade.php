@@ -66,7 +66,7 @@
                 </template>
 
                 <div class="h-fit w-full rounded-md bg-gray-50 dark:border dark:bg-gray-900 dark:border-gray-800 p-4" x-cloak>
-                    <div class="ck-content" x-html="data.load.data.body"></div>
+                    <div class="ck-content" x-html="atob(data.load.data.body)"></div>
                 </div>
             </div>
 
@@ -279,7 +279,7 @@
                                 closed_at: '@if(!is_null($mission->closed_at)){{ $mission->closed_at->format('Y-m-d H:i') }}@endif',
                             },
                             code: '{{ $code }}',
-                            body: '{!! $mission->body !!}',
+                            body: '{!! base64_encode($mission->body) !!}',
                             can_tardy: {{ var_export($mission->can_tardy) }},
                             is_participant: {{ var_export($isParticipant) }},
                             is_edit: false,
