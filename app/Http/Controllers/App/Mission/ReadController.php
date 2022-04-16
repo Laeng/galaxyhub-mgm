@@ -316,7 +316,7 @@ class ReadController extends Controller
                 ],
                 'code' => '',
                 'can_tardy' => $mission->can_tardy,
-                'body' => $mission->body,
+                'body' => base64_encode($mission->body),
                 'is_participant' => (!is_null($userMission) && $mission->user_id != $user->id),
                 'is_survey' => !is_null($mission->survey_id),
                 'button_text' => $buttonText
