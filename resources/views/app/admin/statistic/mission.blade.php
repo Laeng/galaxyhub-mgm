@@ -40,6 +40,7 @@
             </div>
 
             <div class="border border-gray-300 dark:border-gray-800 rounded-md ">
+
                 <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-800">
                     <thead class="bg-gray-50 dark:bg-gray-900">
                     <tr>
