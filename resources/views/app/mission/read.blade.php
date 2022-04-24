@@ -71,7 +71,7 @@
             </div>
 
             <div class="flex flex-col space-y-2" x-cloak>
-                <h2 class="text-xl lg:text-2xl font-bold">참가자</h2>
+                <h2 class="text-xl lg:text-2xl font-bold">참가자 <span class="text-sm" x-text="'(' + data.participants.data.participants.length + '명)'"></span></h2>
                 <div class="grid grid-cols-1 gap-4 lg:grid-cols-2">
                     @if($isAdmin)
                         <template x-for="i in data.participants.data.participants">
