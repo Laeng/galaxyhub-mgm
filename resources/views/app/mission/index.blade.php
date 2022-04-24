@@ -6,7 +6,7 @@
     <x-panel.galaxyhub.basics>
         <div class="flex flex-col space-y-2" x-data="mission_list">
             @foreach($messages as $message)
-                <x-dynamic-component :component="'alert.' .$message[0]" :title="$message[1]">
+                <x-dynamic-component :component="'alert.galaxyhub.' .$message[0]" :title="$message[1]">
                     {!! $message[2] !!}
                 </x-dynamic-component>
             @endforeach
