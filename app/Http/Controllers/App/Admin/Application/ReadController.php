@@ -117,7 +117,7 @@ class ReadController extends Controller
             'role' => $role,
             'title' => "{$user->name}님의 신청서",
             'survey' => $survey,
-            'answer' => !is_null($quiz) ? $application->id : null,
+            'answer' => !is_null($survey) ? $application->id : null,
             'quiz' => $survey_quiz,
             'quiz_answer' => !is_null($quiz) ? $quiz->id : null,
             'status' => $status ?? '약관 동의',
