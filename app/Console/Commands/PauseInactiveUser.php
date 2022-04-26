@@ -64,13 +64,13 @@ class PauseInactiveUser extends Command
         {
             if (is_null($user->banned_at))
             {
-                if (is_null($user->attended_at))
+                if (is_null($user->attended_at) && $user->hasRole([RoleType::MEMBER, RoleType::MAKER1]))
                 {
                     $userService->ban($user->id, BanCommentType::USER_INACTIVE_NEWBIE->value);
                 }
                 else
                 {
-                    if ($user->hasRole([RoleType::MEMBER->name])) {
+                    if ($user->hasRole([RoleType::MEMBER->name, RoleType::MAKER1])) {
                         $userService->ban($user->id, BanCommentType::USER_INACTIVE_MISSION->value);
                     }
                 }
