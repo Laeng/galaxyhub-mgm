@@ -382,7 +382,7 @@
                                         msg = '현재 미션 상태에서 실행할 수 없는 요청입니다.';
                                         break;
                                     case "REQUIRES 10 PARTICIPATION":
-                                        msg = '미션 10회를 참여하셔야만 부트캠프를 신청할 수 있습니다.'
+                                        msg = '미션 5회 또는 아르마의 밤 1회 이상 참여하셔야만 부트캠프를 신청할 수 있습니다.'
                                         break;
                                     default:
                                         msg = e.response.data.description;

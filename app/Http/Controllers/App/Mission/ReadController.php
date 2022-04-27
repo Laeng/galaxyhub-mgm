@@ -232,7 +232,34 @@ class ReadController extends Controller
 
                     if ($mission->type === MissionType::BOOTCAMP->value)
                     {
-                        if (!$user->hasPermissionTo(PermissionType::ADMIN->name) && $this->userMissionRepository->findByUserId($user->id)->count() < 10)
+                        $userMissions = $this->userMissionRepository->findAttendedMissionByUserId($user->id);
+
+                        $normal = 0;
+                        $canJoin = false;
+
+                        foreach ($userMissions as $userMission)
+                        {
+                            $userAttendedMission = $userMission->mission();
+
+                            if ($userAttendedMission->type === MissionType::NIGHT_OF_ARMA->value)
+                            {
+                                $canJoin = true;
+                                break;
+                            }
+
+                            if ($userAttendedMission->type === MissionType::MISSION->value)
+                            {
+                                ++$normal;
+
+                                if ($normal >= 5)
+                                {
+                                    $canJoin = true;
+                                    break;
+                                }
+                            }
+                        }
+
+                        if (!$user->hasPermissionTo(PermissionType::ADMIN->name) && !$canJoin)
                         {
                             throw new \Exception('REQUIRES 10 PARTICIPATION', 422);
                         }
