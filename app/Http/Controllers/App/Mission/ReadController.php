@@ -230,6 +230,7 @@ class ReadController extends Controller
                         throw new \Exception('MISSION STATUS DOES\'T MATCH THE CONDITIONS', 422);
                     }
 
+                    /*
                     if ($mission->type === MissionType::BOOTCAMP->value)
                     {
                         $userMissions = $this->userMissionRepository->findAttendedMissionByUserId($user->id);
@@ -264,6 +265,7 @@ class ReadController extends Controller
                             throw new \Exception('REQUIRES 10 PARTICIPATION', 422);
                         }
                     }
+                    */
 
                     $this->missionService->addParticipant($mission->id, $user->id);
                     break;
