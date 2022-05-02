@@ -92,10 +92,13 @@ class ReadController extends Controller
         {
             $missionCount = $userMission->count();
             $missionLatest = $userMission->first()->attended_at->format('Y-m-d');
+
+            $missionMakeCount = $this->userMissionRepository->new()->where('user_id', $user->id)->where('is_maker', true)->count();
         }
         else
         {
             $missionCount = 0;
+            $missionMakeCount = 0;
             $missionLatest = '참가하지 않음';
         }
 
@@ -149,6 +152,7 @@ class ReadController extends Controller
             'group' => RoleType::getKoreanNames()[$role->name],
             'groups' => json_encode(array_flip(RoleType::getKoreanNames())),
             'missionCount' => $missionCount,
+            'missionMakeCount' => $missionMakeCount,
             'missionLatest' => $missionLatest,
             'naverId' => $naverId,
             'discordName' => $discordName,
@@ -172,10 +176,13 @@ class ReadController extends Controller
             {
                 $missionCount = $userMission->count();
                 $missionLatest = $userMission->first()->attended_at->format('Y-m-d');
+
+                $missionMakeCount = $this->userMissionRepository->new()->where('user_id', $user->id)->where('is_maker', true)->count();
             }
             else
             {
                 $missionCount = 0;
+                $missionMakeCount = 0;
                 $missionLatest = '참가하지 않음';
             }
 
@@ -208,6 +215,7 @@ class ReadController extends Controller
                 'badges' => $userBadge,
                 'group' => RoleType::getKoreanNames()[$role->name],
                 'mission_count' => $missionCount,
+                'mission_make_count' => $missionMakeCount,
                 'mission_date' => $missionLatest,
                 'ban' => $ban,
                 'steam_date' => $steamDataDate

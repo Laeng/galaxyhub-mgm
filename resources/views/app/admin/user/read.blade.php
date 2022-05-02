@@ -7,27 +7,23 @@
     <div class="md:flex md:space-x-4 items-start" x-data="user_read">
         <div class="self-start md:basis-3/5 lg:basis-2/3 space-y-8">
             <x-panel.galaxyhub.basics>
-                <template x-if="data.load.data.ban !== ''">
-                    <div class="space-y-2 mb-8">
-                        <div class="rounded-md bg-red-50 dark:bg-gray-900 dark:border dark:border-red-500 p-4">
-                            <div class="flex">
-                                <div class="flex-shrink-0">
-                                    <svg class="h-5 w-5 text-red-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-                                        <path fill="currentColor" d="M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256s256-114.6 256-256S397.4 0 256 0zM256 464c-114.7 0-208-93.31-208-208S141.3 48 256 48s208 93.31 208 208S370.7 464 256 464zM256 304c13.25 0 24-10.75 24-24v-128C280 138.8 269.3 128 256 128S232 138.8 232 152v128C232 293.3 242.8 304 256 304zM256 337.1c-17.36 0-31.44 14.08-31.44 31.44C224.6 385.9 238.6 400 256 400s31.44-14.08 31.44-31.44C287.4 351.2 273.4 337.1 256 337.1z"></path>
-                                    </svg>
-                                </div>
-                                <div class="ml-3">
-                                    <h3 class="text-sm font-bold text-red-800 dark:text-red-200">활동 정지된 회원입니다.</h3>
-                                    <div class="mt-2 text-sm text-red-700 dark:text-red-300">
-                                        <ul>
-                                            <li>해제 예정 날짜: <span x-text="data.load.data.ban"></span></li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </template>
+                <div class="space-y-3">
+                    <template x-if="data.load.data.ban !== ''">
+                        <x-alert.galaxyhub.danger title="활동 정지된 회원">
+                            <ul>
+                                <li>해제 예정 날짜: <span x-text="data.load.data.ban"></span></li>
+                            </ul>
+                        </x-alert.galaxyhub.danger>
+                    </template>
+
+                    <template x-if="data.load.data.group === '{{ \App\Enums\RoleType::getKoreanNames()[\App\Enums\RoleType::MAKER1->name] }}' && data.load.data.mission_make_count >= 10">
+                        <x-alert.galaxyhub.info title="정식 메이커 심사 대상">
+                            <ul>
+                                <li>미션 10회 이상 제작한 임시 메이커입니다.</li>
+                            </ul>
+                        </x-alert.galaxyhub.info>
+                    </template>
+                </div>
 
 
                 <div class="">
@@ -71,6 +67,10 @@
                             <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4">
                                 <dt class="text-sm font-medium text-gray-500 dark:text-gray-300">미션 참가 횟수</dt>
                                 <dd class="mt-1 text-sm text-gray-900 dark:text-gray-100 sm:mt-0 sm:col-span-2" x-text="data.load.data.mission_count"></dd>
+                            </div>
+                            <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4">
+                                <dt class="text-sm font-medium text-gray-500 dark:text-gray-300">미션 제작 횟수</dt>
+                                <dd class="mt-1 text-sm text-gray-900 dark:text-gray-100 sm:mt-0 sm:col-span-2" x-text="data.load.data.mission_make_count"></dd>
                             </div>
                             <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4">
                                 <dt class="text-sm font-medium text-gray-500 dark:text-gray-300">미션 참가 날짜</dt>
@@ -268,6 +268,7 @@
                         data: {
                             group: '{{ $group }}',
                             mission_count: '{{ $missionCount }}',
+                            mission_make_count: '{{ $missionMakeCount }}',
                             mission_date: '{{ $missionLatest }}',
                             badges: {!! $userBadge !!},
                             ban: '{{ $ban }}',
