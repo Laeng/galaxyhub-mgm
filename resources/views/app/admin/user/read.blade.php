@@ -16,10 +16,10 @@
                         </x-alert.galaxyhub.danger>
                     </template>
 
-                    <template x-if="data.load.data.group === '{{ \App\Enums\RoleType::getKoreanNames()[\App\Enums\RoleType::MAKER1->name] }}' && data.load.data.mission_make_count >= 4">
+                    <template x-if="data.load.data.group === '{{ \App\Enums\RoleType::getKoreanNames()[\App\Enums\RoleType::MAKER1->name] }}' && data.load.data.mission_make_count >= 10">
                         <x-alert.galaxyhub.info title="정식 메이커 심사 대상">
                             <ul>
-                                <li>미션 10회 이상 제작한 임시 메이커입니다.</li>
+                                <li>미션을 10회 이상 제작한 임시 메이커입니다.</li>
                             </ul>
                         </x-alert.galaxyhub.info>
                     </template>
