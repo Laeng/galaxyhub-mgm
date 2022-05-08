@@ -52,6 +52,7 @@
                         <option value="신규가입 미참여">신규가입 미참여</option>
                         <option value="30일이상 미참여">30일이상 미참여</option>
                         <option value="활동 정지 회원">활동 정지 회원</option>
+                        <option value="예비 가입자">예비 가입자</option>
                     </x-input.select.basics>
                 </div>
                 <div class="w-full lg:w-auto">

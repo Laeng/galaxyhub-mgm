@@ -66,7 +66,14 @@ class ListController extends Controller
                     //->on('user_missions.id', '=', DB::raw("(SELECT max(id) FROM user_missions WHERE user_missions.user_id = users.id AND user_missions.attended_at IS NOT NULL)"));
             });
 
-            $query = $query->whereNotNull('users.agreed_at');
+            if (!empty($q['filter']) && $q['filter'] !== '예비 가입자')
+            {
+                $query = $query->whereNull('users.agreed_at');
+            }
+            else
+            {
+                $query = $query->whereNotNull('users.agreed_at');
+            }
 
             if (!empty($q['find']))
             {
