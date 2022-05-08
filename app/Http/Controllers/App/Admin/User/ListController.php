@@ -154,14 +154,13 @@ class ListController extends Controller
 
                 foreach ($users as $user)
                 {
-                    if (is_null($user)) continue;
-
                     $ban = $banRepository->findByUserId($user->id)->first();
+                    $role = $user->roles()->latest()->first();
 
                     $row = [
                         $user->id,
                         $user->name,
-                        RoleType::getKoreanNames()[$user->roles()->latest()->first()->name], //TODO repository 패턴 사용하기
+                        is_null($role) ? '⨉' : RoleType::getKoreanNames()[$role->name], //TODO repository 패턴 사용하기
                         is_null($ban) ? '⨉' : (is_null($ban->expired_at) ? '무기한' : $ban->expired_at->toDateString()),
                         $user->created_at->toDateString(),
                         $user->visited_at->toDateString(),
