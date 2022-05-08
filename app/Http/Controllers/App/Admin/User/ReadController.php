@@ -61,7 +61,7 @@ class ReadController extends Controller
 
         if (is_null($application))
         {
-            return redirect()->route('app.admin.application.read', $user->id);
+            return redirect()->route('admin.application.read', $user->id);
         }
 
         $response = $application->answers()->latest()->get();
