@@ -161,14 +161,6 @@ class ReadController extends Controller
                 throw new \Exception('NOT FOUND USER', 422);
             }
 
-            $application = $this->surveyService->getLatestApplicationForm($user->id);
-            $response = $application?->answers()->get();
-
-            if (is_null($application))
-            {
-                throw new \Exception('NOT FOUND APPLICATION', 422);
-            }
-
             $summaries = $this->recordRepository->findByUserIdAndType($userId, UserRecordType::STEAM_DATA_SUMMARIES->name)->first();
 
             if (is_null($summaries) || count($summaries->data) <= 0)
@@ -215,19 +207,25 @@ class ReadController extends Controller
                 ];
             }
 
-
             $naverId = null;
+            $application = $this->surveyService->getLatestApplicationForm($user->id);
 
-            foreach ($response as $item)
+            if (!is_null($application))
             {
-                $question = $item->question()->first();
-                $value = $item->value;
+                $response = $application?->answers()->get();
 
-                if (is_null($question)) continue;
+                foreach ($response as $item)
+                {
+                    $question = $item->question()->first();
+                    $value = $item->value;
 
-                if ($question->title == '네이버 아이디') {
-                    $naverId = explode('@', $value)[0];
+                    if (is_null($question)) continue;
+
+                    if ($question->title == '네이버 아이디') {
+                        $naverId = explode('@', $value)[0];
+                    }
                 }
+
             }
 
             return $this->jsonResponse(200, 'OK', [
