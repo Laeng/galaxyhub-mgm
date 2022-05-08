@@ -66,8 +66,11 @@ class ListController extends Controller
                     //->on('user_missions.id', '=', DB::raw("(SELECT max(id) FROM user_missions WHERE user_missions.user_id = users.id AND user_missions.attended_at IS NOT NULL)"));
             });
 
+            $isPreJoin = false;
+
             if (!empty($q['filter']) && $q['filter'] === '예비 가입자')
             {
+                $isPreJoin = true;
                 $query = $query->whereNull('users.agreed_at');
             }
             else
@@ -116,11 +119,11 @@ class ListController extends Controller
             {
                 switch ($q['order'])
                 {
-                    case '가입일 오른차순':
-                        $query = $query->oldest('agreed_at');
+                    case '등록일 오른차순':
+                        $query = $isPreJoin ? $query->oldest('created_at') : $query->oldest('agreed_at');
                         break;
-                    case '가입일 내림차순':
-                        $query = $query->latest('agreed_at');
+                    case '등록일 내림차순':
+                        $query = $isPreJoin ? $query->latest('created_at') : $query->oldest('agreed_at');
                         break;
                     case '방문일 오른차순':
                         $query = $query->oldest('visited_at');

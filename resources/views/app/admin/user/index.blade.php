@@ -38,8 +38,8 @@
                 <div class="w-full lg:w-auto">
                     <x-input.select.basics id="order" name="order" x-model="data.list.body.query.order" required>
                         <option value="">정렬</option>
-                        <option value="가입일 오른차순">가입일 오른차순</option>
-                        <option value="가입일 내림차순">가입일 내림차순</option>
+                        <option value="등록일 오른차순">등록일 오른차순</option>
+                        <option value="등록일 내림차순">등록일 내림차순</option>
                         <option value="방문일 오른차순">방문일 오른차순</option>
                         <option value="방문일 내림차순">방문일 내림차순</option>
                         <option value="미션 참가일 오른차순">미션 참가일 오른차순</option>
