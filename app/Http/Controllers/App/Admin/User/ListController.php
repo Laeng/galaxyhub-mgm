@@ -154,6 +154,8 @@ class ListController extends Controller
 
                 foreach ($users as $user)
                 {
+                    if (is_null($user)) continue;
+
                     $ban = $banRepository->findByUserId($user->id)->first();
 
                     $row = [
