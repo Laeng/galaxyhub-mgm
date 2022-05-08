@@ -67,7 +67,7 @@
             </div>
 
             <div class="my-2">
-                <x-list.galaxyhub.basics :component-id="$componentId" name="user_id" :action="route('admin.user.index.list')" :refresh="true" limit="20" query="{order:'가입일 내림차순'}"/>
+                <x-list.galaxyhub.basics :component-id="$componentId" name="user_id" :action="route('admin.user.index.list')" :refresh="true" limit="20" query="{order:'등록일 내림차순'}"/>
             </div>
 
             <div class="flex divide-x divide-gray-200 flex-wrap">
