@@ -207,7 +207,7 @@ class ReadController extends Controller
                 ];
             }
 
-            $naverId = null;
+            $naverId = '';
             $application = $this->surveyService->getLatestApplicationForm($user->id);
 
             if (!is_null($application))
