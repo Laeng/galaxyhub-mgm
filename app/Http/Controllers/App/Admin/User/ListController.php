@@ -152,7 +152,7 @@ class ListController extends Controller
             {
                 $users = $query->offset($step * $limit)->limit($limit)->get();
 
-                $th = ['닉네임', '등급', '활동 정지', '가입', '최근 방문', '최근 미션 참가', '미션 참가', '상세 정보'];
+                $th = ['닉네임', '등급', '활동 정지', '등록', '최근 방문', '최근 미션 참가', '미션 참가', '상세 정보'];
                 $tr = array();
 
                 foreach ($users as $user)
