@@ -76,7 +76,7 @@
                                 접수 날짜
                             </p>
                             <p class="text-sm text-gray-600 dark:text-gray-300">
-                                {{ $application->created_at->format('Y-m-d h:i') }}
+                                {{ !is_null($application) ? $application->created_at->format('Y-m-d h:i') : '등록된 신청서 없음' }}
                             </p>
                         </div>
                     </li>
