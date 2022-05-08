@@ -119,25 +119,25 @@ class ListController extends Controller
             {
                 switch ($q['order'])
                 {
-                    case '등록일 오른차순':
+                    case '등록일 오름차순':
                         $query = $isPreJoin ? $query->oldest('created_at') : $query->oldest('agreed_at');
                         break;
                     case '등록일 내림차순':
-                        $query = $isPreJoin ? $query->latest('created_at') : $query->oldest('agreed_at');
+                        $query = $isPreJoin ? $query->latest('created_at') : $query->latest('agreed_at');
                         break;
-                    case '방문일 오른차순':
+                    case '방문일 오름차순':
                         $query = $query->oldest('visited_at');
                         break;
                     case '방문일 내림차순':
                         $query = $query->latest('visited_at');
                         break;
-                    case '방문 오른차순':
+                    case '방문 오름차순':
                         $query = $query->orderBy('visit', 'asc');
                         break;
                     case '방문 내림차순':
                         $query = $query->orderBy('visit', 'desc');
                         break;
-                    case '미션 참가일 오른차순':
+                    case '미션 참가일 오름차순':
                         $query = $query->oldest('attended_at');
                         break;
                     case '미션 참가일 내림차순':
