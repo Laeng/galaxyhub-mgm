@@ -66,7 +66,7 @@ class ListController extends Controller
                     //->on('user_missions.id', '=', DB::raw("(SELECT max(id) FROM user_missions WHERE user_missions.user_id = users.id AND user_missions.attended_at IS NOT NULL)"));
             });
 
-            if (!empty($q['filter']) && $q['filter'] !== '예비 가입자')
+            if (!empty($q['filter']) && $q['filter'] === '예비 가입자')
             {
                 $query = $query->whereNull('users.agreed_at');
             }
@@ -160,7 +160,7 @@ class ListController extends Controller
                     $row = [
                         $user->id,
                         $user->name,
-                        is_null($role) ? '⨉' : RoleType::getKoreanNames()[$role->name], //TODO repository 패턴 사용하기
+                        is_null($role) ? '예비 가입자' : RoleType::getKoreanNames()[$role->name], //TODO repository 패턴 사용하기
                         is_null($ban) ? '⨉' : (is_null($ban->expired_at) ? '무기한' : $ban->expired_at->toDateString()),
                         $user->created_at->toDateString(),
                         $user->visited_at->toDateString(),

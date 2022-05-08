@@ -18,6 +18,7 @@ use App\Services\Survey\Contracts\SurveyServiceContract;
 use App\Services\User\Contracts\UserServiceContract;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -47,7 +48,7 @@ class ReadController extends Controller
     (
         Request $request, int $userId, UserAccountRepositoryInterface $userAccountRepository,
         SurveyServiceContract $surveyService
-    ): View
+    ): View|RedirectResponse
     {
         $user = $this->userRepository->findById($userId);
 
@@ -58,9 +59,9 @@ class ReadController extends Controller
 
         $application = $surveyService->getLatestApplicationForm($user->id);
 
-        if (is_null($application))
+        if (!is_null($application))
         {
-            abort(404);
+            return redirect()->route('app.admin.application.read', $user->id);
         }
 
         $response = $application->answers()->latest()->get();
