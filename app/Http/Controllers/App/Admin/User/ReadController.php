@@ -59,7 +59,7 @@ class ReadController extends Controller
 
         $application = $surveyService->getLatestApplicationForm($user->id);
 
-        if (!is_null($application))
+        if (is_null($application))
         {
             return redirect()->route('app.admin.application.read', $user->id);
         }
