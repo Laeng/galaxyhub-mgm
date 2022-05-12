@@ -3,7 +3,6 @@
 namespace App\Services\SSH;
 
 use App\Services\SSH\Contracts\SSHServiceContract;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use phpseclib3\Crypt\PublicKeyLoader;
@@ -11,8 +10,6 @@ use phpseclib3\Net\SSH2;
 
 class SSHService implements SSHServiceContract
 {
-    const CACHE_ACCOUNT_PASSWORD_LOCK = 'services.ssh.account_password_lock';
-
     private ?SSH2 $client = null;
 
     public function getClient(string $address, string $username, ?string $password, int $port = 22, int $timeout = 30): self
@@ -45,18 +42,11 @@ class SSHService implements SSHServiceContract
         try {
             if (is_null($this->client)) return false;
 
-            $cacheName = self::getCacheName(self::CACHE_ACCOUNT_PASSWORD_LOCK, $username);
-            $lock = Cache::lock($cacheName, 30);
+            $response = $this->client->exec("net user \"{$username}\" \"{$password}\"");
 
-            if ($lock->get())
+            if(str_contains($response, 'The command completed successfully.'))
             {
-                $response = $this->client->exec("net user \"{$username}\" \"{$password}\"");
-                $lock->release();
-
-                if(str_contains($response, 'The command completed successfully.'))
-                {
-                    return true;
-                }
+                return true;
             }
         }
         catch (\Exception $e)

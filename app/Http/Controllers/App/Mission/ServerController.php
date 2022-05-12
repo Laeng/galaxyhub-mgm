@@ -261,7 +261,6 @@ class ServerController extends Controller
         }
     }
 
-
     public function download(Request $request, string $instanceName): \Illuminate\Http\Response|\Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory
     {
         $user = Auth::user();
@@ -344,13 +343,17 @@ class ServerController extends Controller
 
     private function getPassword(string $instanceName, bool $cache = true): ?string
     {
-        if ($cache && Cache::has(self::getCacheName(self::CACHE_PASSWORD, $instanceName)))
+        $cacheName = self::getCacheName(self::CACHE_PASSWORD, $instanceName);
+
+        if ($cache && Cache::has($cacheName))
         {
-            return Cache::get(self::getCacheName(self::CACHE_PASSWORD, $instanceName));
+            return Cache::get($cacheName);
         }
         else
         {
-            if (Cache::get(self::getCacheName(SSHService::CACHE_ACCOUNT_PASSWORD_LOCK, $instanceName), false) === false)
+            $lock = Cache::lock('mission.server.password_lock', 30);
+
+            if ($lock->get())
             {
                 $ip = $this->getIpAddress($instanceName);
 
@@ -364,9 +367,11 @@ class ServerController extends Controller
 
                 $result = $this->sshService->getClient($ip, $sshUsername, $sshPassword)->setAccountPassword($username, $password);
 
+                $lock->release();
+
                 if ($result)
                 {
-                    Cache::put(self::getCacheName(self::CACHE_PASSWORD, $instanceName), $password);
+                    Cache::put($cacheName, $password);
 
                     return $password;
                 }

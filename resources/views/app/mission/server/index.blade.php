@@ -10,7 +10,7 @@
                 </x-alert.galaxyhub.danger>
                 <x-alert.galaxyhub.info title="미션 서버 안내">
                     <ul>
-                        <li>제공되는 모든 미션 서버는 시작시 IP 주소와 원격 제어 계정의 비밀번호가 변경됩니다.</li>
+                        <li>미션 서버 시작시 IP 주소와 원격 제어 로그인 정보가 변경됩니다.</li>
                     </ul>
                 </x-alert.galaxyhub.info>
 @if($isAdmin)
