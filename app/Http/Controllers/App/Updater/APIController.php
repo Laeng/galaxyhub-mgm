@@ -93,7 +93,7 @@ class APIController extends Controller
         }
         catch (Exception $e)
         {
-            Log::error($e->getMessage(), $e->getTrace());
+            Log::error($e);
 
             return Response()->json([
                 'result' => false,
@@ -133,7 +133,7 @@ class APIController extends Controller
         }
         catch (Exception $e)
         {
-            Log::error($e->getMessage(), $e->getTrace());
+            if ($e->getMessage() !== 'DATA IS NULL') Log::error($e);
 
             return Response()->json([
                 'result' => false,
@@ -172,7 +172,7 @@ class APIController extends Controller
         }
         catch (Exception $e)
         {
-            Log::error($e->getMessage(), $e->getTrace());
+            Log::error($e);
 
             return Response()->json([
                 'result' => false,
@@ -234,7 +234,7 @@ class APIController extends Controller
         }
         catch (Exception $e)
         {
-            Log::error($e->getMessage(), $e->getTrace());
+            Log::error($e);
 
             return Response()->json([
                 'result' => false,
@@ -286,7 +286,7 @@ class APIController extends Controller
 
         } catch (Exception $e)
         {
-            Log::error($e->getMessage(), $e->getTrace());
+            Log::error($e);
 
             return Response()->json([
                 'result' => false,
