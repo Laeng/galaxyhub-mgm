@@ -122,7 +122,7 @@
                             }
                         }
                     },
-                    release() {
+                    async release() {
                         let success = (r) => {
                             if (r.data.data !== null) {
                                 if (!(typeof r.data.data === 'undefined' || r.data.data.length <= 0)) {
@@ -138,7 +138,7 @@
 
                         let complete = () => {};
 
-                        this.post(this.data.release.url, this.data.release.body, success, error, complete);
+                        await this.post(this.data.release.url, this.data.release.body, success, error, complete);
 
                         if (this.interval.release.load === -1) {
                             this.interval.release.load = setInterval(() => {this.post(this.data.release.url, this.data.release.body, success, error, complete)}, 30000);

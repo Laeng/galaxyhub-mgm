@@ -383,7 +383,7 @@
                         this.post(this.data.steam.url, this.data.steam.body, success, error, complete);
                     }
                 },
-                load() {
+                async load() {
                     let success = (r) => {
                         if (r.data.data !== null) {
                             if (!(typeof r.data.data === 'undefined' || r.data.data.length <= 0)) {
@@ -403,7 +403,7 @@
                     let complete = () => {}
 
                     if (!this.data.load.lock) {
-                        this.post(this.data.load.url, this.data.load.body, success, error, complete);
+                        await this.post(this.data.load.url, this.data.load.body, success, error, complete);
 
                         if (this.interval.load === -1)
                         {
