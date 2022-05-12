@@ -270,7 +270,7 @@ class ServerController extends Controller
             abort(404);
         }
 
-        if (!in_array($instanceName, $this->instances)) return abort(404);
+        if (!in_array($instanceName, self::$instances)) return abort(404);
 
         $instanceView = $this->azureService->getInstanceView($instanceName);
         $pass = false;
