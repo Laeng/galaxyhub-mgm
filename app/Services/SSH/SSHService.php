@@ -3,6 +3,7 @@
 namespace App\Services\SSH;
 
 use App\Services\SSH\Contracts\SSHServiceContract;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use phpseclib3\Crypt\PublicKeyLoader;
@@ -44,8 +45,17 @@ class SSHService implements SSHServiceContract
         try {
             if (is_null($this->client)) return false;
 
-            $response = $this->client->exec("net user \"{$username}\" \"{$password}\"");
-            if (str_contains($response, 'The command completed successfully.')) return true;
+            if (Cache::get(self::getCacheName(self::CACHE_SET_ACCOUNT_PASSWORD_LOCK, $username), false))
+            {
+                Cache::put(self::getCacheName(self::CACHE_SET_ACCOUNT_PASSWORD_LOCK, $username), true);
+
+                $response = $this->client->exec("net user \"{$username}\" \"{$password}\"");
+
+                Cache::put(self::getCacheName(self::CACHE_SET_ACCOUNT_PASSWORD_LOCK, $username), false);
+
+                if (str_contains($response, 'The command completed successfully.')) return true;
+            }
+
         }
         catch (\Exception $e)
         {
@@ -61,4 +71,10 @@ class SSHService implements SSHServiceContract
         return Storage::disk('local')->get("/ssh/{$username}");
         //return file_get_contents( storage_path()."/app/ssh/".$username);
     }
+
+    private static function getCacheName(string $type, string $name): string
+    {
+        return "{$type}.{$name}";
+    }
+
 }

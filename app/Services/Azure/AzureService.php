@@ -310,6 +310,4 @@ class AzureService implements AzureServiceContract
     {
         return "{$type}.{$name}";
     }
-
-
 }

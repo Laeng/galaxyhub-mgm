@@ -123,25 +123,35 @@ class ServerController extends Controller
 
                 if ($on)
                 {
-                    $info = $this->azureService->getCompute($instanceName);
-                    if (is_null($info)) throw new \Exception('NULL INFO RESPONSE');
-
-                    $this->setUsername($instanceName, $info['properties']['osProfile']['adminUsername']);
-
-                    $temp['username'] = $this->getUsername($instanceName);
-                    $temp['password'] = $this->getPassword($instanceName);
-                    $temp['ip'] = $this->getIpAddress($instanceName);
-
-                    if (is_null($temp['password']) || $temp['password'] === '')
+                    if (config('app.debug') === false)
                     {
-                        $temp['code'] = 2;
-                        $temp['status'] = '설정 중';
-                        $temp['username'] = '';
-                        $temp['password'] = '';
-                        $temp['ip'] = '';
+                        $info = $this->azureService->getCompute($instanceName);
+                        if (is_null($info)) throw new \Exception('NULL INFO RESPONSE');
+
+                        $this->setUsername($instanceName, $info['properties']['osProfile']['adminUsername']);
+
+                        $temp['username'] = $this->getUsername($instanceName);
+                        $temp['password'] = $this->getPassword($instanceName);
+                        $temp['ip'] = $this->getIpAddress($instanceName);
+
+                        if (is_null($temp['password']) || $temp['password'] === '')
+                        {
+                            $temp['code'] = 2;
+                            $temp['status'] = '설정 중';
+                            $temp['username'] = '';
+                            $temp['password'] = '';
+                            $temp['ip'] = '';
+                        }
+                        else
+                        {
+                            $temp['online'] = true;
+                        }
                     }
                     else
                     {
+                        $temp['username'] = config('services.vm.ssh.username');
+                        $temp['password'] = config('services.vm.ssh.password') ?? 'Use your private key.';
+                        $temp['ip'] = $this->getIpAddress($instanceName);
                         $temp['online'] = true;
                     }
                 }
@@ -321,8 +331,8 @@ class ServerController extends Controller
             $username = $this->getUsername($instanceName);
             $password = Str::random(self::PASSWORD_LENGTH);
 
-            $sshUsername = Config('services.vm.ssh.username');
-            $sshPassword = Config('services.vm.ssh.password');
+            $sshUsername = config('services.vm.ssh.username');
+            $sshPassword = config('services.vm.ssh.password');
 
             $result = $this->sshService->getClient($ip, $sshUsername, $sshPassword)->setAccountPassword($username, $password);
 
