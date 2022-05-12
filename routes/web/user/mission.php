@@ -4,6 +4,7 @@ use App\Http\Controllers\App\Mission\AttendController;
 use App\Http\Controllers\App\Mission\EditorController;
 use App\Http\Controllers\App\Mission\ListController;
 use App\Http\Controllers\App\Mission\ReadController;
+use App\Http\Controllers\App\Mission\ServerController;
 use App\Http\Controllers\App\Mission\SurveyController;
 use App\Http\Middleware\ForbidBannedUser;
 use Illuminate\Support\Facades\Route;
@@ -13,6 +14,17 @@ Route::prefix('app')->group(function () {
         //VIEW
         Route::redirect('/', '/app/missions');
         Route::get('/new', [EditorController::class, 'new'])->name('new');
+
+        Route::prefix('server')->name('server.')->group(function () {
+            //VIEW
+            Route::get('/', [ServerController::class, 'index'])->name('index');
+            Route::get('/download/{instanceName}', [ServerController::class, 'download'])->name('download');
+
+            //AJAX
+            Route::post('/status', [ServerController::class, 'status'])->name('status');
+            Route::post('/process', [ServerController::class, 'process'])->name('process');
+
+        });
 
         //AJAX
         Route::post('/create', [EditorController::class, 'create'])->name('create');

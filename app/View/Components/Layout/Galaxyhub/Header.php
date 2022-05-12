@@ -60,6 +60,7 @@ class Header extends Component
                     {
                         $menu = $menu->submenu("<a href='#'>미션</a>", function (Menu $menu) {
                             $menu = $menu->add(Link::toRoute('mission.index', '미션 목록'));
+                            $menu = $menu->add(Link::toRoute('mission.server.index', '미션 서버'));
                             $menu = $menu->add(Link::toRoute('mission.new', '새로 만들기'));
                         });
                     }

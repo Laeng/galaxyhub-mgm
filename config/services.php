@@ -52,6 +52,22 @@ return [
             'id' => env('NAVER_CAFE_ID'),
             'menu' => env('NAVER_CAFE_MENU')
         ]
-    ]
+    ],
 
+    'azure' => [
+        'tenant_id' => env('AZURE_TENANT_ID'),
+        'subscription_id' => env('AZURE_SUBSCRIPTION_ID'),
+        'resource_group_name' => env('AZURE_RESOURCE_GROUP_NAME'),
+        'billing_account_id' => env('AZURE_BILLING_ACCOUNT_ID'),
+        'budget_name' => env('AZURE_BUDGET_NAME'),
+        'key' => env('AZURE_CLIENT_KEY'),
+        'secret' => env('AZURE_CLIENT_SECRET'),
+    ],
+
+    'vm' => [
+        'ssh' => [
+            'username' => env('VM_SSH_USERNAME'),
+            'password' => env('VM_SSH_PASSWORD')
+        ]
+    ]
 ];

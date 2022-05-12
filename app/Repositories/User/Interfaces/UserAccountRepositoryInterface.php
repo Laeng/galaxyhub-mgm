@@ -3,10 +3,11 @@
 namespace App\Repositories\User\Interfaces;
 
 use App\Models\UserAccount;
+use App\Repositories\Base\Interfaces\EloquentRepositoryInterface;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
-interface UserAccountRepositoryInterface
+interface UserAccountRepositoryInterface extends EloquentRepositoryInterface
 {
     public function findByAccountId(string $provider, string $accountId, array $columns = ['*'], array $relations = []): ?Collection;
 
