@@ -45,7 +45,7 @@ class SSHService implements SSHServiceContract
         try {
             if (is_null($this->client)) return false;
 
-            if (Cache::get(self::getCacheName(self::CACHE_SET_ACCOUNT_PASSWORD_LOCK, $username), false))
+            if (!Cache::get(self::getCacheName(self::CACHE_SET_ACCOUNT_PASSWORD_LOCK, $username), false))
             {
                 Cache::put(self::getCacheName(self::CACHE_SET_ACCOUNT_PASSWORD_LOCK, $username), true);
 
