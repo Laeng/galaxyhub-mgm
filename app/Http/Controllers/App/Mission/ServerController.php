@@ -23,8 +23,8 @@ class ServerController extends Controller
     const CACHE_USERNAME = 'mission.server.username';
     const CACHE_PASSWORD = 'mission.server.password';
 
+    public static array $instances = ['galaxyhub'];
 
-    private array $instances = ['galaxyhub'];
     private AzureServiceContract $azureService;
     private SSHServiceContract $sshService;
 
@@ -44,7 +44,7 @@ class ServerController extends Controller
         }
 
         return view('app.mission.server.index', [
-            'instances' => $this->instances,
+            'instances' => self::$instances,
             'isAdmin' => $user->hasRole(RoleType::ADMIN->name)
         ]);
     }
@@ -195,7 +195,7 @@ class ServerController extends Controller
 
             $instanceName = $request->get('instance_name');
 
-            if (!in_array($instanceName, $this->instances)) throw new \Exception('NOT FOUND', 422);
+            if (!in_array($instanceName, self::$instances)) throw new \Exception('NOT FOUND', 422);
 
             switch ($request->get('command'))
             {

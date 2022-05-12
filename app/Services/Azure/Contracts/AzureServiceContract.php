@@ -11,9 +11,10 @@ interface AzureServiceContract
     public function deallocateCompute(string $instanceName): bool;
     public function restartCompute(string $instanceName): bool;
 
-    public function getInstanceView(string $instanceName): ?array;
+    public function getInstanceView(string $instanceName, bool $cache = true): ?array;
     public function getNetworkInterfaces(string $networkInterfaceName): ?array;
     public function getPublicIPAddresses(string $publicIpAddressName, bool $cache = true): ?array;
 
-    public function getBudgets(string $budgetsName): ?array;
+    public function getBudgets(string $budgetsName, bool $cache = true): ?array;
+    public function getUsageDetails(bool $cache = true): ?array;
 }

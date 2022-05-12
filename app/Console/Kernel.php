@@ -23,6 +23,9 @@ class Kernel extends ConsoleKernel
         $schedule->command('updater:clean')->timezone('Asia/Seoul')->dailyAt('06:00');
         $schedule->command('user:pause-auto')->timezone('Asia/Seoul')->dailyAt('05:00');
         $schedule->command('account:update steam')->timezone('Asia/Seoul')->monthlyOn(1, '04:00');
+        $schedule->command('azure:update instances')->hourly();
+        $schedule->command('azure:update budges')->cron('0 */12 * * *');
+        $schedule->command('azure:update usage')->everyFourHours();
     }
 
     /**

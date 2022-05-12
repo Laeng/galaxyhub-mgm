@@ -12,36 +12,34 @@ use Illuminate\Support\Facades\Log;
 class AzureService implements AzureServiceContract
 {
     const CACHE_AZURE_ACCESS_TOKEN = 'services.azure.access_token';
-    const CACHE_AZURE_API_GET_COMPUTE = 'services.azure.api.get.compute';
-    const CACHE_AZURE_API_INSTANCE_VIEW_DATA = 'services.azure.api.instance_view.data';
-    const CACHE_AZURE_API_INSTANCE_VIEW_TIMER = 'services.azure.api.instance_view.timer';
+    const CACHE_AZURE_API_COMPUTE = 'services.azure.api.compute';
+    const CACHE_AZURE_API_BUDGETS = 'services.azure.api.budgets';
+    const CACHE_AZURE_API_USAGE_DETAILS = 'services.azure.api.usage_details';
+    const CACHE_AZURE_API_INSTANCE_VIEW = 'services.azure.api.instance_view';
 
     public function getCompute(string $instanceName, bool $cache = true): ?array
     {
         try {
-            if ($cache && Cache::has(self::getCacheName(self::CACHE_AZURE_API_GET_COMPUTE, $instanceName)))
+            $cacheName = self::getCacheName(self::CACHE_AZURE_API_COMPUTE, $instanceName);
+
+            if ($cache && Cache::has($cacheName))
             {
-                $data = Cache::get(self::getCacheName(self::CACHE_AZURE_API_GET_COMPUTE, $instanceName));
+                return json_decode(Cache::get($cacheName), true);
+            }
+
+            $client = $this->getClient();
+            $result = $client->get("{$this->url()}/Microsoft.Compute/virtualMachines/{$instanceName}", [
+                'query' => [
+                    'api-version' => '2021-11-01'
+                ],
+            ]);
+
+            if ($result->getStatusCode() == 200)
+            {
+                $data = $result->getBody()->getContents();
+                Cache::put($cacheName, $data, now()->addHours(2));
 
                 return json_decode($data, true);
-            }
-            else
-            {
-                $client = $this->getClient();
-                $result = $client->get("{$this->url()}/Microsoft.Compute/virtualMachines/{$instanceName}", [
-                    'query' => [
-                        'api-version' => '2021-11-01'
-                    ],
-                ]);
-
-                if ($result->getStatusCode() == 200)
-                {
-                    $data = $result->getBody()->getContents();
-
-                    Cache::put(self::getCacheName(self::CACHE_AZURE_API_GET_COMPUTE, $instanceName), $data, now()->addHour());
-
-                    return json_decode($data, true);
-                }
             }
         }
         catch (GuzzleException|\Exception $e)
@@ -121,24 +119,14 @@ class AzureService implements AzureServiceContract
         return false;
     }
 
-    public function getInstanceView(string $instanceName): ?array
+    public function getInstanceView(string $instanceName, bool $cache = true): ?array
     {
         try {
-            $instanceViewData = self::getCacheName(self::CACHE_AZURE_API_INSTANCE_VIEW_DATA, $instanceName);
-            $instanceViewTimer = self::getCacheName(self::CACHE_AZURE_API_INSTANCE_VIEW_TIMER, $instanceName);
+            $cacheName = self::getCacheName(self::CACHE_AZURE_API_INSTANCE_VIEW, $instanceName);
 
-            if (Cache::has($instanceViewData) && Cache::has($instanceViewTimer))
+            if ($cache && Cache::has($cacheName))
             {
-                if (Carbon::createFromTimestamp(Cache::get($instanceViewTimer))->timestamp > now()->timestamp)
-                {
-                    return json_decode(Cache::get($instanceViewData), true);
-                }
-                else
-                {
-                    Cache::forget($instanceViewData);
-                    Cache::forget($instanceViewTimer);
-                }
-
+                return json_decode(Cache::get($cacheName), true);
             }
 
             $client = $this->getClient();
@@ -150,12 +138,8 @@ class AzureService implements AzureServiceContract
 
             if ($result->getStatusCode() == 200)
             {
-                //ref: https://docs.microsoft.com/ko-kr/rest/api/compute/virtual-machines/instance-view
-
                 $data = $result->getBody()->getContents();
-
-                Cache::put($instanceViewData, $data);
-                Cache::put($instanceViewTimer, (string) now()->addSeconds(1)->timestamp);
+                Cache::put($cacheName, $data, now()->addSeconds(2));
 
                 return json_decode($data, true);
             }
@@ -218,9 +202,17 @@ class AzureService implements AzureServiceContract
         return null;
     }
 
-    public function getBudgets(string $budgetsName): ?array
+    public function getBudgets(string $budgetsName, bool $cache = true): ?array
     {
         try {
+            $cacheName = self::getCacheName(self::CACHE_AZURE_API_BUDGETS, $budgetsName);
+
+            if ($cache && Cache::has($cacheName))
+            {
+                return json_decode(Cache::get($cacheName), true);
+            }
+
+
             $subscriptionId = config('services.azure.subscription_id');
             $client = $this->getClient();
 
@@ -232,9 +224,45 @@ class AzureService implements AzureServiceContract
 
             if ($result->getStatusCode() == 200)
             {
-                //ref: https://docs.microsoft.com/ko-kr/rest/api/consumption/budgets/get
+                $data = $result->getBody()->getContents();
+                Cache::put($cacheName, $data, now()->addHours(12));
 
-                return json_decode($result->getBody()->getContents(), true);
+                return json_decode($data, true);
+            }
+        }
+        catch (GuzzleException|\Exception $e)
+        {
+            Log::error($e->getMessage());
+        }
+
+        return null;
+    }
+
+    public function getUsageDetails(bool $cache = true): ?array
+    {
+        try {
+            $cacheName = self::CACHE_AZURE_API_USAGE_DETAILS;
+
+            if ($cache && Cache::has($cacheName))
+            {
+                return json_decode(Cache::get($cacheName), true);
+            }
+
+            $subscriptionId = config('services.azure.subscription_id');
+            $client = $this->getClient();
+
+            $result = $client->get("https://management.azure.com/subscriptions/{$subscriptionId}/providers/Microsoft.Consumption/usageDetails", [
+                'query' => [
+                    'api-version' => '2021-10-01'
+                ],
+            ]);
+
+            if ($result->getStatusCode() == 200)
+            {
+                $data = $result->getBody()->getContents();
+                Cache::put($cacheName, $data, now()->addHours(24));
+
+                return json_decode($data, true);
             }
         }
         catch (GuzzleException|\Exception $e)
@@ -265,31 +293,29 @@ class AzureService implements AzureServiceContract
             {
                 return Cache::get(self::CACHE_AZURE_ACCESS_TOKEN);
             }
-            else
+
+            $client = new Client();
+
+            $tenantId = config('services.azure.tenant_id');
+            $response = $client->post("https://login.microsoftonline.com/{$tenantId}/oauth2/token", [
+                'form_params' => [
+                    'grant_type' => 'client_credentials',
+                    'client_id' => config('services.azure.key'),
+                    'client_secret' => config('services.azure.secret'),
+                    'resource' => 'https://management.core.windows.net/'
+                ]
+            ]);
+
+            $result = json_decode($response->getBody()->getContents(), true);
+
+            if (!array_key_exists('access_token', $result))
             {
-                $client = new Client();
-
-                $tenantId = config('services.azure.tenant_id');
-                $response = $client->post("https://login.microsoftonline.com/{$tenantId}/oauth2/token", [
-                    'form_params' => [
-                        'grant_type' => 'client_credentials',
-                        'client_id' => config('services.azure.key'),
-                        'client_secret' => config('services.azure.secret'),
-                        'resource' => 'https://management.core.windows.net/'
-                    ]
-                ]);
-
-                $result = json_decode($response->getBody()->getContents(), true);
-
-                if (!array_key_exists('access_token', $result))
-                {
-                    throw new \Exception('NOT FOUND ACCESS TOKEN');
-                }
-
-                Cache::put(self::CACHE_AZURE_ACCESS_TOKEN, $result['access_token'], now()->addSeconds((int) $result['expires_in']));
-
-                return $result['access_token'];
+                throw new \Exception('NOT FOUND ACCESS TOKEN');
             }
+
+            Cache::put(self::CACHE_AZURE_ACCESS_TOKEN, $result['access_token'], now()->addSeconds((int) $result['expires_in']));
+
+            return $result['access_token'];
         }
         catch (GuzzleException | \Exception $e) {
             Log::error($e->getMessage());
