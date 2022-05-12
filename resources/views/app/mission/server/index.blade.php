@@ -41,8 +41,8 @@
                                         <p class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800"></p>
                                         -->
                                     </div>
-                                    <div class="relative">
-                                        <div class="px-6">
+                                    <div class="relative px-2">
+                                        <div class="px-4">
                                             <table class="mt-2 text-gray-500 text-sm truncate table-auto font-mono">
                                                 <tbody>
                                                 <tr>
