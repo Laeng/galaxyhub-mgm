@@ -155,7 +155,7 @@ class AzureService implements AzureServiceContract
                 $data = $result->getBody()->getContents();
 
                 Cache::put($instanceViewData, $data);
-                Cache::put($instanceViewTimer, (string) now()->addSeconds(5)->timestamp);
+                Cache::put($instanceViewTimer, (string) now()->addSeconds(1)->timestamp);
 
                 return json_decode($data, true);
             }
