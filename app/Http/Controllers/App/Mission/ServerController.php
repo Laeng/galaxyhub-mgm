@@ -350,7 +350,7 @@ class ServerController extends Controller
         }
         else
         {
-            if (Cache::get(self::getCacheName(SSHService::CACHE_SET_ACCOUNT_PASSWORD_LOCK, $instanceName), false) === false)
+            if (Cache::get(self::getCacheName(SSHService::CACHE_ACCOUNT_PASSWORD_LOCK, $instanceName), false) === false)
             {
                 $ip = $this->getIpAddress($instanceName);
 

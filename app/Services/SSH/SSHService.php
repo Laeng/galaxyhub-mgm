@@ -11,7 +11,7 @@ use phpseclib3\Net\SSH2;
 
 class SSHService implements SSHServiceContract
 {
-    const CACHE_SET_ACCOUNT_PASSWORD_LOCK = 'services.ssh.set.account_password_lock';
+    const CACHE_ACCOUNT_PASSWORD_LOCK = 'services.ssh.account_password_lock';
 
     private ?SSH2 $client = null;
 
@@ -40,22 +40,24 @@ class SSHService implements SSHServiceContract
         return $this;
     }
 
-    public function setAccountPassword(string $username, $password): bool
+    public function setAccountPassword(string $username, string $password): bool
     {
         try {
             if (is_null($this->client)) return false;
 
-            if (!Cache::get(self::getCacheName(self::CACHE_SET_ACCOUNT_PASSWORD_LOCK, $username), false))
+            $cacheName = self::getCacheName(self::CACHE_ACCOUNT_PASSWORD_LOCK, $username);
+            $lock = Cache::lock($cacheName, 30);
+
+            if ($lock->get())
             {
-                Cache::put(self::getCacheName(self::CACHE_SET_ACCOUNT_PASSWORD_LOCK, $username), true);
-
                 $response = $this->client->exec("net user \"{$username}\" \"{$password}\"");
+                $lock->release();
 
-                Cache::put(self::getCacheName(self::CACHE_SET_ACCOUNT_PASSWORD_LOCK, $username), false);
-
-                if (str_contains($response, 'The command completed successfully.')) return true;
+                if(str_contains($response, 'The command completed successfully.'))
+                {
+                    return true;
+                }
             }
-
         }
         catch (\Exception $e)
         {
