@@ -1,4 +1,4 @@
-<x-theme.galaxyhub.sub-content title="네이버 카페" description="회원 목록" :breadcrumbs="Diglactic\Breadcrumbs\Breadcrumbs::render('app.admin', '네이버 카페')">
+<x-theme.galaxyhub.sub-content title="네이버 카페" description="네이버 카페" :breadcrumbs="Diglactic\Breadcrumbs\Breadcrumbs::render('app.admin', '네이버 카페')">
     <x-panel.galaxyhub.basics>
         <div class="space-y-4">
             <div>

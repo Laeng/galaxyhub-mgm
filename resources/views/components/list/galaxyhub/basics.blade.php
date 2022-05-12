@@ -117,7 +117,7 @@
            init() {
                this.list();
            },
-           list(step = 0) {
+           async list(step = 0) {
                this.load.list = true;
                this.data.list.body.step = step;
 
@@ -159,7 +159,7 @@
                if (!this.data.list.lock) {
                    this.data.list.lock = true;
 
-                   this.post(this.data.list.url, this.data.list.body, success, error, complete);
+                   await this.post(this.data.list.url, this.data.list.body, success, error, complete);
 
                    if (this.interval.list === -1)
                    {

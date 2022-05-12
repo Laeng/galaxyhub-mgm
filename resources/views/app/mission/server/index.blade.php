@@ -144,7 +144,7 @@
                             data: {}
                         }
                     },
-                    load() {
+                    async load() {
                         let success = (r) => {
                             if (r.data.data !== null) {
                                 if (!(typeof r.data.data === 'undefined' || r.data.data.length <= 0)) {
@@ -159,14 +159,14 @@
 
                         let complete = () => {};
 
-                        this.post(this.data.load.url, this.data.load.body, success, error, complete);
+                        await this.post(this.data.load.url, this.data.load.body, success, error, complete);
 
                         if (this.interval.load === -1) {
                             this.interval.load = setInterval(() => {this.post(this.data.load.url, this.data.load.body, success, error, complete)}, 2000);
                         }
                     },
 @if($isAdmin)
-                    cost() {
+                    async cost() {
                         let success = (r) => {
                             if (r.data.data !== null) {
                                 if (!(typeof r.data.data === 'undefined' || r.data.data.length <= 0)) {
@@ -182,7 +182,7 @@
 
                         let complete = () => {};
 
-                        this.post(this.data.cost.url, this.data.cost.body, success, error, complete);
+                        await this.post(this.data.cost.url, this.data.cost.body, success, error, complete);
                     },
 @endif
                     process(type, instanceName) {

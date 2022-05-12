@@ -407,7 +407,7 @@
                         this.post(this.data.process.url, this.data.process.body, success, error, complete);
                     }
                 },
-                load(update = false) {
+                async load(update = false) {
                     let success = (r) => {
                         if (r.data.data !== null) {
                             if (!(typeof r.data.data === 'undefined' || r.data.data.length <= 0)) {
@@ -438,13 +438,13 @@
 
                     let complete = () => {};
 
-                    this.post(this.data.load.url, this.data.load.body, success, error, complete);
+                    await this.post(this.data.load.url, this.data.load.body, success, error, complete);
 
                     if (this.interval.load === -1) {
                         this.interval.load = setInterval(() => {this.post(this.data.load.url, this.data.load.body, success, error, complete)}, 30000);
                     }
                 },
-                participants() {
+                async participants() {
                     let success = (r) => {
                         if (r.data.data !== null) {
                             if (!(typeof r.data.data === 'undefined' || r.data.data.length <= 0)) {
@@ -459,7 +459,7 @@
 
                     let complete = () => {};
 
-                    this.post(this.data.participants.url, this.data.participants.body, success, error, complete);
+                    await this.post(this.data.participants.url, this.data.participants.body, success, error, complete);
 
                     if (this.interval.participants === -1) {
                         this.interval.participants = setInterval(() => {this.post(this.data.participants.url, this.data.participants.body, success, error, complete)}, 30000);
