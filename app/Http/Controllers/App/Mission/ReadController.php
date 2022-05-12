@@ -204,6 +204,8 @@ class ReadController extends Controller
                         $makerMission = $this->userMissionRepository->findByUserIdAndMissionId($mission->user_id, $mission->id);
                         $makerMission->attended_at = $now;
                         $makerMission->save();
+
+
                         break;
 
                     case 'CANCEL':

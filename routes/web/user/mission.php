@@ -23,6 +23,7 @@ Route::prefix('app')->group(function () {
             //AJAX
             Route::post('/status', [ServerController::class, 'status'])->name('status');
             Route::post('/process', [ServerController::class, 'process'])->name('process');
+            Route::post('/cost', [ServerController::class, 'cost'])->name('cost');
 
         });
 

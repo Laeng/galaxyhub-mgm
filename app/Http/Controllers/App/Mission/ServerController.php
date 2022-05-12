@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\App\Mission;
 
 use App\Enums\PermissionType;
+use App\Enums\RoleType;
 use App\Http\Controllers\Controller;
 use App\Services\Azure\Contracts\AzureServiceContract;
 use App\Services\SSH\Contracts\SSHServiceContract;
@@ -42,6 +43,7 @@ class ServerController extends Controller
 
         return view('app.mission.server.index', [
             'instances' => $this->instances,
+            'isAdmin' => $user->hasRole(RoleType::ADMIN->name)
         ]);
     }
 
@@ -232,7 +234,29 @@ class ServerController extends Controller
 
     public function cost(Request $request): JsonResponse
     {
-        return $this->jsonResponse(200, '', '');
+        try
+        {
+            $user = Auth::user();
+
+            if (!$user->hasAnyPermission([PermissionType::MAKER1->name, PermissionType::MAKER2->name]))
+            {
+                abort(404);
+            }
+
+            $budgets = $this->azureService->getBudgets(config('services.azure.budget_name'));
+
+            if (is_null($budgets)) throw new \Exception('NULL BUDGETS RESPONSE', 422);
+
+            return $this->jsonResponse(200, 'SUCCESS', $budgets['properties']['currentSpend']);
+
+        }
+        catch (\Exception $e)
+        {
+            return $this->jsonResponse($e->getCode(), Str::upper($e->getMessage()), config('app.debug') ? $e->getTrace() : [
+                "amount" => 0,
+                "unit" => '',
+            ]);
+        }
     }
 
 

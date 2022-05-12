@@ -13,13 +13,15 @@
                         <li>제공되는 모든 미션 서버는 시작시 IP 주소와 원격 제어 계정의 비밀번호가 변경됩니다.</li>
                     </ul>
                 </x-alert.galaxyhub.info>
-                {{--
-                <x-alert.galaxyhub.success title="{{ today()->month }}월 1일 부터 {{ today()->month }}월 {{ today()->day }}일까지의 사용 금액">
-                    <ul>
-                        <li>사용 금액: <span>212</span>원 ({{ today()->addMonth()->month }}월 9일 결제 예정)</li>
-                    </ul>
-                </x-alert.galaxyhub.success>
-                --}}
+@if($isAdmin)
+                <div style="display: none" x-show="data.cost.data.amount !== ''" x-cloak>
+                    <x-alert.galaxyhub.success title="{{ today()->month }}월 1일 부터 {{ today()->month }}월 {{ today()->day }}일까지의 사용 금액">
+                        <ul>
+                            <li>사용 금액: <span x-text="data.cost.data.amount"></span><span x-text="data.cost.data.unit"></span> ({{ today()->addMonth()->month }}월 9일 결제 예정)</li>
+                        </ul>
+                    </x-alert.galaxyhub.success>
+                </div>
+@endif
             </div>
 
             <div class="space-y-2">
@@ -126,6 +128,16 @@
                                 count: 0
                             }
                         },
+@if($isAdmin)
+                        cost: {
+                            url: '{{ route('mission.server.cost') }}',
+                            body: {},
+                            data: {
+                                amount: '',
+                                unit: ''
+                            }
+                        },
+@endif
                         process: {
                             url: '{{ route('mission.server.process') }}',
                             body: {},
@@ -153,6 +165,26 @@
                             this.interval.load = setInterval(() => {this.post(this.data.load.url, this.data.load.body, success, error, complete)}, 5000);
                         }
                     },
+@if($isAdmin)
+                    cost() {
+                        let success = (r) => {
+                            if (r.data.data !== null) {
+                                if (!(typeof r.data.data === 'undefined' || r.data.data.length <= 0)) {
+                                    this.data.cost.data.amount = r.data.data.amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+                                    this.data.cost.data.unit = r.data.data.unit === 'KRW' ? '원' : r.data.data.unit;
+                                }
+                            }
+                        };
+
+                        let error = (e) => {
+                            console.log(e);
+                        };
+
+                        let complete = () => {};
+
+                        this.post(this.data.cost.url, this.data.cost.body, success, error, complete);
+                    },
+@endif
                     process(type, instanceName) {
                         if(!this.data.load.data.server[instanceName].wait) {
                             if (this.data.load.data.server[instanceName].code === 2 || this.data.load.data.server[instanceName].code === 3)
@@ -240,7 +272,10 @@
                         }
                     },
                     init() {
-                      this.load();
+                        this.load();
+@if($isAdmin)
+                        this.cost();
+@endif
                     },
                     post(url, body, success, error, complete) {
                         window.axios.post(url, body).then(success).catch(error).then(complete);

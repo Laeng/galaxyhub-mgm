@@ -221,9 +221,9 @@ class AzureService implements AzureServiceContract
     public function getBudgets(string $budgetsName): ?array
     {
         try {
-            $subscriptionId = env('services.azure.subscription_id');
-
+            $subscriptionId = config('services.azure.subscription_id');
             $client = $this->getClient();
+
             $result = $client->get("https://management.azure.com/subscriptions/{$subscriptionId}/providers/Microsoft.Consumption/budgets/{$budgetsName}", [
                 'query' => [
                     'api-version' => '2021-10-01'
