@@ -7,6 +7,7 @@ use App\Enums\RoleType;
 use App\Http\Controllers\Controller;
 use App\Services\Azure\Contracts\AzureServiceContract;
 use App\Services\SSH\Contracts\SSHServiceContract;
+use App\Services\SSH\SSHService;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -21,6 +22,7 @@ class ServerController extends Controller
     const CACHE_IP_ADDRESS = 'mission.server.ip_address';
     const CACHE_USERNAME = 'mission.server.username';
     const CACHE_PASSWORD = 'mission.server.password';
+
 
     private array $instances = ['galaxyhub'];
     private AzureServiceContract $azureService;
@@ -348,23 +350,26 @@ class ServerController extends Controller
         }
         else
         {
-            $ip = $this->getIpAddress($instanceName);
-
-            if (is_null($ip)) return null;
-
-            $username = $this->getUsername($instanceName);
-            $password = Str::random(self::PASSWORD_LENGTH);
-
-            $sshUsername = config('services.vm.ssh.username');
-            $sshPassword = config('services.vm.ssh.password');
-
-            $result = $this->sshService->getClient($ip, $sshUsername, $sshPassword)->setAccountPassword($username, $password);
-
-            if ($result)
+            if (Cache::get(self::getCacheName(SSHService::CACHE_SET_ACCOUNT_PASSWORD_LOCK, $instanceName), false) === false)
             {
-                Cache::put(self::getCacheName(self::CACHE_PASSWORD, $instanceName), $password);
+                $ip = $this->getIpAddress($instanceName);
 
-                return $password;
+                if (is_null($ip)) return null;
+
+                $username = $this->getUsername($instanceName);
+                $password = Str::random(self::PASSWORD_LENGTH);
+
+                $sshUsername = config('services.vm.ssh.username');
+                $sshPassword = config('services.vm.ssh.password');
+
+                $result = $this->sshService->getClient($ip, $sshUsername, $sshPassword)->setAccountPassword($username, $password);
+
+                if ($result)
+                {
+                    Cache::put(self::getCacheName(self::CACHE_PASSWORD, $instanceName), $password);
+
+                    return $password;
+                }
             }
 
             return null;
