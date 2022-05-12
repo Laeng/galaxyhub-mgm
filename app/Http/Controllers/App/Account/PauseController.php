@@ -119,8 +119,8 @@ class PauseController extends Controller
 
             if ($this->isEnabled($user->id))
             {
-                $ban = $user->bans()->first();
-
+                $ban = $user->bans()->where('comment', BanCommentType::USER_PAUSE->value)->latest()->first();
+                
                 if (is_null($ban) || $ban->comment === BanCommentType::USER_PAUSE->value)
                 {
                     $data = [

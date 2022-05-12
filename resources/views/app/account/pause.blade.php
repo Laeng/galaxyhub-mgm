@@ -32,8 +32,8 @@
                     </x-button.filled.md-white>
                 </div>
             @elseif($canPause)
-                <div class="mt-8 text-center" @click="pause('장기 미접속 신청을 하시겠습니까?')">
-                    <x-button.filled.md-red>
+                <div class="mt-8 text-center">
+                    <x-button.filled.md-red @click="pause('장기 미접속 신청을 하시겠습니까?')">
                         장기 미접속 신청
                     </x-button.filled.md-red>
                 </div>
