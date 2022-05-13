@@ -20,11 +20,12 @@ class Basics extends Component
         $this->limit = $limit;
         $this->query = $query;
         $this->refresh = $refresh;
-
     }
 
     public function render(): View
     {
-        return view('components.list.galaxyhub.basics');
+        return view('components.list.galaxyhub.basics', [
+            'refreshTime' => config('app.debug') ? '10000' : '1000'
+        ]);
     }
 }

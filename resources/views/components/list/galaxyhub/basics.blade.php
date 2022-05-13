@@ -165,7 +165,7 @@
                    {
                        this.interval.list = setInterval(() => {
                            this.post(this.data.list.url, this.data.list.body, success, error, complete)
-                       }, 10000);
+                       }, {{ $refreshTime }});
                    }
                }
            },
