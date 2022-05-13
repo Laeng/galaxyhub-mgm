@@ -48,7 +48,7 @@ class ListController extends Controller
             $limit = $request->get('limit', 10);
             $q = $request->get('query', []);
 
-            $query = $this->userMissionRepository->new()->where('user_id', $user->id);
+            $query = $this->userMissionRepository->new()->where('user_id', $user->id)->where('is_maker', false);
             $conditions = array();
 
             if (isset($q['type'])) {
