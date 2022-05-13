@@ -60,7 +60,7 @@ class ListController extends Controller
             if ($limit < 1 || $limit > 100) $limit = 20;
 
             $query = $this->userRepository->new()->newQuery()->leftJoin('user_missions', function ($join) {
-                $join->on('user_missions.id', '=', DB::raw("(SELECT max(user_missions.id) FROM user_missions WHERE user_missions.user_id = users.id)"));
+                $join->on('user_missions.id', '=', DB::raw("(SELECT max(user_missions.id) FROM user_missions WHERE user_missions.user_id = users.id AND user_missions.attended_at IS NOT NULL)"));
                     // OLD
                     //->on('user_missions.user_id', '=', 'users.id')
                     //->on('user_missions.id', '=', DB::raw("(SELECT max(id) FROM user_missions WHERE user_missions.user_id = users.id AND user_missions.attended_at IS NOT NULL)"));
@@ -101,7 +101,7 @@ class ListController extends Controller
                         $query = $query->whereNull('user_missions.attended_at')->whereDate('users.agreed_at', '<=', now()->subDays(30));
                         break;
                     case '30일이상 미참여':
-                        $query = $query->whereNotNull('user_missions.attended_at')->whereDate('user_missions.attended_at', '>=', now()->subDays(30));
+                        $query = $query->whereNotNull('user_missions.attended_at')->whereDate('user_missions.attended_at', '<=', now()->subDays(30));
                         break;
                     case '활동 정지 회원':
                         $query = $query->whereNotNull('banned_at');
