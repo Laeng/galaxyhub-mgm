@@ -51,10 +51,8 @@ class ListController extends Controller
                 'query' => 'array'
             ]);
 
-            $count = $this->userRepository->count();
-
             $limit = $request->get('limit', 20);
-            $step = $this->getPaginationStep($request->get('step', 0), $limit, $count);
+            $step = $request->get('step', 0);
             $q = $request->get('query', []);
 
             if ($limit < 1 || $limit > 100) $limit = 20;
@@ -147,6 +145,7 @@ class ListController extends Controller
             }
 
             $count = $query->count();
+            $step = $this->getPaginationStep($step, $limit, $count);
 
             if ($count > 0)
             {

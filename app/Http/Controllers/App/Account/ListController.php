@@ -69,7 +69,8 @@ class ListController extends Controller
 
             if ($count > 0)
             {
-                $userMission = $query->offset($step * $limit)->limit($limit)->get();
+                $step = $this->getPaginationStep($step, $limit, $count);
+                $userMission = $query->latest()->offset($step * $limit)->limit($limit)->get();
 
                 $missionType = MissionType::getKoreanNames();
 
@@ -178,7 +179,8 @@ class ListController extends Controller
 
             if ($count > 0)
             {
-                $userMission = $query->offset($step * $limit)->limit($limit)->get();
+                $step = $this->getPaginationStep($step, $limit, $count);
+                $userMission = $query->latest()->offset($step * $limit)->limit($limit)->get();
 
                 $missionType = MissionType::getKoreanNames();
 
