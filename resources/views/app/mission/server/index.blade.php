@@ -17,7 +17,7 @@
                 <div style="display: none" x-show="data.cost.data.amount !== ''" x-cloak>
                     <x-alert.galaxyhub.success title="{{ today()->month }}월 1일 부터 {{ today()->month }}월 {{ today()->subDay()->day }}일까지의 사용 금액">
                         <ul>
-                            <li>사용 금액: <span x-text="data.cost.data.amount"></span><span x-text="data.cost.data.unit"></span> ({{ today()->addMonth()->month }}월 9일 결제 예정) - <a href="{{ route('mission.server.index') }}" class="hover:underline">자세히 보기</a></li>
+                            <li>사용 금액: <span x-text="data.cost.data.amount"></span><span x-text="data.cost.data.unit"></span> ({{ today()->addMonth()->month }}월 9일 결제 예정) - <a href="{{ route('admin.budget.live') }}" class="hover:underline">자세히 보기</a></li>
                         </ul>
                     </x-alert.galaxyhub.success>
                 </div>
