@@ -19,9 +19,10 @@
             <!--azure -->
             <div x-show="data.ui.mode === 0">
                 <div class="space-y-2">
-                    <x-alert.galaxyhub.info title="갱신 안내">
+                    <x-alert.galaxyhub.info title="비용 안내">
                         <ul>
                             <li>Microsoft Azure 정책에 따라 4시간 마다 업데이트됩니다.</li>
+                            <li x-show="data.azure.data.calculate.exchange !== 0">발생된 비용은 원화로 결제되며 {{ now()->month }} 월 기준 환율은 1 달러 당 <span x-text="splitNumber(data.azure.data.calculate.exchange)"></span> 원 입니다.</li>
                         </ul>
                     </x-alert.galaxyhub.info>
                 </div>
@@ -127,7 +128,8 @@
                                 live: [],
                                 calculate: {
                                     subtotal: 0,
-                                    tax: 0
+                                    tax: 0,
+                                    exchange: 0
                                 },
                             }
                         },
@@ -158,6 +160,10 @@
                                             Object.values(aa[ii]).forEach((vvv, iii, aaa) => {
                                                 Object.values(aaa[iii]).forEach((vvvv, iiii, aaaa) => {
                                                     this.data.azure.data.calculate.subtotal += vvvv.totalPrice * vvvv.exchangeRate;
+
+                                                    if (this.data.azure.data.calculate.exchange === 0) {
+                                                        this.data.azure.data.calculate.exchange = vvvv.exchangeRate;
+                                                    }
                                                 });
                                             });
                                         });
