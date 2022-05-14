@@ -169,6 +169,34 @@
 
         <div>
             <div class="my-2 lg:my-4">
+                <h2 class="text-xl lg:text-2xl font-bold">예산</h2>
+                <p class="mt-1 text-sm text-gray-500 dark:text-gray-300">운영에 대한 필요 예산을 예측하고 확인합니다.</p>
+            </div>
+            <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+
+                <div class="relative rounded-lg border border-gray-300 dark:border-gray-800 bg-white dark:bg-gray-900 px-6 py-5 shadow-sm flex items-center space-x-3 hover:border-gray-400 dark:hover:border-gray-700">
+                    <div class="flex-shrink-0">
+                        <svg class="h-10 w-10 text-gray-500 dark:text-gray-300" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                            <path d="M448 0h-112c-17.67 0-32 14.33-32 32v48h32c17.67 0 32 14.33 32 32s-14.33 32-32 32h-32v64h64V224c0 17.67 14.33 32 32 32s32-14.33 32-32V208H480c17.67 0 32-14.33 32-32V64C512 28.65 483.3 0 448 0zM416 288h-48v32c0 17.67-14.33 32-32 32s-32-14.33-32-32V288H224v64H192c-17.67 0-32 14.33-32 32s14.33 32 32 32h32v48H72c-13.25 0-24-10.75-24-24V288H96V256c0-17.67 14.33-32 32-32s32 14.33 32 32v32h64V208h16c17.67 0 32-14.33 32-32s-14.33-32-32-32H224V96c0-17.67-14.33-32-32-32H64C28.65 64 0 92.65 0 128v312C0 479.8 32.24 512 72 512H384c35.35 0 64-28.65 64-64v-128C448 302.3 433.7 288 416 288z"/>
+                        </svg>
+                        <svg class="h-10 w-10 text-gray-500 dark:text-gray-300" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
+                            <path d="M304 16.58C304 7.555 310.1 0 320 0C443.7 0 544 100.3 544 224C544 233 536.4 240 527.4 240H304V16.58zM32 272C32 150.7 122.1 50.34 238.1 34.25C248.2 32.99 256 40.36 256 49.61V288L412.5 444.5C419.2 451.2 418.7 462.2 411 467.7C371.8 495.6 323.8 512 272 512C139.5 512 32 404.6 32 272zM558.4 288C567.6 288 575 295.8 573.8 305C566.1 360.9 539.1 410.6 499.9 447.3C493.9 452.1 484.5 452.5 478.7 446.7L320 288H558.4z"/>
+                        </svg>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <a href="{{ route('admin.budget.live') }}" class="focus:outline-none">
+                            <span class="absolute inset-0" aria-hidden="true"></span>
+                            <p class="font-medium text-gray-900 dark:text-gray-100">실시간 비용</p>
+                            <p class="text-sm text-gray-500  dark:text-gray-300 truncate">이용 중인 서비스에 대한 실시간 비용을 확인합니다.</p>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div>
+            <div class="my-2 lg:my-4">
                 <h2 class="text-xl lg:text-2xl font-bold">알림</h2>
                 <p class="mt-1 text-sm text-gray-500 dark:text-gray-300">네이버 카페 및 디스코드에 발행되는 미션 알림를 설정합니다.</p>
             </div>
