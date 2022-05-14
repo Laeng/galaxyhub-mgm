@@ -77,6 +77,8 @@ class BudgetController extends Controller
                 $data[$property['consumedService']][$property['meterCategory']][$property['meterName']][$property['product']]['totalPrice'] += (float) $property['paygCostInUSD'];
             }
 
+            ksort($data);
+
             return $this->jsonResponse(200, 'SUCCESS', $data);
         }
         catch (\Exception $e)
