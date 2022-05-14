@@ -70,7 +70,7 @@
                             <div>
                                 <div class="-mt-px flex divide-x divide-gray-300">
                                     <div class="w-0 flex-1 flex">
-                                        <button class="relative w-0 flex-1 inline-flex items-center justify-center py-4 text-sm font-medium border border-transparent text-gray-500 hover:text-blue-500 font-bold" @click="process('start', server.name)">
+                                        <button class="relative w-0 flex-1 inline-flex items-center justify-center py-4 text-sm font-medium border border-transparent text-gray-500 hover:text-indigo-500 font-bold" @click="process('start', server.name)">
                                             <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" fill="currentColor" >
                                                 <path d="M24.52 38.13C39.66 29.64 58.21 29.99 73.03 39.04L361 215C375.3 223.8 384 239.3 384 256C384 272.7 375.3 288.2 361 296.1L73.03 472.1C58.21 482 39.66 482.4 24.52 473.9C9.377 465.4 0 449.4 0 432V80C0 62.64 9.377 46.63 24.52 38.13V38.13zM48 432L336 256L48 80V432z"/>
                                             </svg>
@@ -78,7 +78,7 @@
                                         </button>
                                     </div>
                                     <div class="w-0 flex-1 flex">
-                                        <button class="relative w-0 flex-1 inline-flex items-center justify-center py-4 text-sm font-medium border border-transparent text-gray-500 hover:text-blue-500 font-bold" @click="process('stop', server.name)">
+                                        <button class="relative w-0 flex-1 inline-flex items-center justify-center py-4 text-sm font-medium border border-transparent text-gray-500 hover:text-indigo-500 font-bold" @click="process('stop', server.name)">
                                             <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" fill="currentColor">
                                                 <path d="M320 64H64c-35.35 0-64 28.65-64 64v255.1c0 35.35 28.65 64 64 64H320c35.35 0 64-28.65 64-64V128C384 92.65 355.3 64 320 64zM336 384c0 8.822-7.178 16-16 16H64c-8.822 0-16-7.178-16-16V128c0-8.822 7.178-16 16-16h256c8.822 0 16 7.178 16 16V384z"/>
                                             </svg>
@@ -86,7 +86,7 @@
                                         </button>
                                     </div>
                                     <div class="w-0 flex-1 flex">
-                                        <button class="relative w-0 flex-1 inline-flex items-center justify-center py-4 text-sm font-medium border border-transparent text-gray-500 hover:text-blue-500 font-bold" @click="process('restart', server.name)">
+                                        <button class="relative w-0 flex-1 inline-flex items-center justify-center py-4 text-sm font-medium border border-transparent text-gray-500 hover:text-indigo-500 font-bold" @click="process('restart', server.name)">
                                             <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="currentColor">
                                                 <path d="M496 40v160C496 213.3 485.3 224 472 224h-160C298.8 224 288 213.3 288 200s10.75-24 24-24h100.5C382.8 118.3 322.5 80 256 80C158.1 80 80 158.1 80 256s78.97 176 176 176c41.09 0 81.09-14.47 112.6-40.75c10.16-8.5 25.31-7.156 33.81 3.062c8.5 10.19 7.125 25.31-3.062 33.81c-40.16 33.44-91.17 51.77-143.5 51.77C132.4 479.9 32 379.5 32 256s100.4-223.9 223.9-223.9c79.85 0 152.4 43.46 192.1 109.1V40c0-13.25 10.75-24 24-24S496 26.75 496 40z"/>
                                             </svg>
@@ -94,7 +94,7 @@
                                         </button>
                                     </div>
                                     <div class="w-0 flex-1 hidden xl:flex">
-                                        <button class="relative w-0 flex-1 inline-flex items-center justify-center py-4 text-sm font-medium border border-transparent text-gray-500 hover:text-blue-500 font-bold" @click="download(server.name)">
+                                        <button class="relative w-0 flex-1 inline-flex items-center justify-center py-4 text-sm font-medium border border-transparent text-gray-500 hover:text-indigo-500 font-bold" @click="download(server.name)">
                                             <svg class="w-5 h-5"  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="currentColor">
                                                 <path d="M136.2 150.3L232.2 238.3C237.2 242.9 240 249.3 240 256C240 262.7 237.2 269.1 232.2 273.7L136.2 361.7C126.4 370.6 111.3 369.1 102.3 360.2C93.35 350.4 94.01 335.3 103.8 326.3L180.5 256L103.8 185.7C94.01 176.7 93.35 161.6 102.3 151.8C111.3 142 126.4 141.4 136.2 150.3V150.3zM392 336C405.3 336 416 346.7 416 360C416 373.3 405.3 384 392 384H248C234.7 384 224 373.3 224 360C224 346.7 234.7 336 248 336H392zM448 32C483.3 32 512 60.65 512 96V416C512 451.3 483.3 480 448 480H64C28.65 480 0 451.3 0 416V96C0 60.65 28.65 32 64 32H448zM448 80H64C55.16 80 48 87.16 48 96V416C48 424.8 55.16 432 64 432H448C456.8 432 464 424.8 464 416V96C464 87.16 456.8 80 448 80z"/>
                                             </svg>

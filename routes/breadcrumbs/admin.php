@@ -23,3 +23,10 @@ Breadcrumbs::for('app.admin.user', function(BreadcrumbTrail $trail, string $titl
     $trail->push($title);
 });
 
+
+Breadcrumbs::for('app.admin.budget', function(BreadcrumbTrail $trail, string $title) {
+    $trail->push('메인', route('app.index'));
+    $trail->push('관리자 메뉴', route('admin.index'));
+    $trail->push('예산', route('admin.index'));
+    $trail->push($title);
+});

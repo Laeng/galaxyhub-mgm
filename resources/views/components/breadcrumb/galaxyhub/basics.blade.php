@@ -22,7 +22,7 @@
                             @if (!is_null($breadcrumb->url) && !$loop->last)
                                 <a href="{{ $breadcrumb->url }}" class="ml-4 text-sm font-bold text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-500">{{ $breadcrumb->title }}</a>
                             @else
-                                <span class="ml-4 text-sm font-bold text-blue-500">{{ $breadcrumb->title }}</span>
+                                <span class="ml-4 text-sm font-bold text-indigo-500">{{ $breadcrumb->title }}</span>
                             @endif
                         </div>
                     </li>

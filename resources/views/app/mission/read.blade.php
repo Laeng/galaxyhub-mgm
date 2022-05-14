@@ -441,7 +441,7 @@
                     await this.post(this.data.load.url, this.data.load.body, success, error, complete);
 
                     if (this.interval.load === -1) {
-                        this.interval.load = setInterval(() => {this.post(this.data.load.url, this.data.load.body, success, error, complete)}, 30000);
+                        this.interval.load = setInterval(() => {this.post(this.data.load.url, this.data.load.body, success, error, complete)}, 10000);
                     }
                 },
                 async participants() {
@@ -462,7 +462,7 @@
                     await this.post(this.data.participants.url, this.data.participants.body, success, error, complete);
 
                     if (this.interval.participants === -1) {
-                        this.interval.participants = setInterval(() => {this.post(this.data.participants.url, this.data.participants.body, success, error, complete)}, 30000);
+                        this.interval.participants = setInterval(() => {this.post(this.data.participants.url, this.data.participants.body, success, error, complete)}, 10000);
                     }
                 },
                 init() {
