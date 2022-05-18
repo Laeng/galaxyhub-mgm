@@ -147,9 +147,9 @@ class SurveyController extends Controller
 
         $hasSurvey = !is_null($mission->survey_id);
 
-        if (!$hasSurvey && in_array($mission->type, MissionType::needSurvey()))
+        if (!$hasSurvey && !in_array($mission->type, MissionType::needSurvey()))
         {
-            abort(404);
+            return redirect()->route('mission.read.attend');
         }
 
         $userMission = $this->userMissionRepository->findByUserIdAndMissionId($user->id, $mission->id);

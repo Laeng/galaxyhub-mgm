@@ -42,7 +42,10 @@ return [
     ],
 
     'discord' => [
-        'webhook' => env('DISCORD_WEBHOOK_URL')
+        'webhook' => [
+            'admin' => env('DISCORD_WEBHOOK_ADMIN_URL'),
+            'mission' => env('DISCORD_WEBHOOK_MISSION_URL')
+        ]
     ],
 
     'naver' => [

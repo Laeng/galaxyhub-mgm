@@ -6,6 +6,7 @@ use App\Enums\BanCommentType;
 use App\Enums\RoleType;
 use App\Enums\UserRecordType;
 use App\Http\Controllers\Controller;
+use App\Jobs\SendAccountDeleteRequestMessage;
 use App\Repositories\Ban\Interfaces\BanRepositoryInterface;
 use App\Repositories\User\Interfaces\UserAccountRepositoryInterface;
 use App\Repositories\User\Interfaces\UserMissionRepositoryInterface;
@@ -66,16 +67,6 @@ class ListController extends Controller
 
             $isPreJoin = false;
 
-            if (!empty($q['filter']) && $q['filter'] === '예비 가입자')
-            {
-                $isPreJoin = true;
-                $query = $query->whereNull('users.agreed_at');
-            }
-            else
-            {
-                $query = $query->whereNotNull('users.agreed_at');
-            }
-
             if (!empty($q['find']))
             {
                 switch ($q['find'])
@@ -96,13 +87,19 @@ class ListController extends Controller
                 switch ($q['filter'])
                 {
                     case '신규가입 미참여':
-                        $query = $query->whereNull('user_missions.attended_at')->whereDate('users.agreed_at', '<=', now()->subDays(30));
+                        $query = $query->whereNotNull('users.agreed_at')->whereNull('user_missions.attended_at')->whereDate('users.agreed_at', '<=', now()->subDays(30));
                         break;
                     case '30일이상 미참여':
-                        $query = $query->whereNotNull('user_missions.attended_at')->whereDate('user_missions.attended_at', '<=', now()->subDays(30));
+                        $query = $query->whereNotNull('users.agreed_at')->whereNotNull('user_missions.attended_at')->whereDate('user_missions.attended_at', '<=', now()->subDays(30));
                         break;
                     case '활동 정지 회원':
-                        $query = $query->whereNotNull('banned_at');
+                        $query = $query->whereNotNull('users.agreed_at')->whereNotNull('banned_at');
+                        break;
+                    case '예비 가입자':
+                        $isPreJoin = true;
+                        $query = $query->whereNull('users.agreed_at');
+                        break;
+                    default:
                         break;
                 }
             }
@@ -285,6 +282,8 @@ class ListController extends Controller
                 case 'drop':
                     foreach ($users as $user)
                     {
+                        SendAccountDeleteRequestMessage::dispatch($user, "{$reason} - 처리자: {$executor->name}");
+
                         $userService->createRecord($user->id, UserRecordType::USER_DELETE->name, [
                             'comment' => $reason
                         ], $executor->id);

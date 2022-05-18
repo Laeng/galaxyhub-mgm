@@ -7,6 +7,7 @@ use App\Enums\PermissionType;
 use App\Enums\RoleType;
 use App\Enums\UserRecordType;
 use App\Http\Controllers\Controller;
+use App\Jobs\SendAccountDeleteRequestMessage;
 use App\Repositories\Badge\Interfaces\BadgeRepositoryInterface;
 use App\Repositories\User\Interfaces\UserAccountRepositoryInterface;
 use App\Repositories\User\Interfaces\UserBadgeRepositoryInterface;
@@ -51,9 +52,12 @@ class AccountController extends Controller
         try
         {
             $user = Auth::user();
+            $reason = "{$user->name}님의 요청으로 계정 데이터를 삭제하였습니다.";
+
+            SendAccountDeleteRequestMessage::dispatch($user, $reason);
 
             $userService->createRecord($user->id, UserRecordType::USER_DELETE->name, [
-                'comment' => "{$user->name}님의 요청으로 계정 데이터를 삭제하였습니다."
+                'comment' => $reason
             ]);
             $userService->delete($user->id);
 
