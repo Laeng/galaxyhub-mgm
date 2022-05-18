@@ -97,6 +97,11 @@ class SurveyController extends Controller
                         ];
 
                         if ($isAdmin) {
+
+                            $answerEntry = $answer->entry();
+
+                            if(is_null($answerEntry)) continue;
+
                             $userAnswer['user'] = $answer->entry()->first()->participant()->first();
                         }
 
