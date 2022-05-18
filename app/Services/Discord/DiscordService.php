@@ -162,41 +162,6 @@ class DiscordService implements DiscordServiceContract
                     'avatar_url' => '',
                     'type' => "rich",
                     'content' => "{$user->name}님의 데이터가 삭제 되었습니다.\n\n```사유: {$reason}\n\n계정 정보\nSTEAM ID: {$steamId}\nSTEAM Nickname: {$user->name}\nNAVER ID: {$naverId}\nDISCORD NAME: {$discordName} ```\n[스팀 프로필](https://steamcommunity.com/profiles/{$steamId}) | [작성 게시글](https://cafe.naver.com/ca-fe/cafes/17091584/members?memberId={$naverId})\n ㅤㅤㅤㅤ",
-
-
-
-
-                    /*
-                    'embeds' => [
-                        [
-                            'title' => '사유',
-                            'description' => $reason,
-                            'color' => '9936498',
-                            'author' => [
-                                'name' => 'MGM 라운지',
-                                'url' => $homeUrl
-                            ],
-                            'timestamp' => now()->toIso8601String()
-                        ],
-                        [
-                            'title' => "스팀 프로필",
-                            'description' => "스팀 고유번호: {$steamId}\n스팀 닉네임: {$user->name}",
-                            'url' => "https://steamcommunity.com/profiles/{$steamId}",
-                            'color' => '0'
-                        ],
-                        [
-                            'title' => "카페 작성글",
-                            'description' => "네이버 아이디: {$naverId}",
-                            'url' => "https://cafe.naver.com/ca-fe/cafes/17091584/members?memberId={$steamId}",
-                            'color' => '51004'
-                        ],
-                        [
-                            'title' => "디스코드",
-                            'description' => "디스코드 아이디: {$discordName}",
-                            'color' => '5793266'
-                        ]
-                    ]
-                    */
                 ]
             ]);
         }

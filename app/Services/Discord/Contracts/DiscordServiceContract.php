@@ -10,6 +10,7 @@ use App\Services\Survey\SurveyService;
 interface DiscordServiceContract
 {
     public function sendMissionCreatedMessage(Mission $mission): bool;
+    public function sendMissionCanceledMessage(?Mission $mission): bool;
 
     public function sendAccountDeleteRequestMassage(SurveyService $surveyService, UserAccountRepository $accountRepository, User $user, string $reason);
 }
