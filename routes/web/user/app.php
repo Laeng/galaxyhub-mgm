@@ -14,7 +14,8 @@ Route::prefix('app')->group(function () {
 
     Route::name('app.')->group(function() {
         //VIEW
-        Route::get('/privacy', [AppController::class, 'privacy'])->name('privacy');
+        Route::get('/privacy', [AppController::class, 'privacy'])->name('privacy')->whereNumber('date');
+        Route::get('/privacy/{date}', [AppController::class, 'privacy'])->name('privacy.date')->whereNumber('date');
         Route::get('/rules', [AppController::class, 'rules'])->name('rules');
 
         //AJAX

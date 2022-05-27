@@ -12,6 +12,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Auth;
+use function PHPUnit\Framework\matches;
 
 class AppController extends Controller
 {
@@ -40,9 +41,16 @@ class AppController extends Controller
         ]);
     }
 
-    public function privacy(): View
+    public function privacy(?int $date = null): View
     {
-        return view('app.privacy');
+        $path = match ($date) {
+            220301 => 'components.agreements.privacy_220301',
+            default => 'components.agreements.privacy'
+        };
+
+        return view('app.privacy', [
+            'path' => $path
+        ]);
     }
 
     public function rules(): View
