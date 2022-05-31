@@ -55,9 +55,7 @@ class AccountController extends Controller
             $user = Auth::user();
             $reason = "{$user->name}님의 요청으로 계정 데이터를 삭제하였습니다.";
 
-            Log::error('try send leave user data');
             SendAccountDeleteRequestMessage::dispatch($user, $reason);
-            Log::error('nice try! :D');
 
             $userService->createRecord($user->id, UserRecordType::USER_DELETE->name, [
                 'comment' => $reason

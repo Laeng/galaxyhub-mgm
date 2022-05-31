@@ -165,7 +165,7 @@ class DiscordService implements DiscordServiceContract
                 ]
             ]);
         }
-        catch (GuzzleException $e)
+        catch (GuzzleException|Exception $e)
         {
             Log::error($e->getMessage());
             Log::error($e);
