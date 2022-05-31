@@ -12,6 +12,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 
 class SendAccountDeleteRequestMessage implements ShouldQueue
 {
@@ -38,6 +39,7 @@ class SendAccountDeleteRequestMessage implements ShouldQueue
      */
     public function handle(DiscordServiceContract $discordService, UserAccountRepository $accountRepository, SurveyService $surveyService)
     {
+        Log::info('send leave user message');
         $discordService->sendAccountDeleteRequestMassage($surveyService, $accountRepository, $this->user, $this->reason);
     }
 }
