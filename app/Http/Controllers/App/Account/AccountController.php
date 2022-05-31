@@ -57,11 +57,6 @@ class AccountController extends Controller
 
             SendAccountDeleteRequestMessage::dispatch($user, $reason);
 
-            $userService->createRecord($user->id, UserRecordType::USER_DELETE->name, [
-                'comment' => $reason
-            ]);
-            $userService->delete($user->id);
-
             Auth::logout();
 
             $request->session()->invalidate();

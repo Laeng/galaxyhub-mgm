@@ -2,10 +2,13 @@
 
 namespace App\Jobs;
 
+use App\Enums\UserRecordType;
 use App\Models\User;
 use App\Repositories\User\UserAccountRepository;
 use App\Services\Discord\Contracts\DiscordServiceContract;
 use App\Services\Survey\SurveyService;
+use App\Services\User\Contracts\UserServiceContract;
+use App\Services\User\UserService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -37,9 +40,15 @@ class SendAccountDeleteRequestMessage implements ShouldQueue
      *
      * @return void
      */
-    public function handle(DiscordServiceContract $discordService, UserAccountRepository $accountRepository, SurveyService $surveyService)
+    public function handle(UserServiceContract $userService, DiscordServiceContract $discordService, UserAccountRepository $accountRepository, SurveyService $surveyService)
     {
         Log::error('send leave user message');
         $discordService->sendAccountDeleteRequestMassage($surveyService, $accountRepository, $this->user, $this->reason);
+
+        $userService->createRecord($this->user->id, UserRecordType::USER_DELETE->name, [
+            'comment' => $this->reason
+        ]);
+
+        $userService->delete($this->user->id);
     }
 }
