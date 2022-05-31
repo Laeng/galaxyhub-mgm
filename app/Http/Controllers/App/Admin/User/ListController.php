@@ -282,12 +282,14 @@ class ListController extends Controller
                 case 'drop':
                     foreach ($users as $user)
                     {
-                        SendAccountDeleteRequestMessage::dispatch($user, "{$reason} - 처리자: {$executor->name}");
-
                         $userService->createRecord($user->id, UserRecordType::USER_DELETE->name, [
                             'comment' => $reason
                         ], $executor->id);
-                        $userService->delete($user->id);
+
+                        // 삭제 메세지를 전송한 후 계정을 삭제 한다.
+                        SendAccountDeleteRequestMessage::dispatch($user, "{$reason} - 처리자: {$executor->name}");
+
+                        //$userService->delete($user->id);
                     }
                     break;
 

@@ -56,13 +56,14 @@ class AccountController extends Controller
             $user = $userRepository->findById(Auth::id());
             $reason = "{$user->name}님의 요청으로 계정 데이터를 삭제하였습니다.";
 
-            SendAccountDeleteRequestMessage::dispatch($user, $reason);
-
             $userService->createRecord($user->id, UserRecordType::USER_DELETE->name, [
                 'comment' => $reason
             ]);
 
-            $userService->delete($user->id);
+            // 삭제 메세지를 전송한 후 계정을 삭제 한다.
+            SendAccountDeleteRequestMessage::dispatch($user, $reason);
+
+            //$userService->delete($user->id);
 
             Auth::logout();
 
