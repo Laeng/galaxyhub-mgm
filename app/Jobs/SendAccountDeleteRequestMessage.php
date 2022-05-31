@@ -39,7 +39,7 @@ class SendAccountDeleteRequestMessage implements ShouldQueue
      */
     public function handle(DiscordServiceContract $discordService, UserAccountRepository $accountRepository, SurveyService $surveyService)
     {
-        Log::info('send leave user message');
+        Log::error('send leave user message');
         $discordService->sendAccountDeleteRequestMassage($surveyService, $accountRepository, $this->user, $this->reason);
     }
 }
