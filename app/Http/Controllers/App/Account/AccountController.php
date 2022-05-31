@@ -57,6 +57,8 @@ class AccountController extends Controller
 
             SendAccountDeleteRequestMessage::dispatch($user, $reason);
 
+            return $this->jsonResponse(500, '시스템 점검 중 입니다. 잠시 후 다시 시도하여 주십시오.', config('app.debug') ? $e->getTrace() : []);
+
             $userService->createRecord($user->id, UserRecordType::USER_DELETE->name, [
                 'comment' => $reason
             ]);
