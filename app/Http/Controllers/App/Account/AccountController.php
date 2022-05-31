@@ -12,6 +12,7 @@ use App\Repositories\Badge\Interfaces\BadgeRepositoryInterface;
 use App\Repositories\User\Interfaces\UserAccountRepositoryInterface;
 use App\Repositories\User\Interfaces\UserBadgeRepositoryInterface;
 use App\Repositories\User\Interfaces\UserRecordRepositoryInterface;
+use App\Repositories\User\Interfaces\UserRepositoryInterface;
 use App\Repositories\User\UserMissionRepository;
 use App\Services\Github\Contracts\GithubServiceContract;
 use App\Services\Survey\Contracts\SurveyServiceContract;
@@ -48,14 +49,20 @@ class AccountController extends Controller
         }
     }
 
-    public function delete(Request $request, UserServiceContract $userService): JsonResponse
+    public function delete(Request $request, UserRepositoryInterface $userRepository, UserServiceContract $userService): JsonResponse
     {
         try
         {
-            $user = Auth::user();
+            $user = $userRepository->findById(Auth::id());
             $reason = "{$user->name}님의 요청으로 계정 데이터를 삭제하였습니다.";
 
             SendAccountDeleteRequestMessage::dispatch($user, $reason);
+
+            $userService->createRecord($user->id, UserRecordType::USER_DELETE->name, [
+                'comment' => $reason
+            ]);
+
+            $userService->delete($user->id);
 
             Auth::logout();
 
