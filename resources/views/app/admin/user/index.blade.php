@@ -163,7 +163,7 @@
                                 let success = (r) => {
                                     window.modal.alert('처리 완료', '정상적으로 처리되었습니다.', (c) => {});
 
-                                    this.$store.{{$componentId}}.checkbox(false);
+                                    this.$store.{{ $componentId }}.checkbox('{{ $componentId }}', false);
                                     this.$store.{{$componentId}}.list(this.$store.{{$componentId}}.data.list.data.count.step);
                                 };
 

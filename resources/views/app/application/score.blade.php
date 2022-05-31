@@ -22,7 +22,7 @@
             <li class="relative md:flex-1 md:flex">
                 <div class="group flex items-center w-full">
                     <p class="px-6 py-4 flex items-center text-sm font-medium">
-                        @if($matches >= 3)
+                        @if($matches >= 4)
                             <span class="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-full bg-blue-600 group-hover:bg-blue-800">
                                 <svg class="w-6 h-6 text-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                                     <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
