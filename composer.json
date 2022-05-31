@@ -14,7 +14,7 @@
         "diglactic/laravel-breadcrumbs": "^7.1",
         "fruitcake/laravel-cors": "^2.0.5",
         "getsolaris/laravel-make-service": "^1.0",
-        "guzzlehttp/guzzle": "7.4.2",
+        "guzzlehttp/guzzle": "^7.4.2",
         "guzzlehttp/psr7": "^2.1.1",
         "http-interop/http-factory-guzzle": "^1.0",
         "knplabs/github-api": "^3.0",
