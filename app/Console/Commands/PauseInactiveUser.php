@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Enums\BanCommentType;
 use App\Enums\RoleType;
+use App\Enums\UserRecordType;
 use App\Repositories\Updater\Interfaces\UpdaterRepositoryInterface;
 use App\Repositories\User\Interfaces\UserRepositoryInterface;
 use App\Services\User\Contracts\UserServiceContract;
@@ -64,14 +65,19 @@ class PauseInactiveUser extends Command
         {
             if (is_null($user->banned_at))
             {
-                if (is_null($user->attended_at) && $user->hasRole([RoleType::MEMBER->name, RoleType::MAKER1->name]))
+                $latestUnban = $userService->getRecord($user->id, UserRecordType::UNBAN_DATA->name)->first();
+
+                if (is_null($latestUnban) || today()->diffInDays($latestUnban->created_at) > 7)
                 {
-                    $userService->ban($user->id, BanCommentType::USER_INACTIVE_NEWBIE->value);
-                }
-                else
-                {
-                    if ($user->hasRole([RoleType::MEMBER->name, RoleType::MAKER1->name])) {
-                        $userService->ban($user->id, BanCommentType::USER_INACTIVE_MISSION->value);
+                    if (is_null($user->attended_at) && $user->hasRole([RoleType::MEMBER->name, RoleType::MAKER1->name]))
+                    {
+                        $userService->ban($user->id, BanCommentType::USER_INACTIVE_NEWBIE->value);
+                    }
+                    else
+                    {
+                        if ($user->hasRole([RoleType::MEMBER->name, RoleType::MAKER1->name])) {
+                            $userService->ban($user->id, BanCommentType::USER_INACTIVE_MISSION->value);
+                        }
                     }
                 }
             }
