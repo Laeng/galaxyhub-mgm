@@ -61,13 +61,15 @@ class SteamService implements SteamServiceContract
         try
         {
             $response = $webClient->request('GET',"gid/{$steamGroupId}/memberslistxml", ['xml' => 1]);
-            $xml = simplexml_load_string($response->getBody()->getContents(),"SimpleXMLElement", LIBXML_NOCDATA);
+
+            $data = $response->getBody()->getContents(); //FIXME - 일부 엣지 케이스에서 작동 안함... https://steamcommunity.com/id/Hawkeye1213/
+            $xml = simplexml_load_string($data,'SimpleXMLElement', LIBXML_NOCDATA);
 
             return json_decode(json_encode($xml), true);
         }
-        catch (GuzzleException $e)
+        catch (\Exception|GuzzleException $e)
         {
-            return [];
+            return json_decode('{}', true);
         }
     }
 }
