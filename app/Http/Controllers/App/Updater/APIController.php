@@ -260,33 +260,35 @@ class APIController extends Controller
 
             $updater = $this->updaterRepository->findByCode($request->get('code'));
 
-            if (is_null($updater)) {
-                throw new Exception('CAN NOT FOUND DATA', 200);
-            }
-
-            $latest = $this->updaterRepository->findLatestUpdatedByUserId($updater->user_id)->first();
-
-            if ($latest->id === $updater->id)
+            if (!is_null($updater))
             {
-                $result = true;
+                $latest = $this->updaterRepository->findLatestUpdatedByUserId($updater->user_id)->first();
 
-                $updater->ip = $request->getClientIp();
-                $updater->setUpdatedAt(now());
-                $updater->save();
+                if ($latest->id === $updater->id)
+                {
+                    $updater->ip = $request->getClientIp();
+                    $updater->setUpdatedAt(now());
+                    $updater->save();
+
+                    return Response()->json([
+                        'result' => true,
+                        'message' => 'SUCCESS'
+                    ]);
+                }
+                else
+                {
+                    //FIXME - detect 안됌...
+                    throw new Exception('MULTIPLE USING');
+                }
             }
             else
             {
-                $result = false;
+                throw new Exception('NOT FOUND DATA');
             }
-
-            return Response()->json([
-                'result' => $result,
-                'message' => 'SUCCESS'
-            ]);
-
-        } catch (Exception $e)
+        }
+        catch (Exception $e)
         {
-            Log::error($e);
+            //Log::error($e);
 
             return Response()->json([
                 'result' => false,

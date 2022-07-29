@@ -30,7 +30,7 @@ class AppController extends Controller
         $user = Auth::user();
         $attendUserMission = $userMissionRepository->findAttendedMissionByUserId($user->id, ['*'], ['mission'])->first();
         $latestUserMission = $userMissionRepository->findByUserId($user->id, ['*'], ['mission'])->first();
-        $latestMission = $missionRepository->findBetweenDates('expected_at', [today(), today()->addYear()])->reverse()->first(fn ($v, $k) => $v->phase === 0);
+        $latestMission = $missionRepository->findBetweenDates('expected_at', [today(), today()->addYear()])->first(fn ($v, $k) => $v->phase === 0);
 
         return view('app.index', [
             'user' => Auth::user(),

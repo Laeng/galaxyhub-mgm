@@ -4,6 +4,7 @@ namespace App\Http\Controllers\App\Account;
 
 use App\Http\Controllers\Controller;
 use App\Services\User\Contracts\UserServiceContract;
+use GuzzleHttp\Exception\ServerException;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -72,9 +73,13 @@ class AuthenticateController extends Controller
 
             return redirect()->intended(route('app.index'));
         }
+        catch (ServerException $e)
+        {
+            return redirect()->route('welcome', $provider)->withErrors( ['error' => $e->getRequest()->getUri()->getHost() . '에 오류가 발생하였습니다. 해당 서버가 복구 된 후 다시 시도하여 주십시오.']);
+        }
         catch (OpenIDValidationException $e)
         {
-            return redirect()->route('auth.login', $provider)->withErrors('error', '소셜 로그인 중 오류가 발생하였습니다. 다시 시도하여 주십시오.');
+            return redirect()->route('Welcome', $provider)->withErrors(['error' => '소셜 로그인 중 오류가 발생하였습니다. 다시 시도하여 주십시오.']);
         }
     }
 

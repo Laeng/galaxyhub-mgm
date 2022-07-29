@@ -31,6 +31,8 @@
     {{ $slot }}
 </div>
 @stack('script')
+
+
 @php
     $hasErrors = !empty($errors);
     $errorMessages = ($hasErrors) ? $errors->getMessages() : [];
@@ -57,3 +59,5 @@
 </noscript>
 </body>
 </html>
+
+

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\App\Updater\APIController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -16,13 +17,13 @@ use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
     Route::name('updater.')->prefix('updater')->group(function () {
-        Route::post('/verify', [\App\Http\Controllers\App\Updater\APIController::class, 'verify']);
-        Route::post('/user/data', [\App\Http\Controllers\App\Updater\APIController::class, 'getUserData']);
-        Route::patch('/user/data', [\App\Http\Controllers\App\Updater\APIController::class, 'setUserData']);
-        Route::post('/server/data', [\App\Http\Controllers\App\Updater\APIController::class, 'getServerData']);
-        Route::post('/ping', [\App\Http\Controllers\App\Updater\APIController::class, 'ping']);
+        Route::post('/verify', [APIController::class, 'verify']);
+        Route::post('/user/data', [APIController::class, 'getUserData']);
+        Route::patch('/user/data', [APIController::class, 'setUserData']);
+        Route::post('/server/data', [APIController::class, 'getServerData']);
+        Route::post('/ping', [APIController::class, 'ping']);
 
-        Route::get('/view/updater/{code}', [\App\Http\Controllers\App\Updater\APIController::class, 'viewUpdaterIndex'])->whereUuid('code');
+        Route::get('/view/updater/{code}', [APIController::class, 'viewUpdaterIndex'])->whereUuid('code');
     });
 
 });
