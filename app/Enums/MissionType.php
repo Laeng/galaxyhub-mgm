@@ -60,4 +60,5 @@ enum MissionType: int  {
             self::MISSION->value, self::NIGHT_OF_ARMA->value
         ];
     }
+
 }

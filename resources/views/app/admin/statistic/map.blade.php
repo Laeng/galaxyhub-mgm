@@ -2,9 +2,9 @@
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.min.js"></script>
 @endpush
 
-<x-theme.galaxyhub.sub-content title="애드온 통계" description="애드온 통계" :breadcrumbs="Diglactic\Breadcrumbs\Breadcrumbs::render('app.admin', '애드온 통계')">
+<x-theme.galaxyhub.sub-content title="맵 통계" description="맵 통계" :breadcrumbs="Diglactic\Breadcrumbs\Breadcrumbs::render('app.admin', '맵 통계')">
     <x-panel.galaxyhub.basics>
-        <div class="space-y-4" x-data="statistic_addon">
+        <div class="space-y-4" x-data="statistic_map">
             <div>
                 <div class="mb-4">
                     <h2 class="text-xl lg:text-2xl font-bold">기간 설정</h2>
@@ -25,19 +25,19 @@
             <div class="">
                 <x-alert.galaxyhub.info title="통계 안내" class="mb-2">
                     <ul>
-                        <li><span x-text="data.load.data.total"></span>개 미션에서 사용된 애드온 통계입니다.</li>
+                        <li><span x-text="data.load.data.total"></span>개 미션에서 사용된 멥 통계입니다.</li>
                     </ul>
                 </x-alert.galaxyhub.info>
                 <canvas id="addon"></canvas>
             </div>
 
-            <div class="border border-gray-300 dark:border-gray-800 rounded-md ">
+            <div class="border border-gray-300 dark:border-gray-800 rounded-md w-full overflow-y-auto">
 
                 <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-800">
                     <thead class="bg-gray-50 dark:bg-gray-900">
                     <tr>
                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider whitespace-nowrap tabular-nums">미션 이름</th>
-                        <template x-for="type in data.load.data.addon_types">
+                        <template x-for="type in data.load.data.map_types">
                             <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider whitespace-nowrap tabular-nums text-center" x-text="type"></th>
                         </template>
                     </tr>
@@ -49,9 +49,9 @@
                                 <a :href="'/app/mission/' + value.id" target="_blank" rel="noopener" class="link-indigo" x-text="value.title"></a>
                             </td>
 
-                            <template x-for="type in data.load.data.addon_types">
+                            <template x-for="type in data.load.data.map_types">
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300 tabular-nums text-center">
-                                    <input type="checkbox" class="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300 rounded" :checked="value.addons.includes(type)" disabled/>
+                                    <input type="checkbox" class="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300 rounded" :checked="value.map.includes(type)" disabled/>
                                 </td>
                             </template>
                         </tr>
@@ -63,13 +63,13 @@
         </div>
         <script type="text/javascript">
             window.document.addEventListener('alpine:init', () => {
-                window.alpine.data('statistic_addon', () => ({
+                window.alpine.data('statistic_map', () => ({
                     interval: {
                         load: -1
                     },
                     data: {
                         load: {
-                            url: '{{ route('admin.statistic.addon.data') }}',
+                            url: '{{ route('admin.statistic.map.data') }}',
                             body: {
                                 query: {
                                     start: '{{ today()->subMonth()->format('Y-m-d') }}',
@@ -78,7 +78,7 @@
                             },
                             data: {
                                 total: 0,
-                                addon_types: [],
+                                map_types: [],
                                 values: []
                             },
                             lock: false
@@ -113,7 +113,7 @@
                                         type: 'bar',
                                         data: {
                                             labels: r.data.data.statistic.keys,
-                                            datasets: [{label: '애드온 사용 통계', data: r.data.data.statistic.values, backgroundColor: colors}]
+                                            datasets: [{label: '맵 사용 통계', data: r.data.data.statistic.values, backgroundColor: colors}]
                                         },
                                         options: {
                                             scales: {

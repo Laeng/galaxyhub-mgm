@@ -4,6 +4,7 @@ namespace App\Http\Controllers\App\Admin\Statistic;
 
 use App\Enums\MissionAddonType;
 use App\Enums\MissionPhaseType;
+use App\Enums\MissionType;
 use App\Enums\RoleType;
 use App\Http\Controllers\Controller;
 use App\Repositories\Mission\MissionRepository;
@@ -21,9 +22,11 @@ class MissionController extends Controller
     public function mission(Request $request, UserRepositoryInterface $userRepository): View
     {
         $makers = $userRepository->new()->newQuery()->select(['id', 'name'])->Role([RoleType::MAKER1->name, RoleType::MAKER2->name, RoleType::ADMIN->name])->get();
+        $types = MissionType::getKoreanNames();
 
         return view('app.admin.statistic.mission', [
-            'makers' => $makers
+            'makers' => $makers,
+            'types' => $types
         ]);
     }
 
@@ -46,6 +49,11 @@ class MissionController extends Controller
             if (!empty($q['user_id']))
             {
                 $query = $query->where('user_id', $q['user_id']);
+            }
+
+            if (!is_null($q['mission_type']) && $q['mission_type'] !== '')
+            {
+                $query = $query->where('type', $q['mission_type']);
             }
 
             $query = $query->whereBetween('started_at', [$start, $end])->latest('started_at')->with(['participants', 'user']);

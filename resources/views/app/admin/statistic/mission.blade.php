@@ -24,6 +24,14 @@
                             @endforeach
                         </x-input.select.basics>
                     </div>
+                    <div>
+                        <x-input.select.basics type="date" x-model="data.load.body.query.mission_type">
+                            <option value="">모든 미션 종류&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
+                            @foreach($types as $type => $korean)
+                                <option value="{{ $type }}">{{ $korean }}</option>
+                            @endforeach
+                        </x-input.select.basics>
+                    </div>
                     <x-button.filled.md-white @click="load()">
                         조회
                     </x-button.filled.md-white>
@@ -85,7 +93,8 @@
                                 query: {
                                     start: '{{ today()->subMonth()->format('Y-m-d') }}',
                                     end: '{{ today()->format('Y-m-d') }}',
-                                    user_id: ''
+                                    user_id: '',
+                                    mission_type: ''
                                 },
                             },
                             data: {
