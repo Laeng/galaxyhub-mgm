@@ -14,7 +14,7 @@
         "@tailwindcss/line-clamp": "^0.3.1",
         "@tailwindcss/typography": "^0.5.2",
         "alpinejs": "^3.9.0",
-        "autoprefixer": "10.4.5",
+        "autoprefixer": "10.4.8",
         "axios": "^0.25",
         "follow-redirects": "^1.14.9",
         "laravel-mix": "^6.0.43",
