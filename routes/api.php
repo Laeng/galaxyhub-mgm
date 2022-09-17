@@ -1,6 +1,7 @@
 <?php
 
-use App\Http\Controllers\App\Updater\APIController;
+use App\Http\Controllers\App\Mission\ApiController as MissionAPIController;
+use App\Http\Controllers\App\Updater\APIController as UpdaterAPIController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -17,13 +18,19 @@ use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
     Route::name('updater.')->prefix('updater')->group(function () {
-        Route::post('/verify', [APIController::class, 'verify']);
-        Route::post('/user/data', [APIController::class, 'getUserData']);
-        Route::patch('/user/data', [APIController::class, 'setUserData']);
-        Route::post('/server/data', [APIController::class, 'getServerData']);
-        Route::post('/ping', [APIController::class, 'ping']);
+        Route::post('/verify', [UpdaterAPIController::class, 'verify']);
+        Route::post('/user/data', [UpdaterAPIController::class, 'getUserData']);
+        Route::patch('/user/data', [UpdaterAPIController::class, 'setUserData']);
+        Route::post('/server/data', [UpdaterAPIController::class, 'getServerData']);
+        Route::post('/ping', [UpdaterAPIController::class, 'ping']);
 
-        Route::get('/view/updater/{code}', [APIController::class, 'viewUpdaterIndex'])->whereUuid('code');
+        Route::get('/view/updater/{code}', [UpdaterAPIController::class, 'viewUpdaterIndex'])->whereUuid('code');
+    });
+
+    Route::name('mission.')->prefix('mission')->group(function () {
+        Route::name('server.')->prefix('server')->group(function () {
+            Route::get('/deallocate', [MissionAPIController::class, 'deallocate']);
+        });
     });
 
 });
