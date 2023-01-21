@@ -6,13 +6,15 @@
                 "ip": "",
                 "port": "",
                 "id": "",
-                "pw": ""
+                "pw": "",
+                "directory": ""
             },
             "ReadOnly": {
                 "ip": "",
                 "port": "",
                 "id": "",
-                "pw": ""
+                "pw": "",
+                "directory": ""
             }
         },
         "S3": {

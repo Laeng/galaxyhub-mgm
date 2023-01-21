@@ -215,6 +215,7 @@ class APIController extends Controller
                     'port' => $updater['provider'][$type][$permission]['port'],
                     'id' => $updater['provider'][$type][$permission]['id'],
                     'pw' => $updater['provider'][$type][$permission]['pw'],
+                    'directory' => $updater['provider'][$type][$permission]['directory']
                 ],
                 'S3' => [
                     'type' => 'S3',
