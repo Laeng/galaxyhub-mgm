@@ -26,8 +26,5 @@ Galaxyhub MGM 프로젝트는 멀티플래이 게임 매니지먼트의 아르�
 - 사전 정의된 인스턴스 on/off 기능
 - Guest OS 계정 패스워드 자동 변경 기능
 
-## 스택
-<img src="https://img.shields.io/badge/php-777BB4?style=for-the-badge&logo=php&logoColor=white"> 
-<img src="https://img.shields.io/badge/laravel-FF2D20?style=for-the-badge&logo=laravel&logoColor=white"> 
-<img src="https://img.shields.io/badge/mariadb-003545?style=for-the-badge&logo=mariadb&logoColor=white"> 
-<img src="https://img.shields.io/badge/redis-dc382d?style=for-the-badge&logo=redis&logoColor=white"> 
+# 기술 스택
+<img src="https://img.shields.io/badge/php-777BB4?style=for-the-badge&logo=php&logoColor=white"> <img src="https://img.shields.io/badge/laravel-FF2D20?style=for-the-badge&logo=laravel&logoColor=white"> <img src="https://img.shields.io/badge/mariadb-003545?style=for-the-badge&logo=mariadb&logoColor=white"> <img src="https://img.shields.io/badge/redis-dc382d?style=for-the-badge&logo=redis&logoColor=white"> 
