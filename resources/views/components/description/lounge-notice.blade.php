@@ -1,5 +1,5 @@
 <x-markdown>
-    > Bill Red 님, DIma97 님, ChunJu 님, Knight 님, 컴벳메딕 님, Lt.Foley 님, looska 님 그리고 익명으로 도와주신 분들께 감사드립니다.
+    Bill Red 님, DIma97 님, ChunJu 님, Knight 님, 컴벳메딕 님, Lt.Foley 님, looska 님 그리고 익명으로 도와주신 분들께 감사드립니다.
 
     # 아르마 3 세계로 오신 여러분을 환영합니다!
     본 글은 본격적으로 ARMA 3 내에서 일어나는 상황에 숙지해야 할 내용이므로
