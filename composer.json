@@ -15,7 +15,7 @@
         "fruitcake/laravel-cors": "^2.0.5",
         "getsolaris/laravel-make-service": "^1.0",
         "guzzlehttp/guzzle": "^7.4.2",
-        "guzzlehttp/psr7": "^2.4.1",
+        "guzzlehttp/psr7": "^2.4.5",
         "http-interop/http-factory-guzzle": "^1.0",
         "knplabs/github-api": "^3.0",
         "laravel/framework": "^9.0",
