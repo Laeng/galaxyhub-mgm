@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e272ad5903f0bdfa9d385d017c85c9a0",
+    "content-hash": "c5399823a9a0ca00c1de95479348f4a0",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -61,48 +61,6 @@
                 "source": "https://github.com/asm89/stack-cors/tree/v2.1.1"
             },
             "time": "2022-01-18T09:12:03+00:00"
-        },
-        {
-            "name": "auauauauauauau/steam-web-api",
-            "version": "0.0.6",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/auauauauauauau/steam-web-api.git",
-                "reference": "4a0fe8bcf9881225e397e43c31b9e192e134f993"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/auauauauauauau/steam-web-api/zipball/4a0fe8bcf9881225e397e43c31b9e192e134f993",
-                "reference": "4a0fe8bcf9881225e397e43c31b9e192e134f993",
-                "shasum": ""
-            },
-            "require": {
-                "guzzlehttp/guzzle": "^7.4",
-                "nikic/php-parser": "^4.13",
-                "php": "^8.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Auauauauauauau\\SteamWebApi\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Nikolay Kuzmin",
-                    "email": "cool.baklazhan@gmail.com"
-                }
-            ],
-            "description": "Composer package for interacting with the Steam Web API",
-            "support": {
-                "issues": "https://github.com/auauauauauauau/steam-web-api/issues",
-                "source": "https://github.com/auauauauauauau/steam-web-api/tree/0.0.6"
-            },
-            "time": "2022-01-30T20:56:46+00:00"
         },
         {
             "name": "aws/aws-crt-php",

@@ -7,17 +7,13 @@ use App\Repositories\User\Interfaces\UserAccountRepositoryInterface;
 use App\Services\Naver\Contracts\NaverServiceContract;
 use Exception;
 use GuzzleHttp\Client;
-use GuzzleHttp\Cookie\CookieJar;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\GuzzleException;
-use GuzzleHttp\Exception\ServerException;
 use GuzzleHttp\RequestOptions;
 use Illuminate\Http\Request;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
-use function Symfony\Component\String\u;
 
 class NaverService implements NaverServiceContract
 {

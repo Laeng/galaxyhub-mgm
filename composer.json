@@ -9,7 +9,6 @@
         "ext-curl": "*",
         "ext-libxml": "*",
         "ext-simplexml": "*",
-        "auauauauauauau/steam-web-api": "^0.0.6",
         "cybercog/laravel-ban": "^4.7",
         "diglactic/laravel-breadcrumbs": "^7.1",
         "fruitcake/laravel-cors": "^2.0.5",

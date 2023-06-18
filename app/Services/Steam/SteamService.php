@@ -2,10 +2,10 @@
 
 namespace App\Services\Steam;
 
+use App\Services\Steam\Client\Services\SteamUserService;
 use App\Services\Steam\Contracts\SteamServiceContract;
-use Auauauauauauau\SteamWebApi\SteamApiClient;
-use Auauauauauauau\SteamWebApi\SteamInterface\IPlayerService;
-use Auauauauauauau\SteamWebApi\SteamInterface\ISteamUser;
+use App\Services\Steam\Client\SteamApiClient;
+use App\Services\Steam\Client\Services\PlayerService;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use function config;
@@ -18,15 +18,15 @@ class SteamService implements SteamServiceContract
 {
     private string $steamApiKey;
     private SteamApiClient $steamApi;
-    private IPlayerService $playerService;
-    private ISteamUser $steamUser;
+    private PlayerService $playerService;
+    private SteamUserService $steamUser;
 
     public function __construct()
     {
         $this->steamApiKey = config('services.steam.key');
         $this->steamApi = new SteamApiClient($this->steamApiKey);
-        $this->playerService = new IPlayerService($this->steamApi);
-        $this->steamUser = new ISteamUser($this->steamApi);
+        $this->playerService = new PlayerService($this->steamApi);
+        $this->steamUser = new SteamUserService($this->steamApi);
     }
 
     public function getOwnedGames(int $steamId, bool $includeAppInfo = true, bool $includePlayedFreeGames = false, array $appIdsFilter = []): array
