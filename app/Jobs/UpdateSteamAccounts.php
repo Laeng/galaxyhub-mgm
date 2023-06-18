@@ -41,6 +41,7 @@ class UpdateSteamAccounts implements ShouldQueue
      */
     public function handle(UserService $userService, SteamServiceContract $steamService, UserAccountRepositoryInterface $userAccountRepository)
     {
+        /**
         User::whereNull('banned_at')->latest()->chunk(100, function ($users) use ($userService, $steamService, $userAccountRepository) {
             foreach ($users as $user) {
                 if ($user->hasAnyRole([RoleType::MEMBER->name, RoleType::MAKER1->name, RoleType::MAKER2->name]))
@@ -52,5 +53,6 @@ class UpdateSteamAccounts implements ShouldQueue
                 }
             }
         });
+         * **/
     }
 }

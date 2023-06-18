@@ -28,6 +28,7 @@ class Service
             substr($method, strlen(self::NAMESPACE . '\\')),
             $steamApiMethodParams,
         );
+
         array_shift($steamApiMethodParams);
 
         list($steamInterface, $interfaceMethod, $version) = $steamApiMethodParams;

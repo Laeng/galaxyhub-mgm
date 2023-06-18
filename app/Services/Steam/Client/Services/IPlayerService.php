@@ -5,8 +5,10 @@ namespace App\Services\Steam\Client\Services;
 use App\Services\Steam\Client\Service;
 use GuzzleHttp\Exception\GuzzleException;
 
-class PlayerService extends Service
+class IPlayerService extends Service
 {
+
+
     /**
      * Return a list of games owned by the player
      *

@@ -44,6 +44,7 @@ class PauseInactiveUser extends Command
      */
     public function handle(UserRepositoryInterface $userRepository, UserServiceContract $userService): int
     {
+        /*
         $query = $userRepository->new()->newQuery()->leftJoin('user_missions', function ($join) {
             $join->on('user_missions.id', '=', DB::raw("(SELECT max(user_missions.id) FROM user_missions WHERE user_missions.user_id = users.id AND user_missions.attended_at IS NOT NULL)"));
 
@@ -82,6 +83,7 @@ class PauseInactiveUser extends Command
                 }
             }
         }
+        */
 
         return 0;
     }

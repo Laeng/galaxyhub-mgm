@@ -104,6 +104,9 @@ class FormController extends Controller
                 'agreed_at' => $now
             ]);
 
+            $user->assignRole(RoleType::MEMBER->name);
+
+            /**
             $user->assignRole(RoleType::APPLY->name);
             $data = [
                 'comment' => "가입 신청서가 접수되었습니다."
@@ -111,7 +114,10 @@ class FormController extends Controller
 
             $userService->createRecord($user->id, UserRecordType::USER_APPLICATION->name, $data);
 
+
             return redirect()->route('application.applied')->withErrors(['success' => '가입 신청이 접수되었습니다.']);
+             * **/
+            return redirect()->route('app.index');
         }
         catch (\Exception $e)
         {
