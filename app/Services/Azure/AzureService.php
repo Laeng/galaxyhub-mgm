@@ -30,7 +30,7 @@ class AzureService implements AzureServiceContract
             $client = $this->getClient();
             $result = $client->get("{$this->url()}/Microsoft.Compute/virtualMachines/{$instanceName}", [
                 'query' => [
-                    'api-version' => '2021-11-01'
+                    'api-version' => '2023-07-01'
                 ],
             ]);
 
@@ -132,7 +132,7 @@ class AzureService implements AzureServiceContract
             $client = $this->getClient();
             $result = $client->get("{$this->url()}/Microsoft.Compute/virtualMachines/{$instanceName}/instanceView", [
                 'query' => [
-                    'api-version' => '2021-11-01'
+                    'api-version' => '2023-07-01'
                 ],
             ]);
 
@@ -158,7 +158,7 @@ class AzureService implements AzureServiceContract
             $client = $this->getClient();
             $result = $client->get("{$this->url()}/Microsoft.Network/networkInterfaces/{$networkInterfaceName}", [
                 'query' => [
-                    'api-version' => '2021-08-01'
+                    'api-version' => '2023-05-01'
                 ],
             ]);
 
@@ -183,7 +183,7 @@ class AzureService implements AzureServiceContract
             $client = $this->getClient();
             $result = $client->get("{$this->url()}/Microsoft.Network/publicIPAddresses/{$publicIpAddressName}", [
                 'query' => [
-                    'api-version' => '2021-05-01'
+                    'api-version' => '2023-05-01'
                 ],
             ]);
 
@@ -218,7 +218,7 @@ class AzureService implements AzureServiceContract
 
             $result = $client->get("https://management.azure.com/subscriptions/{$subscriptionId}/providers/Microsoft.Consumption/budgets/{$budgetsName}", [
                 'query' => [
-                    'api-version' => '2021-10-01'
+                    'api-version' => '2023-05-01'
                 ],
             ]);
 
@@ -253,7 +253,7 @@ class AzureService implements AzureServiceContract
 
             $result = $client->get("https://management.azure.com/subscriptions/{$subscriptionId}/providers/Microsoft.Consumption/usageDetails", [
                 'query' => [
-                    'api-version' => '2021-10-01'
+                    'api-version' => '2023-05-01'
                 ],
             ]);
 

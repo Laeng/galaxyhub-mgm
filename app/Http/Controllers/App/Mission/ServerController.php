@@ -317,7 +317,7 @@ class ServerController extends Controller
 
             if (is_null($interfaces)) return null;
 
-            $publicIpAddressName = $interfaces['properties']['ipConfigurations'][0]['properties']['publicIPAddress']['name'];
+            $publicIpAddressName = last(explode('/', $interfaces['properties']['ipConfigurations'][0]['properties']['publicIPAddress']['id']));
             $ipAddress = $this->azureService->getPublicIPAddresses($publicIpAddressName);
 
             if (is_null($ipAddress)) return null;
