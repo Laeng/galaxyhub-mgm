@@ -79,7 +79,7 @@ class AuthenticateController extends Controller
         }
         catch (OpenIDValidationException $e)
         {
-            return redirect()->route('Welcome', $provider)->withErrors(['error' => '소셜 로그인 중 오류가 발생하였습니다. 다시 시도하여 주십시오.']);
+            return redirect()->route('welcome', $provider)->withErrors(['error' => '소셜 로그인 중 오류가 발생하였습니다. 다시 시도하여 주십시오.']);
         }
     }
 
