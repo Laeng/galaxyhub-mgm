@@ -270,7 +270,9 @@ class ServerController extends Controller
             abort(404);
         }
 
-        if (!in_array($instanceName, self::$instances)) return abort(404);
+        if (!in_array($instanceName, self::$instances)) {
+            abort(404);
+        }
 
         $instanceView = $this->azureService->getInstanceView($instanceName);
         $pass = false;
@@ -283,7 +285,9 @@ class ServerController extends Controller
             }
         }
 
-        if (!$pass) return abort(404);
+        if (!$pass) {
+            abort(404);
+        }
 
         $ip = $this->getIpAddress($instanceName);
         $port = '3389';
