@@ -15,6 +15,9 @@ class SurveySection extends Model
      *
      * @var array
      */
+
+    protected $dateFormat = 'Y-m-d H:i:s.u';
+
     protected $fillable = ['name', 'description'];
 
     /**

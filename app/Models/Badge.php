@@ -9,6 +9,8 @@ class Badge extends Model
 {
     use HasFactory;
 
+    protected $dateFormat = 'Y-m-d H:i:s.u';
+
     protected $guarded = ['id', 'created_at', 'updated_at'];
 
     public function users()

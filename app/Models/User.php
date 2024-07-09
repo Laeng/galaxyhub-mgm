@@ -22,6 +22,9 @@ class User extends Authenticatable implements BannableContract
      *
      * @var array<int, string>
      */
+
+    protected $dateFormat = 'Y-m-d H:i:s.u';
+
     protected $fillable = [
         'name',
         'email',

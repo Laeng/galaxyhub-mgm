@@ -15,6 +15,9 @@ class SurveyAnswer extends Model
      *
      * @var array
      */
+
+    protected $dateFormat = 'Y-m-d H:i:s.u';
+
     protected $fillable = ['value', 'survey_question_id', 'survey_entry_id'];
 
     /**

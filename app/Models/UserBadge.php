@@ -15,6 +15,9 @@ class UserBadge extends Model
         'badge_id'
     ];
 
+
+    protected $dateFormat = 'Y-m-d H:i:s.u';
+
     protected $casts = [
         'created_at' => 'datetime',
         'updated_at' => 'datetime'

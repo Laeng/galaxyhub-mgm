@@ -10,6 +10,9 @@ class Log extends Model
 {
     use HasFactory;
 
+
+    protected $dateFormat = 'Y-m-d H:i:s.u';
+
     protected $fillable = [
         'type',
         'user_id',

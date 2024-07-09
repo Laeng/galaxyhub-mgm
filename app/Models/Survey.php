@@ -15,6 +15,9 @@ class Survey extends Model
      *
      * @var array
      */
+
+    protected $dateFormat = 'Y-m-d H:i:s.u';
+
     protected $fillable = ['name', 'settings', 'user_id'];
 
     /**

@@ -15,6 +15,9 @@ class Updater extends Model
      *
      * @var string[]
      */
+
+    protected $dateFormat = 'Y-m-d H:i:s.u';
+
     protected $fillable = [
         'user_id',
         'version',

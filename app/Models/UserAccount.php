@@ -15,6 +15,9 @@ class UserAccount extends Model
      *
      * @var array<int, string>
      */
+
+    protected $dateFormat = 'Y-m-d H:i:s.u';
+
     protected $fillable = [
         'user_id',
         'provider',
