@@ -118,7 +118,12 @@ class EditorController extends Controller
             }
 
             $typeKorean = MissionType::getKoreanNames()[$type];
-            $date = \Carbon\Carbon::createFromFormat('Y-m-d H:i', "{$request->get('date')} {$request->get('time')}");
+            try {
+                $date = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', "{$request->get('date')} {$request->get('time')}");
+            } catch (\Exception $e) {
+                throw new \Exception('Invalid data/time format', 422);
+            }
+
 
             if ($date->isPast())
             {
