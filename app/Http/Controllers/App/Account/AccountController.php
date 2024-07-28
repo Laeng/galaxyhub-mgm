@@ -108,10 +108,11 @@ class AccountController extends Controller
         }
 
         $role = $user->roles()->latest()->first();
-
         $application = $surveyService->getLatestApplicationForm($user->id);
-        $response = $application->answers()->latest()->get();
+        $answers = $application->answers();
 
+        $response = $answers ? $answers->latest()->get() : [];
+        
         $naverId = '';
         $discordName = '';
         $birthday = '';
