@@ -118,12 +118,18 @@ class EditorController extends Controller
             }
 
             $typeKorean = MissionType::getKoreanNames()[$type];
+            $data = null;
+            
             try {
-                $date = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', "{$request->get('date')} {$request->get('time')}");
+                $dateString = $request->get('date') . ' ' . $request->get('time');
+                $date = \Carbon\Carbon::parse($dateString);
+    
+                if (!$date->isValid()) {
+                    throw new \Exception('Invalid date/time format');
+                }
             } catch (\Exception $e) {
-                throw new \Exception('Invalid data/time format', 422);
+                    throw new \Exception('Invalid date/time format', 422);
             }
-
 
             if ($date->isPast())
             {
@@ -209,7 +215,18 @@ class EditorController extends Controller
             }
 
             $typeKorean = MissionType::getKoreanNames()[$type];
-            $date = \Carbon\Carbon::createFromFormat('Y-m-d H:i', "{$request->get('date')} {$request->get('time')}");
+            $data = null;
+            
+            try {
+                $dateString = $request->get('date') . ' ' . $request->get('time');
+                $date = \Carbon\Carbon::parse($dateString);
+    
+                if (!$date->isValid()) {
+                    throw new \Exception('Invalid date/time format');
+                }
+            } catch (\Exception $e) {
+                    throw new \Exception('Invalid date/time format', 422);
+            }
 
             if ($date->isPast())
             {
